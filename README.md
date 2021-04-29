@@ -1,7 +1,26 @@
 # sabila-mall-fe
+
 Aplikasi Reselling (Jualan Bareng) Terlengkap, Milik Anak Negeri di Indonesia!
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+## Contribution
+
+Developers are strongly suggested to follow these conventions in doing contribution for KitaDevelop Project.
+
+1.  Create pull request with title same on the **trello** task
+    Example: [Sprint 1] Initiate Project Structure <br />
+2.  **Self-assign** your own pull requests <br />
+3.  For work in progress or not intended to be reviewed yet, prepend **[WIP]**  
+    Example: [WIP] [Sprint 1] Initiate Project Structure  
+    Once your work is ready to be reviewed, delete **[WIP]**. <br />
+4.  Do not forget to **request review** <br />
+5.  Git branching follows these rules:  
+    For **features development**, name your branch as "feature/{branch-name}"  
+    For **bugfix**, name your branch as "bugfix/{branch-name}"  
+    For **test**, name your branch as "test/{branch-name}"  
+    Be sure to follow the nomenclature correctly in lowercase <br/>
+    Example: feature/initiate-project-structure
 
 ## Getting Started
 
@@ -29,9 +48,3 @@ To learn more about Next.js, take a look at the following resources:
 - [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
