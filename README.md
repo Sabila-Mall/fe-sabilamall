@@ -24,6 +24,15 @@ Developers are strongly suggested to follow these conventions in doing contribut
     Be sure to follow the nomenclature correctly in lowercase <br/>
     Example: feature/initiate-project-structure
 
+Next JS and Chakra UI Tips:
+
+1. Use PascalCase for every component name.
+2. Don't create a new component, unless Chakra UI didn't provide it.
+3. Use `Box` element from Chakra UI instead of `div`.
+4. To add custom styling, you can create YourComponent.module.scss inside styles folder and import it to your component.
+5. Handle every edge case / validation (if needed).
+6. Clean Code is a must.
+
 ## Getting Started
 
 First, run the development server:
