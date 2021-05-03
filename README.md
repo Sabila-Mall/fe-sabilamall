@@ -15,10 +15,12 @@ Developers are strongly suggested to follow these conventions in doing contribut
     Example: [WIP] [Sprint 1] Initiate Project Structure  
     Once your work is ready to be reviewed, delete **[WIP]**. <br />
 4.  Do not forget to **request review** <br />
-5.  Git branching follows these rules:  
-    For **features development**, name your branch as "feature/{branch-name}"  
-    For **bugfix**, name your branch as "bugfix/{branch-name}"  
-    For **test**, name your branch as "test/{branch-name}"  
+5.  Git branching follows these rules:
+
+    - For **features development**, name your branch as "feature/{branch-name}"
+    - For **bugfix**, name your branch as "bugfix/{branch-name}"
+    - For **test**, name your branch as "test/{branch-name}"
+
     Be sure to follow the nomenclature correctly in lowercase <br/>
     Example: feature/initiate-project-structure
 
