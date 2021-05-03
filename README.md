@@ -6,7 +6,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Contribution
 
-Developers are strongly suggested to follow these conventions in doing contribution for KitaDevelop Project.
+Developers are strongly suggested to follow these conventions in doing contribution for SabilaMall Project.
 
 1.  Create pull request with title same on the **trello** task
     Example: [Sprint 1] Initiate Project Structure <br />
