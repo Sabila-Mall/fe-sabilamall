@@ -2,12 +2,10 @@ import { Image } from "@chakra-ui/image";
 import {
   Box,
   Input,
+  VStack,
+  Heading,
   InputGroup,
   InputLeftElement,
-  Text,
-  VStack,
-  StackDivider,
-  Heading,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -105,6 +103,7 @@ const Navbar = () => {
         w={isMenu ? "100vw" : "0"}
         h="100vh"
         transition="opacity 0.6s"
+        onClick={() => setIsMenu(false)}
       ></Box>
       <Box
         position="fixed"
@@ -115,17 +114,16 @@ const Navbar = () => {
         zIndex="102"
         fontFamily="Inter"
         fontWeight="500"
-        fontSize="16px"
         lineHeight="24px"
         color="black"
-        transition="width 0.5s"
+        overflow="hidden"
+        transition="width 0.4s"
       >
         <Box
           w="100%"
           h="50px"
           boxShadow="0px 4px 10px 0px #00000040"
           boxSizing="border-box"
-          overflow="hidden"
           bg="white"
           display="flex"
           alignItems="center"
@@ -139,54 +137,31 @@ const Navbar = () => {
           <Heading size="sm">Menu</Heading>
         </Box>
         <VStack spacing={1} px="10px" pt="10px">
-          {isMenu &&
-            menuSidebar.map((menu, index) => {
-              if (index === 0) {
-                return (
-                  <Box
-                    h="50px"
-                    borderBottomWidth="1px"
-                    borderColor="gray.200"
-                    w="70vw"
-                    key={menu.id}
-                  >
-                    <Link href={menu.href}>
-                      <Heading
-                        size="sm"
-                        lineHeight="50px"
-                        display="flex"
-                        justifyContent="space-between"
-                      >
-                        {menu.text} <Image src="/images/Navbar/forward.svg" />
-                      </Heading>
-                    </Link>
-                  </Box>
-                );
-              } else if (index === menuSidebar.length - 1) {
-                return (
-                  <Box
-                    borderBottomWidth="1px"
-                    borderColor="gray.200"
-                    w="70vw"
-                    key={menu.id}
-                  >
-                    <Link href={menu.href}>
-                      <Heading size="sm" lineHeight="50px">
-                        {menu.text}
-                      </Heading>
-                    </Link>
-                    <Image
-                      src="/images/Navbar/google-play.svg"
-                      alt="Google Play"
-                      mt="-15px"
-                      mb="14px"
-                    />
-                  </Box>
-                );
-              }
+          {menuSidebar.map((menu, index) => {
+            if (index === 0) {
               return (
                 <Box
                   h="50px"
+                  borderBottomWidth="1px"
+                  borderColor="gray.200"
+                  w="70vw"
+                  key={menu.id}
+                >
+                  <Link href={menu.href}>
+                    <Heading
+                      size="sm"
+                      lineHeight="50px"
+                      display="flex"
+                      justifyContent="space-between"
+                    >
+                      {menu.text} <Image src="/images/Navbar/forward.svg" />
+                    </Heading>
+                  </Link>
+                </Box>
+              );
+            } else if (index === menuSidebar.length - 1) {
+              return (
+                <Box
                   borderBottomWidth="1px"
                   borderColor="gray.200"
                   w="70vw"
@@ -197,9 +172,31 @@ const Navbar = () => {
                       {menu.text}
                     </Heading>
                   </Link>
+                  <Image
+                    src="/images/Navbar/google-play.svg"
+                    alt="Google Play"
+                    mt="-15px"
+                    mb="14px"
+                  />
                 </Box>
               );
-            })}
+            }
+            return (
+              <Box
+                h="50px"
+                borderBottomWidth="1px"
+                borderColor="gray.200"
+                w="70vw"
+                key={menu.id}
+              >
+                <Link href={menu.href}>
+                  <Heading size="sm" lineHeight="50px">
+                    {menu.text}
+                  </Heading>
+                </Link>
+              </Box>
+            );
+          })}
         </VStack>
       </Box>
     </>
