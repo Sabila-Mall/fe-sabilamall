@@ -1,6 +1,7 @@
 import { Image } from "@chakra-ui/image";
 import {
   Box,
+  Icon,
   Input,
   VStack,
   Heading,
@@ -9,8 +10,11 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import React, { useState } from "react";
+import { BsSearch, BsChevronLeft, BsChevronRight } from "react-icons/bs";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { IoMdNotifications } from "react-icons/io";
 
-const Navbar = () => {
+const NavbarMobile = () => {
   const [isSearched, setIsSearched] = useState(false);
   const [isMenu, setIsMenu] = useState(true);
 
@@ -24,9 +28,30 @@ const Navbar = () => {
     { text: "Download Aplikasi", id: "dagp", href: "#" },
   ];
 
+  const styledIcon = {
+    color: "gray.500",
+    w: "23px",
+    h: "23px",
+    _hover: {
+      cursor: "pointer",
+    },
+  };
+
+  const fontSizeSidebar = {
+    "@media only screen and (max-width:300px)": {
+      fontSize: ".8em",
+    },
+    fontSize: "1em",
+  };
+
   return (
     <>
       <Box
+        sx={{
+          "@media only screen and (min-width:500px)": {
+            display: "none",
+          },
+        }}
         position="fixed"
         bg="white"
         minWidth="100vw"
@@ -37,15 +62,16 @@ const Navbar = () => {
         display="flex"
         justifyContent="space-between"
       >
-        <Box display="flex" ml="20px">
-          <Image
-            src="/images/Navbar/hamburger.svg"
+        <Box display="flex" ml="20px" alignItems="center">
+          <Icon
+            as={GiHamburgerMenu}
+            sx={styledIcon}
             onClick={() => setIsMenu(true)}
           />
           <Image src="/images/Navbar/logo.svg" ml="20px" />
         </Box>
-        <Box display="flex" mr="20px">
-          <Image src="/images/Navbar/notif.svg" />
+        <Box display="flex" alignItems="center" mr="20px">
+          <Icon as={IoMdNotifications} sx={styledIcon} />
         </Box>
         <Box
           zIndex={isSearched ? "100" : "-100"}
@@ -72,15 +98,17 @@ const Navbar = () => {
           >
             <InputLeftElement
               children={
-                <Image
-                  src="/images/Navbar/search.svg"
-                  mr="20px"
-                  _hover={{ cursor: "pointer" }}
+                <Icon
+                  as={BsSearch}
                   onClick={() => setIsSearched(true)}
+                  mr="12px"
+                  w="20px"
+                  h="20px"
+                  _hover={{ cursor: "pointer" }}
                 />
               }
               ml={isSearched ? "15px" : "0"}
-              transition="margin-left 0.8s"
+              transition="all 0.8s"
             />
             <Input
               type="text"
@@ -88,9 +116,10 @@ const Navbar = () => {
               bg={isSearched ? "gray.100" : "transparent"}
               borderRadius="12px"
               borderWidth="0"
-              pl={isSearched ? "45px" : "0"}
+              pl={isSearched ? "50px" : "0"}
               w={isSearched ? "100%" : "0"}
-              transition="width 0.8s, padding-left 0.8s, background-color 0.8s"
+              visibility={isSearched ? "visible" : "hidden"}
+              transition="width 0.8s, padding-left 0.8s,  background-color 0s, visibility 0s"
             />
           </InputGroup>
         </Box>
@@ -128,17 +157,19 @@ const Navbar = () => {
           display="flex"
           alignItems="center"
         >
-          <Image
-            src="/images/Navbar/back.svg"
+          <Icon
+            as={BsChevronLeft}
+            onClick={() => setIsMenu(false)}
             ml="20px"
             mr="10px"
-            onClick={() => setIsMenu(false)}
+            w="20px"
+            h="20px"
           />
-          <Heading size="sm">Menu</Heading>
+          <Heading sx={fontSizeSidebar}>Menu</Heading>
         </Box>
         <VStack spacing={1} px="10px" pt="10px">
           {menuSidebar.map((menu, index) => {
-            if (index === 0) {
+            if (menu.id === "kb") {
               return (
                 <Box
                   h="50px"
@@ -149,12 +180,13 @@ const Navbar = () => {
                 >
                   <Link href={menu.href}>
                     <Heading
-                      size="sm"
+                      sx={fontSizeSidebar}
                       lineHeight="50px"
                       display="flex"
                       justifyContent="space-between"
+                      alignItems="center"
                     >
-                      {menu.text} <Image src="/images/Navbar/forward.svg" />
+                      {menu.text} <Icon as={BsChevronRight} w="20px" h="20px" />
                     </Heading>
                   </Link>
                 </Box>
@@ -168,7 +200,7 @@ const Navbar = () => {
                   key={menu.id}
                 >
                   <Link href={menu.href}>
-                    <Heading size="sm" lineHeight="50px">
+                    <Heading sx={fontSizeSidebar} lineHeight="50px">
                       {menu.text}
                     </Heading>
                   </Link>
@@ -190,7 +222,7 @@ const Navbar = () => {
                 key={menu.id}
               >
                 <Link href={menu.href}>
-                  <Heading size="sm" lineHeight="50px">
+                  <Heading sx={fontSizeSidebar} lineHeight="50px">
                     {menu.text}
                   </Heading>
                 </Link>
@@ -199,6 +231,14 @@ const Navbar = () => {
           })}
         </VStack>
       </Box>
+    </>
+  );
+};
+
+const Navbar = () => {
+  return (
+    <>
+      <NavbarMobile />
     </>
   );
 };
