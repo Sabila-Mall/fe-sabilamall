@@ -65,35 +65,48 @@ const contactUs = () => {
           </Text>
         </Box>
         <Grid
-          templateRows="2rem 10rem 10rem 5rem"
-          templateColumns="repeat(7, 1fr)"
+          mt="0 !important"
+          templateRows="2rem 10rem 10rem 4.5rem "
+          templateColumns="22.5rem 28.5rem 16.5rem"
           gap="1rem"
         >
-          <GridItem colSpan={3} rowSpan={1} order={2}>
+          <GridItem rowSpan={1} order={2}>
             <Flex
               h="10%"
               order={[1, 1, 2]}
               direction={["column", "column", "row"]}
             >
-              <Stack spacing="1em" direction="row">
-                <Stack direction="row">
+              <Stack
+                direction="row"
+                alignItems="center"
+                height="3rem"
+                width="100%"
+                justifyContent="space-between"
+              >
+                <Stack direction="row" alignItems="center">
                   <FaPhoneAlt size="2rem" color="orange" />
-                  <h1>+62 851-5995-4161</h1>
+                  <Text as="h1" fontSize="0.875rem" fontWeight="500">
+                    +62 851-5995-4161
+                  </Text>
                 </Stack>
-                <Stack direction="row">
+                <Divider orientation="vertical" />
+                <Stack direction="row" alignItems="center">
                   <IoMail size="2rem" color="orange" />
-                  <h1>customer@sabilamall.co.id</h1>
+                  <Text as="h1" fontSize="0.875rem" fontWeight="500">
+                    customer@sabilamall.co.id
+                  </Text>
                 </Stack>
+                <Divider orientation="Horizontal" />
               </Stack>
             </Flex>
           </GridItem>
-          <GridItem colSpan={2} rowSpan={3} order={1}>
+          <GridItem rowSpan={3} order={1}>
             <AspectRatio w="22rem" h="22rem" ratio={4 / 4} order={[2, 2, 1]}>
               <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3965.3005748285827!2d106.83741871529621!3d-6.355123363942694!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69edea57fe727d%3A0xd91affb117d8be88!2sSabilaMall!5e0!3m2!1sen!2sid!4v1620227743526!5m2!1sen!2sid"></iframe>
             </AspectRatio>
           </GridItem>
 
-          <GridItem colSpan={2} rowSpan={4} order={3}>
+          <GridItem rowSpan={4} order={3}>
             <Box position="relative">
               {/* <Image
                 src="/Assets/sm-mascott.svg"
@@ -104,36 +117,36 @@ const contactUs = () => {
               <img src="/Assets/sm-mascott.svg" alt="" />
             </Box>
           </GridItem>
-          <GridItem colSpan={3} rowSpan={3} order={4} mt="2rem">
+          <GridItem rowSpan={3} order={4} mt="2rem">
             <Stack w="100%" h="100%">
               <Text as="h1" fontSize={["2xl"]}>
                 <b>Tinggalkan Pesan</b>
               </Text>
-              <VStack h="100%">
-                <InputGroup size="lg" flexGrow="1">
+              <VStack h="100%" spacing="1rem">
+                <InputGroup size="md" flexGrow="1">
                   <InputLeftElement
                     pointerEvents="none"
-                    children={<IoPeopleSharp color="#A0AEC0" />}
+                    children={<IoPeopleSharp size="1.4rem" color="#A0AEC0" />}
                   />
-                  <Input type="tel" placeholder="Nama Anda" size="lg" />
+                  <Input type="tel" placeholder="Nama Anda" size="md" />
                 </InputGroup>
-                <InputGroup size="lg" flexGrow="1">
+                <InputGroup size="md" flexGrow="1">
                   <InputLeftElement
                     pointerEvents="none"
-                    children={<IoMail color="#A0AEC0" />}
+                    children={<IoMail size="1.4rem" color="#A0AEC0" />}
                   />
-                  <Input placeholder="Alamat email Anda" size="lg" />
+                  <Input placeholder="Alamat email Anda" size="md" />
                 </InputGroup>
-                <InputGroup size="lg" flexGrow="1">
+                <InputGroup size="md" flexGrow="1">
                   <InputLeftElement
                     pointerEvents="none"
-                    children={<FaPhoneAlt color="#A0AEC0" />}
+                    children={<FaPhoneAlt size="1.4rem" color="#A0AEC0" />}
                   />
                   <Input type="tel" placeholder="Nomor Telepon" />
                 </InputGroup>
                 <Textarea
                   placeHolder="Tinggalkan pesan Anda di sini"
-                  size="lg"
+                  size="md"
                   w="100%"
                   h="40%"
                 />
