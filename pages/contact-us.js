@@ -14,11 +14,17 @@ import {
   HStack,
   Grid,
   GridItem,
+  InputGroup,
+  InputLeftElement,
+  Input,
+  VStack,
+  Textarea,
+  Button,
 } from "@chakra-ui/react";
 import { createBreakpoints } from "@chakra-ui/theme-tools";
 import Image from "next/image";
 import { FaPhoneAlt } from "react-icons/fa";
-import { IoChevronForwardSharp, IoMail } from "react-icons/io5";
+import { IoChevronForwardSharp, IoMail, IoPeopleSharp } from "react-icons/io5";
 
 const breakpoints = createBreakpoints({
   xs: "20em", // 320px
@@ -59,7 +65,7 @@ const contactUs = () => {
           </Text>
         </Box>
         <Grid
-          templateRows="repeat(3, 1fr)"
+          templateRows="repeat(5, 1fr)"
           templateColumns="repeat(7, 1fr)"
           gap="1rem"
         >
@@ -82,13 +88,13 @@ const contactUs = () => {
             </Flex>
           </GridItem>
 
-          <GridItem rowSpan={3} colSpan={2} order={1}>
+          <GridItem colSpan={2} rowSpan={4} order={1}>
             <AspectRatio w="22rem" h="22rem" ratio={4 / 4} order={[2, 2, 1]}>
               <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3965.3005748285827!2d106.83741871529621!3d-6.355123363942694!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69edea57fe727d%3A0xd91affb117d8be88!2sSabilaMall!5e0!3m2!1sen!2sid!4v1620227743526!5m2!1sen!2sid"></iframe>
             </AspectRatio>
           </GridItem>
 
-          <GridItem colSpan={2} rowSpan={3} order={3}>
+          <GridItem colSpan={2} rowSpan={4} order={3}>
             <Box position="relative" w="100%" h="100%">
               <Image
                 src="/Assets/sm-mascott.svg"
@@ -98,8 +104,45 @@ const contactUs = () => {
               />
             </Box>
           </GridItem>
-          <GridItem colSpan={3} rowSpan={2} order={4}>
-            <h1>aaa</h1>
+          <GridItem colSpan={3} rowSpan={4} order={4}>
+            <Stack w="100%" h="100%">
+              <Text as="h1" fontSize={["2xl"]}>
+                <b>Tinggalkan Pesan</b>
+              </Text>
+
+              <VStack h="100%">
+                <InputGroup size="md" flexGrow="1">
+                  <InputLeftElement
+                    pointerEvents="none"
+                    children={<IoPeopleSharp color="gray.300" />}
+                  />
+                  <Input type="tel" placeholder="Nama Anda" size="md" />
+                </InputGroup>
+                <InputGroup size="md" flexGrow="1">
+                  <InputLeftElement
+                    pointerEvents="none"
+                    children={<IoMail color="gray.300" />}
+                  />
+                  <Input placeholder="Email" size="md" />
+                </InputGroup>
+                <InputGroup size="md" flexGrow="1">
+                  <InputLeftElement
+                    pointerEvents="none"
+                    children={<FaPhoneAlt color="gray.300" />}
+                  />
+                  <Input type="tel" placeholder="Nomor Telepon" />
+                </InputGroup>
+                <Textarea
+                  placeHolder="Tinggalkan Pesan Anda di sini"
+                  size="md"
+                  w="100%"
+                  h="40%"
+                />
+                <Button colorScheme="red" variant="solid" size="md">
+                  Kirim
+                </Button>
+              </VStack>
+            </Stack>
           </GridItem>
         </Grid>
       </Stack>
