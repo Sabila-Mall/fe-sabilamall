@@ -58,15 +58,11 @@ const styledSidebarMenu = {
 };
 
 const styledNavbar = {
-  "@media only screen and (min-width:500px)": {
-    display: "none",
-  },
   position: "fixed",
   bg: "white",
   minWidth: "100vw",
   boxSizing: "border-box",
   overflow: "hidden",
-  display: "flex",
   alignItems: "center",
 };
 
@@ -357,6 +353,7 @@ const NavbarBottom = () => {
       bottom="0"
       border="1.5px solid #E2E8F0"
       justifyContent="space-evenly"
+      display={{ base: "flex", md: "none" }}
     >
       <Box sx={styledBox}>
         <Icon as={IoHomeSharp} sx={styledIcon} />
@@ -378,9 +375,9 @@ const NavbarBottom = () => {
   );
 };
 
-const NavbarMobile = () => {
+const Navbar = () => {
   const [isSearched, setIsSearched] = useState(false);
-  const [isMainMenu, setIsMainMenu] = useState(true);
+  const [isMainMenu, setIsMainMenu] = useState(false);
   const [isCategoryMenu, setIsCategoryMenu] = useState(false);
 
   const handleClickOverlay = () => {
@@ -406,18 +403,62 @@ const NavbarMobile = () => {
         position="fixed"
         boxShadow="0px 4px 10px 0px #00000040"
         h="50px"
+        display="flex"
+        px={{ base: "2px", md: "40px", lg: "80px", xl: "120px" }}
       >
         <Box display="flex" ml="20px" alignItems="center">
           <Icon
             as={IoMenu}
             sx={styledIcon}
+            display={{ base: "block", md: "none" }}
             onClick={() => setIsMainMenu(true)}
           />
           <Image src="/images/Navbar/logo.svg" ml="20px" />
+          <InputGroup
+            ml="30px"
+            w="60vw"
+            mr="25px"
+            display={{ base: "none", md: "block" }}
+          >
+            <InputLeftElement
+              children={
+                <Icon
+                  as={IoSearch}
+                  h="23px"
+                  w="23px"
+                  sx={{
+                    _hover: {
+                      cursor: "pointer",
+                    },
+                  }}
+                  color="orange.400"
+                  ml="17px"
+                />
+              }
+            />
+            <Input
+              type="text"
+              placeholder="Cari di toko..."
+              borderRadius="15px"
+              borderWidth="0"
+              bg="gray.100"
+              pl="55px"
+            />
+          </InputGroup>
         </Box>
         <Box display="flex" alignItems="center" mr="20px">
-          <Icon as={IoHeartSharp} sx={styledIcon} mr="10px" />
+          <Icon
+            as={IoHeartSharp}
+            sx={styledIcon}
+            mr={{ base: "12px", md: "20px", lg: "25px" }}
+          />
           <Icon as={IoNotifications} sx={styledIcon} />
+          <Icon
+            as={FaUser}
+            sx={styledIcon}
+            ml={{ base: "12px", md: "20px", lg: "25px" }}
+            display={{ base: "none", md: "block" }}
+          />
         </Box>
         <Box
           zIndex={isSearched ? "100" : "-100"}
@@ -426,7 +467,7 @@ const NavbarMobile = () => {
           right="0"
           w={isSearched ? "100vw" : "128px"}
           bg={isSearched ? "white" : "transparent"}
-          display="flex"
+          display={{ base: "flex", md: "none" }}
           alignItems="center"
           px="20px"
           transition="width 0.8s, background-color 0.8s"
@@ -491,14 +532,6 @@ const NavbarMobile = () => {
         {sideBar}
       </Box>
       <NavbarBottom />
-    </>
-  );
-};
-
-const Navbar = () => {
-  return (
-    <>
-      <NavbarMobile />
     </>
   );
 };
