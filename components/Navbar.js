@@ -28,6 +28,8 @@ import {
   IoNotifications,
 } from "react-icons/io5";
 
+import styles from "../styles/Navbar.module.scss";
+
 const styledIcon = {
   color: "gray.500",
   w: "23px",
@@ -49,7 +51,6 @@ const styledSidebarMenu = {
   boxSizing: "border-box",
   h: "100vh",
   bg: "white",
-  fontFamily: "Inter",
   fontWeight: "500",
   lineHeight: "24px",
   color: "black",
@@ -80,12 +81,57 @@ const BoxMenu = ({ children }) => (
   </Box>
 );
 
-const SideBar = ({
-  isMainMenu,
-  setIsMainMenu,
-  isCategoryMenu,
-  setIsCategoryMenu,
-}) => {
+const NavbarBottom = () => {
+  const styledBox = {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  };
+
+  const styledFont = {
+    fontSize: "12px",
+    color: "gray.500",
+    lineHeight: "18px",
+    fontWeight: "500",
+  };
+
+  const icons = [
+    { text: "Home", iconElement: IoHomeSharp, id: "ic1" },
+    { text: "Keranjang", iconElement: IoCart, id: "ic2" },
+    { text: "Pesanan", iconElement: IoReceiptSharp, id: "ic3" },
+    { text: "Akun", iconElement: FaUser, id: "ic4" },
+  ];
+
+  return (
+    <Box
+      sx={styledNavbar}
+      h="60px"
+      bottom="0"
+      border="1.5px solid #E2E8F0"
+      justifyContent="space-evenly"
+      display={{ base: "flex", md: "none" }}
+    >
+      {icons.map((icon) => (
+        <Box sx={styledBox} key={icon.id}>
+          <Icon as={icon.iconElement} sx={styledIcon} />
+          <Text sx={styledFont}>{icon.text}</Text>
+        </Box>
+      ))}
+    </Box>
+  );
+};
+
+const Navbar = () => {
+  const [isSearched, setIsSearched] = useState(false);
+  const [isMainMenu, setIsMainMenu] = useState(false);
+  const [isCategoryMenu, setIsCategoryMenu] = useState(false);
+
+  const handleClickOverlay = () => {
+    setIsMainMenu(false);
+    setIsCategoryMenu(false);
+  };
+
   const menuSidebar = {
     headerText: "Menu",
     menu: [
@@ -212,199 +258,15 @@ const SideBar = ({
   return (
     <>
       <Box
-        w="100%"
-        h="50px"
-        boxShadow="0px 4px 10px 0px #00000040"
-        boxSizing="border-box"
-        bg="white"
-        display="flex"
-        alignItems="center"
-      >
-        <Icon
-          as={BsChevronLeft}
-          onClick={
-            isCategoryMenu
-              ? () => setIsCategoryMenu(false)
-              : () => setIsMainMenu(false)
-          }
-          ml="20px"
-          mr="10px"
-          w="20px"
-          h="20px"
-        />
-        <Heading sx={fontSizeSidebar}>
-          {isCategoryMenu ? menuCategory.headerText : menuSidebar.headerText}
-        </Heading>
-      </Box>
-      <VStack spacing={1} px="10px" pt="5px">
-        {isMainMenu &&
-          !isCategoryMenu &&
-          menuSidebar.menu.map((item) => {
-            if (item.id === "kb") {
-              return (
-                <BoxMenu key={item.id}>
-                  <Heading
-                    sx={fontSizeSidebar}
-                    lineHeight="50px"
-                    onClick={() => setIsCategoryMenu(true)}
-                  >
-                    {item.text}
-                  </Heading>
-                  <Icon
-                    as={BsChevronRight}
-                    w="20px"
-                    h="20px"
-                    onClick={() => setIsCategoryMenu(true)}
-                  />
-                </BoxMenu>
-              );
-            } else if (item.id === "dagp") {
-              return (
-                <Box
-                  borderBottomWidth="1px"
-                  borderColor="gray.200"
-                  w="70vw"
-                  key={item.id}
-                >
-                  <Link href={item.href}>
-                    <Heading sx={fontSizeSidebar} lineHeight="40px">
-                      {item.text}
-                    </Heading>
-                  </Link>
-                  <Image
-                    src="/images/Navbar/google-play.svg"
-                    alt="Google Play"
-                    mt="-13px"
-                    mb="14px"
-                  />
-                </Box>
-              );
-            }
-            return (
-              <BoxMenu key={item.id}>
-                <Link href={item.href}>
-                  <Heading sx={fontSizeSidebar} lineHeight="50px">
-                    {item.text}
-                  </Heading>
-                </Link>
-              </BoxMenu>
-            );
-          })}{" "}
-        {isMainMenu && isCategoryMenu && (
-          <Accordion defaultIndex={[0]} borderWidth="0" allowMultiple>
-            {menuCategory.menu.map((item) => {
-              return (
-                <AccordionItem key={item.id}>
-                  <AccordionButton borderWidth="0" borderColor="transparent">
-                    <Box
-                      h="40px"
-                      w="70vw"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="space-between"
-                    >
-                      <Heading sx={fontSizeSidebar} lineHeight="30px">
-                        {item.text}
-                      </Heading>
-                      <AccordionIcon />
-                    </Box>
-                  </AccordionButton>
-                  <AccordionPanel pb={1} pl="30px">
-                    {item.subMenu.map((sub) => (
-                      <Heading
-                        sx={fontSizeSidebar}
-                        lineHeight="40px"
-                        key={sub.id}
-                      >
-                        {sub.text}
-                      </Heading>
-                    ))}
-                  </AccordionPanel>
-                </AccordionItem>
-              );
-            })}
-          </Accordion>
-        )}
-      </VStack>
-    </>
-  );
-};
-
-const NavbarBottom = () => {
-  const styledBox = {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-  };
-
-  const styledFont = {
-    fontSize: "12px",
-    color: "gray.500",
-    lineHeight: "18px",
-    fontFamily: "Inter",
-    fontWeight: "500",
-  };
-
-  return (
-    <Box
-      sx={styledNavbar}
-      h="60px"
-      bottom="0"
-      border="1.5px solid #E2E8F0"
-      justifyContent="space-evenly"
-      display={{ base: "flex", md: "none" }}
-    >
-      <Box sx={styledBox}>
-        <Icon as={IoHomeSharp} sx={styledIcon} />
-        <Text sx={styledFont}>Home</Text>
-      </Box>
-      <Box sx={styledBox}>
-        <Icon as={IoCart} sx={styledIcon} />
-        <Text sx={styledFont}>Keranjang</Text>
-      </Box>
-      <Box sx={styledBox}>
-        <Icon as={IoReceiptSharp} sx={styledIcon} />
-        <Text sx={styledFont}>Pesanan</Text>
-      </Box>
-      <Box sx={styledBox}>
-        <Icon as={FaUser} sx={styledIcon} />
-        <Text sx={styledFont}>Akun</Text>
-      </Box>
-    </Box>
-  );
-};
-
-const Navbar = () => {
-  const [isSearched, setIsSearched] = useState(false);
-  const [isMainMenu, setIsMainMenu] = useState(false);
-  const [isCategoryMenu, setIsCategoryMenu] = useState(false);
-
-  const handleClickOverlay = () => {
-    setIsMainMenu(false);
-    setIsCategoryMenu(false);
-  };
-
-  const sideBar = (
-    <SideBar
-      isMainMenu={isMainMenu}
-      setIsMainMenu={setIsMainMenu}
-      isCategoryMenu={isCategoryMenu}
-      setIsCategoryMenu={setIsCategoryMenu}
-    />
-  );
-
-  return (
-    <>
-      <Box
         sx={styledNavbar}
         justifyContent="space-between"
         top="0"
         position="fixed"
         boxShadow="0px 4px 10px 0px #00000040"
-        h="50px"
+        h={{ base: "50px", md: "70px" }}
         display="flex"
         px={{ base: "2px", md: "40px", lg: "80px", xl: "120px" }}
+        className={styles.navbarFont}
       >
         <Box display="flex" ml="20px" alignItems="center">
           <Icon
@@ -522,14 +384,159 @@ const Navbar = () => {
         onClick={handleClickOverlay}
       ></Box>
       <Box w={isMainMenu ? "85vw" : "0"} zIndex="102" sx={styledSidebarMenu}>
-        {sideBar}
+        <Box
+          w="100%"
+          h="50px"
+          boxShadow="0px 4px 10px 0px #00000040"
+          boxSizing="border-box"
+          bg="white"
+          display="flex"
+          alignItems="center"
+        >
+          <Icon
+            as={BsChevronLeft}
+            onClick={
+              isCategoryMenu
+                ? () => setIsCategoryMenu(false)
+                : () => setIsMainMenu(false)
+            }
+            ml="20px"
+            mr="10px"
+            w="20px"
+            h="20px"
+          />
+          <Heading
+            sx={fontSizeSidebar}
+            visibility={isCategoryMenu ? "hidden" : "visible"}
+          >
+            {menuSidebar.headerText}
+          </Heading>
+        </Box>
+        <VStack spacing={1} px="10px" pt="5px">
+          {menuSidebar.menu.map((item) => {
+            if (item.id === "kb") {
+              return (
+                <Box
+                  h="40px"
+                  borderBottomWidth="1px"
+                  borderColor="gray.200"
+                  w="70vw"
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  key={item.id}
+                  onClick={() => setIsCategoryMenu(true)}
+                >
+                  <Heading sx={fontSizeSidebar} lineHeight="50px">
+                    {item.text}
+                  </Heading>
+                  <Icon as={BsChevronRight} w="20px" h="20px" />
+                </Box>
+              );
+            } else if (item.id === "dagp") {
+              return (
+                <Box
+                  borderBottomWidth="1px"
+                  borderColor="gray.200"
+                  w="70vw"
+                  key={item.id}
+                >
+                  <Link href={item.href}>
+                    <Heading sx={fontSizeSidebar} lineHeight="40px">
+                      {item.text}
+                    </Heading>
+                  </Link>
+                  <Image
+                    src="/images/Navbar/google-play.svg"
+                    alt="Google Play"
+                    mt="-13px"
+                    mb="14px"
+                  />
+                </Box>
+              );
+            }
+            return (
+              <BoxMenu key={item.id}>
+                <Link href={item.href}>
+                  <Heading sx={fontSizeSidebar} lineHeight="50px">
+                    {item.text}
+                  </Heading>
+                </Link>
+              </BoxMenu>
+            );
+          })}
+        </VStack>
       </Box>
       <Box
-        w={isMainMenu && isCategoryMenu ? "85vw" : "0"}
+        w={isCategoryMenu ? "85vw" : "0"}
         zIndex="103"
         sx={styledSidebarMenu}
+        overflow="hidden"
+        transition="width .3s"
       >
-        {sideBar}
+        <Box
+          w="100%"
+          h="50px"
+          boxShadow="0px 4px 10px 0px #00000040"
+          boxSizing="border-box"
+          bg="white"
+          display="flex"
+          alignItems="center"
+        >
+          <Icon
+            as={BsChevronLeft}
+            onClick={
+              isCategoryMenu
+                ? () => setIsCategoryMenu(false)
+                : () => setIsMainMenu(false)
+            }
+            ml="20px"
+            mr="10px"
+            w="20px"
+            h="20px"
+          />
+          <Heading
+            sx={fontSizeSidebar}
+            visibility={isCategoryMenu ? "visible" : "hidden"}
+          >
+            {menuCategory.headerText}
+          </Heading>
+        </Box>
+        <VStack spacing={1} px="10px" pt="5px">
+          <Accordion defaultIndex={[0]} borderWidth="0" allowMultiple>
+            {menuCategory.menu.map((item) => {
+              return (
+                <AccordionItem key={item.id}>
+                  <AccordionButton borderWidth="0" borderColor="transparent">
+                    <Box
+                      h="40px"
+                      w="70vw"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="space-between"
+                    >
+                      <Heading sx={fontSizeSidebar} lineHeight="30px">
+                        {item.text}
+                      </Heading>
+                      <AccordionIcon />
+                    </Box>
+                  </AccordionButton>
+                  <AccordionPanel pb={1} pl="30px">
+                    {item.subMenu.map((sub) => (
+                      <Heading
+                        sx={fontSizeSidebar}
+                        lineHeight="40px"
+                        key={sub.id}
+                      >
+                        {sub.text}
+                      </Heading>
+                    ))}
+                  </AccordionPanel>
+                </AccordionItem>
+              );
+            })}
+          </Accordion>
+        </VStack>
       </Box>
       <NavbarBottom />
     </>
