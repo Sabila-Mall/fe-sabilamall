@@ -267,6 +267,7 @@ const Navbar = () => {
         display="flex"
         px={{ base: "2px", md: "40px", lg: "80px", xl: "120px" }}
         className={styles.navbarFont}
+        zIndex={isSearched ? "107" : ""}
       >
         <Box display="flex" ml="20px" alignItems="center">
           <Icon
@@ -323,10 +324,11 @@ const Navbar = () => {
           />
         </Box>
         <Box
-          zIndex={isSearched ? "100" : "-100"}
           position="absolute"
+          zIndex={isSearched ? "110" : "-100"}
           h="100%"
           right="0"
+          top="0"
           w={isSearched ? "100vw" : "128px"}
           bg={isSearched ? "white" : "transparent"}
           display={{ base: "flex", md: "none" }}
@@ -377,10 +379,9 @@ const Navbar = () => {
         position="fixed"
         zIndex="101"
         bg="gray.500"
-        opacity={isMainMenu ? "50%" : "0%"}
-        w={isMainMenu ? "100vw" : "0"}
+        opacity="50%"
+        w={isMainMenu || isSearched ? "100vw" : "0"}
         h="100vh"
-        transition="opacity 0.6s"
         onClick={handleClickOverlay}
       ></Box>
       <Box w={isMainMenu ? "85vw" : "0"} zIndex="102" sx={styledSidebarMenu}>
