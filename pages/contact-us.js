@@ -35,7 +35,9 @@ import {
 } from "react-icons/io5";
 
 const contact = () => {
-  const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
+  const [isLargerThan768, isDisplayingInBrowser] = useMediaQuery(
+    "(min-width: 768px)",
+  );
   const [isLargerThan1024] = useMediaQuery("(min-width: 1024px)");
   const [isLargerThan1280] = useMediaQuery("(min-width: 1280px)");
 
@@ -62,8 +64,7 @@ const contact = () => {
         <Text as="h1" fontWeight="700" fontSize="2.25rem" mt="2rem">
           Kontak Kami
         </Text>
-
-        <Flex w="100%" flexDirection={isLargerThan768 ? "row" : "column"}>
+        <Flex w="100%">
           <Box
             w="22rem"
             maxW={{ sm: "19.5rem", lg: "19.5rem", xl: "22.5rem" }}
@@ -75,7 +76,7 @@ const contact = () => {
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3965.3005748285827!2d106.83741871529621!3d-6.355123363942694!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69edea57fe727d%3A0xd91affb117d8be88!2sSabilaMall!5e0!3m2!1sen!2sid!4v1620499207093!5m2!1sen!2sid"
                   width="22rem"
                   height="22rem"
-                  allowfullscreen={true}
+                  allowFullScreen={true}
                   loading="lazy"
                 ></iframe>
               </AspectRatio>
