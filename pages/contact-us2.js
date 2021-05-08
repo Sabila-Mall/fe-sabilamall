@@ -18,14 +18,19 @@ import {
   VStack,
   Textarea,
   Button,
+  Image,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import { FaPhoneAlt } from "react-icons/fa";
+import { FaPhoneAlt, FaFacebookSquare } from "react-icons/fa";
+import { IoLogoFacebook } from "react-icons/io";
 import {
   IoChevronForwardSharp,
   IoMail,
   IoPeopleSharp,
   IoLocation,
+  IoLogoTwitter,
+  IoLogoInstagram,
+  IoLogoLinkedin,
 } from "react-icons/io5";
 
 const contact = () => {
@@ -51,7 +56,7 @@ const contact = () => {
       mx={["2rem", "3rem", "2rem", "2rem", "7.5rem"]}
       flexDirection="column"
     >
-      <Box>
+      <Box mt="1.25rem">
         <Breadcrumb separator={<IoChevronForwardSharp size="0.75rem" />}>
           <BreadcrumbItem>
             <BreadcrumbLink href="#">Home</BreadcrumbLink>
@@ -68,7 +73,7 @@ const contact = () => {
         </Text>
         {useGetWindowWidth() > 1023 ? (
           <Flex w="100%">
-            <Box w="32%">
+            <Box maxW={"19rem"} mr="1rem">
               <Flex direction="column">
                 <AspectRatio
                   ratio={1 / 1}
@@ -77,9 +82,8 @@ const contact = () => {
                 >
                   <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1982.6511914828773!2d106.84040535481434!3d-6.354888779943661!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69edea57fe727d%3A0xd91affb117d8be88!2sSabilaMall!5e0!3m2!1sen!2sid!4v1620456567353!5m2!1sen!2sid"
-                    width="22rem"
-                    height="22rem"
                     allowfullscreen={true}
+                    width="22rem"
                   />
                 </AspectRatio>
                 <Flex mt="1rem">
@@ -99,6 +103,7 @@ const contact = () => {
                         variant="outline"
                         fontWeight="700"
                         colorScheme="orange"
+                        fontSize="0.875rem"
                       >
                         Lihat di Google Maps
                       </Button>
@@ -107,7 +112,7 @@ const contact = () => {
                 </Flex>
               </Flex>
             </Box>
-            <Flex w="40%" direction="column" px="1rem">
+            <Flex w="50%" direction="column" px="1rem">
               <Flex
                 h="20%"
                 w="100%"
@@ -134,11 +139,68 @@ const contact = () => {
                   <Divider orientation="horizontal" />
                 </Box>
               </Flex>
-              <Box h="80%" bg="red.500">
-                a
+              <Box h="80%">
+                <Text as="h1" fontSize="1.5rem">
+                  Tinggalkan Pesan
+                </Text>
+                <Stack spacing={4} mt="1.4rem">
+                  <InputGroup>
+                    <InputLeftElement
+                      pointerEvents="none"
+                      children={<IoPeopleSharp color="#A0AEC0" />}
+                    />
+                    <Input type="tel" placeholder="Nama Anda" />
+                  </InputGroup>
+
+                  <InputGroup>
+                    <InputLeftElement
+                      pointerEvents="none"
+                      fontSize="1em"
+                      children={<IoMail color="#A0AEC0" />}
+                    />
+                    <Input placeholder="Alamat email Anda" />
+                  </InputGroup>
+
+                  <InputGroup>
+                    <InputLeftElement
+                      pointerEvents="none"
+                      fontSize="1em"
+                      children={<FaPhoneAlt color="#A0AEC0" />}
+                    />
+                    <Input placeholder="Nomor telepon Anda" />
+                  </InputGroup>
+                  <Textarea
+                    h="7.5rem"
+                    placeholder="Tuliskan pesan Anda di sini"
+                    resize={"none"}
+                  />
+                  <Flex justifyContent="flex-end">
+                    <Button
+                      w="10.4rem"
+                      colorScheme="red"
+                      color="white"
+                      fontWeight="700"
+                    >
+                      Kirim
+                    </Button>
+                  </Flex>
+                </Stack>
               </Box>
             </Flex>
-            <Box w="27%" bg="blue.800"></Box>
+            <Flex direction="column">
+              <Box>
+                <Image maxW="22rem" src="/Assets/sm-mascott.svg" alt="" />
+              </Box>
+              <Text fontSize="1.5rem" fontWeight="700">
+                Follow SabilaMall yuk!
+              </Text>
+              <Stack direction="row" spacing={4} justifyContent="center">
+                <IoLogoFacebook size="2.5rem" color="orange" />
+                <IoLogoTwitter size="2.5rem" color="orange" />
+                <IoLogoInstagram size="2.5rem" color="orange" />
+                <IoLogoLinkedin size="2.5rem" color="orange" />
+              </Stack>
+            </Flex>
           </Flex>
         ) : null}
       </Box>
