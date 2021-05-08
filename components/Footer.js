@@ -112,7 +112,7 @@ const DesktopFooter = () => {
               Unduh Aplikasi
             </Heading>
             <Image
-              src="/images/Footer/google-play.svg"
+              src="/images/Footer/google-play.png"
               alt="Google Play Store"
             />
           </Box>
@@ -156,19 +156,19 @@ const DesktopFooter = () => {
           >
             <GridItem>
               <Image
-                src="/images/Footer/pos-indonesia.svg"
+                src="/images/Footer/pos-indonesia.png"
                 alt="Pos Indonesia"
               />
             </GridItem>
             <GridItem>
               <Image
-                src="/images/Footer/sap.svg"
+                src="/images/Footer/sap.png"
                 alt="SAP"
               />
             </GridItem>
             <GridItem>
               <Image
-                src="/images/Footer/sicepat.svg"
+                src="/images/Footer/sicepat.png"
                 alt="SiCepat"
               />
             </GridItem>
@@ -177,7 +177,7 @@ const DesktopFooter = () => {
               justifySelf="center"
             >
               <Image
-                src="/images/Footer/jne-express.svg"
+                src="/images/Footer/jne-express.png"
                 alt="JNE Express"
               />
             </GridItem>
