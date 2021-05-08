@@ -68,7 +68,7 @@ const contact = () => {
         </Text>
         {useGetWindowWidth() > 1023 ? (
           <Flex w="100%">
-            <Box w="30%">
+            <Box w="32%">
               <Flex direction="column">
                 <AspectRatio
                   ratio={1 / 1}
@@ -107,15 +107,38 @@ const contact = () => {
                 </Flex>
               </Flex>
             </Box>
-            <Flex w="45%" direction="column" px="1rem">
-              <Box h="20%" bg="red.700">
-                a
-              </Box>
+            <Flex w="40%" direction="column" px="1rem">
+              <Flex
+                h="20%"
+                w="100%"
+                direction="column"
+                justifyContent="space-between"
+              >
+                <Flex
+                  w="100%"
+                  h="50%"
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
+                  <Flex>
+                    <FaPhoneAlt color="rgba(246, 173, 85, 1)" size="2rem" />
+                    <Text>+62 851-5995-4161</Text>
+                  </Flex>
+                  <Divider orientation="vertical" />
+                  <Flex>
+                    <IoMail color="rgba(246, 173, 85, 1)" size="2rem" />
+                    <Text pl="0.64rem">customer@sabilamall.co.id</Text>
+                  </Flex>
+                </Flex>
+                <Box h="31%">
+                  <Divider orientation="horizontal" />
+                </Box>
+              </Flex>
               <Box h="80%" bg="red.500">
                 a
               </Box>
             </Flex>
-            <Box w="25%" bg="blue.800"></Box>
+            <Box w="27%" bg="blue.800"></Box>
           </Flex>
         ) : null}
       </Box>
