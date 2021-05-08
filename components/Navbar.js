@@ -54,7 +54,8 @@ const styledSidebarMenu = {
   fontWeight: "500",
   lineHeight: "24px",
   color: "black",
-  overflow: "hidden",
+  overflowX: "hidden",
+  overflowY: "auto",
   transition: "width 0.4s",
 };
 
@@ -265,18 +266,25 @@ const Navbar = () => {
         boxShadow="0px 4px 10px 0px #00000040"
         h={{ base: "50px", md: "70px" }}
         display="flex"
-        px={{ base: "2px", md: "40px", lg: "80px", xl: "120px" }}
+        px={{ md: "40px", lg: "80px", xl: "120px" }}
         className={styles.navbarFont}
         zIndex={isSearched ? "107" : ""}
       >
-        <Box display="flex" ml="20px" alignItems="center">
+        <Box
+          display="flex"
+          ml={{ base: "15px", md: "20px" }}
+          alignItems="center"
+        >
           <Icon
             as={IoMenu}
             sx={styledIcon}
             display={{ base: "block", md: "none" }}
             onClick={() => setIsMainMenu(true)}
           />
-          <Image src="/images/Navbar/logo.svg" ml="20px" />
+          <Image
+            src="/images/Navbar/logo.svg"
+            ml={{ base: "15px", md: "20px" }}
+          />
           <InputGroup
             ml="30px"
             w="60vw"
@@ -313,13 +321,13 @@ const Navbar = () => {
           <Icon
             as={IoHeartSharp}
             sx={styledIcon}
-            mr={{ base: "12px", md: "20px", lg: "25px" }}
+            mr={{ base: "8px", md: "20px", lg: "25px" }}
           />
           <Icon as={IoNotifications} sx={styledIcon} />
           <Icon
             as={FaUser}
             sx={styledIcon}
-            ml={{ base: "12px", md: "20px", lg: "25px" }}
+            ml={{ base: "8px", md: "20px", lg: "25px" }}
             display={{ base: "none", md: "block" }}
           />
         </Box>
