@@ -19,6 +19,7 @@ import {
   Textarea,
   Button,
   Image,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { FaPhoneAlt, FaFacebookSquare } from "react-icons/fa";
@@ -34,27 +35,15 @@ import {
 } from "react-icons/io5";
 
 const contact = () => {
-  const useGetWindowWidth = () => {
-    const [width, setWidth] = useState(
-      typeof window !== "undefined" ? window.innerWidth : 0,
-    );
-
-    useEffect(() => {
-      const onResize = () => {
-        setWidth(window.innerWidth);
-      };
-      window.addEventListener("resize", onResize);
-      return () => window.removeEventListener("resize", onResize);
-    }, []);
-
-    return width;
-  };
+  const [isLargerThan1024] = useMediaQuery("(min-width: 1024px)");
+  const [isLargerThan1280] = useMediaQuery("(min-width: 1280px)");
 
   return (
     <Flex
       fontWeight="500"
-      mx={["2rem", "3rem", "2rem", "2rem", "7.5rem"]}
+      mx={["2rem", "3rem", "2rem", "2rem", "5rem", "7.5rem"]}
       flexDirection="column"
+      justifyContent="center"
     >
       <Box mt="1.25rem">
         <Breadcrumb separator={<IoChevronForwardSharp size="0.75rem" />}>
@@ -68,12 +57,12 @@ const contact = () => {
             </BreadcrumbLink>
           </BreadcrumbItem>
         </Breadcrumb>
-        <Text as="h1" fontWeight="700" fontSize="3rem">
+        <Text as="h1" fontWeight="700" fontSize="3rem" mt="2rem">
           Kontak Kami
         </Text>
-        {useGetWindowWidth() > 1023 ? (
+        {isLargerThan1024 ? (
           <Flex w="100%">
-            <Box maxW={"19rem"} mr="1rem">
+            <Box maxW={{ lg: "19.5rem", xl: "22.5rem" }} mr="1rem">
               <Flex direction="column">
                 <AspectRatio
                   ratio={1 / 1}
@@ -125,13 +114,28 @@ const contact = () => {
                   alignItems="center"
                   justifyContent="space-between"
                 >
-                  <Flex>
-                    <FaPhoneAlt color="rgba(246, 173, 85, 1)" size="2rem" />
-                    <Text>+62 851-5995-4161</Text>
+                  <Flex alignItems="center">
+                    {!isLargerThan1280 ? (
+                      <FaPhoneAlt color="rgba(246, 173, 85, 1)" size="1rem" />
+                    ) : (
+                      <FaPhoneAlt color="rgba(246, 173, 85, 1)" size="2rem" />
+                    )}
+
+                    <Text
+                      fontSize={isLargerThan1280 ? "1rem" : "0.9rem"}
+                      as="h1"
+                      pl="0.64rem"
+                    >
+                      +62 851-5995-4161
+                    </Text>
                   </Flex>
                   <Divider orientation="vertical" />
-                  <Flex>
-                    <IoMail color="rgba(246, 173, 85, 1)" size="2rem" />
+                  <Flex alignItems="center">
+                    {!isLargerThan1280 ? (
+                      <IoMail color="rgba(246, 173, 85, 1)" size="1rem" />
+                    ) : (
+                      <IoMail color="rgba(246, 173, 85, 1)" size="2rem" />
+                    )}
                     <Text pl="0.64rem">customer@sabilamall.co.id</Text>
                   </Flex>
                 </Flex>
@@ -189,7 +193,11 @@ const contact = () => {
             </Flex>
             <Flex direction="column">
               <Box>
-                <Image maxW="22rem" src="/Assets/sm-mascott.svg" alt="" />
+                <Image
+                  maxW={{ xl: "22rem" }}
+                  src="/Assets/sm-mascott.svg"
+                  alt=""
+                />
               </Box>
               <Text fontSize="1.5rem" fontWeight="700">
                 Follow SabilaMall yuk!
