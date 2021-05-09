@@ -216,7 +216,7 @@ const SignUp = () => {
                       borderRadius="0px"
                     >
                       {provinces.map((province, i) => (
-                        <option value={province + "-" + i}>{province}</option>
+                        <option key={province}>{province}</option>
                       ))}
                     </Select>
                   </FormControl>
@@ -254,7 +254,7 @@ const SignUp = () => {
                       borderRadius="0px"
                     >
                       {cities.map((city, i) => (
-                        <option value={city + "-" + i}>{city}</option>
+                        <option key={city}>{city}</option>
                       ))}
                     </Select>
                   </FormControl>
