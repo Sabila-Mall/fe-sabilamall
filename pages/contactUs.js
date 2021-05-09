@@ -60,25 +60,49 @@ const contactUs = () => {
             Kontak Kami
           </Text>
 
-          <Grid gridTemplateRows={{ base: "repeat(auto)" }} gap={10}>
-            <GridItem>
-              <Stack direction={{ base: "column" }} spacing={{ base: "1rem" }}>
-                <Flex alignItems="center">
-                  <FaPhoneAlt size="2rem" color="orange" />
-                  <Text fontSize={["14px"]} pl="0.64rem">
-                    +62 851-5995-4161
-                  </Text>
-                </Flex>
-                <Flex alignItems="center">
-                  <IoMail size="2rem" color="orange" />
-                  <Text fontSize={["14px"]} pl="0.64rem">
-                    customer@sabilamall.co.id
-                  </Text>
-                </Flex>
+          <Grid
+            gridTemplateColumns={{
+              lg: "300px auto 260px",
+              xl: "360px auto 280px",
+            }}
+            gridTemplateRows={{ base: "repeat(auto)", lg: "15% auto " }}
+            gap={{ base: 10, lg: 2, xl: 5 }}
+          >
+            <GridItem order={{ lg: 2 }}>
+              <Stack
+                h="100%"
+                w="100%"
+                flexDirection={{ lg: "column" }}
+                spacing="25px"
+              >
+                <Stack
+                  justifyContent={{ lg: "space-between" }}
+                  h="100%"
+                  direction={{ base: "column", lg: "row" }}
+                  spacing={{ base: "1rem" }}
+                >
+                  <Flex alignItems="center">
+                    <FaPhoneAlt size="2rem" color="orange" />
+                    <Text fontSize={["14px"]} pl="0.64rem">
+                      +62 851-5995-4161
+                    </Text>
+                  </Flex>
+                  <Divider orientation="vertical" />
+                  <Flex alignItems="center">
+                    <IoMail size="2rem" color="orange" />
+                    <Text fontSize={["14px"]} pl="0.64rem">
+                      customer@sabilamall.co.id
+                    </Text>
+                  </Flex>
+                </Stack>
+                <Divider
+                  orientation="horizontal"
+                  display={{ base: "none", lg: "block" }}
+                />
               </Stack>
             </GridItem>
 
-            <GridItem>
+            <GridItem order={{ lg: 1 }} rowSpan={{ lg: 2 }}>
               <Flex flexDirection={["column"]}>
                 <AspectRatio
                   ratio={1 / 1}
@@ -87,8 +111,6 @@ const contactUs = () => {
                 >
                   <iframe
                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3965.3005748285827!2d106.83741871529621!3d-6.355123363942694!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69edea57fe727d%3A0xd91affb117d8be88!2sSabilaMall!5e0!3m2!1sen!2sid!4v1620499207093!5m2!1sen!2sid"
-                    width="22rem"
-                    height="22rem"
                     allowFullScreen={true}
                     loading="lazy"
                   ></iframe>
@@ -121,7 +143,7 @@ const contactUs = () => {
               </Flex>
             </GridItem>
 
-            <GridItem>
+            <GridItem order={{ lg: 3 }} rowSpan={{ lg: 2 }}>
               <Flex direction="column">
                 <Flex justifyContent="center">
                   <Image
@@ -143,8 +165,11 @@ const contactUs = () => {
               </Flex>
             </GridItem>
 
-            <GridItem>
-              <Stack spacing={4} mt="1.4rem">
+            <GridItem order={{ lg: 5 }} rowSpan={1}>
+              <Stack spacing={4}>
+                <Text as="h1" fontSize="1.5rem">
+                  Tinggalkan Pesan
+                </Text>
                 <InputGroup>
                   <InputLeftElement
                     pointerEvents="none"
@@ -177,7 +202,7 @@ const contactUs = () => {
                 />
                 <Flex justifyContent="flex-end">
                   <Button
-                    w="100%"
+                    w={{ base: "100%", lg: "10.4rem" }}
                     colorScheme="red"
                     color="white"
                     fontWeight="700"
