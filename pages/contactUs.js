@@ -4,7 +4,6 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
-  extendTheme,
   Text,
   Stack,
   AspectRatio,
@@ -19,7 +18,6 @@ import {
   Textarea,
   Button,
   Image,
-  useMediaQuery,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { FaPhoneAlt, FaFacebookSquare } from "react-icons/fa";
@@ -34,19 +32,9 @@ import {
   IoLogoLinkedin,
 } from "react-icons/io5";
 
-// const breakpoints = createBreakpoints({
-//   sm: "30em",
-//   md: "48em",
-//   lg: "62em",
-//   xl: "80em",
-//   "2xl": "96em",
-//   "3xl": "2em",
-// });
-// const theme = extendTheme({ breakpoints });
-
 const contactUs = () => {
   return (
-    <>
+    <Box>
       <Flex
         fontWeight="500"
         mx={["2rem", "3rem", "2rem", "2rem", "5rem", "7.5rem"]}
@@ -71,7 +59,7 @@ const contactUs = () => {
             as="h1"
             fontWeight="700"
             fontSize={{ base: "2.25rem", "2xl": "3rem" }}
-            mt="2rem"
+            mt="23px"
           >
             Kontak Kami
           </Text>
@@ -192,6 +180,7 @@ const contactUs = () => {
                 <InputGroup>
                   <InputLeftElement
                     pointerEvents="none"
+                    fontSize="1em"
                     children={<IoPeopleSharp color="#A0AEC0" size="24px" />}
                   />
                   <Input type="tel" placeholder="Nama Anda" />
@@ -234,7 +223,7 @@ const contactUs = () => {
           </Grid>
         </Box>
       </Flex>
-    </>
+    </Box>
   );
 };
 
