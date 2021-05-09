@@ -83,14 +83,17 @@ const contactUs = () => {
                 >
                   <Flex alignItems="center">
                     <FaPhoneAlt size="2rem" color="orange" />
-                    <Text fontSize={["14px"]} pl="0.64rem">
+                    <Text fontSize={{ base: "14px", xl: "1rem" }} pl="0.64rem">
                       +62 851-5995-4161
                     </Text>
                   </Flex>
-                  <Divider orientation="vertical" />
+                  <Divider
+                    orientation="vertical"
+                    display={{ base: "none", lg: "block" }}
+                  />
                   <Flex alignItems="center">
                     <IoMail size="2rem" color="orange" />
-                    <Text fontSize={["14px"]} pl="0.64rem">
+                    <Text fontSize={{ base: "14px", xl: "1rem" }} pl="0.64rem">
                       customer@sabilamall.co.id
                     </Text>
                   </Flex>
@@ -144,7 +147,7 @@ const contactUs = () => {
             </GridItem>
 
             <GridItem order={{ lg: 3 }} rowSpan={{ lg: 2 }}>
-              <Flex direction="column">
+              <Stack direction="column" spacing={1}>
                 <Flex justifyContent="center">
                   <Image
                     src="/images/sm-mascott.svg"
@@ -162,18 +165,18 @@ const contactUs = () => {
                   <IoLogoInstagram size="2.5rem" color="orange" />
                   <IoLogoLinkedin size="2.5rem" color="orange" />
                 </Stack>
-              </Flex>
+              </Stack>
             </GridItem>
 
             <GridItem order={{ lg: 5 }} rowSpan={1}>
-              <Stack spacing={4}>
-                <Text as="h1" fontSize="1.5rem">
+              <Stack spacing={5}>
+                <Text as="h1" fontSize="1.5rem" fontWeight="700">
                   Tinggalkan Pesan
                 </Text>
                 <InputGroup>
                   <InputLeftElement
                     pointerEvents="none"
-                    children={<IoPeopleSharp color="#A0AEC0" />}
+                    children={<IoPeopleSharp color="#A0AEC0" size="24px" />}
                   />
                   <Input type="tel" placeholder="Nama Anda" />
                 </InputGroup>
@@ -182,7 +185,7 @@ const contactUs = () => {
                   <InputLeftElement
                     pointerEvents="none"
                     fontSize="1em"
-                    children={<IoMail color="#A0AEC0" />}
+                    children={<IoMail color="#A0AEC0" size="24px" />}
                   />
                   <Input placeholder="Alamat email Anda" />
                 </InputGroup>
@@ -191,7 +194,7 @@ const contactUs = () => {
                   <InputLeftElement
                     pointerEvents="none"
                     fontSize="1em"
-                    children={<FaPhoneAlt color="#A0AEC0" />}
+                    children={<FaPhoneAlt color="#A0AEC0" size="24px" />}
                   />
                   <Input placeholder="Nomor telepon Anda" />
                 </InputGroup>
