@@ -34,6 +34,16 @@ import {
   IoLogoLinkedin,
 } from "react-icons/io5";
 
+// const breakpoints = createBreakpoints({
+//   sm: "30em",
+//   md: "48em",
+//   lg: "62em",
+//   xl: "80em",
+//   "2xl": "96em",
+//   "3xl": "2em",
+// });
+// const theme = extendTheme({ breakpoints });
+
 const contactUs = () => {
   return (
     <>
@@ -56,7 +66,13 @@ const contactUs = () => {
             </BreadcrumbItem>
           </Breadcrumb>
 
-          <Text mb="25px" as="h1" fontWeight="700" fontSize="2.25rem" mt="2rem">
+          <Text
+            mb="25px"
+            as="h1"
+            fontWeight="700"
+            fontSize={{ base: "2.25rem", "2xl": "3rem" }}
+            mt="2rem"
+          >
             Kontak Kami
           </Text>
 
