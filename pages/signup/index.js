@@ -67,7 +67,7 @@ const SignUp = () => {
         spacing={{ base: "0.25em", md: "1.5em" }}
         direction={{ base: "column", md: "row", lg: "" }}
         h="100%"
-        w={{ base: "100%", md: "85%", lg: "" }}
+        w={{ base: "100%", md: "85%" }}
       >
         <Center w="100%">
           <Image
