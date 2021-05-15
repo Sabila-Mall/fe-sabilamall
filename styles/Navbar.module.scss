@@ -1,3 +1,11 @@
+@import "variables";
+
+.sidebarMenu,
+.boxIconText,
+.fontSizeSidebar {
+  font-family: $secondary-font;
+}
+
 .navbarIcon {
   color: #718096 !important;
   width: 23px !important;
@@ -33,7 +41,7 @@
 .navbarBottom {
   height: 60px;
   bottom: 0;
-  border: 1.5px solid #e2e8f0;
+  border-top: 1.5px solid #e2e8f0;
   justify-content: space-evenly;
 }
 
@@ -93,6 +101,7 @@
 
 .fontSizeSidebar {
   font-size: 0.9em !important;
+  font-weight: 500 !important;
 }
 
 @media only screen and (max-width: 300px) {
