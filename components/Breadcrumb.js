@@ -18,9 +18,9 @@ export const BreadCrumb = ({ items }) => {
         <BreadcrumbLink href="#">Home</BreadcrumbLink>
       </BreadcrumbItem>
 
-      {items.map((el) => {
+      {items.map((el, index) => {
         return (
-          <BreadcrumbItem>
+          <BreadcrumbItem key={index}>
             <BreadcrumbLink
               href={el.link}
               color={el.isOnPage ? "orange.400" : "black"}

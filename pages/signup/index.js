@@ -59,14 +59,12 @@ const SignUp = () => {
   };
 
   return (
-    <Layout hasNavbar>
+    <Layout>
       <Center maxW="100vw" minH="100vh">
         <Stack
           divider={
             <StackDivider borderColor={{ base: "white", md: "gray.200" }} />
           }
-          mt={5}
-          mb={5}
           spacing={{ base: "0.25em", md: "1.5em" }}
           direction={{ base: "column", md: "row", lg: "" }}
           h="100%"

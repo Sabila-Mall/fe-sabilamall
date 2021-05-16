@@ -1,9 +1,5 @@
 import {
   Box,
-  Center,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
   Text,
   Stack,
   AspectRatio,
@@ -14,15 +10,13 @@ import {
   InputGroup,
   InputLeftElement,
   Input,
-  VStack,
   Textarea,
   Button,
   Image,
 } from "@chakra-ui/react";
-import { FaPhoneAlt, FaFacebookSquare } from "react-icons/fa";
+import { FaPhoneAlt } from "react-icons/fa";
 import { IoLogoFacebook } from "react-icons/io";
 import {
-  IoChevronForwardSharp,
   IoMail,
   IoPeopleSharp,
   IoLocation,
@@ -31,8 +25,8 @@ import {
   IoLogoLinkedin,
 } from "react-icons/io5";
 
-import { BreadCrumb } from "../components/Breadcrumb";
 import { Layout } from "../components/Layout";
+import styles from "../styles/ContactUs.module.scss";
 
 const contactUs = () => {
   return (
@@ -41,7 +35,12 @@ const contactUs = () => {
       hasBreadCrumb
       breadCrumbItem={[{ name: "Kontak Kami", link: "#", isOnPage: true }]}
     >
-      <Flex fontWeight="500" flexDirection="column" justifyContent="center">
+      <Flex
+        className={styles.layout}
+        fontWeight="500"
+        flexDirection="column"
+        justifyContent="center"
+      >
         <Box>
           <Text
             mb="25px"
