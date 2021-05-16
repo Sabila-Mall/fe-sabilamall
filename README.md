@@ -28,10 +28,12 @@ Next JS and Chakra UI Tips:
 
 1. Use PascalCase for every component name.
 2. Don't create a new component, unless Chakra UI didn't provide it.
-3. Use `Box` element from Chakra UI instead of `div`.
-4. To add custom styling, you can create YourComponent.module.scss inside styles folder and import it to your component.
-5. Handle every edge case / validation (if needed).
-6. Clean Code is a must.
+3. Same rule for the hooks.
+4. Use `Box` element from Chakra UI instead of `div`.
+5. To add custom styling, you can create YourComponent.module.scss inside styles folder and import it to your component.
+6. Handle every edge case / validation (if needed).
+7. Clean Code is a must.
+8. DRY.
 
 ## Getting Started
 
