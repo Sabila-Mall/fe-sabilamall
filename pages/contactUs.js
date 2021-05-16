@@ -19,7 +19,6 @@ import {
   Button,
   Image,
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
 import { FaPhoneAlt, FaFacebookSquare } from "react-icons/fa";
 import { IoLogoFacebook } from "react-icons/io";
 import {
@@ -32,28 +31,18 @@ import {
   IoLogoLinkedin,
 } from "react-icons/io5";
 
+import { BreadCrumb } from "../components/Breadcrumb";
+import { Layout } from "../components/Layout";
+
 const contactUs = () => {
   return (
-    <Box>
-      <Flex
-        fontWeight="500"
-        mx={["2rem", "3rem", "2rem", "2rem", "5rem", "7.5rem"]}
-        flexDirection="column"
-        justifyContent="center"
-      >
-        <Box mt="1.25rem">
-          <Breadcrumb separator={<IoChevronForwardSharp size="0.75rem" />}>
-            <BreadcrumbItem>
-              <BreadcrumbLink href="#">Home</BreadcrumbLink>
-            </BreadcrumbItem>
-
-            <BreadcrumbItem isCurrentPage>
-              <BreadcrumbLink href="#" color="orange.400">
-                Kontak Kami
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          </Breadcrumb>
-
+    <Layout
+      hasNavbar
+      hasBreadCrumb
+      breadCrumbItem={[{ name: "Kontak Kami", link: "#", isOnPage: true }]}
+    >
+      <Flex fontWeight="500" flexDirection="column" justifyContent="center">
+        <Box>
           <Text
             mb="25px"
             as="h1"
@@ -223,7 +212,7 @@ const contactUs = () => {
           </Grid>
         </Box>
       </Flex>
-    </Box>
+    </Layout>
   );
 };
 

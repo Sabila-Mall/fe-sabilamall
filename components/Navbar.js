@@ -31,7 +31,7 @@ import styles from "../styles/Navbar.module.scss";
 const NavbarBottom = () => (
   <Box
     className={styles.navbarBottom}
-    zIndex="1"
+    zIndex="10"
     display={{ base: "flex", md: "none" }}
   >
     {icons.map((icon) => (
@@ -59,7 +59,7 @@ const Navbar = () => {
         className={styles.navbarTop}
         px={{ md: "40px", lg: "80px", xl: "120px" }}
         h={{ base: "50px", md: "70px" }}
-        zIndex={isSearched ? "5" : ""}
+        zIndex={isSearched ? "5" : "10"}
       >
         <Box
           display="flex"

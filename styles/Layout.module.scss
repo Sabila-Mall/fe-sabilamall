@@ -1,0 +1,19 @@
+.layout {
+  width: calc(100vw - (100vw - 100%));
+  background-color: transparent;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  padding-top: 80px;
+  padding-bottom: 60px;
+
+  @media (max-width: 576px) {
+    padding-top: 60px;
+    padding-bottom: 70px;
+  }
+  .breadcrumb {
+    @media (min-width: 768px) {
+      margin-left: 16px;
+    }
+  }
+}
