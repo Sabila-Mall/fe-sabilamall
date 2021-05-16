@@ -48,21 +48,21 @@ import React, { useState } from 'react';
               Masukkan Alamat Email Anda
             </Text>
 
-<FormControl>
-            <InputGroup mt="32px" >
-              <InputLeftElement 
-                pointerEvents="none"
-                children={ <IoMdMail /> }
-                color="gray.500"
-              />
-              <Input placeholder="Email Anda" onChange = {(event) => setResetEmail(event.target.value)}/>
-            </InputGroup>
+            <FormControl>
+              <InputGroup mt="32px" >
+                <InputLeftElement 
+                  pointerEvents="none"
+                  children={ <IoMdMail /> }
+                  color="gray.500"
+                />
+                <Input placeholder="Email Anda" onChange = {(event) => setResetEmail(event.target.value)}/>
+              </InputGroup>
             </FormControl>
 
             <Button bgColor="red.500" w="100%" _hover={{color: "red.500"}} isDisabled={resetEmail === "" ? true: false} mt="16px" type="submit" onClick={(e) => submitHandler(e)}>
               <Text color="white" as="b" className="primaryFont">
                 Reset Kata Sandi
-              </Text>
+              </Text>   
             </Button>
           </Box>
         </Center>

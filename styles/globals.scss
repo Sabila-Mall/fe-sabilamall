@@ -7,14 +7,6 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-
-  .primaryFont {
-    font-family: 'Work Sans', sans-serif;
-  }
-
-  .secondaryFont {
-    font-family: 'Inter', sans-serif;
-  }
 }
 
 a {
@@ -24,4 +16,12 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+.primaryFont {
+  font-family: "Work Sans", sans-serif;
+}
+
+.secondaryFont {
+  font-family: "Inter", sans-serif;
 }
