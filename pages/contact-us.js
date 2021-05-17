@@ -31,6 +31,7 @@ import styles from "../styles/ContactUs.module.scss";
 const contactUs = () => {
   return (
     <Layout
+      hasFooter
       hasNavbar
       hasBreadCrumb
       breadCrumbItem={[{ name: "Kontak Kami", link: "#", isOnPage: true }]}
@@ -44,7 +45,6 @@ const contactUs = () => {
         <Box>
           <Text
             mb="25px"
-            as="h1"
             fontWeight="700"
             fontSize={{ base: "2.25rem", "2xl": "3rem" }}
             mt="23px"
@@ -117,7 +117,7 @@ const contactUs = () => {
                   </Box>
                   <Flex direction="column">
                     <Box>
-                      <Text as="h1" fontSize="14px" fontWeight="500">
+                      <Text fontSize="14px" fontWeight="500">
                         Satria Building 2nd Lt 2 Unit A204-A206, Jl. Akses UI
                         No.24-26, Tugu, Kec. Cimanggis, Kota Depok, Jawa Barat
                         Depok Jawa Barat, 16451 Indonesia
@@ -162,7 +162,7 @@ const contactUs = () => {
 
             <GridItem order={{ lg: 5 }} rowSpan={1}>
               <Stack spacing={5}>
-                <Text as="h1" fontSize="1.5rem" fontWeight="700">
+                <Text fontSize="1.5rem" fontWeight="700">
                   Tinggalkan Pesan
                 </Text>
                 <InputGroup>

@@ -4,6 +4,7 @@ import styles from "../styles/Layout.module.scss";
 import { BreadCrumb } from "./Breadcrumb";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
+import useGetWindowWidth from "./shared/getWidth";
 
 // Untuk props berupa hasNavbar, hasBreadCrumb, hasFooter -> Punya navbar, punya breadcrumb?
 // Untuk passing breadcrumb berupa array of object, defaultnya udah ada home, jadi kalo nambahin bakal jadi Home > ... > dst
@@ -17,11 +18,12 @@ export const Layout = ({
   breadCrumbItem,
   hasFooter,
 }) => {
+  const width = useGetWindowWidth();
   return (
     <>
       <Box
         className={styles.layout}
-        pt={hasNavbar && "80px"}
+        pt={[hasNavbar && "70px", hasNavbar && width > 768 && "90px"]}
         pb={hasNavbar && "65px"}
       >
         {hasNavbar && <Navbar />}
@@ -30,7 +32,7 @@ export const Layout = ({
           {children}
         </Box>
       </Box>
-      {hasFooter && <Footer />}
+      <Footer />
     </>
   );
 };
