@@ -98,34 +98,59 @@ const DesktopFooter = () => {
               spacing={{ base: 1, lg: 4 }}
               className={styles.secondaryFont}
             >
-              <IconButton
-                aria-label="Facebook"
-                as={FaFacebookSquare}
-                color="orange.400"
-                w={6}
-                h={6}
-              />
-              <IconButton
-                aria-label="Twitter"
-                as={IoLogoTwitter}
-                color="orange.400"
-                w={6}
-                h={6}
-              />
-              <IconButton
-                aria-label="Instagram"
-                as={IoLogoInstagram}
-                color="orange.400"
-                w={6}
-                h={6}
-              />
-              <IconButton
-                aria-label="LinkedIn"
-                as={FaLinkedin}
-                color="orange.400"
-                w={6}
-                h={6}
-              />
+              <Link
+                href="https://facebook.com"
+                target="_blank"
+                _focus={{ boxShadow: "none" }}
+              >
+                <Icon
+                  aria-label="Facebook"
+                  as={FaFacebookSquare}
+                  color="orange.400"
+                  w={6}
+                  h={6}
+                  link
+                />
+              </Link>
+              <Link
+                href="https://facebook.com"
+                target="_blank"
+                _focus={{ boxShadow: "none" }}
+              >
+                <Icon
+                  aria-label="Twitter"
+                  as={IoLogoTwitter}
+                  color="orange.400"
+                  w={6}
+                  h={6}
+                />
+              </Link>
+              <Link
+                href="https://facebook.com"
+                target="_blank"
+                _focus={{ boxShadow: "none" }}
+              >
+                <Icon
+                  aria-label="Instagram"
+                  as={IoLogoInstagram}
+                  color="orange.400"
+                  w={6}
+                  h={6}
+                />
+              </Link>
+              <Link
+                href="https://facebook.com"
+                target="_blank"
+                _focus={{ boxShadow: "none" }}
+              >
+                <Icon
+                  aria-label="LinkedIn"
+                  as={FaLinkedin}
+                  color="orange.400"
+                  w={6}
+                  h={6}
+                />
+              </Link>
             </HStack>
           </Box>
         </VStack>
