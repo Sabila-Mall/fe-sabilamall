@@ -1,0 +1,18 @@
+@import "variables";
+
+.primaryFont {
+  font-family: $primary-font;
+  font-weight: 700;
+}
+
+.secondaryFont {
+  font-family: $secondary-font;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.partnerLogo {
+  @media (max-width: 570px) {
+    width: 68px;
+  }
+}
