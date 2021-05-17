@@ -57,7 +57,7 @@ const contactUs = () => {
               lg: "300px auto 260px",
               xl: "360px auto 280px",
             }}
-            gridTemplateRows={{ base: "repeat(auto)", lg: "15% auto " }}
+            gridTemplateRows={{ base: "repeat(auto)", lg: "12% auto " }}
             gap={{ base: 10, lg: 2, xl: 5 }}
           >
             <GridItem order={{ lg: 2 }}>
@@ -68,7 +68,6 @@ const contactUs = () => {
                 spacing="25px"
               >
                 <Stack
-                  justifyContent={{ lg: "space-between" }}
                   h="100%"
                   direction={{ base: "column", lg: "row" }}
                   spacing={{ base: "1rem" }}
