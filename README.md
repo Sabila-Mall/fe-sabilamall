@@ -27,13 +27,14 @@ Developers are strongly suggested to follow these conventions in doing contribut
 Next JS and Chakra UI Tips:
 
 1. Use PascalCase for every component name.
-2. Don't create a new component, unless Chakra UI didn't provide it.
-3. Same rule for the hooks.
-4. Use `Box` element from Chakra UI instead of `div`.
-5. To add custom styling, you can create YourComponent.module.scss inside styles folder and import it to your component.
-6. Handle every edge case / validation (if needed).
-7. Clean Code is a must.
-8. DRY.
+2. New page should be inside a folder. The folder will be the route for the page. Use dash (-) if the route contains 2 words or more. Example: "reset-password"
+3. Don't create a new component, unless Chakra UI didn't provide it.
+4. Same rule for the hooks.
+5. Use `Box` element from Chakra UI instead of `div`.
+6. To add custom styling, you can create YourComponent.module.scss inside styles folder and import it to your component.
+7. Handle every edge case / validation (if needed).
+8. Clean Code is a must.
+9. DRY.
 
 ## Getting Started
 
