@@ -25,8 +25,8 @@ import {
   IoLogoLinkedin,
 } from "react-icons/io5";
 
-import { Layout } from "../components/Layout";
-import styles from "../styles/ContactUs.module.scss";
+import { Layout } from "../../components/Layout";
+import styles from "../../styles/ContactUs.module.scss";
 
 const contactUs = () => {
   return (
@@ -46,7 +46,7 @@ const contactUs = () => {
           <Text
             mb="25px"
             fontWeight="700"
-            fontSize={{ base: "2.25rem", "2xl": "3rem" }}
+            fontSize={{ base: "2rem", "2xl": "3rem" }}
             mt="23px"
           >
             Kontak Kami
@@ -54,11 +54,11 @@ const contactUs = () => {
 
           <Grid
             gridTemplateColumns={{
-              lg: "300px auto 260px",
-              xl: "360px auto 280px",
+              lg: "280px auto 260px",
+              xl: "320px auto 280px",
             }}
             gridTemplateRows={{ base: "repeat(auto)", lg: "12% auto " }}
-            gap={{ base: 10, lg: 2, xl: 5 }}
+            gap={{ base: 10, lg: 4, xl: 6 }}
           >
             <GridItem order={{ lg: 2 }}>
               <Stack
@@ -139,12 +139,12 @@ const contactUs = () => {
 
             <GridItem order={{ lg: 3 }} rowSpan={{ lg: 2 }}>
               <Stack direction="column" spacing={1}>
-                <Flex justifyContent="center">
+                <Flex justifyContent="center" my="60px">
                   <Image
                     src="/images/sm-mascott.svg"
                     alt=""
-                    w="260px"
-                    h="403px"
+                    w="auto"
+                    h="320px"
                   />
                 </Flex>
                 <Text fontSize="1.5rem" fontWeight="700" textAlign="center">
