@@ -9,20 +9,12 @@ import {
   Stack,
   HStack,
   VStack,
-  IconButton,
   Link,
   Grid,
   GridItem,
-  useMediaQuery,
 } from "@chakra-ui/react";
 import { FaFacebookSquare, FaLinkedin, FaUser } from "react-icons/fa";
-import {
-  IoLogoTwitter,
-  IoLogoInstagram,
-  IoHomeSharp,
-  IoCart,
-  IoReceiptSharp,
-} from "react-icons/io5";
+import { IoLogoTwitter, IoLogoInstagram } from "react-icons/io5";
 
 import styles from "../styles/Footer.module.scss";
 
@@ -109,7 +101,6 @@ const DesktopFooter = () => {
                   color="orange.400"
                   w={6}
                   h={6}
-                  link
                 />
               </Link>
               <Link
