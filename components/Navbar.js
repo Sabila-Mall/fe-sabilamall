@@ -30,6 +30,7 @@ import styles from "../styles/Navbar.module.scss";
 
 const NavbarBottom = () => (
   <Box
+    as="nav"
     className={styles.navbarBottom}
     zIndex="10"
     display={{ base: "flex", md: "none" }}
@@ -70,7 +71,7 @@ const Navbar = () => {
             as={IoMenu}
             className={styles.navbarIcon}
             display={{ base: "block", md: "none" }}
-            onClick={() => setIsMainMenu(true)}
+            onClick={() => setIsMainMenu(!isMainMenu)}
           />
           <Image
             src="/images/Navbar/logo.svg"
