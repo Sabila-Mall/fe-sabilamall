@@ -1,7 +1,7 @@
 import { Box, Image, Text, Icon } from "@chakra-ui/react";
 import { IoHeartOutline } from "react-icons/io5";
 
-import styles from "../styles/CardProduct.module.scss";
+import styles from "../styles/LayoutProduct.module.scss";
 
 // discount masukin angkanya aja, misalnya
 // kalau diskonnya 10%, masukin 10 aja
@@ -30,6 +30,7 @@ const CardProduct = ({
       w="160px"
       border=" 1px solid #CBD5E0"
       borderRadius="8px"
+      bg="white"
     >
       <Box
         bg="white"
