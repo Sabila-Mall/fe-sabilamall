@@ -1,8 +1,6 @@
 import { Box, Text } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 
-import styles from "../styles/Product.module.scss";
-
 const calculateTimeLeft = (endTime) => {
   let difference = +endTime - +new Date();
   let timeLeft = {};
@@ -69,7 +67,7 @@ const CountDownTimer = ({ endTime }) => {
   });
 
   return (
-    <Box className={styles.countdown}>
+    <Box display={{ base: "flex", md: "none" }} alignItems="center">
       <SegmentTime
         time={timeLeft.days}
         hasTwoBoxTime={false}

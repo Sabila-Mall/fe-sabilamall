@@ -15,14 +15,3 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-.countdown {
-  display: flex;
-  align-items: center;
-}
-
-@media only screen and (min-width: 500px) {
-  .countdown {
-    display: none;
-  }
-}

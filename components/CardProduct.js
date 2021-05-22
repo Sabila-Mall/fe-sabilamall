@@ -17,7 +17,6 @@ const CardProduct = ({
   remainingDays,
   discount,
   realPrice,
-  isMobileSize,
 }) => {
   const realPriceString = numberWithDot(realPrice);
   const priceAfterDiscount = discount
@@ -46,15 +45,16 @@ const CardProduct = ({
         <Box h="144px" w="144px" bg="yellow.100" mb="8px">
           <Image src={imageUrl} h="100%" w="100%" />
         </Box>
-        {remainingDays && !isMobileSize && (
+        {remainingDays && (
           <Box
+            // className={styles.remainingDays}
             w="117px"
             h="26px"
             bg="red.500"
             borderRadius="4px"
             boxSizing="border"
             color="red.50"
-            display="flex"
+            display={{ base: "none", md: "flex" }}
             justifyContent="center"
             alignItems="center"
             mb="8px"
