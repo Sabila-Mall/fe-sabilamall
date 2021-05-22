@@ -36,7 +36,11 @@ const LayoutProductList = ({ headingText, bg, data, endTime }) => {
           gap={isLargerThan600 ? 6 : 3}
         >
           {data.map((item) => (
-            <CardProduct {...item} isMobileSize={!isLargerThan600} />
+            <CardProduct
+              {...item}
+              isMobileSize={!isLargerThan600}
+              key={item.id}
+            />
           ))}
         </Grid>
       </Box>
