@@ -3,6 +3,8 @@ import { IoHeartOutline } from "react-icons/io5";
 
 import styles from "../styles/Product.module.scss";
 
+// import { BsFilter } from "react-icons/bs";
+
 // discount masukin angkanya aja, misalnya
 // kalau diskonnya 10%, masukin 10 aja
 // kalau gaada diskon, gak usah dimasukin angka
@@ -47,7 +49,6 @@ const CardProduct = ({
         </Box>
         {remainingDays && (
           <Box
-            // className={styles.remainingDays}
             w="117px"
             h="26px"
             bg="red.500"
