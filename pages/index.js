@@ -9,8 +9,7 @@ import {
   dataDiscount,
 } from "../constants/dummyData";
 
-export default function Home() {
-  console.log(dataNormal);
+const Home = () => {
   return (
     <>
       <Navbar />
@@ -34,4 +33,6 @@ export default function Home() {
       <Footer />
     </>
   );
-}
+};
+
+export default Home;
