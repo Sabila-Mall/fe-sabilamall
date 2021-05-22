@@ -1,7 +1,7 @@
 import { Box, Image, Text, Icon } from "@chakra-ui/react";
 import { IoHeartOutline } from "react-icons/io5";
 
-import styles from "../styles/LayoutProduct.module.scss";
+import styles from "../styles/Product.module.scss";
 
 // discount masukin angkanya aja, misalnya
 // kalau diskonnya 10%, masukin 10 aja
@@ -26,7 +26,7 @@ const CardProduct = ({
 
   return (
     <Box
-      className={styles.cardFontSecondary}
+      className={styles.secondaryFont}
       p="8px 8px 16px 8px"
       w="160px"
       border=" 1px solid #CBD5E0"
@@ -75,7 +75,7 @@ const CardProduct = ({
             {productName.toUpperCase()}
           </Text>
         </Box>
-        {discount ? (
+        {discount && (
           <Box
             w="100%"
             h="18px"
@@ -98,9 +98,9 @@ const CardProduct = ({
               alignItems="center"
             >{`${discount}%`}</Text>
           </Box>
-        ) : null}
+        )}
         <Box
-          className={styles.cardFontPrimary}
+          className={styles.primaryFont}
           w="100%"
           display="flex"
           alignItems="center"

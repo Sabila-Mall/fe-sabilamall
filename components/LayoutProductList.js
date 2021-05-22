@@ -1,6 +1,7 @@
 import { Box, Heading, Grid, useMediaQuery } from "@chakra-ui/react";
+import React from "react";
 
-import styles from "../styles/LayoutProduct.module.scss";
+import styles from "../styles/Product.module.scss";
 import CardProduct from "./CardProduct";
 import CountDownTimer from "./CountDownTimer";
 
@@ -15,9 +16,9 @@ const LayoutProductList = ({ headingText, bg, data, endTime }) => {
   return (
     <Box bg={bg} pt="32px" pb="64px" overflowX="auto">
       <Box px={[".7rem", "3rem", "2rem", "2rem", "5rem", "7.5rem"]}>
-        <Box mb="32px" className={styles.cardFontSecondary}>
+        <Box mb="32px" className={styles.secondaryFont}>
           <Heading
-            className={styles.cardFontPrimary}
+            className={styles.primaryFont}
             color={bg === "white" ? "black" : "white"}
             fontWeight={700}
             fontSize={{ base: "16px", md: "20px", lg: "24px" }}
@@ -26,9 +27,7 @@ const LayoutProductList = ({ headingText, bg, data, endTime }) => {
           >
             {headingText}
           </Heading>
-          {!isLargerThan600 && isFlashSale && (
-            <CountDownTimer endTime={endTime} />
-          )}
+          {isFlashSale && <CountDownTimer endTime={endTime} />}
         </Box>
         <Grid
           templateColumns={isLargerThan600 ? "repeat(6,1fr)" : templateColumns}
@@ -36,11 +35,9 @@ const LayoutProductList = ({ headingText, bg, data, endTime }) => {
           gap={isLargerThan600 ? 6 : 3}
         >
           {data.map((item) => (
-            <CardProduct
-              {...item}
-              isMobileSize={!isLargerThan600}
-              key={item.id}
-            />
+            <React.Fragment key={item.id}>
+              <CardProduct {...item} isMobileSize={!isLargerThan600} />
+            </React.Fragment>
           ))}
         </Grid>
       </Box>
