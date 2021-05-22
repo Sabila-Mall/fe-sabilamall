@@ -1,32 +1,37 @@
 import { Box } from "@chakra-ui/react";
-import Head from "next/head";
 
-import CardProduct from "../components/CardProduct";
-import FlashSale from "../components/FlashSale";
-import { Layout } from "../components/Layout";
+import Footer from "../components/Footer";
+import LayoutProductList from "../components/LayoutProductList";
+import Navbar from "../components/Navbar";
 import {
   dataNormal,
   dataFlashSale,
   dataDiscount,
 } from "../constants/dummyData";
-import styles from "../styles/Home.module.scss";
 
 export default function Home() {
   console.log(dataNormal);
   return (
     <>
-      <Layout hasNavbar={true} hasBreadCrumb={false}>
-        {dataNormal.map((item) => (
-          <CardProduct {...item} />
-        ))}
-        {dataFlashSale.map((item) => (
-          <CardProduct {...item} />
-        ))}
-        {dataDiscount.map((item) => (
-          <CardProduct {...item} />
-        ))}
-        {/* <FlashSale data={dataFlashSale} /> */}
-      </Layout>
+      <Navbar />
+      <Box as="main" pt={{ base: "51px", md: "71px" }}>
+        <LayoutProductList
+          headingText="Flash Sale"
+          bg="red.600"
+          data={dataFlashSale}
+        />
+        <LayoutProductList
+          headingText="Discount"
+          bg="white"
+          data={dataDiscount}
+        />
+        <LayoutProductList
+          headingText="Semua Product"
+          bg="white"
+          data={dataNormal}
+        />
+      </Box>
+      <Footer />
     </>
   );
 }
