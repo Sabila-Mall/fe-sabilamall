@@ -1,0 +1,28 @@
+@import "variables";
+
+.secondaryFont {
+  font-family: $secondary-font;
+}
+
+.primaryFont {
+  font-family: $primary-font;
+}
+
+.productName {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.countdown {
+  display: flex;
+  align-items: center;
+}
+
+@media only screen and (min-width: 500px) {
+  .countdown {
+    display: none;
+  }
+}
