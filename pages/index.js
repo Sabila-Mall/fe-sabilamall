@@ -10,6 +10,22 @@ import {
 } from "../constants/dummyData";
 
 const Home = () => {
+  const currentTime = new Date();
+  const endTime = new Date("2021-05-29T11:07:50.420Z");
+  let difference = +endTime - +currentTime;
+
+  console.log(difference);
+  let timeLeft = {};
+  if (difference > 0) {
+    timeLeft = {
+      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+      minutes: Math.floor((difference / 1000 / 60) % 60),
+      seconds: Math.floor((difference / 1000) % 60),
+    };
+  }
+
+  console.log(timeLeft);
   return (
     <>
       <Navbar />
@@ -18,6 +34,7 @@ const Home = () => {
           headingText="Flash Sale"
           bg="red.600"
           data={dataFlashSale}
+          endTime={endTime}
         />
         <LayoutProductList
           headingText="Discount"
@@ -25,7 +42,7 @@ const Home = () => {
           data={dataDiscount}
         />
         <LayoutProductList
-          headingText="Semua Product"
+          headingText="Semua Produk"
           bg="white"
           data={dataNormal}
         />
