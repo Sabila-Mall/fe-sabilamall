@@ -2,9 +2,9 @@ import { Box, Circle, Text, Center, Square, Icon } from "@chakra-ui/react";
 import { FaHistory } from "react-icons/fa";
 import { IoIosAddCircle } from "react-icons/io";
 
-const SMCard = () => {
+const SMCard = ({ width }) => {
   return (
-    <Box w="26rem" h="15rem" borderRadius="lg">
+    <Box w={width} h="15rem" borderRadius="lg">
       <Center
         bg="gray.50"
         w="100%"
@@ -105,7 +105,7 @@ const SMCard = () => {
         >
           <Circle
             bg="white"
-            size="75%"
+            size="8rem"
             d="flex"
             flexDirection="column"
             className="secondaryFont"
