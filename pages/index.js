@@ -20,6 +20,7 @@ import {
   FaPencilRuler,
   FaRobot,
   FaStethoscope,
+  FaPizzaSlice,
 } from "react-icons/fa";
 import { IoFastFood, IoGift } from "react-icons/io5";
 import Slider from "react-slick";
@@ -42,7 +43,7 @@ const Home = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const category = [
+  const moreCategory = [
     {
       title: "Fashion",
       items: [
@@ -73,36 +74,50 @@ const Home = () => {
     },
   ];
 
+  const category = [
+    [BsWatch, "Fashion Muslim"],
+    [FaPizzaSlice, "Makanan dan Minuman"],
+    [BsWatch, "Perlengkapan Ibadah"],
+    [FaStethoscope, "Kesehatan"],
+  ];
+
   const settings = {
-    dots: true,
+    className: "center",
+    centerMode: true,
     infinite: true,
-    speed: 500,
+    centerPadding: "100px",
     slidesToShow: 1,
-    slidesToScroll: 1,
+    speed: 500,
+    dots: true,
+    autoplay: true,
+    autoplaySpeed: 5000,
     arrows: false,
+    responsive: [
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+          centerPadding: "0px",
+        },
+      },
+    ],
   };
 
   return (
     <>
       <Navbar />
       <Box as="main" pt={{ base: "51px", md: "71px" }}>
-        <Box marginTop="1rem">
+        <Box marginTop="1.5rem">
           <Slider {...settings}>
-            <Img
-              src="/images/Carousel/1.png"
-              paddingLeft="5vw"
-              paddingRight="5vw"
-            />
-            <Img
-              src="/images/Carousel/1.png"
-              paddingLeft="5vw"
-              paddingRight="5vw"
-            />
-            <Img
-              src="/images/Carousel/1.png"
-              paddingLeft="5vw"
-              paddingRight="5vw"
-            />
+            <Box paddingLeft="1rem" paddingRight="1rem">
+              <Img src="/images/Carousel/1.png" />
+            </Box>
+            <Box paddingLeft="1rem" paddingRight="1rem">
+              <Img src="/images/Carousel/1.png" />
+            </Box>
+            <Box paddingLeft="1rem" paddingRight="1rem">
+              <Img src="/images/Carousel/1.png" />
+            </Box>
           </Slider>
         </Box>
         <Box
@@ -123,7 +138,11 @@ const Home = () => {
             <Text className="primaryFont" fontWeight="700" fontSize="1.5rem">
               Kategori
             </Text>
-            <LayoutCategoryList moreCategory={false} onOpen={() => onOpen()} />
+            <LayoutCategoryList
+              moreCategory={false}
+              onOpen={() => onOpen()}
+              category={category}
+            />
           </Box>
         </Box>
         <LayoutProductList
@@ -156,12 +175,12 @@ const Home = () => {
         <ModalContent maxW="68rem">
           <ModalBody paddingBottom="1.5rem">
             <ModalCloseButton />
-            {category.map((cat) => {
+            {moreCategory.map((cat) => {
               return (
                 <LayoutCategoryList
                   moreCategory={true}
                   title={cat.title}
-                  category={cat.items}
+                  moreCategory={cat.items}
                 />
               );
             })}

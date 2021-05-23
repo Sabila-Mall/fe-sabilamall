@@ -56,7 +56,12 @@ const SMCard = ({ width }) => {
           </Box>
         </Center>
         <Center w="40%" h="2rem">
-          <Square size="3rem" marginRight="0.7rem" flexDirection="column">
+          <Square
+            size="3rem"
+            marginRight="0.7rem"
+            flexDirection="column"
+            cursor="pointer"
+          >
             <Icon as={IoIosAddCircle} color="red.600" boxSize="2rem" />
             <Text
               fontSize="0.75rem"
@@ -67,7 +72,12 @@ const SMCard = ({ width }) => {
               Top Up
             </Text>
           </Square>
-          <Square size="3rem" marginLeft="0.7rem" flexDirection="column">
+          <Square
+            size="3rem"
+            marginLeft="0.7rem"
+            flexDirection="column"
+            cursor="pointer"
+          >
             <Icon
               as={FaHistory}
               color="red.600"
