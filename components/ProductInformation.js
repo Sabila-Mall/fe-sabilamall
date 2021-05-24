@@ -9,28 +9,24 @@ import {
     Stack,
     Link,
     Button,
-    Stat,
-    StatNumber,
-    StatHelpText,
-    StatGroup
+    Heading,
+    HStack,
+    Progress,
+    Center
 } from "@chakra-ui/react"
 
-import { BsFillStarFill } from "react-icons/bs"
+import { GoStar } from "react-icons/go"
 import styles from "../styles/ProductInformation.module.scss"
-import { useEffect } from "react";
+import dynamic from "next/dynamic"
+
+const StarRatings = dynamic(() => import("react-star-ratings"), {
+    ssr: false,
+})
 
 const ProductInformation = () => {
 
-    const rating = 4.7
+    let rating = 3.7
 
-    // useEffect(() => getRating, [])
-
-    // const getRating = () => {
-    //     const starPercentage = rating * 100
-    //     const starPercentageRounded = `${Math.round(starPercentage / 10) * 10}%`
-
-    //     document.getElementById('starRating').style.width = starPercentageRounded
-    // }
 
     const showDescription = () => {
         const descriptionText = document.getElementById("descriptionText")
@@ -44,10 +40,10 @@ const ProductInformation = () => {
         <Box mt="16px">
             <Tabs>
                 <TabList borderTopColor="gray.200">
-                    <Tab _selected={{ color: "orange.400", borderBottomColor: "orange.400"}} _focus={{boxShadow: "none"}}>Informasi Produk</Tab>
-                    <Tab _selected={{ color: "orange.400", borderBottomColor: "orange.400"}} _focus={{boxShadow: "none"}}>Penilaian</Tab>
+                    <Tab _selected={{ color: "orange.500", borderBottomColor: "orange.400"}} _focus={{boxShadow: "none"}} className="secondaryFont" fontWeight="500">Informasi Produk</Tab>
+                    <Tab _selected={{ color: "orange.500", borderBottomColor: "orange.400"}} _focus={{boxShadow: "none"}} className="secondaryFont" fontWeight="500">Penilaian</Tab>
                     <Link href="#">
-                        <Tab _selected={{ color: "orange.400", borderBottomColor: "orange.400"}} _focus={{boxShadow: "none"}}>Ulasan</Tab>
+                        <Tab _selected={{ color: "orange.500", borderBottomColor: "orange.400"}} _focus={{boxShadow: "none"}} className="secondaryFont" fontWeight="500">Ulasan</Tab>
                     </Link>
                     
                 </TabList>
@@ -81,26 +77,51 @@ const ProductInformation = () => {
                         
                     </TabPanel>
                     <TabPanel>
-                        <Box>
-                            <Stat>
-                                <StatNumber>{rating}</StatNumber>
-                                <Box className={styles.outerStar} direction="row">
-                                    <BsFillStarFill />
-                                    <BsFillStarFill />
-                                    <BsFillStarFill />
-                                    <BsFillStarFill />
-                                    <BsFillStarFill />
-                                    <Box className={styles.innerStar}>
-                                        <BsFillStarFill />
-                                        <BsFillStarFill />
-                                        <BsFillStarFill />
-                                        <BsFillStarFill />
-                                        <BsFillStarFill />
-                                    </Box>
+                        <Box display="flex">
+                            <Center w="40%" display="flex" flexDirection="column" ml={0} align="flex-end">
+                                <Box>
+                                    <Heading display="inline" fontWeight="500" className="secondaryFont" color="gray.900" as="h3" size="2xl">{rating.toFixed(2)}</Heading>
+                                    <Text display="inline"> dari 5</Text>
                                 </Box>
-                                <StatHelpText>999 penilaian</StatHelpText>
-                            </Stat>
+                                <StarRatings 
+                                    rating={rating}
+                                    starRatedColor="orange"
+                                    starDimension="24px"
+                                    starSpacing="2px"
+                                />
+                                <Text color="gray.500" className="secondaryFont" fontWeight="500">999 penilaian</Text>
+                                
+                            </Center> 
+                            <Stack w="60%" spacing="1px" ml="4px">
+                                
+                                <HStack color="orange.400">    
+                                    <GoStar />
+                                    <Text>5</Text>
+                                    <Progress value={80} colorScheme="orange" w="100%" h="16px" borderRadius="8px"/>
+                                </HStack>
+                                <HStack color="orange.400">    
+                                    <GoStar />
+                                    <Text>4</Text>
+                                    <Progress value={60} colorScheme="orange" w="100%" h="16px" borderRadius="8px"/>
+                                </HStack>
+                                <HStack color="orange.400">    
+                                    <GoStar />
+                                    <Text>3</Text>
+                                    <Progress value={20} colorScheme="orange" w="100%" h="16px" borderRadius="8px"/>
+                                </HStack>
+                                <HStack color="orange.400">    
+                                    <GoStar />
+                                    <Text>2</Text>
+                                    <Progress value={40} colorScheme="orange" w="100%" h="16px" borderRadius="8px"/>
+                                </HStack>
+                                <HStack color="orange.400">    
+                                    <GoStar />
+                                    <Text>1</Text>
+                                    <Progress value={0} colorScheme="orange" w="100%" h="16px" borderRadius="8px"/>
+                                </HStack>
+                            </Stack>
                         </Box>
+                        
                     </TabPanel>
                 </TabPanels>
             </Tabs>

@@ -5,23 +5,14 @@
     -webkit-box-orient: vertical;
 }
 
-.outerStar {
+.progressBar {
     position: relative;
-    display: inline-block;
-
-    ::before {
-        color: #ccc;
-    }
+    z-index: 1;
 }
 
-.innerStar {
+.progressNumber {
+    z-index: -1;
     position: absolute;
-    top: 0;
     left: 0;
-    overflow: hidden;
-    width: 0;
-
-    ::before {
-        color: #f8ce0b;
-    }
+    top: 0;
 }

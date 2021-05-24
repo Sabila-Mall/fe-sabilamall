@@ -1,26 +1,11 @@
 import {
     Box,
     Text,
-    Tabs,
-    TabList,
-    TabPanels,
-    Tab,
-    TabPanel,
     Stack,
-    StackDivider,
-    Icon,
-    Link,
-    Button,
-    Stat,
-    StatNumber,
-    StatHelpText,
-    StatGroup
+    StackDivider
 } from "@chakra-ui/react"
 
 import { IoIosCheckmarkCircleOutline } from "react-icons/io"
-import { BsFillStarFill } from "react-icons/bs"
-import styles from "../styles/ProductInformation.module.scss"
-import { useEffect } from "react";
 
 
 const ProductHeader = () => {
