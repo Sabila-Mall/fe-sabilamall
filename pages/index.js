@@ -96,8 +96,7 @@ const Home = () => {
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: 1,
-          centerPadding: "0px",
+          centerPadding: "30px",
         },
       },
     ],
@@ -109,14 +108,26 @@ const Home = () => {
       <Box as="main" pt={{ base: "51px", md: "71px" }}>
         <Box marginTop="1.5rem">
           <Slider {...settings}>
-            <Box paddingLeft="1rem" paddingRight="1rem">
-              <Img src="/images/Carousel/1.png" />
+            <Box paddingLeft="0.5rem" paddingRight="0.5rem">
+              <Img src="/images/Carousel/1.jpg" borderRadius="lg" />
             </Box>
-            <Box paddingLeft="1rem" paddingRight="1rem">
-              <Img src="/images/Carousel/1.png" />
+            <Box paddingLeft="0.5rem" paddingRight="0.5rem">
+              <Img src="/images/Carousel/2.jpg" borderRadius="lg" />
             </Box>
-            <Box paddingLeft="1rem" paddingRight="1rem">
-              <Img src="/images/Carousel/1.png" />
+            <Box paddingLeft="0.5rem" paddingRight="0.5rem">
+              <Img src="/images/Carousel/3.jpg" borderRadius="lg" />
+            </Box>
+            <Box paddingLeft="0.5rem" paddingRight="0.5rem">
+              <Img src="/images/Carousel/4.jpg" borderRadius="lg" />
+            </Box>
+            <Box paddingLeft="0.5rem" paddingRight="0.5rem">
+              <Img src="/images/Carousel/5.jpg" borderRadius="lg" />
+            </Box>
+            <Box paddingLeft="0.5rem" paddingRight="0.5rem">
+              <Img src="/images/Carousel/6.jpg" borderRadius="lg" />
+            </Box>
+            <Box paddingLeft="0.5rem" paddingRight="0.5rem">
+              <Img src="/images/Carousel/7.jpg" borderRadius="lg" />
             </Box>
           </Slider>
         </Box>
