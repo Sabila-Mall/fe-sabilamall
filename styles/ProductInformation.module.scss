@@ -4,15 +4,3 @@
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
 }
-
-.progressBar {
-    position: relative;
-    z-index: 1;
-}
-
-.progressNumber {
-    z-index: -1;
-    position: absolute;
-    left: 0;
-    top: 0;
-}
