@@ -1,0 +1,76 @@
+.productDescription {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+
+.fiveStar {
+    position: relative;
+
+    &::before {
+        content: "5";
+        position: absolute;
+        size: 4px;
+        top: 0;
+        left: 8px;
+        color: #fff;
+        z-index: 1;
+    }
+}
+
+.fourStar {
+    position: relative;
+
+    &::before {
+        content: "4";
+        position: absolute;
+        text-align: center;
+        top: 0;
+        left: 8px;
+        color: #fff;
+        z-index: 1;
+    }
+}
+
+.threeStar {
+    position: relative;
+
+    &::before {
+        content: "3";
+        position: absolute;
+        text-align: center;
+        top: 0;
+        left: 8px;
+        color: #fff;
+        z-index: 1;
+    }
+}
+
+.twoStar {
+    position: relative;
+
+    &::before {
+        content: "2";
+        position: absolute;
+        text-align: center;
+        top: 0;
+        left: 8px;
+        color: #fff;
+        z-index: 1;
+    }
+}
+
+.oneStar {
+    position: relative;
+
+    &::before {
+        content: "1";
+        position: absolute;
+        text-align: center;
+        top: 0;
+        left: 8px;
+        color: #fff;
+        z-index: 1;
+    }
+}
