@@ -14,12 +14,19 @@ import { IoRemoveCircleOutline } from "react-icons/io5";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { FaWhatsapp, FaRegHeart } from "react-icons/fa";
 
+const formatPrice = (price) => {
+  return new Intl.NumberFormat(
+    'id-ID',
+    { style: 'decimal', currency: 'IDR' })
+    .format(price);
+}
+
 const ProductCheckout = () => {
   const colorVariance = 99;
   const sizeVariance = 99;
   const remainingStock = 9999;
-  const discountedPrice = "999.999.999.999";
-  const realPrice = "99.999.999";
+  const discountedPrice = 999999999999;
+  const realPrice = 99999999;
 
   const [numberOfItem, setNumberOfItem] = useControllableState({ defaultValue: 0 })
 
@@ -131,8 +138,8 @@ const ProductCheckout = () => {
         >
           <Text textColor={"gray.500"} fontSize={"16px"}>Subtotal</Text>
           <VStack alignItems={"flex-end"}>
-            <Text as={"s"} color={"gray.400"} fontSize={"12px"} >Rp{realPrice}</Text>
-            <Text color={"orange.400"} fontSize={"20px"} fontWeight={"bold"}>Rp{discountedPrice}</Text>
+            <Text as={"s"} color={"gray.400"} fontSize={"12px"} >Rp{formatPrice(realPrice)}</Text>
+            <Text color={"orange.400"} fontSize={"20px"} fontWeight={"bold"}>Rp{formatPrice(discountedPrice)}</Text>
           </VStack>
         </Flex>
 
