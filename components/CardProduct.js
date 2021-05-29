@@ -1,5 +1,5 @@
 import { Box, Image, Text, Icon } from "@chakra-ui/react";
-import { IoHeartOutline } from "react-icons/io5";
+import { IoHeartOutline, IoTimeSharp } from "react-icons/io5";
 
 import styles from "../styles/Product.module.scss";
 
@@ -29,7 +29,7 @@ const CardProduct = ({
     <Box
       className={styles.secondaryFont}
       p="8px 8px 16px 8px"
-      w="160px"
+      w="200px"
       border=" 1px solid #CBD5E0"
       borderRadius="8px"
       bg="white"
@@ -44,12 +44,12 @@ const CardProduct = ({
         alignItems="start"
         borderRadius="8px"
       >
-        <Box h="144px" w="144px" bg="yellow.100" mb="8px">
-          <Image src={imageUrl} h="100%" w="100%" />
+        <Box h="144px" mb="8px" display="flex" justifyContent="center" w="100%">
+          <Image src={imageUrl} h="144px" w="144px" mx="auto" />
         </Box>
         {remainingDays && (
           <Box
-            w="117px"
+            px="4px"
             h="26px"
             bg="red.500"
             borderRadius="4px"
@@ -67,7 +67,7 @@ const CardProduct = ({
               lineHeight="18px"
               fontWeight="500"
             >
-              Berakhir {remainingDays} hari lagi
+              <Icon as={IoTimeSharp}></Icon> 23 Jam 32 Menit lagi
             </Text>
           </Box>
         )}

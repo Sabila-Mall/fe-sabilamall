@@ -8,6 +8,7 @@ import {
   ModalCloseButton,
   useDisclosure,
   Img,
+  Divider,
 } from "@chakra-ui/react";
 import React from "react";
 import { BsWatch, BsBagFill } from "react-icons/bs";
