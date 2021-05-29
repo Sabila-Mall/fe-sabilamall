@@ -35,7 +35,7 @@ export const CardProduct = ({ isDiscount, discountAmount }) => {
             ALEA GAMIS CASUAL
           </Text>
           <Box pt="0.2rem">
-            {isDiscount && (
+            {isDiscount ? (
               <>
                 <Flex alignItems="center" fontWeight="500">
                   <Text
@@ -65,6 +65,12 @@ export const CardProduct = ({ isDiscount, discountAmount }) => {
                   Rp 168.000
                 </Text>
               </>
+            ) : (
+              <Box mt="0.5rem">
+                <Text as="h1" fontWeight="bold" fontSize="1.1rem">
+                  Rp 180.000
+                </Text>
+              </Box>
             )}
           </Box>
         </Box>
