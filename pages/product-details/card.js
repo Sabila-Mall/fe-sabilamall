@@ -2,9 +2,12 @@ import { Button } from "@chakra-ui/button";
 import { Box, Flex, Text } from "@chakra-ui/layout";
 import { css } from "@emotion/react";
 import Image from "next/image";
-import { IoHeartOutline } from "react-icons/io5";
+import { useState } from "react";
+import { IoHeartOutline, IoHeart } from "react-icons/io5";
 
 export const CardProduct = ({ isDiscount, discountAmount }) => {
+  const [onWishList, setOnWishList] = useState(false);
+
   return (
     <Box
       w="10.5rem"
@@ -12,8 +15,11 @@ export const CardProduct = ({ isDiscount, discountAmount }) => {
       border="solid #CBD5E0 0.5px"
       borderRadius="8px"
       css={css`
+        transition: 0.3s;
         :hover {
           cursor: pointer;
+
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
         }
       `}
     >
@@ -65,14 +71,14 @@ export const CardProduct = ({ isDiscount, discountAmount }) => {
         <Box
           pos="absolute"
           right="1rem"
-          bottom="1.5px"
-          css={css`
-            :hover {
-              size: 1.5em;
-            }
-          `}
+          bottom="1.7px"
+          onClick={() => setOnWishList(!onWishList)}
         >
-          <IoHeartOutline size="1.3em" />
+          {!onWishList ? (
+            <IoHeartOutline size="1.3em" />
+          ) : (
+            <IoHeart size="1.3em" color="red" />
+          )}
         </Box>
       </Flex>
     </Box>
