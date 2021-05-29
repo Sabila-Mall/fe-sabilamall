@@ -141,7 +141,7 @@ const LayoutProductList = ({ headingText, bg, data, endTime }) => {
         pt="8px"
         h={showOverlay ? "auto" : "0"}
         transition="height 2s linear 1s"
-        display={{ base: "block", md: "block", lg: "none" }}
+        display={{ base: "block", md: "none" }}
       >
         {listSorting.map((item) => (
           <Text

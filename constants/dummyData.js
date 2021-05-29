@@ -2,6 +2,9 @@ export const dataFlashSale = [];
 export const dataDiscount = [];
 export const dataNormal = [];
 
+const endTime = new Date();
+endTime.setHours(endTime.getHours() + 10);
+
 const product = {
   productName: "Alea Casual Gamis Banget",
   imageUrl: "/images/product.png",
@@ -9,7 +12,7 @@ const product = {
 };
 
 const flashSaleProduct = {
-  remainingDays: 5,
+  endTime,
   discount: 10,
   ...product,
 };
