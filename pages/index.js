@@ -5,10 +5,11 @@ import {
   ModalOverlay,
   ModalContent,
   ModalBody,
-  ModalCloseButton,
   useDisclosure,
   Img,
   Divider,
+  Circle,
+  Icon,
 } from "@chakra-ui/react";
 import React from "react";
 import { BsWatch, BsBagFill } from "react-icons/bs";
@@ -23,7 +24,7 @@ import {
   FaStethoscope,
   FaPizzaSlice,
 } from "react-icons/fa";
-import { IoFastFood, IoGift } from "react-icons/io5";
+import { IoFastFood, IoGift, IoClose } from "react-icons/io5";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
@@ -186,7 +187,17 @@ const Home = () => {
         <ModalOverlay />
         <ModalContent maxW="68rem">
           <ModalBody paddingBottom="1.5rem">
-            <ModalCloseButton />
+            <Circle
+              size="2.5rem"
+              bg="red.500"
+              onClick={() => onClose()}
+              cursor="pointer"
+              position="absolute"
+              top="-18px"
+              right={{ base: "18px", xl: "-18px" }}
+            >
+              <Icon as={IoClose} color="white" w="65%" h="65%" />
+            </Circle>
             {moreCategory.map((cat) => {
               return (
                 <LayoutCategoryList
