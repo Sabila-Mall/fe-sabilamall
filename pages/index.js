@@ -40,13 +40,12 @@ import {
 } from "../constants/dummyData";
 
 const Home = () => {
-  const endTime = new Date("2021-05-29T11:07:50.420Z");
-
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const moreCategory = [
     {
       title: "Fashion",
+      id: "mcrtst1",
       items: [
         [BsWatch, "Fashion Muslim"],
         [FaBaby, "Fashion Bayi"],
@@ -56,6 +55,7 @@ const Home = () => {
     },
     {
       title: "Rumah Tangga",
+      id: "mrctas2",
       items: [
         [FaMugHot, "Perlengkapan Dapur"],
         [FaHome, "Perlengkapan Rumah Tangga"],
@@ -65,6 +65,7 @@ const Home = () => {
     },
     {
       title: "Perlengkapan Lainnya",
+      id: "mrctdad2",
       items: [
         [FaPencilRuler, "Buku & Alat Tulis"],
         [FaRobot, "Mainan"],
@@ -161,7 +162,6 @@ const Home = () => {
           headingText="Flash Sale"
           bg="red.600"
           data={dataFlashSale}
-          endTime={endTime}
         />
         <LayoutProductList
           headingText="Discount"
@@ -193,6 +193,7 @@ const Home = () => {
                   moreCategory={true}
                   title={cat.title}
                   moreCategory={cat.items}
+                  key={cat.id}
                 />
               );
             })}

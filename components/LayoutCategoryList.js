@@ -21,6 +21,7 @@ const LayoutCategoryList = ({ moreCategory, title, category, onOpen }) => {
                     icon={cat[0]}
                     name={cat[1]}
                     onClick={() => console.log(`redirect ke ${cat[1]}`)}
+                    key={cat[1]}
                   />
                 );
               })}
@@ -36,6 +37,7 @@ const LayoutCategoryList = ({ moreCategory, title, category, onOpen }) => {
                 icon={cat[0]}
                 name={cat[1]}
                 onClick={() => console.log(`redirect ke ${cat[1]}`)}
+                key={cat[1]}
               />
             );
           })}

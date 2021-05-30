@@ -9,6 +9,22 @@ import styles from "../styles/Product.module.scss";
 // kalau diskonnya 10%, masukin 10 aja
 // kalau gaada diskon, gak usah dimasukin angka
 
+const calculateTimeLeft = (endTime) => {
+  let difference = +endTime - +new Date();
+  let timeLeft = {};
+
+  if (difference > 0) {
+    timeLeft = {
+      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+      minutes: Math.floor((difference / 1000 / 60) % 60),
+      seconds: Math.floor((difference / 1000) % 60),
+    };
+  }
+
+  return timeLeft;
+};
+
 const numberWithDot = (x) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };
@@ -16,7 +32,7 @@ const numberWithDot = (x) => {
 const CardProduct = ({
   imageUrl,
   productName,
-  remainingDays,
+  endTime,
   discount,
   realPrice,
 }) => {
@@ -25,11 +41,13 @@ const CardProduct = ({
     ? numberWithDot(realPrice - (realPrice * discount) / 100)
     : null;
 
+  const timeLeft = endTime && calculateTimeLeft(endTime);
+
   return (
     <Box
       className={styles.secondaryFont}
       p="8px 8px 16px 8px"
-      w="200px"
+      w={{ base: "160px", md: "200px" }}
       border=" 1px solid #CBD5E0"
       borderRadius="8px"
       bg="white"
@@ -47,7 +65,7 @@ const CardProduct = ({
         <Box h="144px" mb="8px" display="flex" justifyContent="center" w="100%">
           <Image src={imageUrl} h="144px" w="144px" mx="auto" />
         </Box>
-        {remainingDays && (
+        {endTime && timeLeft && (
           <Box
             px="4px"
             h="26px"
@@ -55,19 +73,20 @@ const CardProduct = ({
             borderRadius="4px"
             boxSizing="border"
             color="red.50"
-            display={{ base: "none", md: "flex" }}
+            display="flex"
             justifyContent="center"
             alignItems="center"
             mb="8px"
           >
             <Text
               as="p"
-              fontSize="12px"
+              fontSize={{ base: "10px", md: "12px" }}
               textAlign="center"
-              lineHeight="18px"
+              lineHeight={{ base: "15px", md: "18px" }}
               fontWeight="500"
             >
-              <Icon as={IoTimeSharp}></Icon> 23 Jam 32 Menit lagi
+              <Icon as={IoTimeSharp}></Icon>{" "}
+              {`${timeLeft.hours} Jam ${timeLeft.minutes} Menit lagi`}
             </Text>
           </Box>
         )}
