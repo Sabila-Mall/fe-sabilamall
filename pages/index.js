@@ -194,7 +194,6 @@ const Home = () => {
               cursor="pointer"
               position="absolute"
               top="-18px"
-              // right="-18px"
               right={{ base: "18px", xl: "-18px" }}
             >
               <Icon as={IoClose} color="white" w="65%" h="65%" />
