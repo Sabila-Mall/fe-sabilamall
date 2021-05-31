@@ -6,13 +6,7 @@ const numberWithDot = (x) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };
 
-const CardWishlist = ({
-  imageUrl,
-  productName,
-  remainingDays,
-  discount,
-  realPrice,
-}) => {
+const CardWishlist = ({ imageUrl, productName, discount, realPrice }) => {
   const [removed, setRemoved] = useState(false);
 
   const realPriceString = numberWithDot(realPrice);
@@ -70,7 +64,6 @@ const CardWishlist = ({
           </Text>
           <Box d="flex" flexDir="row" alignItems="center" pt="0.3rem">
             <Text as="del" color="gray.500" fontSize="0.9rem">
-              {/* Rp. 180.000 */}
               {`Rp ${realPriceString}`}
             </Text>
             <Box px="0.5ch" py={1} bg="red.200" borderRadius="lg" ml="0.6rem">
@@ -114,7 +107,6 @@ const CardWishlist = ({
               onClick={() => handleRemove()}
             />
           </Box>
-          {/* <Icon as={IoMdHeartEmpty} color="red.500" /> */}
         </Box>
       </Box>
     </Box>
