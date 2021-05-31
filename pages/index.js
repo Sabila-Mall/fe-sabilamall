@@ -11,7 +11,7 @@ import {
   Circle,
   Icon,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { BsWatch, BsBagFill } from "react-icons/bs";
 import {
   FaBaby,
@@ -24,7 +24,7 @@ import {
   FaStethoscope,
   FaPizzaSlice,
 } from "react-icons/fa";
-import { IoFastFood, IoGift, IoClose } from "react-icons/io5";
+import { IoFastFood, IoGift, IoClose, IoArrowUp } from "react-icons/io5";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
@@ -105,10 +105,70 @@ const Home = () => {
     ],
   };
 
+  const flashSaleRef = useRef();
+  const scrollRef = useRef();
+
+  const [inFlashSale, setInFlashSale] = useState(false);
+  const [scrollVisible, setScrollVisible] = useState(false);
+
+  function logit() {
+    const flashSaleData = flashSaleRef.current.getBoundingClientRect();
+    const scrollData = scrollRef.current.getBoundingClientRect();
+
+    if (
+      flashSaleData.top - scrollData.bottom < 0 &&
+      flashSaleData.bottom - scrollData.top < 0
+    ) {
+      setInFlashSale(false);
+    } else {
+      setInFlashSale(true);
+    }
+    if (window.pageYOffset > window.innerHeight / 3) {
+      setScrollVisible(true);
+    } else {
+      setScrollVisible(false);
+    }
+  }
+
+  useEffect(() => {
+    const watchScroll = () => {
+      window.addEventListener("scroll", logit);
+    };
+    watchScroll();
+    return () => {
+      window.removeEventListener("scroll", logit);
+    };
+  });
+
+  useEffect(() => {
+    const elem = scrollRef.current.getBoundingClientRect();
+  }, []);
+
   return (
     <>
       <Navbar />
       <Box as="main" pt={{ base: "51px", md: "71px" }}>
+        <Circle
+          bg={inFlashSale ? "white" : "red.600"}
+          size="40px"
+          position="fixed"
+          zIndex="9999"
+          bottom={{ base: "75px", md: "20px" }}
+          right="20px"
+          d={scrollVisible ? "flex" : "none"}
+          alignItems="center"
+          justifyContent="center"
+          ref={scrollRef}
+          cursor="pointer"
+          onClick={() => window.scroll({ top: 0, behavior: "smooth" })}
+        >
+          <Icon
+            as={IoArrowUp}
+            color={inFlashSale ? "red.600" : "white"}
+            width="55%"
+            height="55%"
+          />
+        </Circle>
         <Box marginTop="1.5rem">
           <Slider {...settings}>
             <Box paddingLeft="0.5rem" paddingRight="0.5rem">
@@ -163,6 +223,7 @@ const Home = () => {
           headingText="Flash Sale"
           bg="red.600"
           data={dataFlashSale}
+          flashSaleRef={flashSaleRef}
         />
         <LayoutProductList
           headingText="Discount"

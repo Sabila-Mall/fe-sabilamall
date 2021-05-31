@@ -46,7 +46,13 @@ const MenuSorting = () => (
   </Menu>
 );
 
-const LayoutProductList = ({ headingText, bg, data, endTime }) => {
+const LayoutProductList = ({
+  headingText,
+  bg,
+  data,
+  endTime,
+  flashSaleRef,
+}) => {
   let templateColumns = `repeat(${data.length}, 1fr)`;
   const isFlashSale = headingText.toLowerCase() === "flash sale";
   const isDiscount = headingText.toLowerCase() === "discount";
@@ -59,7 +65,14 @@ const LayoutProductList = ({ headingText, bg, data, endTime }) => {
 
   return (
     <>
-      <Box bg={bg} pt="32px" pb="100px" overflowX="hidden" position="relative">
+      <Box
+        bg={bg}
+        pt="32px"
+        pb="100px"
+        overflowX="hidden"
+        position="relative"
+        ref={flashSaleRef}
+      >
         <Box px={[".7rem", "3rem", "2rem", "2rem", "5rem", "7.5rem"]}>
           {isAllProduct && (
             <Divider
