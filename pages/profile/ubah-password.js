@@ -8,7 +8,10 @@ const UbahPassword = () => {
   return (
     <>
       <ChangePasswordMobile />
-      <ProfileDesktop section="Ubah Password" element={<ChangePassword />} />
+      <ProfileDesktop
+        section="Ubah Password"
+        element={<ChangePassword isMobile={false} />}
+      />
     </>
   );
 };

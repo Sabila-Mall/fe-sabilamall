@@ -36,7 +36,7 @@ const InputBoxAndLabel = ({ register, text, name, mt, w, type, options }) => (
           <option
             key={option.value}
             value={option.value}
-            selected={index === 0 && "selected"}
+            defaultValue={index === 0 && "selected"}
           >
             {option.text}
           </option>

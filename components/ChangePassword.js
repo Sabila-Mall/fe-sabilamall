@@ -5,7 +5,7 @@ import { ButtonSubmit } from "./ButtonProfile";
 import InputBoxAndLabel from "./InputBoxAndLabel";
 import NavbarProfile from "./NavbarProfile";
 
-export const ChangePassword = () => {
+export const ChangePassword = ({ isMobile }) => {
   const { handleSubmit, register, errors } = useForm();
 
   const onSubmit = (values) => console.log(values);
@@ -18,21 +18,23 @@ export const ChangePassword = () => {
             <InputBoxAndLabel
               register={register}
               text="Password Lama"
-              name="oldPassword"
+              name={isMobile ? "oldPasswordMobile" : "oldPassword"}
               mt="2px"
               type="password"
             />
             <InputBoxAndLabel
               register={register}
               text="Password Baru"
-              name="newPassword"
+              name={isMobile ? "newPasswordMobile" : "newPassword"}
               mt={{ base: "50px", md: "25px" }}
               type="password"
             />
             <InputBoxAndLabel
               register={register}
               text="Konfirmasi Password Baru"
-              name="newPasswordConfirm"
+              name={
+                isMobile ? "newPasswordConfirmMobile" : "newPasswordConfirm"
+              }
               mt="20px"
               type="password"
             />
@@ -68,6 +70,6 @@ export const ChangePassword = () => {
 export const ChangePasswordMobile = () => (
   <Box display={{ base: "block", md: "none" }}>
     <NavbarProfile section={"Ubah Kata Sandi"} />
-    <ChangePassword />
+    <ChangePassword isMobile={true} />
   </Box>
 );
