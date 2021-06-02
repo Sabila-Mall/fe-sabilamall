@@ -1,6 +1,8 @@
 import { Box, Text, Input, Select } from "@chakra-ui/react";
 
 // options wajib diisi kalau type-nya select
+// contohnya ada di file MyProfile.js
+// register itu fungsi dari react-hook-form
 
 const InputBoxAndLabel = ({ register, text, name, mt, w, type, options }) => (
   <Box mt={mt} key={text} w={w}>
