@@ -7,6 +7,7 @@ import {
   StackDivider,
   Link,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { IoHeart } from "react-icons/io5";
 import { VscPackage } from "react-icons/vsc";
 
@@ -15,13 +16,15 @@ import { SMCard } from "./CardProfile";
 import NavbarProfile from "./NavbarProfile";
 
 const ProfileMobile = ({ sm }) => {
+  const router = useRouter();
+
   const wisPack = [
     { text: "Wishlist", icon: IoHeart, href: "/#" },
     { text: "Pesanan Saya", icon: VscPackage, href: "/#" },
   ];
 
   const profileMenu = [
-    { text: "Ubah Kata Sandi", path: "/ubah-password" },
+    { text: "Ubah Kata Sandi", path: "/profile/ubah-password" },
     { text: "Alamat Pengiriman", path: "/" },
     { text: "Edit Profile", path: "/" },
     { text: "Upgrade Akun", path: "/" },
@@ -84,16 +87,15 @@ const ProfileMobile = ({ sm }) => {
           <StackDivider borderColor="gray.200" />
           {profileMenu.map((menu) => (
             <Box key={menu.text}>
-              <Link href={`/profile${menu.path}`}>
-                <Text
-                  className="secondaryFont"
-                  fontSize="16px"
-                  fontWeight="500"
-                  lineHeight="24px"
-                >
-                  {menu.text}
-                </Text>
-              </Link>
+              <Text
+                className="secondaryFont"
+                fontSize="16px"
+                fontWeight="500"
+                lineHeight="24px"
+                onClick={() => router.push(menu.path)}
+              >
+                {menu.text}
+              </Text>
             </Box>
           ))}
           <StackDivider borderColor="gray.200" />

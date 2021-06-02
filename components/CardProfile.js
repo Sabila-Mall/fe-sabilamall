@@ -8,6 +8,7 @@ import {
   Link,
   Icon,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { FaUser } from "react-icons/fa";
 import { IoHeart } from "react-icons/io5";
 import { VscPackage } from "react-icons/vsc";
@@ -60,9 +61,11 @@ export const SMCard = ({ sm, w }) => (
 );
 
 export const CardProfile = ({ sm }) => {
+  const router = useRouter();
+
   const profileMenu = [
-    { text: "Akun Saya", icon: FaUser, path: "#" },
-    { text: "Wishlist", icon: IoHeart, path: "#" },
+    { text: "Akun Saya", icon: FaUser, path: "/profile" },
+    { text: "Wishlist", icon: IoHeart, path: "/wishlist" },
     { text: "Pesanan Saya", icon: VscPackage, path: "#" },
   ];
 
@@ -111,15 +114,14 @@ export const CardProfile = ({ sm }) => {
         {profileMenu.map((menu) => (
           <Flex key={menu.text} fontSize="16px" align="center" pl="16px">
             <Icon as={menu.icon} color="black" fontSize="20px" mr="10px" />
-            <Link href={`/profile${menu.path}`}>
-              <Text
-                className="secondaryFont"
-                fontWeight="500"
-                lineHeight="24px"
-              >
-                {menu.text}
-              </Text>
-            </Link>
+            <Text
+              onClick={() => router.push(menu.path)}
+              className="secondaryFont"
+              fontWeight="500"
+              lineHeight="24px"
+            >
+              {menu.text}
+            </Text>
           </Flex>
         ))}
         <StackDivider borderColor="gray.200" />
