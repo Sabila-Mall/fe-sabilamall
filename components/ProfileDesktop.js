@@ -34,6 +34,7 @@ const ProfileDesktop = ({ section, element }) => {
       display={{ base: "none", md: "flex" }}
       justify="center"
       pt="89px"
+      pb="30px"
       px={{ base: "50px", md: "10px", lg: "120px" }}
     >
       <Flex>
