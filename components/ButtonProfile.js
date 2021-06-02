@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 
 export const ButtonStatusUser = ({ text, mt }) => {
   return (
@@ -21,3 +21,19 @@ export const ButtonStatusUser = ({ text, mt }) => {
     </Box>
   );
 };
+
+export const ButtonSubmit = ({ text }) => (
+  <Button
+    className="primaryFont"
+    fontWeight="700"
+    fontSize="18px"
+    type="submit"
+    display={{ base: "none", md: "block" }}
+    size="lg"
+    colorScheme="orange.500"
+    bg="orange.500"
+    _hover={{ bg: "orange.400" }}
+  >
+    {text}
+  </Button>
+);

@@ -1,6 +1,7 @@
 import { Box, Text, Input, Button, FormControl, Flex } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 
+import { ButtonSubmit } from "./ButtonProfile";
 import InputBoxAndLabel from "./InputBoxAndLabel";
 
 const MyProfile = () => {
@@ -56,6 +57,9 @@ const MyProfile = () => {
           type="number"
         />
       </Box>
+      <Flex justify="flex-end" w="100%" mt="70px">
+        <ButtonSubmit text="Konfirmasi" />
+      </Flex>
     </FormControl>
   );
 };

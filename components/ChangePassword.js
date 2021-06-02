@@ -1,6 +1,7 @@
 import { Box, Button, FormControl, Flex } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 
+import { ButtonSubmit } from "./ButtonProfile";
 import InputBoxAndLabel from "./InputBoxAndLabel";
 import NavbarProfile from "./NavbarProfile";
 
@@ -56,19 +57,7 @@ export const ChangePassword = () => {
             Update Profile
           </Button>
           <Flex justify="flex-end" w="100%" mt="70px">
-            <Button
-              className="primaryFont"
-              fontWeight="700"
-              fontSize="18px"
-              type="submit"
-              display={{ base: "none", md: "block" }}
-              size="lg"
-              colorScheme="orange.500"
-              bg="orange.500"
-              _hover={{ bg: "orange.400" }}
-            >
-              Ubah Password
-            </Button>
+            <ButtonSubmit text="Ubah Password" />
           </Flex>
         </FormControl>
       </Box>
