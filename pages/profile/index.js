@@ -1,3 +1,4 @@
+import MyProfile from "../../components/MyProfile";
 import ProfileDesktop from "../../components/ProfileDesktop";
 import ProfileMobile from "../../components/ProfileMobile";
 
@@ -9,7 +10,7 @@ const Profile = () => {
   return (
     <>
       <ProfileMobile sm={sm} />
-      <ProfileDesktop sm={sm} />
+      <ProfileDesktop section="Profile Saya" element={<MyProfile />} />
     </>
   );
 };

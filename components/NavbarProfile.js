@@ -1,4 +1,4 @@
-import { Box, Icon, Text, Link } from "@chakra-ui/react";
+import { Box, Icon, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { IoNotifications, IoChevronBack } from "react-icons/io5";
 

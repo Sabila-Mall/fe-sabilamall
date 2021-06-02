@@ -5,7 +5,6 @@ import {
   Text,
   VStack,
   StackDivider,
-  Link,
   Icon,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
@@ -71,8 +70,9 @@ export const CardProfile = ({ sm }) => {
 
   return (
     <Box
-      w="270px"
+      w={{ md: "260px", lg: "270px" }}
       boxShadow=" 0px 0px 10px 0px #00000040"
+      maxHeight="545px"
       pt="20px"
       pb="36px"
       borderRadius="20px"
