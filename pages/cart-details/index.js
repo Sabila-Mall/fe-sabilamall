@@ -13,10 +13,10 @@ const cartDetails = () => {
   return (
     <Layout hasNavbar>
       <Box w="full">
-        <Flex justifyContent="space-between">
+        <Box display={{ lg: "flex" }} justifyContent="space-between">
           <Box
             w={{ lg: "75%" }}
-            mr={{ lg: "2rem" }}
+            mr={{ lg: "1rem", xl: "2rem" }}
             border={{ md: "1px solid #CBD5E0" }}
             borderRadius={{ md: "12px" }}
           >
@@ -25,7 +25,7 @@ const cartDetails = () => {
                 <Tr>
                   <Th w="50%">Produk</Th>
                   <Th w="20%">Harga Satuan</Th>
-                  <Th textAlign="center" p="0" w="20%">
+                  <Th textAlign="center" pr={{ xl: "0.5rem" }} p="0" w="20%">
                     Jumlah
                   </Th>
                   <Th w="20%" textAlign="center" px="1em">
@@ -42,11 +42,11 @@ const cartDetails = () => {
                   <Td>
                     <CartPrice isDiscount price={"99.999.999"} />
                   </Td>
-                  <Td p={{ md: "0", xl: "1.5rem" }}>
+                  <Td p={{ md: "0", "2xl": "1.5rem" }}>
                     <AddAmount />
                   </Td>
-                  <Td textAlign="center" pr={{ md: "0", lg: "1.5rem" }}>
-                    <Text color="orange.400" fontWeight="500" fontSize="1.1rem">
+                  <Td textAlign="center" px={{ md: "0", xl: "1.5rem" }}>
+                    <Text color="orange.400" fontWeight="500" fontSize="1.2rem">
                       Rp99.999.999
                     </Text>
                   </Td>
@@ -58,7 +58,7 @@ const cartDetails = () => {
           <Box display={{ base: "none", lg: "block" }} w={{ lg: "25%" }}>
             <CardCheckout subTotal={"99.999.999"} discount="0" />
           </Box>
-        </Flex>
+        </Box>
 
         <Box display={{ base: "block", md: "none" }}>
           <ProductCart isDiscount price={"99.999.999"} />

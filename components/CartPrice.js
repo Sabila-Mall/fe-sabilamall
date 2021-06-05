@@ -29,6 +29,7 @@ export const CartPrice = ({ isDiscount, price }) => {
                 Rp99.999.999
               </Text>
               <Box
+                w={{ lg: "6rem" }}
                 bgColor="red.500"
                 color="white"
                 borderRadius="4px"

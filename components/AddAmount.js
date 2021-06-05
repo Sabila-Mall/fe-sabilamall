@@ -8,8 +8,8 @@ export const AddAmount = () => {
   const [amount, setAmount] = useState(1);
 
   return (
-    <Box w={{ md: "8rem", lg: "100%" }} justifyContent={{ lg: "center" }}>
-      <HStack alignItems="center">
+    <Box>
+      <HStack alignItems="center" justifyContent={{ lg: "center" }}>
         <Box
           css={css`
             :hover {
