@@ -4,8 +4,10 @@ import { css } from "@emotion/react";
 import { useState } from "react";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 
-export const AddAmount = () => {
+export const AddAmount = ({ setTotal, price, total }) => {
   const [amount, setAmount] = useState(1);
+
+  const prices = parseInt(price.replace(/\./g, ""));
 
   return (
     <Box>
@@ -22,6 +24,7 @@ export const AddAmount = () => {
             size="1.5em"
             onClick={() => {
               if (amount > 0) setAmount(amount - 1);
+              setTotal(prices * amount);
             }}
           />
         </Box>
@@ -47,6 +50,7 @@ export const AddAmount = () => {
             size="1.5em"
             onClick={() => {
               setAmount(amount + 1);
+              setTotal(prices * amount);
             }}
           />
         </Box>

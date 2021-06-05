@@ -8,6 +8,7 @@ import { CardCheckout } from "../../components/CardCheckout";
 import { CartPrice } from "../../components/CartPrice";
 import { Layout } from "../../components/Layout";
 import { ProductCart } from "../../components/ProductCart";
+import { TableContent } from "../../components/TableContent";
 
 const cartDetails = () => {
   return (
@@ -35,22 +36,8 @@ const cartDetails = () => {
               </Thead>
 
               <Tbody>
-                <Tr>
-                  <Td pr={{ md: "0" }}>
-                    <ProductCart isDiscount price={"99.999.999"} />
-                  </Td>
-                  <Td>
-                    <CartPrice isDiscount price={"99.999.999"} />
-                  </Td>
-                  <Td p={{ md: "0", "2xl": "1.5rem" }}>
-                    <AddAmount />
-                  </Td>
-                  <Td textAlign="center" px={{ md: "0", xl: "1.5rem" }}>
-                    <Text color="orange.400" fontWeight="500" fontSize="1.2rem">
-                      Rp99.999.999
-                    </Text>
-                  </Td>
-                </Tr>
+                <TableContent price={"99.999.999"} isDiscount />
+                <TableContent price={"99.999.999"} isDiscount />
               </Tbody>
             </Table>
           </Box>
