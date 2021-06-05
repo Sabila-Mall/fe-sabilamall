@@ -9,14 +9,16 @@ import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 import { IoTrash } from "react-icons/io5";
 import { RiPencilFill } from "react-icons/ri";
 
-export const ProductCart = ({ isDiscount, price }) => {
-  const [amount, setAmount] = useState(1);
-  const idr = Intl.NumberFormat("id-ID");
-  price = Number(price.replace(/\./g, ""));
+import { CartPrice } from "./CartPrice";
 
+export const ProductCart = ({ isDiscount, price }) => {
   return (
-    <Box mb="1.75rem">
-      <Flex w="full" alignItems="start" justifyContent="center" mb="1.75rem">
+    <Box>
+      <Flex
+        alignItems="start"
+        justifyContent={{ base: "center", md: "start" }}
+        mb={{ base: "1.75rem", md: "0" }}
+      >
         <Flex
           flexDirection="column"
           justifyContent="center"
@@ -36,7 +38,12 @@ export const ProductCart = ({ isDiscount, price }) => {
             <IoTrash size="1.5em" />
           </HStack>
         </Flex>
-        <Flex flexDirection="column" w="16.125rem" fontWeight="500">
+
+        <Flex
+          flexDirection="column"
+          w={{ base: "16.125rem", md: "9rem", xl: "100%" }}
+          fontWeight="500"
+        >
           <Text as="h1" isTruncated mb="8px">
             Nama Produk Croissant Jujubes...
           </Text>
@@ -51,68 +58,12 @@ export const ProductCart = ({ isDiscount, price }) => {
               Ukuran : XXXXXXXL
             </Text>
           </VStack>
-          {isDiscount ? (
-            <>
-              <Text
-                textDecoration="line-through"
-                fontSize="0.8rem"
-                color="gray.500"
-              >
-                Rp99.999.999
-              </Text>
-              <Flex alignItems="center" mb="12px">
-                <Text fontSize="1.1rem" color="black" mr="10px">
-                  Rp99.999.999
-                </Text>
-                <Box
-                  bgColor="red.500"
-                  color="white"
-                  borderRadius="4px"
-                  py="2px"
-                  px="8px"
-                  fontWeight="500"
-                >
-                  <Text as="h1" fontSize="14px">
-                    Diskon 99%
-                  </Text>
-                </Box>
-              </Flex>
-            </>
-          ) : (
-            <Text fontSize="1.1rem" mb="12px">
-              Rp99.999.999
-            </Text>
-          )}
-          <HStack alignItems="center">
-            <AiOutlineMinusCircle
-              color="#E2E8F0"
-              size="1.5em"
-              onClick={() => {
-                if (amount > 0) setAmount(amount - 1);
-              }}
-            />
-            <Input
-              color="black"
-              textAlign="center"
-              isDisabled
-              variant="outline"
-              w="5rem"
-              h="2rem"
-              placeholder={String(amount)}
-            />
-            <AiOutlinePlusCircle
-              size="1.5em"
-              onClick={() => {
-                setAmount(amount + 1);
-              }}
-            />
-          </HStack>
-          <Text pt="8px" fontSize="1.2rem" color="orange.400">
-            Rp{idr.format(amount * price)}
-          </Text>
+          <Box display={{ md: "none" }}>
+            <CartPrice isDiscount={isDiscount} price={price} />
+          </Box>
         </Flex>
       </Flex>
-      <Divider />
+      <Divider display={{ md: "none" }} />
     </Box>
   );
 };
