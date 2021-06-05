@@ -25,8 +25,9 @@ const ProductHeader = () => {
                 spacing="8px" 
                 className="secondaryFont" 
                 fontSize="14px"
-                mt={{base:"8px", md:"16px"}}
-                mb={{base: "8px", md:"12px"}}
+                mt={{base:"12px", md:"16px"}}
+                mb={{base: "12px", md:"12px"}}
+                alignItems="center"
             >
                 <Text color="gray.500">Nama Supplier</Text>
                 <Text color="gray.500">Terjual 9999</Text>
@@ -36,7 +37,7 @@ const ProductHeader = () => {
                 </Stack>
             </Stack>
 
-            {discount ? <Text as="del" color="gray.300" className="secondaryFont" fontSize="16px" h="24px">Rp999.999</Text> : ""}
+            {discount ? <Text as="del" color="gray.300" className="secondaryFont" fontSize="16px" lineHeight="24px" mt="12px">Rp999.999</Text> : ""}
 
             <Stack direction="row">
                 <Text className="primaryFont" color="red.500" fontSize="36px" fontWeight="bold">

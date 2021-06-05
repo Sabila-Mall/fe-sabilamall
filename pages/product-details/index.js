@@ -1,20 +1,33 @@
-import { Box } from "@chakra-ui/react"
+import { Box, 
+  Flex
+} from "@chakra-ui/react";
 
-import ProductInformation from '../../components/ProductInformation';
-import ProductHeader from '../../components/ProductHeader';
-import RelatedProductContainer from '../../components/RelatedProductContainer';
+import ProductInformation from "../../components/ProductInformation";
+import ProductHeader from "../../components/ProductHeader";
+import ProductCheckout from "../../components/ProductCheckout";
+import RelatedProductContainer from "../../components/RelatedProductContainer";
 
 const ProductDetails = () => {
-    return(
-        <Box mr={{base:"16px", md:"100px"}} ml={{base:"16px", md:"100px"}} >
-            <Box w={{ base : "100%", md : "35%" }} ml={{base: "12px"}} mr={{base: "12px"}}>
-                <ProductHeader />
-                <ProductInformation />
-            </Box>
-            <RelatedProductContainer />
-        </Box>
-        
-    )
-}
+  return (
+    <Box mr={{base:"16px", md:"100px"}} ml={{base:"16px", md:"100px"}}>
+      <Flex flexDirection={{base: "column", md: "row"}}>
 
-export default ProductDetails
+        <Box w={{ base: "100%", md: "35%" }}>
+
+        </Box>
+
+        <Box w={{ base: "100%", md: "35%" }}>
+          <ProductHeader />
+          <ProductInformation />
+        </Box>
+
+        <Box w={{ base: "100%", md: "30%" }}>
+          <ProductCheckout />
+        </Box>
+      </Flex>
+      <RelatedProductContainer />
+    </Box>
+  );
+};
+
+export default ProductDetails;

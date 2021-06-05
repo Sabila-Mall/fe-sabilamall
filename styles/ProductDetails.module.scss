@@ -5,72 +5,64 @@
     -webkit-box-orient: vertical;
 }
 
-.fiveStar {
+.fiveStarWhite,
+.fourStarWhite,
+.threeStarWhite,
+.twoStarWhite,
+.oneStarWhite,
+.fiveStarOrange,
+.fourStarOrange,
+.threeStarOrange,
+.twoStarOrange,
+.oneStarOrange {
     position: relative;
 
     &::before {
-        content: "5";
         position: absolute;
-        size: 4px;
+        line-height: normal;
         top: 0;
         left: 8px;
-        color: #fff;
         z-index: 1;
     }
 }
 
-.fourStar {
-    position: relative;
-
-    &::before {
-        content: "4";
-        position: absolute;
-        text-align: center;
-        top: 0;
-        left: 8px;
-        color: #fff;
-        z-index: 1;
-    }
+.oneStarOrange::before,
+.twoStarOrange::before,
+.threeStarOrange::before,
+.fourStarOrange::before,
+.fiveStarOrange::before {
+    color: #ffa726;
 }
 
-.threeStar {
-    position: relative;
-
-    &::before {
-        content: "3";
-        position: absolute;
-        text-align: center;
-        top: 0;
-        left: 8px;
-        color: #fff;
-        z-index: 1;
-    }
+.oneStarWhite::before,
+.twoStarWhite::before,
+.threeStarWhite::before,
+.fourStarWhite::before,
+.fiveStarWhite::before {
+    color: #ffffff;
 }
 
-.twoStar {
-    position: relative;
-
-    &::before {
-        content: "2";
-        position: absolute;
-        text-align: center;
-        top: 0;
-        left: 8px;
-        color: #fff;
-        z-index: 1;
-    }
+.oneStarOrange::before,
+.oneStarWhite::before {
+    content: "1";
 }
 
-.oneStar {
-    position: relative;
+.twoStarOrange::before,
+.twoStarWhite::before {
+    content: "2";
+}
 
-    &::before {
-        content: "1";
-        position: absolute;
-        text-align: center;
-        top: 0;
-        left: 8px;
-        color: #fff;
-        z-index: 1;
-    }
+.threeStarOrange::before,
+.threeStarWhite::before {
+    content: "3";
+}
+
+.fourStarOrange::before,
+.fourStarWhite::before {
+    content: "4";
+}
+
+.fiveStarOrange::before,
+.fiveStarWhite::before {
+    content: "5";
 }

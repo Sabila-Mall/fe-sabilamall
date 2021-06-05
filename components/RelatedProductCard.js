@@ -10,13 +10,10 @@ import {
 import { FiHeart } from 'react-icons/fi'
 import { FaHeart } from 'react-icons/fa'
 
-const RelatedProductCard = () => {
+const RelatedProductCard = ({name, price, discount, image}) => {
     const [liked, setLiked] = useBoolean()
-    const productName = "ALEA GAMIS CASUAL"
-    const productInitialPrice = 180000
-    const discount = 10
     
-    const productDiscountPrice = productInitialPrice * (100 - discount) / 100
+    const productDiscountPrice = price * (100 - discount) / 100
 
     const priceWithDot = (price) => {
         return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
@@ -24,25 +21,58 @@ const RelatedProductCard = () => {
 
 
     return (
-        <Center border="gray.300" borderWidth="1px" borderRadius="8px">
+        <Center 
+            border="gray.300" 
+            borderWidth="1px" 
+            borderRadius="8px" 
+            w="168px">
+
             <Box p="8px">
-                <Image src="/images/productExample.svg"/>
-                <Text className="secondaryFont" fontWeight="medium" fontSize="md" lineHeight="24px" mb={2} maxW="144px">{productName}</Text>
+                <Image src={image} />
+                <Text 
+                    className="secondaryFont" 
+                    fontWeight="medium" 
+                    fontSize="md" 
+                    lineHeight="24px" 
+                    mb={2} maxW="144px">
+                    {name}
+                </Text>
                 <Box as="span" display="flex">
                     {discount ? 
-                    <Box display="flex" w="max-content" align="center">
-                        <Center as="del" color="gray.500" className="secondaryFont" fontSize="xs" fontWeight="500">
-                            {`Rp ${priceWithDot(productInitialPrice)}`}
+                    <Box 
+                        display="flex" 
+                        w="max-content"
+                        align="center">
+
+                        <Center as="del" 
+                            color="gray.500" 
+                            className="secondaryFont" 
+                            fontSize="10px" 
+                            fontWeight="500">
+                            {`Rp ${priceWithDot(price)}`}
                         </Center>
-                        <Text color="red.700" className="secondaryFont" fontSize="xs" bgColor="red.200" ml={4} px={1} py={0.5} borderRadius="4px">
+                        <Text 
+                            color="red.700" 
+                            className="secondaryFont" 
+                            fontSize="10px" 
+                            bgColor="red.200" 
+                            ml={4} px={1} py={0.5} 
+                            borderRadius="4px">
                             {discount}%
                         </Text>
                     </Box>
                     
                     : ""}
                 </Box>
-                <Stack h="21px" mt="4px" mb="8px" justify="space-between" direction="row" align="center">
-                    <Text className="primaryFont" fontSize="xl" fontWeight="bold">
+                <Stack h="21px" mt="4px" mb="8px" 
+                    justify="space-between" 
+                    direction="row" 
+                    align="center">
+                        
+                    <Text 
+                        className="primaryFont" 
+                        fontSize="xl" 
+                        fontWeight="bold">
                         {`Rp ${priceWithDot(productDiscountPrice)}`}
                     </Text>
                     <Box>

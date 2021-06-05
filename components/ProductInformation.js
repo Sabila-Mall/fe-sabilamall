@@ -19,14 +19,14 @@ import {
 import { GoStar } from "react-icons/go"
 import styles from "../styles/ProductDetails.module.scss"
 import dynamic from "next/dynamic"
-import { useEffect } from 'react'
 
 const StarRatings = dynamic(() => import("react-star-ratings"), {
     ssr: false,
 })
 
 const ProductInformation = () => {
-    const [description, setDescription] = useBoolean(true);
+    const [description, setDescription] = useBoolean();
+    const [onInformationTab, setOnInformationTab] = useBoolean(true);
 
     let productRating = 4.3
     const productDescription = "Chupa chups bonbon cotton candy. Cotton candy jelly-o lollipop. Bonbon carrot cake topping chocolate cake marzipan pie dragée liquorice. Chocolate cake bonbon candy canes bonbon chocolate bar. Cupcake fruitcake dragée. Liquorice ice cream pie oat cake toffee fruitcake powder sweet roll macaroon. Tart carrot cake muffin croissant jujubes oat cake caramels. Fruitcake candy dessert bear claw dragée. Chupa chups toffee apple pie pie jelly. Marshmallow sesame snaps tiramisu jelly beans. Pastry croissant gummies. Candy canes gingerbread liquorice sesame snaps donut powder pie. Bonbon bonbon dragée croissant ice cream marzipan sesame snaps cake lemon drops. Chocolate bar gummi bears jujubes tiramisu sesame snaps cupcake chupa chups pastry. Cake pudding chupa chups gummi bears soufflé jelly-o gingerbread jelly beans apple pie. Marzipan sweet roll sesame snaps sweet roll pastry pie jelly beans. Sweet jelly beans wafer muffin jujubes biscuit halvah. Oat cake jelly sesame snaps danish. Liquorice lollipop wafer oat cake muffin tiramisu marzipan donut tart. Chupa chups sugar plum apple pie oat cake marshmallow macaroon. Bear claw candy canes chocolate cake. Halvah cotton candy sweet roll powder toffee cookie sesame snaps. Cupcake gingerbread toffee candy canes chocolate bar toffee lollipop gummi bears. Jelly-o cookie soufflé. Muffin pastry sweet sweet lemon drops gingerbread topping. Cake donut dragée icing tiramisu fruitcake dessert gingerbread wafer. Liquorice croissant oat cake gummies gummi bears cotton candy chupa chups dessert jelly-o. Donut biscuit toffee. Jelly beans cookie chocolate cake candy canes gingerbread. Powder candy canes brownie croissant pie soufflé. Tart soufflé candy powder lemon drops. Cake cake macaroon chocolate bar. Jujubes powder lemon drops tootsie roll carrot cake bonbon brownie. Tootsie roll dragée jelly beans. Carrot cake candy icing apple pie. Donut gummies lemon drops icing powder pastry tootsie roll. Gummi bears halvah sugar plum sweet roll apple pie marshmallow liquorice gingerbread"
@@ -49,85 +49,83 @@ const ProductInformation = () => {
         totalRating += ratingArray[rating]
     }
     const ratingPercentage = {
-        1:(ratingArray[1]*200)/totalRating,
-        2:(ratingArray[2]*200)/totalRating,
-        3:(ratingArray[3]*200)/totalRating,
-        4:(ratingArray[4]*200)/totalRating,
-        5:(ratingArray[5]*200)/totalRating,
+        1:(ratingArray[1]*100)/totalRating,
+        2:(ratingArray[2]*100)/totalRating,
+        3:(ratingArray[3]*100)/totalRating,
+        4:(ratingArray[4]*100)/totalRating,
+        5:(ratingArray[5]*100)/totalRating,
     }
-
-    // const reviewPanel = () => {
-    //     const informationPanel = document.getElementById("informationPanel")
-    //     const ratingPanel = document.getElementById("ratingPanel")
-    //     if (description) {
-    //         return informationPanel
-    //     } else {
-    //         return ratingPanel
-    //     }
-    // }
-
     
 
     const showDescription = () => {
         const descriptionText = document.getElementById("descriptionText")
         const toggleButton = document.getElementById("seeMoreButton")
-
+        
+        setDescription.on;
         descriptionText.classList.remove(styles.productDescription)
         toggleButton.style.display = "none"
     }
 
-    return(
-        <Box mt="16px">
-            <Tabs>
-                <TabList borderTopColor="gray.200">
-                    <Tab 
-                        _selected={{ color: "orange.500", borderBottomColor: "orange.400"}} 
-                        _focus={{boxShadow: "none"}} 
-                        className="secondaryFont" 
-                        fontWeight="500"
-                        onClick={setDescription.on}>
-                        Informasi Produk
-                    </Tab>
-                    <Tab 
-                        _selected={{ color: "orange.500", borderBottomColor: "orange.400"}} 
-                        _focus={{boxShadow: "none"}} 
-                        className="secondaryFont" 
-                        fontWeight="500"
-                        onClick={setDescription.off}>
-                        Penilaian
-                    </Tab>
-                    <Link href="#">
-                        <Tab 
-                            _selected={{ color: "orange.500", borderBottomColor: "orange.400"}} 
-                            _focus={{boxShadow: "none"}} 
-                            _hover={{textDecoration: "none"}}
-                            className="secondaryFont" 
-                            fontWeight="500">
-                            Ulasan
-                        </Tab>
-                    </Link>
-                </TabList>
+    const tabData = [
+        {
+            label: "Informasi Produk",
+            content: <Box>
+                        <Stack 
+                            spacing="24px"
+                            direction="row" 
+                            w="100%">
 
-                <TabPanels>
-                    <TabPanel w="100%" id="informationPanel">
-                        <Stack spacing="24px" direction="row" w="100%">
-                            <Box border="1px" borderColor="gray.200" borderRadius="8px" px="15px" py="10px" w="100%">
-                                <Text className="primaryFont" fontWeight="bold" fontSize="14px" h="18px">
+                            <Box 
+                                border="1px" 
+                                borderColor="gray.200" 
+                                borderRadius="8px" 
+                                px="15px" py="10px" w="100%">
+
+                                <Text 
+                                    className="primaryFont" 
+                                    fontWeight="bold" 
+                                    fontSize="14px" h="18px">
                                     Vendor
                                 </Text>
-                                <Text className="secondaryFont" fontWeight="500" fontSize="16px" color="gray.600">  
+
+                                <Text 
+                                    className="secondaryFont" 
+                                    fontWeight="500" 
+                                    fontSize="16px" color="gray.600">  
                                     {vendor}
                                 </Text>
-                                <Text className="secondaryFont" fontWeight="500" fontSize="18px" color="orange.400">
+
+                                <Text 
+                                    className="secondaryFont" 
+                                    fontWeight="500" 
+                                    fontSize="18px" color="orange.400">
                                     {vendorRating}%
                                 </Text>
                             </Box>
-                            <Box border="1px" borderColor="gray.200" borderRadius="8px" px="15px" py="10px" w="100%">
-                                <Text className="primaryFont" fontWeight="bold" fontSize="14px" h="18px">Lokasi:</Text>
-                                <Text className="secondaryFont" fontWeight="500" fontSize="16px" color="orange.400">    
+                            <Box 
+                                border="1px" 
+                                borderColor="gray.200" 
+                                borderRadius="8px" 
+                                px="15px" py="10px" w="100%">
+
+                                <Text 
+                                    className="primaryFont" 
+                                    fontWeight="bold" 
+                                    fontSize="14px" h="18px">
+                                    Lokasi:
+                                </Text>
+
+                                <Text 
+                                    className="secondaryFont" 
+                                    fontWeight="500" 
+                                    fontSize="16px" color="orange.400">    
                                     {districtLocation},
                                 </Text>
-                                <Text className="secondaryFont" fontWeight="500" fontSize="16px" color="orange.400">
+
+                                <Text 
+                                    className="secondaryFont" 
+                                    fontWeight="500" 
+                                    fontSize="16px" color="orange.400">
                                     {cityLocation}
                                 </Text>
                             </Box>
@@ -136,7 +134,11 @@ const ProductInformation = () => {
                             <Text fontWeight="bold" mt="8px" mb="8px">
                                 Deskripsi Produk
                             </Text>
-                            <Text id="descriptionText" className={styles.productDescription} color="gray.600" fontSize="14px">
+                            <Text 
+                                id="descriptionText" 
+                                className={description ? "" : styles.productDescription} 
+                                color="gray.600" 
+                                fontSize="14px">
                                 {productDescription}
                             </Text>
                             <Button 
@@ -147,94 +149,154 @@ const ProductInformation = () => {
                                 onClick={showDescription} 
                                 id="seeMoreButton" 
                                 _hover={{bg: "transparent", color:"orange.500"}} 
-                                _focus={{boxShadow: "none"}}>
+                                _focus={{boxShadow: "none"}}
+                                display={description? "none" : "block"}>
                                 Lihat selengkapnya
                             </Button>
                         </Box>
-                        
+                    </Box>
+        },
+        {
+            label:"Penilaian",
+            content: <Box display="flex">
+                        <Center 
+                            w="max-content"
+                            display="flex" 
+                            flexDirection="column" 
+                            ml={0} align="flex-end">
+
+                            <Box>
+                                <Heading 
+                                    display="inline" 
+                                    fontWeight="500" 
+                                    className="secondaryFont" 
+                                    color="gray.900" 
+                                    as="h3" size="2xl">
+                                        {productRating.toFixed(2)}
+                                </Heading>
+
+                                <Text display="inline"> dari 5</Text>
+
+                            </Box>
+                            <StarRatings 
+                                rating={productRating}
+                                starRatedColor="orange"
+                                starDimension="20px"
+                                starSpacing="2px"
+                            />
+                            <Text 
+                                color="gray.500" 
+                                className="secondaryFont" 
+                                fontWeight="500">
+                                    {ratingAmount} penilaian
+                            </Text>
+                            
+                        </Center> 
+                        <Stack w="60%" spacing="4px" ml="4px">
+                            
+                            <HStack>    
+                                <GoStar size={20} color="orange"/>
+                                <Progress 
+                                    value={ratingPercentage[5]} 
+                                    colorScheme="orange" 
+                                    w="100%" 
+                                    h="16px" 
+                                    borderRadius="8px" 
+                                    className={ratingPercentage[5] > 0.1 ? styles.fiveStarWhite : styles.fiveStarOrange}>
+                                </Progress>
+                            </HStack>
+                            <HStack>    
+                                <GoStar size={20} color="orange"/>
+                                <Progress 
+                                    value={ratingPercentage[4]} 
+                                    colorScheme="orange" 
+                                    w="100%" 
+                                    h="16px" 
+                                    borderRadius="8px" 
+                                    className={ratingPercentage[4] > 0.1 ? styles.fourStarWhite : styles.fourStarOrange}>
+                                </Progress>
+                            </HStack>
+                            <HStack>    
+                                <GoStar size={20} color="orange" />
+                                <Progress 
+                                    value={ratingPercentage[3]} 
+                                    colorScheme="orange" 
+                                    w="100%" 
+                                    h="16px" 
+                                    borderRadius="8px" 
+                                    className={ratingPercentage[3] > 0.1 ? styles.threeStarWhite : styles.threeStarOrange}>
+                                </Progress>
+                            </HStack>
+                            <HStack>    
+                                <GoStar size={20} color="orange" />
+                                <Progress 
+                                    value={ratingPercentage[2]} 
+                                    colorScheme="orange" 
+                                    w="100%" 
+                                    h="16px" 
+                                    borderRadius="8px" 
+                                    className={ratingPercentage[2] > 0.1 ? styles.twoStarWhite : styles.twoStarOrange}>
+                                </Progress>
+                            </HStack>
+                            <HStack>    
+                                <GoStar size={20} color="orange" />
+                                <Progress 
+                                    value={ratingPercentage[1]} 
+                                    colorScheme="orange" 
+                                    w="100%" 
+                                    h="16px" 
+                                    borderRadius="8px" 
+                                    className={ratingPercentage[1] > 0.1 ? styles.oneStarWhite : styles.oneStarOrange}>
+                                </Progress>
+                            </HStack>
+                        </Stack>
+                    </Box>
+        }
+    ]
+
+    return(
+        <Box mt="16px">
+            <Tabs>
+                <TabList borderTopColor="gray.200">
+                    <Tab 
+                        _selected={{ color: "orange.500", borderBottomColor: "orange.400"}} 
+                        _focus={{boxShadow: "none"}} 
+                        className="secondaryFont" 
+                        fontWeight="500"
+                        onClick={setOnInformationTab.on}
+                        >
+                        {tabData[0].label}
+                    </Tab>
+                    <Tab 
+                        _selected={{ color: "orange.500", borderBottomColor: "orange.400"}} 
+                        _focus={{boxShadow: "none"}} 
+                        className="secondaryFont" 
+                        fontWeight="500"
+                        onClick={setOnInformationTab.off}
+                        >
+                        {tabData[1].label}
+                    </Tab>
+                    <Tab 
+                        _selected={{ color: "orange.500", borderBottomColor: "orange.400"}} 
+                        _focus={{boxShadow: "none"}} 
+                        _hover={{textDecoration: "none"}}
+                        className="secondaryFont" 
+                        fontWeight="500"
+                        >
+                        Ulasan
+                    </Tab>
+                </TabList>
+
+                <TabPanels>
+                    <TabPanel>
+                        {tabData[0].content}
                     </TabPanel>
-                    <TabPanel id="ratingPanel">
-                        <Box display="flex">
-                            <Center w="40%" display="flex" flexDirection="column" ml={0} align="flex-end">
-                                <Box>
-                                    <Heading display="inline" fontWeight="500" className="secondaryFont" color="gray.900" as="h3" size="2xl">{productRating.toFixed(2)}</Heading>
-                                    <Text display="inline"> dari 5</Text>
-                                </Box>
-                                <StarRatings 
-                                    rating={productRating}
-                                    starRatedColor="orange"
-                                    starDimension="24px"
-                                    starSpacing="2px"
-                                />
-                                <Text color="gray.500" className="secondaryFont" fontWeight="500">{ratingAmount}    
-                                    penilaian
-                                </Text>
-                                
-                            </Center> 
-                            <Stack w="60%" spacing="4px" ml="4px">
-                                
-                                <HStack>    
-                                    <GoStar size={24} color="orange"/>
-                                    <Progress 
-                                        value={ratingPercentage[5]} 
-                                        colorScheme="orange" 
-                                        w="100%" 
-                                        h="16px" 
-                                        borderRadius="8px" 
-                                        className={styles.fiveStar}>
-                                    </Progress>
-                                </HStack>
-                                <HStack>    
-                                    <GoStar size={24} color="orange"/>
-                                    <Progress 
-                                        value={ratingPercentage[4]} 
-                                        colorScheme="orange" 
-                                        w="100%" 
-                                        h="16px" 
-                                        borderRadius="8px" 
-                                        className={styles.fourStar}>
-                                    </Progress>
-                                </HStack>
-                                <HStack>    
-                                    <GoStar size={24} color="orange" />
-                                    <Progress 
-                                        value={ratingPercentage[3]} 
-                                        colorScheme="orange" 
-                                        w="100%" 
-                                        h="16px" 
-                                        borderRadius="8px" 
-                                        className={styles.threeStar}>
-                                    </Progress>
-                                </HStack>
-                                <HStack>    
-                                    <GoStar size={24} color="orange" />
-                                    <Progress 
-                                        value={ratingPercentage[2]} 
-                                        colorScheme="orange" 
-                                        w="100%" 
-                                        h="16px" 
-                                        borderRadius="8px" 
-                                        className={styles.twoStar}>
-                                    </Progress>
-                                </HStack>
-                                <HStack>    
-                                    <GoStar size={24} color="orange" />
-                                    <Progress 
-                                        value={ratingPercentage[1]} 
-                                        colorScheme="orange" 
-                                        w="100%" 
-                                        h="16px" 
-                                        borderRadius="8px" 
-                                        className={styles.oneStar}>
-                                    </Progress>
-                                </HStack>
-                            </Stack>
-                        </Box>
-                        
+                    <TabPanel>
+                        {tabData[1].content}
                     </TabPanel>
-                    {/* <TabPanel>
-                        {reviewPanel()}
-                    </TabPanel> */}
+                    <TabPanel>
+                        {onInformationTab ? tabData[0].content : tabData[1].content}
+                    </TabPanel>
                 </TabPanels>
             </Tabs>
 
