@@ -34,5 +34,5 @@ for (let i = 0; i <= 17; i++) {
   dataFlashSale.push({ ...flashSaleProduct, id: `fs${i}` });
   dataDiscount.push({ ...discountProduct, id: `ds${i}` });
   dataNormal.push({ ...product, id: `dn${i}` });
-  // dataWishList.push({ ...wishList, id: `dw${i}` });
+  dataWishList.push({ ...wishList, id: `dw${i}` });
 }

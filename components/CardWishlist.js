@@ -1,5 +1,5 @@
 import { Box, Button, Text, Image, Icon } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { IoHeartOutline, IoHeart } from "react-icons/io5";
 
 const numberWithDot = (x) => {
@@ -14,15 +14,13 @@ const CardWishlist = ({ imageUrl, productName, discount, realPrice }) => {
     ? numberWithDot(realPrice - (realPrice * discount) / 100)
     : null;
 
-  const handleRemove = () => {
-    if (removed) {
-      console.log("delete request ke backend");
-      setRemoved(false);
-    } else {
-      console.log("post request ke backend");
-      setRemoved(true);
-    }
-  };
+  useEffect(() => {
+    return () => {
+      if (removed) {
+        console.log("send DELETE request ke backend");
+      }
+    };
+  }, []);
 
   return (
     <Box
@@ -47,7 +45,6 @@ const CardWishlist = ({ imageUrl, productName, discount, realPrice }) => {
       <Box
         h="100%"
         w="55%"
-        // bg="green"
         d="flex"
         flexDir="column"
         alignItems="center"
@@ -104,7 +101,7 @@ const CardWishlist = ({ imageUrl, productName, discount, realPrice }) => {
               color="red.500"
               h="60%"
               w="60%"
-              onClick={() => handleRemove()}
+              onClick={() => setRemoved(!removed)}
             />
           </Box>
         </Box>
