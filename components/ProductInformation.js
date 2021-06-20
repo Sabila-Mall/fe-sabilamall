@@ -48,11 +48,11 @@ const ProductInformation = () => {
         totalRating += ratingArray[rating]
     }
     const ratingPercentage = {
-        1: (ratingArray[1] * 200) / totalRating,
-        2: (ratingArray[2] * 200) / totalRating,
-        3: (ratingArray[3] * 200) / totalRating,
-        4: (ratingArray[4] * 200) / totalRating,
-        5: (ratingArray[5] * 200) / totalRating,
+        1: (ratingArray[1] * 100) / totalRating,
+        2: (ratingArray[2] * 100) / totalRating,
+        3: (ratingArray[3] * 100) / totalRating,
+        4: (ratingArray[4] * 100) / totalRating,
+        5: (ratingArray[5] * 100) / totalRating,
     }
 
 
@@ -85,15 +85,15 @@ const ProductInformation = () => {
                         onClick={setDescription.off}>
                         Penilaian
                     </Tab>
-                    <Link href="#">
-                        <Tab
+                    <Link href="#tes">
+                        <Button
                             _selected={{ color: "orange.500", borderBottomColor: "orange.400" }}
                             _focus={{ boxShadow: "none" }}
                             _hover={{ textDecoration: "none" }}
                             className="secondaryFont"
                             fontWeight="500">
                             Ulasan
-                        </Tab>
+                        </Button>
                     </Link>
                 </TabList>
 
