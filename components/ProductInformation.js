@@ -19,7 +19,6 @@ import {
 import { GoStar } from "react-icons/go"
 import styles from "../styles/ProductDetails.module.scss"
 import dynamic from "next/dynamic"
-import { useEffect } from 'react'
 
 const StarRatings = dynamic(() => import("react-star-ratings"), {
     ssr: false,
@@ -38,35 +37,25 @@ const ProductInformation = () => {
     const districtLocation = "Bandung Kidul"
     const cityLocation = "BANDUNG"
     const ratingArray = {
-        1:0,
-        2:40,
-        3:30,
-        4:60,
-        5:80
+        1: 0,
+        2: 40,
+        3: 30,
+        4: 60,
+        5: 80
     }
     let totalRating = 0
-    for(var rating in ratingArray){
+    for (var rating in ratingArray) {
         totalRating += ratingArray[rating]
     }
     const ratingPercentage = {
-        1:(ratingArray[1]*200)/totalRating,
-        2:(ratingArray[2]*200)/totalRating,
-        3:(ratingArray[3]*200)/totalRating,
-        4:(ratingArray[4]*200)/totalRating,
-        5:(ratingArray[5]*200)/totalRating,
+        1: (ratingArray[1] * 200) / totalRating,
+        2: (ratingArray[2] * 200) / totalRating,
+        3: (ratingArray[3] * 200) / totalRating,
+        4: (ratingArray[4] * 200) / totalRating,
+        5: (ratingArray[5] * 200) / totalRating,
     }
 
-    // const reviewPanel = () => {
-    //     const informationPanel = document.getElementById("informationPanel")
-    //     const ratingPanel = document.getElementById("ratingPanel")
-    //     if (description) {
-    //         return informationPanel
-    //     } else {
-    //         return ratingPanel
-    //     }
-    // }
 
-    
 
     const showDescription = () => {
         const descriptionText = document.getElementById("descriptionText")
@@ -76,32 +65,32 @@ const ProductInformation = () => {
         toggleButton.style.display = "none"
     }
 
-    return(
+    return (
         <Box mt="16px">
             <Tabs>
                 <TabList borderTopColor="gray.200">
-                    <Tab 
-                        _selected={{ color: "orange.500", borderBottomColor: "orange.400"}} 
-                        _focus={{boxShadow: "none"}} 
-                        className="secondaryFont" 
+                    <Tab
+                        _selected={{ color: "orange.500", borderBottomColor: "orange.400" }}
+                        _focus={{ boxShadow: "none" }}
+                        className="secondaryFont"
                         fontWeight="500"
                         onClick={setDescription.on}>
                         Informasi Produk
                     </Tab>
-                    <Tab 
-                        _selected={{ color: "orange.500", borderBottomColor: "orange.400"}} 
-                        _focus={{boxShadow: "none"}} 
-                        className="secondaryFont" 
+                    <Tab
+                        _selected={{ color: "orange.500", borderBottomColor: "orange.400" }}
+                        _focus={{ boxShadow: "none" }}
+                        className="secondaryFont"
                         fontWeight="500"
                         onClick={setDescription.off}>
                         Penilaian
                     </Tab>
                     <Link href="#">
-                        <Tab 
-                            _selected={{ color: "orange.500", borderBottomColor: "orange.400"}} 
-                            _focus={{boxShadow: "none"}} 
-                            _hover={{textDecoration: "none"}}
-                            className="secondaryFont" 
+                        <Tab
+                            _selected={{ color: "orange.500", borderBottomColor: "orange.400" }}
+                            _focus={{ boxShadow: "none" }}
+                            _hover={{ textDecoration: "none" }}
+                            className="secondaryFont"
                             fontWeight="500">
                             Ulasan
                         </Tab>
@@ -115,7 +104,7 @@ const ProductInformation = () => {
                                 <Text className="primaryFont" fontWeight="bold" fontSize="14px" h="18px">
                                     Vendor
                                 </Text>
-                                <Text className="secondaryFont" fontWeight="500" fontSize="16px" color="gray.600">  
+                                <Text className="secondaryFont" fontWeight="500" fontSize="16px" color="gray.600">
                                     {vendor}
                                 </Text>
                                 <Text className="secondaryFont" fontWeight="500" fontSize="18px" color="orange.400">
@@ -124,7 +113,7 @@ const ProductInformation = () => {
                             </Box>
                             <Box border="1px" borderColor="gray.200" borderRadius="8px" px="15px" py="10px" w="100%">
                                 <Text className="primaryFont" fontWeight="bold" fontSize="14px" h="18px">Lokasi:</Text>
-                                <Text className="secondaryFont" fontWeight="500" fontSize="16px" color="orange.400">    
+                                <Text className="secondaryFont" fontWeight="500" fontSize="16px" color="orange.400">
                                     {districtLocation},
                                 </Text>
                                 <Text className="secondaryFont" fontWeight="500" fontSize="16px" color="orange.400">
@@ -139,19 +128,19 @@ const ProductInformation = () => {
                             <Text id="descriptionText" className={styles.productDescription} color="gray.600" fontSize="14px">
                                 {productDescription}
                             </Text>
-                            <Button 
-                                bg="none" 
-                                color="orange.400" 
-                                fontWeight="bold" 
-                                p="0" 
-                                onClick={showDescription} 
-                                id="seeMoreButton" 
-                                _hover={{bg: "transparent", color:"orange.500"}} 
-                                _focus={{boxShadow: "none"}}>
+                            <Button
+                                bg="none"
+                                color="orange.400"
+                                fontWeight="bold"
+                                p="0"
+                                onClick={showDescription}
+                                id="seeMoreButton"
+                                _hover={{ bg: "transparent", color: "orange.500" }}
+                                _focus={{ boxShadow: "none" }}>
                                 Lihat selengkapnya
                             </Button>
                         </Box>
-                        
+
                     </TabPanel>
                     <TabPanel id="ratingPanel">
                         <Box display="flex">
@@ -160,85 +149,82 @@ const ProductInformation = () => {
                                     <Heading display="inline" fontWeight="500" className="secondaryFont" color="gray.900" as="h3" size="2xl">{productRating.toFixed(2)}</Heading>
                                     <Text display="inline"> dari 5</Text>
                                 </Box>
-                                <StarRatings 
+                                <StarRatings
                                     rating={productRating}
                                     starRatedColor="orange"
                                     starDimension="24px"
                                     starSpacing="2px"
                                 />
-                                <Text color="gray.500" className="secondaryFont" fontWeight="500">{ratingAmount}    
+                                <Text color="gray.500" className="secondaryFont" fontWeight="500">{ratingAmount}
                                     penilaian
                                 </Text>
-                                
-                            </Center> 
+
+                            </Center>
                             <Stack w="60%" spacing="4px" ml="4px">
-                                
-                                <HStack>    
-                                    <GoStar size={24} color="orange"/>
-                                    <Progress 
-                                        value={ratingPercentage[5]} 
-                                        colorScheme="orange" 
-                                        w="100%" 
-                                        h="16px" 
-                                        borderRadius="8px" 
+
+                                <HStack>
+                                    <GoStar size={24} color="orange" />
+                                    <Progress
+                                        value={ratingPercentage[5]}
+                                        colorScheme="orange"
+                                        w="100%"
+                                        h="16px"
+                                        borderRadius="8px"
                                         className={styles.fiveStar}>
                                     </Progress>
                                 </HStack>
-                                <HStack>    
-                                    <GoStar size={24} color="orange"/>
-                                    <Progress 
-                                        value={ratingPercentage[4]} 
-                                        colorScheme="orange" 
-                                        w="100%" 
-                                        h="16px" 
-                                        borderRadius="8px" 
+                                <HStack>
+                                    <GoStar size={24} color="orange" />
+                                    <Progress
+                                        value={ratingPercentage[4]}
+                                        colorScheme="orange"
+                                        w="100%"
+                                        h="16px"
+                                        borderRadius="8px"
                                         className={styles.fourStar}>
                                     </Progress>
                                 </HStack>
-                                <HStack>    
+                                <HStack>
                                     <GoStar size={24} color="orange" />
-                                    <Progress 
-                                        value={ratingPercentage[3]} 
-                                        colorScheme="orange" 
-                                        w="100%" 
-                                        h="16px" 
-                                        borderRadius="8px" 
+                                    <Progress
+                                        value={ratingPercentage[3]}
+                                        colorScheme="orange"
+                                        w="100%"
+                                        h="16px"
+                                        borderRadius="8px"
                                         className={styles.threeStar}>
                                     </Progress>
                                 </HStack>
-                                <HStack>    
+                                <HStack>
                                     <GoStar size={24} color="orange" />
-                                    <Progress 
-                                        value={ratingPercentage[2]} 
-                                        colorScheme="orange" 
-                                        w="100%" 
-                                        h="16px" 
-                                        borderRadius="8px" 
+                                    <Progress
+                                        value={ratingPercentage[2]}
+                                        colorScheme="orange"
+                                        w="100%"
+                                        h="16px"
+                                        borderRadius="8px"
                                         className={styles.twoStar}>
                                     </Progress>
                                 </HStack>
-                                <HStack>    
+                                <HStack>
                                     <GoStar size={24} color="orange" />
-                                    <Progress 
-                                        value={ratingPercentage[1]} 
-                                        colorScheme="orange" 
-                                        w="100%" 
-                                        h="16px" 
-                                        borderRadius="8px" 
+                                    <Progress
+                                        value={ratingPercentage[1]}
+                                        colorScheme="orange"
+                                        w="100%"
+                                        h="16px"
+                                        borderRadius="8px"
                                         className={styles.oneStar}>
                                     </Progress>
                                 </HStack>
                             </Stack>
                         </Box>
-                        
+
                     </TabPanel>
-                    {/* <TabPanel>
-                        {reviewPanel()}
-                    </TabPanel> */}
                 </TabPanels>
             </Tabs>
 
-            
+
 
         </Box>
     )
