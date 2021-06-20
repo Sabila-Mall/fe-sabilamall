@@ -51,7 +51,7 @@ const ProductReview = () => {
   };
 
   return (
-    <VStack className={"secondaryFont"} alignItems={"flex-start"}>
+    <VStack className={"secondaryFont"} alignItems={"flex-start"} id="review">
       <HStack fontSize={"24px"} as={"b"}>
         <Text className={"primaryFont"}>Penilaian Produk </Text>
         <Text textColor={"orange.300"}>({totalReview} ulasan)</Text>

@@ -19,6 +19,7 @@ import {
 import { GoStar } from "react-icons/go"
 import styles from "../styles/ProductDetails.module.scss"
 import dynamic from "next/dynamic"
+import { css } from "@emotion/react"
 
 const StarRatings = dynamic(() => import("react-star-ratings"), {
     ssr: false,
@@ -47,13 +48,28 @@ const ProductInformation = () => {
     for (var rating in ratingArray) {
         totalRating += ratingArray[rating]
     }
-    const ratingPercentage = {
-        1: (ratingArray[1] * 100) / totalRating,
-        2: (ratingArray[2] * 100) / totalRating,
-        3: (ratingArray[3] * 100) / totalRating,
-        4: (ratingArray[4] * 100) / totalRating,
-        5: (ratingArray[5] * 100) / totalRating,
-    }
+    const ratingList = [
+        {
+            label: 5,
+            percentage: (ratingArray[5] * 100) / totalRating
+        },
+        {
+            label: 4,
+            percentage: (ratingArray[4] * 100) / totalRating
+        },
+        {
+            label: 3,
+            percentage: (ratingArray[3] * 100) / totalRating
+        },
+        {
+            label: 2,
+            percentage: (ratingArray[2] * 100) / totalRating
+        },
+        {
+            label: 1,
+            percentage: (ratingArray[1] * 100) / totalRating
+        }
+    ]
 
 
 
@@ -85,13 +101,14 @@ const ProductInformation = () => {
                         onClick={setDescription.off}>
                         Penilaian
                     </Tab>
-                    <Link href="#tes">
+                    <Link href="#review">
                         <Button
                             _selected={{ color: "orange.500", borderBottomColor: "orange.400" }}
                             _focus={{ boxShadow: "none" }}
                             _hover={{ textDecoration: "none" }}
                             className="secondaryFont"
-                            fontWeight="500">
+                            fontWeight="500"
+                            bg="white">
                             Ulasan
                         </Button>
                     </Link>
@@ -161,62 +178,34 @@ const ProductInformation = () => {
 
                             </Center>
                             <Stack w="60%" spacing="4px" ml="4px">
-
-                                <HStack>
-                                    <GoStar size={24} color="orange" />
-                                    <Progress
-                                        value={ratingPercentage[5]}
-                                        colorScheme="orange"
-                                        w="100%"
-                                        h="16px"
-                                        borderRadius="8px"
-                                        className={styles.fiveStar}>
-                                    </Progress>
-                                </HStack>
-                                <HStack>
-                                    <GoStar size={24} color="orange" />
-                                    <Progress
-                                        value={ratingPercentage[4]}
-                                        colorScheme="orange"
-                                        w="100%"
-                                        h="16px"
-                                        borderRadius="8px"
-                                        className={styles.fourStar}>
-                                    </Progress>
-                                </HStack>
-                                <HStack>
-                                    <GoStar size={24} color="orange" />
-                                    <Progress
-                                        value={ratingPercentage[3]}
-                                        colorScheme="orange"
-                                        w="100%"
-                                        h="16px"
-                                        borderRadius="8px"
-                                        className={styles.threeStar}>
-                                    </Progress>
-                                </HStack>
-                                <HStack>
-                                    <GoStar size={24} color="orange" />
-                                    <Progress
-                                        value={ratingPercentage[2]}
-                                        colorScheme="orange"
-                                        w="100%"
-                                        h="16px"
-                                        borderRadius="8px"
-                                        className={styles.twoStar}>
-                                    </Progress>
-                                </HStack>
-                                <HStack>
-                                    <GoStar size={24} color="orange" />
-                                    <Progress
-                                        value={ratingPercentage[1]}
-                                        colorScheme="orange"
-                                        w="100%"
-                                        h="16px"
-                                        borderRadius="8px"
-                                        className={styles.oneStar}>
-                                    </Progress>
-                                </HStack>
+                                {ratingList.map((el, index) => {
+                                    let color;
+                                    { el.percentage > 10 ? color = "#ffffff" : color = "#ffa726" }
+                                    return (
+                                        <HStack>
+                                            <GoStar size={24} color="orange" />
+                                            <Progress
+                                                value={el.percentage}
+                                                colorScheme="orange"
+                                                w="100%"
+                                                h="16px"
+                                                position="relative"
+                                                borderRadius="8px"
+                                                css={css`::before{
+                                                    content: "${5 - index}";
+                                                    position: absolute;
+                                                    size: 4px;
+                                                    top: 0;
+                                                    left: 8px;
+                                                    color: ${color};
+                                                    z-index: 1;
+                                                    line-height: normal;
+                                                    transform: translateY(-3px);
+                                                }`}>
+                                            </Progress>
+                                        </HStack>
+                                    );
+                                })}
                             </Stack>
                         </Box>
 
