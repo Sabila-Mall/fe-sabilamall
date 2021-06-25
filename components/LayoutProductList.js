@@ -147,14 +147,14 @@ const LayoutProductList = ({
       </Box>
       <Box
         w="100vw"
+        h={showOverlay ? "280px" : "0"}
         pl="16px"
         position="fixed"
         bg="white"
         zIndex="10"
         bottom="0"
         pt="8px"
-        h={showOverlay ? "auto" : "0"}
-        transition="height 2s linear 1s"
+        transition="all .2s linear"
         display={{ base: "block", md: "none" }}
       >
         {listSorting.map((item) => (
@@ -169,6 +169,17 @@ const LayoutProductList = ({
           </Text>
         ))}
       </Box>
+      {showOverlay && (
+        <Box
+          w="100vw"
+          h="100vh"
+          position="fixed"
+          zIndex="9"
+          bottom="0"
+          bg="transparent"
+          onClick={() => setShowOverlay(false)}
+        ></Box>
+      )}
     </>
   );
 };
