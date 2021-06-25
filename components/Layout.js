@@ -25,7 +25,7 @@ export const Layout = ({
         pb={hasNavbar && "65px"}
       >
         {hasNavbar && <Navbar />}
-        <Box mx={["2rem", "3rem", "2rem", "2rem", "5rem", "7.5rem"]}>
+        <Box mx={["1.5rem", "3rem", "2rem", "2rem", "5rem", "7.5rem"]}>
           {hasBreadCrumb && <BreadCrumb items={breadCrumbItem} />}
           {children}
         </Box>

@@ -120,7 +120,12 @@ const ProductInformation = () => {
         </TabList>
 
         <TabPanels>
-          <TabPanel w="100%" id="informationPanel">
+          <TabPanel
+            p={{ base: "0", lg: "1rem" }}
+            pt="1rem"
+            w="100%"
+            id="informationPanel"
+          >
             <Stack spacing="24px" direction="row" w="100%">
               <Box
                 border="1px"

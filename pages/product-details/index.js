@@ -35,11 +35,11 @@ const ProductDetails = () => {
         <Flex flexDirection={{ base: "column", lg: "row" }} mt="24px">
           <Box w={{ base: "100%", lg: "32%" }}>
             <ProductImages />
-            <Box>
+            <Box display={{ base: "none", lg: "block" }}>
               <ShareProduct />
             </Box>
           </Box>
-          <Box w={{ base: "100%", lg: "43%" }}>
+          <Box w={{ base: "100%", lg: "43%" }} mr={{ lg: "1rem" }}>
             <ProductHeader />
             <Box display={{ base: "none", lg: "block" }}>
               <ProductInformation />
@@ -48,8 +48,13 @@ const ProductDetails = () => {
           <Box w={{ base: "100%", lg: "25%" }}>
             <ProductCheckout />
           </Box>
-          <Box display={{ base: "block", lg: "none" }}>
+          <Box
+            display={{ base: "block", lg: "none" }}
+            mb={{ base: "2rem", lg: "0" }}
+          >
             <ProductInformation />
+            <Box mb="1rem" />
+            <ShareProduct />
           </Box>
         </Flex>
         <Box w={{ lg: "75%" }}>
