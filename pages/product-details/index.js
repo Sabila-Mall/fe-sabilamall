@@ -32,20 +32,24 @@ const ProductDetails = () => {
     <Layout hasNavbar>
       <Box>
         <BreadCrumb items={path} />
-        <Flex flexDirection={{ base: "column", md: "row" }} mt="24px">
-          <Box w={{ base: "100%", md: "32%" }}>
+        <Flex flexDirection={{ base: "column", lg: "row" }} mt="24px">
+          <Box w={{ base: "100%", lg: "32%" }}>
             <ProductImages />
             <Box>
               <ShareProduct />
             </Box>
           </Box>
-          <Box w={{ base: "100%", md: "43%" }} mr="16px">
+          <Box w={{ base: "100%", lg: "43%" }}>
             <ProductHeader />
-            <ProductInformation />
+            <Box display={{ base: "none", lg: "block" }}>
+              <ProductInformation />
+            </Box>
           </Box>
-
-          <Box w={{ base: "100%", md: "25%" }} ml="16px">
+          <Box w={{ base: "100%", lg: "25%" }}>
             <ProductCheckout />
+          </Box>
+          <Box display={{ base: "block", lg: "none" }}>
+            <ProductInformation />
           </Box>
         </Flex>
         <Box w={{ lg: "75%" }}>
