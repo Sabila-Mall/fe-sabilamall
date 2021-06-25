@@ -113,6 +113,7 @@ const LayoutProductList = ({
           <Grid
             w={!isAllProduct ? "100vw" : "100%"}
             overflowX="auto"
+            className={styles.scrollX}
             templateColumns={
               isDiscount || isFlashSale
                 ? "repeat(800,1fr)"
