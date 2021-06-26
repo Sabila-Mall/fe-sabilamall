@@ -3,7 +3,7 @@ import { Box, Button } from "@chakra-ui/react";
 export const ButtonStatusUser = ({ text, mt }) => {
   return (
     <Box
-      w="80px"
+      minWidth="80px"
       h="30px"
       borderRadius="30px"
       bg="gray.400"

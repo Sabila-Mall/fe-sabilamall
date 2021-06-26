@@ -21,11 +21,9 @@ export const SMCard = ({ sm, w }) => (
         key={item.text}
         display="flex"
         flexDirection="column"
-        // alignItems="center"
-        // alignItems="start"
-        // w="190px"
         ml={index ? "12px" : "0px"}
         borderRadius="8px"
+        boxShadow="0px 1px 3px 0px #2D37481A,0px 1px 2px 0px #2D37480F"
       >
         <Box bg="gray.100" w="113px" p="7px" borderRadius="8px 8px 0px 0px">
           <Text
