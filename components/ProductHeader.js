@@ -5,7 +5,7 @@ const ProductHeader = () => {
   const stock = 999;
   const discount = 99;
   return (
-    <Box>
+    <Box ml="0.5rem">
       <Text
         fontSize={{ base: "18px", md: "24px" }}
         fontWeight="500"

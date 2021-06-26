@@ -81,8 +81,8 @@ const ProductInformation = () => {
   };
 
   return (
-    <Box mt="16px">
-      <Tabs>
+    <Box mt="16px" ml={{ lg: "0.5rem", xl: "0" }}>
+      <Tabs w={{ lg: "95%", xl: "100%" }}>
         <TabList borderTopColor="gray.200">
           <Tab
             _selected={{ color: "orange.500", borderBottomColor: "orange.400" }}

@@ -32,7 +32,11 @@ const ProductDetails = () => {
     <Layout hasNavbar>
       <Box>
         <BreadCrumb items={path} />
-        <Flex flexDirection={{ base: "column", lg: "row" }} mt="24px">
+        <Flex
+          flexDirection={{ base: "column", lg: "row" }}
+          justifyContent={{ md: "center" }}
+          mt="24px"
+        >
           <Box w={{ base: "100%", lg: "32%" }}>
             <ProductImages />
             <Box display={{ base: "none", lg: "block" }}>
