@@ -29,7 +29,7 @@ const ProductDetails = () => {
     },
   ];
   return (
-    <Layout hasNavbar>
+    <Layout sticky hasNavbar>
       <Box>
         <BreadCrumb items={path} />
         <Flex
@@ -37,10 +37,15 @@ const ProductDetails = () => {
           justifyContent={{ md: "center" }}
           mt="24px"
         >
-          <Box w={{ base: "100%", lg: "32%" }}>
-            <ProductImages />
-            <Box display={{ base: "none", lg: "block" }}>
-              <ShareProduct />
+          <Box
+            w={{ base: "100%", lg: "32%" }}
+            mb={{ base: "0.5rem", lg: "5rem" }}
+          >
+            <Box h="fit-content" position={{ lg: "sticky" }} top="10.5%">
+              <ProductImages />
+              <Box display={{ base: "none", lg: "block" }}>
+                <ShareProduct />
+              </Box>
             </Box>
           </Box>
           <Box w={{ base: "100%", lg: "43%" }} mr={{ lg: "1rem" }}>

@@ -16,11 +16,12 @@ export const Layout = ({
   hasBreadCrumb,
   breadCrumbItem,
   hasFooter,
+  sticky,
 }) => {
   return (
     <>
       <Box
-        className={styles.layout}
+        className={sticky ? styles.stickLayout : styles.layout}
         pt={{ base: "70px", md: "90px" }}
         pb={hasNavbar && "65px"}
       >

@@ -22,6 +22,7 @@ const imageSrc = [
 
 export const ProductImages = () => {
   // Set which Image clicked
+  // To be implemented when APIs ready
   const [imageNum, setImageNum] = useState(0);
 
   return (
