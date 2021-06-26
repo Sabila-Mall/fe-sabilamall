@@ -1,4 +1,7 @@
+import { Box } from "@chakra-ui/react";
+
 import MyProfile from "../../components/MyProfile";
+import Navbar from "../../components/Navbar";
 import ProfileDesktop from "../../components/ProfileDesktop";
 import ProfileMobile from "../../components/ProfileMobile";
 

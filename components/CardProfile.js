@@ -15,48 +15,44 @@ import { VscPackage } from "react-icons/vsc";
 import { ButtonStatusUser } from "./ButtonProfile";
 
 export const SMCard = ({ sm, w }) => (
-  <Box
-    mt="20px"
-    mx="auto"
-    w={w}
-    h="50px"
-    bg="gray.50"
-    borderRadius="10px"
-    p="10px"
-    boxSizing="border-box"
-    boxShadow=" 0px 0px 5px 0px #00000040"
-    display="flex"
-    justifyContent="start"
-    alignItems="center"
-  >
+  <Flex mt="20px" mx="auto" w={w} justifyContent="center" alignItems="center">
     {sm.map((item, index) => (
       <Box
+        key={item.text}
         display="flex"
         flexDirection="column"
-        alignItems="center"
-        alignItems="start"
-        key={item.text}
-        ml={index ? "50px" : "10px"}
+        // alignItems="center"
+        // alignItems="start"
+        // w="190px"
+        ml={index ? "12px" : "0px"}
+        borderRadius="8px"
       >
-        <Text
-          className="primaryFont"
-          fontWeight="700"
-          fontSize="12px"
-          color="red.600"
-        >
-          {item.text}
-        </Text>
-        <Text
-          className="secondaryFont"
-          fontWeight="500"
-          fontSize="12px"
-          lineHeight="18px"
-        >
-          {index ? item.value : `RP. ${item.value}`}
-        </Text>
+        <Box bg="gray.100" w="113px" p="7px" borderRadius="8px 8px 0px 0px">
+          <Text
+            className="primaryFont"
+            fontWeight="700"
+            fontSize="14px"
+            color="orange.500"
+            textAlign="center"
+          >
+            {item.text}
+          </Text>
+        </Box>
+        <Box w="100%" p="7px" bg="gray.50" borderRadius="0px 0px 8px 8px">
+          <Text
+            className="secondaryFont"
+            fontWeight="500"
+            fontSize="12px"
+            lineHeight="18px"
+            textAlign="center"
+            color="gray.900"
+          >
+            {index ? item.value : `RP. ${item.value}`}
+          </Text>
+        </Box>
       </Box>
     ))}
-  </Box>
+  </Flex>
 );
 
 export const CardProfile = ({ sm }) => {
@@ -71,11 +67,12 @@ export const CardProfile = ({ sm }) => {
   return (
     <Box
       w={{ md: "260px", lg: "270px" }}
-      boxShadow=" 0px 0px 10px 0px #00000040"
+      boxShadow=" 0px 2px 4px -1px rgba(45, 55, 72, 0.06), 0px 4px 6px -1px rgba(45, 55, 72, 0.1)"
       maxHeight="545px"
       pt="20px"
       pb="36px"
       borderRadius="20px"
+      bg="white"
     >
       <Flex align="center" direction="column">
         <Avatar

@@ -33,7 +33,7 @@ const ProfileMobile = ({ sm }) => {
   ];
 
   return (
-    <Box display={{ base: "block", md: "none" }}>
+    <Box display={{ base: "block", md: "none" }} h="100vh" bg="gray.50">
       <NavbarProfile section="Akun Saya" />
       <Box mt="50px" px="16px" pt="18px">
         <Box display="flex" alignItems="center" justifyContent="space-between">

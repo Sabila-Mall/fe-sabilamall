@@ -5,12 +5,13 @@ import { IoKey, IoMedalOutline } from "react-icons/io5";
 import { VscPackage } from "react-icons/vsc";
 
 import { CardProfile } from "./CardProfile";
+import Navbar from "./Navbar";
 
 const ProfileDesktop = ({ section, element }) => {
   const router = useRouter();
 
   const sm = [
-    { text: "SM Pay", value: "100.000.000" },
+    { text: "SM Pay", value: "1000.000" },
     { text: "SM Point", value: 5 },
   ];
 
@@ -33,10 +34,20 @@ const ProfileDesktop = ({ section, element }) => {
     <Flex
       display={{ base: "none", md: "flex" }}
       justify="center"
-      pt="89px"
+      pt="120px"
       pb="30px"
-      px={{ base: "50px", md: "10px", lg: "120px" }}
+      px={{ base: "50px", md: "10px", lg: "80px", xl: "120px" }}
+      bg="gray.50"
     >
+      <Box
+        display={{ base: "none", md: "block" }}
+        position="fixed"
+        top="0"
+        left="0"
+        zIndex="2"
+      >
+        <Navbar />
+      </Box>
       <Flex>
         <CardProfile sm={sm} />
       </Flex>
@@ -44,18 +55,20 @@ const ProfileDesktop = ({ section, element }) => {
         border="1px solid #E2E8F0"
         borderRadius="20px"
         p="32px"
-        w="100%"
+        w="62vw"
         ml="15px"
+        bg="white"
+        boxShadow="0px 2px 4px -1px rgba(45, 55, 72, 0.06), 0px 4px 6px -1px rgba(45, 55, 72, 0.1)"
       >
         <Flex>
           {menu.map((item) => (
             <Flex
               className="secondaryFont"
-              fontSize="16px"
+              fontSize={{ md: "14px", lg: "16px" }}
               lineHeight="24px"
               align="center"
               fontWeight="500"
-              p="10px 20px"
+              p="10px 2%"
               cursor="pointer"
               key={item.text}
               borderBottom={
