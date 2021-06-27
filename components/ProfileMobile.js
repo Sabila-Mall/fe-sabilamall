@@ -25,9 +25,9 @@ const ProfileMobile = ({ sm }) => {
 
   const profileMenu = [
     { text: "Ubah Kata Sandi", path: "/profile/ubah-password" },
-    { text: "Alamat Pengiriman", path: "/" },
+    { text: "Alamat Pengiriman", path: "/profile/alamat-pengiriman" },
     { text: "Edit Profile", path: "/" },
-    { text: "Upgrade Akun", path: "/" },
+    { text: "Upgrade Akun", path: "/profile/profile-saya" },
     { text: "Pusat Bantuan", path: "/" },
     { text: "Keluar", path: "/" },
   ];

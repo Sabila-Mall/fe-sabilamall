@@ -10,7 +10,6 @@ const NavbarProfile = ({ section }) => {
       h="50px"
       boxShadow="0px 4px 10px 0px #00000040"
       w="100vw"
-      position="fixed"
       top="0"
       display={{ base: "flex", md: "none" }}
       className="primaryFont"
