@@ -11,7 +11,7 @@ import {
   MenuItem,
   MenuList,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   IoFilterOutline,
   IoArrowForwardOutline,
@@ -59,6 +59,28 @@ const LayoutProductList = ({
   const isAllProduct = headingText.toLowerCase() === "semua produk";
 
   const [showOverlay, setShowOverlay] = useState(false);
+  const [isDown, setIsDown] = useState(false);
+  const [startX, setStartX] = useState(null);
+  const [scrollLeft, setScrollLeft] = useState(null);
+  const [cursor, setCursor] = useState("pointer");
+
+  const refSlider = useRef();
+
+  const onMouseDownSlider = (e) => {
+    setIsDown(true);
+    setStartX(e.pageX - refSlider.current.offsetLeft);
+    setScrollLeft(refSlider.current.scrollLeft);
+    setCursor("grab");
+  };
+
+  const onMouseMoveSlider = (e) => {
+    if (!isDown) return;
+
+    e.preventDefault();
+    const x = e.pageX - refSlider.current.offsetLeft;
+    const walk = (x - startX) * 3;
+    refSlider.current.scrollLeft = scrollLeft - walk;
+  };
 
   if (headingText.toLowerCase() === "semua produk")
     templateColumns = "repeat(2, 1fr)";
@@ -112,8 +134,21 @@ const LayoutProductList = ({
           </Box>
           <Grid
             w={!isAllProduct ? "100vw" : "100%"}
-            overflowX="auto"
+            overflowX="scroll"
+            position="relative"
+            cursor={cursor}
             className={styles.scrollX}
+            onMouseMove={onMouseMoveSlider}
+            onMouseDown={onMouseDownSlider}
+            onMouseLeave={() => {
+              setIsDown(false);
+              setCursor("pointer");
+            }}
+            onMouseUp={() => {
+              setIsDown(false);
+              setCursor("pointer");
+            }}
+            ref={refSlider}
             templateColumns={
               isDiscount || isFlashSale
                 ? "repeat(800,1fr)"
@@ -129,7 +164,9 @@ const LayoutProductList = ({
             rowGap={4}
           >
             {data.map((item) => (
-              <CardProduct {...item} key={item.id} />
+              <Box key={item.id}>
+                <CardProduct {...item} />
+              </Box>
             ))}
           </Grid>
           <Box
