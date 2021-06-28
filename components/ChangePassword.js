@@ -12,7 +12,7 @@ export const ChangePassword = ({ isMobile }) => {
 
   return (
     <>
-      <Box mt={{ base: "100px", md: "10px" }} px="16px" pt="18px">
+      <Box mt={{ base: "30px", md: "10px" }} px="16px" pt="18px">
         <FormControl as="form" onSubmit={handleSubmit(onSubmit)}>
           <Box px="12px">
             <InputBoxAndLabel
@@ -69,7 +69,7 @@ export const ChangePassword = ({ isMobile }) => {
 
 export const ChangePasswordMobile = () => (
   <Box display={{ base: "block", md: "none" }}>
-    <NavbarProfile section={"Ubah Kata Sandi"} />
+    <NavbarProfile section={"Ubah Password"} />
     <ChangePassword isMobile={true} />
   </Box>
 );
