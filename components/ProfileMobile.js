@@ -26,7 +26,7 @@ const ProfileMobile = ({ sm }) => {
   ];
 
   const profileMenu = [
-    { text: "Ubah Kata Sandi", path: "/profile/ubah-password" },
+    { text: "Ubah Password", path: "/profile/ubah-password" },
     { text: "Alamat Pengiriman", path: "/profile/alamat-pengiriman" },
     { text: "Edit Profile", path: "/" },
     { text: "Upgrade Akun", path: "/profile/profile-saya" },
@@ -53,7 +53,7 @@ const ProfileMobile = ({ sm }) => {
           secondaryAction={logoutHandler}
         />
         <NavbarProfile section="Akun Saya" />
-        <Box mt="50px" px="16px" pt="18px">
+        <Box mt="20px" px="16px" pt="18px">
           <Flex alignItems="center" justifyContent="space-between">
             <Flex
               alignItems="center"
