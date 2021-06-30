@@ -266,7 +266,7 @@ const ProductInformation = () => {
                       : (color = "#ffa726");
                   }
                   return (
-                    <HStack>
+                    <HStack key={index}>
                       <GoStar size={24} color="orange" />
                       <Progress
                         value={el.percentage}
