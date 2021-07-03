@@ -1,6 +1,6 @@
 import { Box, Image, Text, Icon } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import { IoHeartOutline, IoTimeSharp } from "react-icons/io5";
+import { IoHeartOutline, IoTimeSharp, IoHeart } from "react-icons/io5";
 
 import styles from "../styles/Product.module.scss";
 
@@ -37,7 +37,7 @@ const CardProduct = ({
   discount,
   realPrice,
 }) => {
-  const [removed, setRemoved] = useState(false);
+  const [selected, setSelected] = useState(false);
 
   const realPriceString = numberWithDot(realPrice);
   const priceAfterDiscount = discount
@@ -48,7 +48,7 @@ const CardProduct = ({
 
   useEffect(() => {
     return () => {
-      if (removed) {
+      if (selected) {
         console.log("send DELETE request ke backend");
       }
     };
@@ -142,8 +142,9 @@ const CardProduct = ({
         >
           <Text>Rp {priceAfterDiscount ?? realPriceString}</Text>
           <Icon
-            onClick={() => setRemoved((prev) => !prev)}
-            as={IoHeartOutline}
+            onClick={() => setSelected((prev) => !prev)}
+            as={selected ? IoHeart : IoHeartOutline}
+            color={selected ? "red.500" : "black"}
           ></Icon>
         </Box>
       </Box>
