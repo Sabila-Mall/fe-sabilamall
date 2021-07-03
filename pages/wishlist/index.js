@@ -13,6 +13,7 @@ const Wishlist = () => {
       <Box
         as="main"
         pt={{ base: "51px", md: "71px" }}
+        pb="12"
         d="flex"
         justifyContent="center"
       >
