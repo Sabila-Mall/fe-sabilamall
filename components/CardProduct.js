@@ -1,4 +1,5 @@
 import { Box, Image, Text, Icon } from "@chakra-ui/react";
+import { useState, useEffect } from "react";
 import { IoHeartOutline, IoTimeSharp } from "react-icons/io5";
 
 import styles from "../styles/Product.module.scss";
@@ -36,12 +37,22 @@ const CardProduct = ({
   discount,
   realPrice,
 }) => {
+  const [removed, setRemoved] = useState(false);
+
   const realPriceString = numberWithDot(realPrice);
   const priceAfterDiscount = discount
     ? numberWithDot(realPrice - (realPrice * discount) / 100)
     : null;
 
   const timeLeft = endTime && calculateTimeLeft(endTime);
+
+  useEffect(() => {
+    return () => {
+      if (removed) {
+        console.log("send DELETE request ke backend");
+      }
+    };
+  }, []);
 
   return (
     <Box
@@ -130,7 +141,10 @@ const CardProduct = ({
           lineHeight="20.8px"
         >
           <Text>Rp {priceAfterDiscount ?? realPriceString}</Text>
-          <Icon as={IoHeartOutline}></Icon>
+          <Icon
+            onClick={() => setRemoved((prev) => !prev)}
+            as={IoHeartOutline}
+          ></Icon>
         </Box>
       </Box>
     </Box>
