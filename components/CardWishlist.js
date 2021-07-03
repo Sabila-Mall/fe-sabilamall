@@ -40,7 +40,7 @@ const CardWishlist = ({ imageUrl, productName, discount, realPrice }) => {
         alignItems="center"
         justifyContent="center"
       >
-        <Image src={imageUrl} h="90%" w="90%" />
+        <Image src={imageUrl} w="90%" h="auto" maxW="144px" />
       </Box>
       <Box
         h="100%"
