@@ -112,6 +112,7 @@ const ProductCheckout = () => {
                 w={"24px"}
                 h={"24px"}
                 color={"gray.400"}
+                _hover={{ cursor: "pointer" }}
                 onClick={() => handleModifyNumberOfItem("decrease")}
               />
               <Input
@@ -126,6 +127,7 @@ const ProductCheckout = () => {
                 color={"gray.400"}
                 w={"24px"}
                 h={"24px"}
+                _hover={{ cursor: "pointer" }}
                 onClick={() => handleModifyNumberOfItem("increase")}
               />
             </HStack>
