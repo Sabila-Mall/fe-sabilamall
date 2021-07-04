@@ -28,7 +28,7 @@ import {
 } from "../constants/dummyData";
 
 const Home = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const category = [
     [BsWatch, "Fashion Muslim"],

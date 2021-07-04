@@ -53,7 +53,6 @@ const LayoutProductList = ({
   endTime,
   flashSaleRef,
 }) => {
-  let templateColumns = `repeat(${data.length}, 1fr)`;
   const isFlashSale = headingText.toLowerCase() === "flash sale";
   const isDiscount = headingText.toLowerCase() === "discount";
   const isAllProduct = headingText.toLowerCase() === "semua produk";
@@ -82,8 +81,11 @@ const LayoutProductList = ({
     refSlider.current.scrollLeft = scrollLeft - walk;
   };
 
+  let templateColumns = `repeat(${data.length}, 1fr)`;
   if (headingText.toLowerCase() === "semua produk")
     templateColumns = "repeat(2, 1fr)";
+
+  const px = [".7rem", "3rem", "2rem", "2rem", "5rem", "7.5rem"];
 
   return (
     <>
@@ -95,13 +97,24 @@ const LayoutProductList = ({
         position="relative"
         ref={flashSaleRef}
       >
-        <Box px={[".7rem", "3rem", "2rem", "2rem", "5rem", "7.5rem"]}>
+        <Box px={isAllProduct && px}>
           {isAllProduct && (
             <Divider
               orientation="horizontal"
               w="100%"
               colorScheme="gray"
               mb="30px"
+            />
+          )}
+          {!isAllProduct && (
+            <Box
+              h="100%"
+              w={px}
+              position="absolute"
+              zIndex={2}
+              bg={bg}
+              left={0}
+              top={0}
             />
           )}
           <Box
@@ -118,6 +131,7 @@ const LayoutProductList = ({
               fontWeight={700}
               fontSize={{ base: "16px", md: "20px", lg: "24px" }}
               lineHeight={{ base: "20.8px", md: "26px", lg: "31.2px" }}
+              px={!isAllProduct && px}
               mb={isFlashSale && { base: "8px" }}
             >
               {headingText}
@@ -140,6 +154,7 @@ const LayoutProductList = ({
             className={styles.scrollX}
             onMouseMove={onMouseMoveSlider}
             onMouseDown={onMouseDownSlider}
+            px={!isAllProduct && px}
             onMouseLeave={() => {
               setIsDown(false);
               setCursor("pointer");
@@ -163,7 +178,7 @@ const LayoutProductList = ({
             columnGap={2}
             rowGap={4}
           >
-            {data.map((item) => (
+            {data.map((item, index) => (
               <Box key={item.id}>
                 <CardProduct {...item} />
               </Box>
