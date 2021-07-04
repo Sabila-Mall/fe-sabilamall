@@ -56,14 +56,6 @@ const Home = () => {
     autoplay: true,
     autoplaySpeed: 5000,
     arrows: false,
-    responsive: [
-      {
-        breakpoint: 768,
-        settings: {
-          centerPadding: "30px",
-        },
-      },
-    ],
   };
 
   const flashSaleRef = useRef();
