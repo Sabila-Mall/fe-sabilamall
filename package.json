@@ -19,14 +19,10 @@
     "react-dom": "17.0.2",
     "react-hook-form": "^7.7.1",
     "react-icons": "^4.2.0",
-<<<<<<< HEAD
-    "react-star-ratings": "^2.3.0",
-    "sass": "^1.32.12"
-=======
     "react-slick": "^0.28.1",
     "sass": "^1.32.12",
-    "slick-carousel": "^1.8.1"
->>>>>>> 83a8c2173e1dd6a7300ba46eed24e6786c31962b
+    "slick-carousel": "^1.8.1",
+    "react-star-ratings": "^2.3.0"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^2.0.2"

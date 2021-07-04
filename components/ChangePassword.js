@@ -51,12 +51,12 @@ export const ChangePassword = ({ isMobile }) => {
             bg="orange.400"
             color="white"
             colorScheme="orange.400"
-            mt="150px"
+            mt="2rem"
             _active={{ bg: "orange.300" }}
             border="none"
             display={{ base: "block", md: "none" }}
           >
-            Update Profile
+            Ubah Password
           </Button>
           <Flex justify="flex-end" w="100%" mt="70px">
             <ButtonSubmit text="Ubah Password" />
