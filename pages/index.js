@@ -48,14 +48,12 @@ const Home = () => {
   ];
 
   const settings = {
-    className: "center",
     centerMode: true,
     infinite: true,
-    centerPadding: "100px",
     slidesToShow: 1,
     speed: 500,
     dots: true,
-    autoplay: true,
+    autoplay: false,
     autoplaySpeed: 5000,
     arrows: false,
     responsive: [
@@ -134,27 +132,48 @@ const Home = () => {
         </Circle>
         <Box marginTop="1.5rem">
           <Slider {...settings}>
-            <Box paddingLeft="0.5rem" paddingRight="0.5rem">
-              <Img src="/images/Carousel/1.jpg" borderRadius="lg" />
-            </Box>
-            <Box paddingLeft="0.5rem" paddingRight="0.5rem">
-              <Img src="/images/Carousel/2.jpg" borderRadius="lg" />
-            </Box>
-            <Box paddingLeft="0.5rem" paddingRight="0.5rem">
-              <Img src="/images/Carousel/3.jpg" borderRadius="lg" />
-            </Box>
-            <Box paddingLeft="0.5rem" paddingRight="0.5rem">
-              <Img src="/images/Carousel/4.jpg" borderRadius="lg" />
-            </Box>
-            <Box paddingLeft="0.5rem" paddingRight="0.5rem">
-              <Img src="/images/Carousel/5.jpg" borderRadius="lg" />
-            </Box>
-            <Box paddingLeft="0.5rem" paddingRight="0.5rem">
-              <Img src="/images/Carousel/6.jpg" borderRadius="lg" />
-            </Box>
-            <Box paddingLeft="0.5rem" paddingRight="0.5rem">
-              <Img src="/images/Carousel/7.jpg" borderRadius="lg" />
-            </Box>
+            <Img
+              className="imageRound"
+              src="/images/Carousel/1.jpg"
+              pl="0.5rem"
+              pr="0.5rem"
+            />
+            <Img
+              className="imageRound"
+              src="/images/Carousel/2.jpg"
+              pl="0.5rem"
+              pr="0.5rem"
+            />
+            <Img
+              className="imageRound"
+              src="/images/Carousel/3.jpg"
+              pl="0.5rem"
+              pr="0.5rem"
+            />
+            <Img
+              className="imageRound"
+              src="/images/Carousel/4.jpg"
+              pl="0.5rem"
+              pr="0.5rem"
+            />
+            <Img
+              className="imageRound"
+              src="/images/Carousel/5.jpg"
+              pl="0.5rem"
+              pr="0.5rem"
+            />
+            <Img
+              className="imageRound"
+              src="/images/Carousel/6.jpg"
+              pl="0.5rem"
+              pr="0.5rem"
+            />
+            <Img
+              className="imageRound"
+              src="/images/Carousel/7.jpg"
+              pl="0.5rem"
+              pr="0.5rem"
+            />
           </Slider>
         </Box>
         <Box

@@ -31,18 +31,19 @@ const LayoutCategoryList = ({ isLoggedIn, category }) => {
         </Grid>
       )}
       {!isLoggedIn && (
-        <Slider {...settings}>
-          {category.map((cat) => {
-            return (
-              <CardCategory
-                icon={cat[0]}
-                name={cat[1]}
-                onClick={() => console.log(`redirect ke ${cat[1]}`)}
-                key={cat[1]}
-              />
-            );
-          })}
-        </Slider>
+        // <Slider {...settings}>
+        //   {category.map((cat) => {
+        //     return (
+        //       <CardCategory
+        //         icon={cat[0]}
+        //         name={cat[1]}
+        //         onClick={() => console.log(`redirect ke ${cat[1]}`)}
+        //         key={cat[1]}
+        //       />
+        //     );
+        //   })}
+        // </Slider>
+        <></>
       )}
     </>
   );
