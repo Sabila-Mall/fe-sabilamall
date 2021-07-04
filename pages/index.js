@@ -53,7 +53,7 @@ const Home = () => {
     slidesToShow: 1,
     speed: 500,
     dots: true,
-    autoplay: false,
+    autoplay: true,
     autoplaySpeed: 5000,
     arrows: false,
     responsive: [
