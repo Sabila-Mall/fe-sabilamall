@@ -17,6 +17,8 @@ import { FaWhatsapp, FaRegHeart } from "react-icons/fa";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { IoRemoveCircleOutline } from "react-icons/io5";
 
+import styles from "../styles/ProductDetails.module.scss";
+
 const formatPrice = (price) => {
   return new Intl.NumberFormat("id-ID", {
     style: "decimal",
@@ -138,7 +140,7 @@ const ProductCheckout = () => {
                 onClick={() => handleModifyNumberOfItem("increase")}
               />
             </HStack>
-            <HStack fontSize={"14px"}>
+            <HStack marginInlineStart="1rem !important" fontSize={"14px"}>
               <Text textColor={"gray.500"}>Stok:</Text>
               <Text textColor={"orange.300"}>{remainingStock}</Text>
             </HStack>
@@ -160,7 +162,12 @@ const ProductCheckout = () => {
             <Text as={"s"} color={"gray.400"} fontSize={"12px"}>
               Rp{formatPrice(realPrice)}
             </Text>
-            <Text color={"orange.400"} fontSize={"20px"} fontWeight={"bold"}>
+            <Text
+              className={styles.subtotal}
+              color={"orange.400"}
+              fontSize="20px"
+              fontWeight={"bold"}
+            >
               Rp{formatPrice(discountedPrice)}
             </Text>
           </VStack>

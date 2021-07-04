@@ -1,6 +1,12 @@
 .productDescription {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
+.subtotal {
+  @media screen and (max-width: 325px) {
+    font-size: 1rem !important;
+  }
 }
