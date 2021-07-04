@@ -12,7 +12,7 @@ export const ShareProduct = () => {
         justifyContent="center"
       >
         <Text color="black" fontWeight="semibold">
-          Bagikan :
+          Bagikan
         </Text>
         <Link href="https://google.com" isExternal>
           <Box

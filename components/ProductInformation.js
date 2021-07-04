@@ -83,7 +83,7 @@ const ProductInformation = () => {
   return (
     <Box mt="16px" ml={{ lg: "0.5rem", xl: "0" }}>
       <Tabs w={{ lg: "95%", xl: "100%" }}>
-        <TabList borderTopColor="gray.200">
+        <TabList borderTop="2px" borderTopColor="gray.200">
           <Tab
             _selected={{ color: "orange.500", borderBottomColor: "orange.400" }}
             _focus={{ boxShadow: "none" }}
@@ -102,7 +102,12 @@ const ProductInformation = () => {
           >
             Penilaian
           </Tab>
-          <Link href="#review">
+          <Link
+            href="#review"
+            d={{ base: "flex", sm: "inherit" }}
+            justifyContent="center"
+            alignItems="center"
+          >
             <Button
               _selected={{
                 color: "orange.500",

@@ -52,8 +52,13 @@ const ProductCheckout = () => {
   };
 
   return (
-    <VStack spacing={"12px"} className={"secondaryFont"}>
+    <VStack
+      pt={{ base: "1rem", sm: "inherit" }}
+      spacing={"12px"}
+      className={"secondaryFont"}
+    >
       <VStack
+        w={{ base: "full", lg: "inherit" }}
         spacing={"10px"}
         borderColor={"gray.300"}
         borderWidth={"1px"}
@@ -100,7 +105,7 @@ const ProductCheckout = () => {
           </Text>
           <Spacer height={"10px"} />
           <HStack
-            spacing={"38px"}
+            spacing={"1.5rem"}
             flexDirection={"row"}
             justifyContent={"space-between"}
             alignItems={"center"}
@@ -116,6 +121,8 @@ const ProductCheckout = () => {
                 onClick={() => handleModifyNumberOfItem("decrease")}
               />
               <Input
+                minW="3.5rem"
+                maxW="5rem"
                 placeholder={numberOfItem}
                 textAlign={"center"}
                 borderColor={"gray.200"}

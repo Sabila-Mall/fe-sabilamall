@@ -18,13 +18,13 @@ const ProductHeader = () => {
         divider={
           <StackDivider borderColor={{ base: "white", md: "gray.200" }} />
         }
+        alignItems="center"
         direction="row"
-        h="21px"
         spacing="8px"
         className="secondaryFont"
-        fontSize="14px"
+        fontSize="0.875rem"
         mt={{ base: "8px", md: "16px" }}
-        mb={{ base: "8px", md: "12px" }}
+        mb={{ base: "0.5rem", md: "12px" }}
       >
         <Text color="gray.500">Nama Supplier</Text>
         <Text color="gray.500">Terjual 9999</Text>
