@@ -23,7 +23,11 @@ export const TableContent = ({ price, isDiscount }) => {
       <Td p={{ md: "0", "2xl": "1.5rem" }}>
         <AddAmount total={total} price={price} setTotal={setTotal} />
       </Td>
-      <Td textAlign="center" px={{ md: "0", xl: "1.5rem" }}>
+      <Td
+        textAlign="center"
+        px={{ md: "1rem", xl: "1.5rem" }}
+        pl={{ md: "0.5rem", xl: "1.5rem" }}
+      >
         <Text color="orange.400" fontWeight="500" fontSize="1.2rem">
           Rp{idr.format(prices)}
         </Text>

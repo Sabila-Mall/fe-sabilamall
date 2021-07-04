@@ -1,5 +1,5 @@
 import { Input } from "@chakra-ui/input";
-import { Box, HStack, Text } from "@chakra-ui/layout";
+import { Box, HStack, Text, Flex } from "@chakra-ui/layout";
 import { css } from "@emotion/react";
 import { useState } from "react";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
@@ -10,8 +10,8 @@ export const AddAmount = ({ setTotal, price, total }) => {
   const prices = parseInt(price.replace(/\./g, ""));
 
   return (
-    <Box>
-      <HStack alignItems="center" justifyContent={{ lg: "center" }}>
+    <Flex justifyContent="center">
+      <HStack w="8rem" alignItems="center" justifyContent={{ lg: "center" }}>
         <Box
           css={css`
             :hover {
@@ -55,6 +55,6 @@ export const AddAmount = ({ setTotal, price, total }) => {
           />
         </Box>
       </HStack>
-    </Box>
+    </Flex>
   );
 };
