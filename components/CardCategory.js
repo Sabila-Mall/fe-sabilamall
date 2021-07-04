@@ -4,8 +4,8 @@ const CardCategory = ({ icon, name, onClick }) => {
   return (
     <Box
       shadow="md"
-      width="8rem"
-      height="8rem"
+      width="6rem"
+      height="6rem"
       bg="white"
       cursor="pointer"
       d="flex"
@@ -17,14 +17,14 @@ const CardCategory = ({ icon, name, onClick }) => {
       <Icon
         as={icon}
         color="red.600"
-        boxSize="3rem"
-        marginTop="1rem"
+        boxSize="2rem"
+        marginTop="0.8rem"
         marginBottom="0.5rem"
       />
       <Text
         className="secondaryFont"
-        fontSize="0.8rem"
-        marginTop="0.5rem"
+        fontSize="0.7rem"
+        marginTop="0.3rem"
         textAlign="center"
       >
         {name}

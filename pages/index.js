@@ -1,16 +1,4 @@
-import {
-  Box,
-  Text,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalBody,
-  useDisclosure,
-  Img,
-  Divider,
-  Circle,
-  Icon,
-} from "@chakra-ui/react";
+import { Box, Text, Img, Circle, Icon } from "@chakra-ui/react";
 import React, { useEffect, useState, useRef } from "react";
 import { BsWatch, BsBagFill } from "react-icons/bs";
 import {
@@ -22,9 +10,8 @@ import {
   FaPencilRuler,
   FaRobot,
   FaStethoscope,
-  FaPizzaSlice,
 } from "react-icons/fa";
-import { IoFastFood, IoGift, IoClose, IoArrowUp } from "react-icons/io5";
+import { IoFastFood, IoGift, IoArrowUp } from "react-icons/io5";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
@@ -41,47 +28,23 @@ import {
 } from "../constants/dummyData";
 
 const Home = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const moreCategory = [
-    {
-      title: "Fashion",
-      id: "mcrtst1",
-      items: [
-        [BsWatch, "Fashion Muslim"],
-        [FaBaby, "Fashion Bayi"],
-        [BsWatch, "Aksesori Fashion"],
-        [BsBagFill, "Sepatu dan Tas"],
-      ],
-    },
-    {
-      title: "Rumah Tangga",
-      id: "mrctas2",
-      items: [
-        [FaMugHot, "Perlengkapan Dapur"],
-        [FaHome, "Perlengkapan Rumah Tangga"],
-        [FaSprayCan, "Perawatan & Kecantikan"],
-        [FaMosque, "Perlengkapan Ibadah"],
-      ],
-    },
-    {
-      title: "Perlengkapan Lainnya",
-      id: "mrctdad2",
-      items: [
-        [FaPencilRuler, "Buku & Alat Tulis"],
-        [FaRobot, "Mainan"],
-        [IoFastFood, "Makanan dan Minuman"],
-        [FaStethoscope, "Kesehatan"],
-        [IoGift, "Serba-serbi"],
-      ],
-    },
-  ];
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const category = [
     [BsWatch, "Fashion Muslim"],
-    [FaPizzaSlice, "Makanan dan Minuman"],
-    [BsWatch, "Perlengkapan Ibadah"],
+    [FaBaby, "Fashion Bayi"],
+    [BsWatch, "Aksesoris Fashion"],
+    [BsBagFill, "Sepatu dan Tas"],
+    [FaMugHot, "Perlengkapan Dapur"],
+    [FaHome, "Perlengkapan Rumah Tangga"],
+    [FaSprayCan, "Perawatan & Kecantikan"],
+    [FaMosque, "Perlengkapan Ibadah"],
+    [FaPencilRuler, "Buku & Alat Tulis"],
+    [FaRobot, "Mainan"],
+    [IoFastFood, "Makanan dan Minuman"],
     [FaStethoscope, "Kesehatan"],
+    [IoGift, "Serba-serbi"],
+    [IoGift, "Apalagi :("],
   ];
 
   const settings = {
@@ -202,22 +165,51 @@ const Home = () => {
           marginTop="2rem"
           marginBottom="2rem"
         >
-          <SMCard width={{ base: "90vw", md: "26rem" }} />
-          <Box
-            d={{ base: "none", md: "flex" }}
-            flexDirection="column"
-            alignItems="center"
-            paddingTop={{ base: "2rem", xl: "0px" }}
-          >
-            <Text className="primaryFont" fontWeight="700" fontSize="1.5rem">
-              Kategori
-            </Text>
-            <LayoutCategoryList
-              moreCategory={false}
-              onOpen={() => onOpen()}
-              category={category}
-            />
-          </Box>
+          {isLoggedIn && (
+            <>
+              <SMCard width={{ base: "90vw", md: "26rem" }} />
+              <Box
+                d={{ base: "none", md: "flex" }}
+                flexDirection="column"
+                alignItems="center"
+                paddingTop={{ base: "2rem", xl: "0px" }}
+              >
+                <Text
+                  className="primaryFont"
+                  fontWeight="700"
+                  fontSize="1.5rem"
+                >
+                  Kategori
+                </Text>
+                <LayoutCategoryList
+                  isLoggedIn={isLoggedIn}
+                  category={category}
+                />
+              </Box>
+            </>
+          )}
+          {!isLoggedIn && (
+            <>
+              <Box
+                d={{ base: "none", md: "flex" }}
+                flexDirection="column"
+                alignItems="center"
+                paddingTop={{ base: "2rem", xl: "0px" }}
+              >
+                <Text
+                  className="primaryFont"
+                  fontWeight="700"
+                  fontSize="1.5rem"
+                >
+                  Kategori
+                </Text>
+                <LayoutCategoryList
+                  isLoggedIn={isLoggedIn}
+                  category={category}
+                />
+              </Box>
+            </>
+          )}
         </Box>
         <LayoutProductList
           headingText="Flash Sale"
@@ -237,41 +229,6 @@ const Home = () => {
         />
       </Box>
       <Footer />
-
-      <Modal
-        onClose={onClose}
-        size="xl"
-        isOpen={isOpen}
-        isCentered
-        scrollBehavior="inside"
-      >
-        <ModalOverlay />
-        <ModalContent maxW="68rem">
-          <ModalBody paddingBottom="1.5rem">
-            <Circle
-              size="2.5rem"
-              bg="red.500"
-              onClick={() => onClose()}
-              cursor="pointer"
-              position="absolute"
-              top="-18px"
-              right={{ base: "18px", xl: "-18px" }}
-            >
-              <Icon as={IoClose} color="white" w="65%" h="65%" />
-            </Circle>
-            {moreCategory.map((cat) => {
-              return (
-                <LayoutCategoryList
-                  moreCategory={true}
-                  title={cat.title}
-                  moreCategory={cat.items}
-                  key={cat.id}
-                />
-              );
-            })}
-          </ModalBody>
-        </ModalContent>
-      </Modal>
     </>
   );
 };
