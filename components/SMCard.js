@@ -143,25 +143,51 @@ const SMCard = ({ width }) => {
           <Box
             w="70%"
             d="flex"
-            flexDirection="row"
+            flexDirection="column"
             justifyContent="space-between"
             fontSize="0.8rem"
             fontWeight="500"
             className="secondaryFont"
           >
-            <Box w="60%">
-              <Text isTruncated>1. Siapa</Text>
-              <Text isTruncated>2. Siapa lagi</Text>
-              <Text isTruncated>3. lagi lagi</Text>
-              <Text isTruncated>4. terus</Text>
-              <Text isTruncated>5. lagilagilagilagilagilagi</Text>
+            <Box h="20%" w="100%" d="flex" justifyContent="space-between">
+              <Text w="60%" minW="20px" isTruncated>
+                1. Siapa
+              </Text>
+              <Text w="40%" minW="20px" align="right" isTruncated>
+                1495 poin
+              </Text>
             </Box>
-            <Box>
-              <Text align="right">1495 poin</Text>
-              <Text align="right">397 poin</Text>
-              <Text align="right">376 poin</Text>
-              <Text align="right">289 poin</Text>
-              <Text align="right">123 poin</Text>
+            <Box h="20%" w="100%" d="flex" justifyContent="space-between">
+              <Text w="60%" minW="20px" isTruncated>
+                2. Siapa lagi
+              </Text>
+              <Text w="40%" minW="20px" align="right" isTruncated>
+                397 poin
+              </Text>
+            </Box>
+            <Box h="20%" w="100%" d="flex" justifyContent="space-between">
+              <Text w="60%" minW="20px" isTruncated>
+                3. lagi lagi
+              </Text>
+              <Text w="40%" minW="20px" align="right" isTruncated>
+                376 poin
+              </Text>
+            </Box>
+            <Box h="20%" w="100%" d="flex" justifyContent="space-between">
+              <Text w="60%" minW="20px" isTruncated>
+                4. terus
+              </Text>
+              <Text w="40%" minW="20px" align="right" isTruncated>
+                289 poin
+              </Text>
+            </Box>
+            <Box h="20%" w="100%" d="flex" justifyContent="space-between">
+              <Text w="60%" minW="20px" isTruncated>
+                5. lagilagilagilagilagilagi
+              </Text>
+              <Text w="40%" minW="20px" align="right" isTruncated>
+                123 poin
+              </Text>
             </Box>
           </Box>
         </Center>
