@@ -5,10 +5,10 @@ import {
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
-  DrawerCloseButton, useDisclosure, Button, Input, Divider, HStack, Text, Flex, Icon, Link, Box,
+  DrawerCloseButton, useDisclosure, Button, Text, Flex, Link
 } from "@chakra-ui/react";
 import React from "react";
-import { Image } from "@chakra-ui/image";
+import QuickAddListItem from "./QuickAddListItem";
 
 const formatPrice = (price) => {
   return new Intl.NumberFormat(
@@ -25,17 +25,17 @@ const QuickAdd = () => {
 
   const products = [
     {
-      "nama": "Nama Produk Croissant Jujubes Sweet Sweet Powder Tiramisu Caramels",
+      "name": "Nama Produk Croissant Jujubes Sweet Sweet Powder Tiramisu Caramels",
       "image": "",
       "discount": 0,
     },
     {
-      "nama": "Nama Produk Croissant Jujubes Sweet Sweet Powder Tiramisu Caramels",
+      "name": "Nama Produk Croissant Jujubes Sweet Sweet Powder Tiramisu Caramels",
       "image": "",
       "discount": 0,
     },
     {
-      "nama": "Nama Produk Croissant Jujubes Sweet Sweet Powder Tiramisu Caramels",
+      "name": "Nama Produk Croissant Jujubes Sweet Sweet Powder Tiramisu Caramels",
       "image": "",
       "discount": 0,
     },
@@ -56,24 +56,18 @@ const QuickAdd = () => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader textColor={"gray.500"}>
-            Keranjang Saya
+          <DrawerHeader textColor={"gray.500"} marginTop={6} marginLeft={8}>
+            <Text>Keranjang Saya</Text>
           </DrawerHeader>
 
-          <DrawerBody>
-            {products.forEach((product) => {
-              return (
-                <Flex>
-                  <Text isTruncated>{product.nama}</Text>
-                </Flex>
-              );
-            })}
+          <DrawerBody mx={8}>
+            <QuickAddListItem products={products}/>
           </DrawerBody>
 
           <DrawerFooter borderTopWidth="1px" flexDirection={"column"}>
-            <Flex flexDirection={"row"} justifyContent={"space-between"}>
-              <Text fontSize={"16px"} textColor={"gray.500"}>Total</Text>
-              <Text>Rp${price}</Text>
+            <Flex flexDirection={"row"} justifyContent={"space-between"} alignItems={"center"}>
+              <Text fontSize={"16px"} textColor={"gray.500"} flex={1}>Total</Text>
+              <Text textColor={"orange.400"} fontSize={"20"} fontWeight={"bold"} flex={1}>Rp${price}</Text>
             </Flex>
             <Text fontSize={"14px"} textColor={"gray.400"} className={"secondaryFont"}>
               Ongkos kirim akan dihitung saat proses checkout
