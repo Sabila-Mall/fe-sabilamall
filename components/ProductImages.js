@@ -35,10 +35,7 @@ export const ProductImages = () => {
         </Flex>
 
         <Flex justifyContent="center">
-          <Box
-            pos="relative"
-            w={{ base: "100%", md: "50%", lg: "100%", xl: "90%" }}
-          >
+          <Box pos="relative">
             <Box
               position="absolute"
               top="25%"
@@ -56,11 +53,15 @@ export const ProductImages = () => {
             >
               <MdKeyboardArrowRight size="2em" color="white" />
             </Box>
-            <Flex justifyContent="space-between">
+
+            <HStack
+              justifyContent="center"
+              spacing={{ base: "0.4rem", md: "1rem" }}
+            >
               {imageSrc.map((e) => {
                 return <Image key={e.src} src={e.src} />;
               })}
-            </Flex>
+            </HStack>
           </Box>
         </Flex>
       </Flex>
