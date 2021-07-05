@@ -108,14 +108,14 @@ export const UpgradeAccount = ({ isMobile, currentAccount }) => {
                     fontWeight="700"
                     fontSize="18px"
                     onClick={() => handleSubmit()}
-                    display={isMobile ? "block" : "none"}
                     size="lg"
-                    w="90%"
+                    w={isMobile ? "90%" : "25%"}
                     ml="5%"
+                    mt={isMobile ? "" : "72px"}
                     color="white"
                     bg="orange.500"
-                    pos="absolute"
-                    bottom="36px"
+                    pos={isMobile ? "absolute" : ""}
+                    bottom={isMobile ? "36px" : ""}
                     borderRadius="20px"
                     _hover={{ bg: "orange.400" }}
                 >
