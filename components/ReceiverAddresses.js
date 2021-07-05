@@ -105,6 +105,8 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
                         setcity(tempCity)
                         setprovince(tempProvince)
                         setpostalCode(tempPostalCode)
+
+                        settempName(name)
                     }
 
                     return (

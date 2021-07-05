@@ -25,6 +25,7 @@ const InputBoxAndLabel = ({ register, text, name, mt, w, type, options }) => (
         id={name}
         placeholder={text}
         _focus={{ outline: "none" }}
+        autoComplete="on"
       />
     )}
     {type === "select" && (
