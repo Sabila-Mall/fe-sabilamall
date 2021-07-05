@@ -1,7 +1,6 @@
 import {
     Box,
     Flex,
-    Text,
     useDisclosure,
     Modal,
     ModalOverlay,
@@ -24,7 +23,7 @@ const DeleteIcon = ({ deleteAddress }) => {
                 onClose={onClose}
             >
                 <ModalOverlay />
-                <ModalContent borderRadius="20px" bgColor={{ base: "#F7FAFC", md: "white" }}>
+                <ModalContent borderRadius="20px" bgColor={{ base: "#F7FAFC", md: "white" }} pos="absolute" top="35%">
                     <ModalHeader w="100%" justifyContent="center" justifySelf="center" justifyItems="center">
                         <Center>
                             Hapus Alamat?

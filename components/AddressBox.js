@@ -6,21 +6,23 @@ import {
 import { FaPen } from "react-icons/fa";
 import DeleteIcon from "./deleteIcon";
 
-const AddressBox = ({ name, phoneNumber, address, editAddress, deleteAddress }) => {
+const AddressBox = ({ name, phoneNumber, address, city, district, province, postalCode, editAddress, deleteAddress }) => {
 
 
     return (
         <Box position="relative" p="16px">
             <Flex lineHeight="150%" className="secondaryFont" fontSize="12px">
                 <Box color="gray.500" textAlign="right" display={{ base: "none", md: "block" }}>
-                    <Text>Nama Lengkap</Text>
-                    <Text>Telepon</Text>
-                    <Text>Alamat</Text>
+                    <Text>{name ? "Nama Lengkap" : ""}</Text>
+                    <Text>{phoneNumber ? "Telepon" : ""}</Text>
+                    <Text>{address ? "Alamat" : ""}</Text>
                 </Box>
-                <Box ml="16px" maxW={{ base: "60%", md: "40%" }}>
+                <Box ml={{ base: "0", md: "16px" }} maxW={{ base: "60%", md: "40%" }}>
                     <Text fontWeight="bold">{name}</Text>
                     <Text>{phoneNumber}</Text>
                     <Text>{address}</Text>
+                    <Text>{(city ? city : "") + (city && province ? ", " : "") + (province ? province : "")}</Text>
+                    <Text>{(district ? district : "") + (district && postalCode ? ", " : "") + (postalCode ? postalCode : "")}</Text>
                 </Box>
             </Flex>
             <Box position="absolute" top="15px" right="40px" color="gray.500" cursor="pointer" h={{ base: "24px", md: "24px" }}>
@@ -30,7 +32,7 @@ const AddressBox = ({ name, phoneNumber, address, editAddress, deleteAddress }) 
                 <DeleteIcon deleteAddress={deleteAddress} />
             </Box>
 
-        </Box>
+        </Box >
     )
 }
 

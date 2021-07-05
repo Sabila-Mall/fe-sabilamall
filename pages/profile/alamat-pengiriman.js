@@ -9,7 +9,7 @@ const editAddress = () => {
     <>
       <ChangeAddressMobile />
       <ProfileDesktop
-        section="Alamat Pengiriman"
+        section="Data Pengiriman"
         element={<ChangeAddress isMobile={false} />}
       />
     </>

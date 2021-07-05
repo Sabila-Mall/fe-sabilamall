@@ -6,79 +6,122 @@ import {
     Button,
     Radio,
     RadioGroup,
-    FormControl
+    FormControl,
+    Center,
+    Image
 } from "@chakra-ui/react";
 import NavbarProfile from "./NavbarProfile";
-import { useState, useEffect } from "react";
-import { ButtonSubmit } from "./ButtonProfile";
-import router from "next/router";
+import { useState } from "react";
 
-export const UpgradeAccount = ({ isMobile }) => {
-    const [value, setValue] = useState("");
+export const UpgradeAccount = ({ isMobile, currentAccount }) => {
+    const [value, setValue] = useState(currentAccount);
+    const [tempValue, settempValue] = useState(value)
 
-    useEffect(() => {
-        setValue(value)
-    }, [value])
+    const handleSubmit = () => {
+        setValue(tempValue)
+    }
 
-    const option = [
+    const options = [
         {
             name: "Agen",
-            value: "agen"
+            value: "agen",
+            price: "Rp 2.005.749",
+            discount: "30%"
         },
         {
             name: "Reseller",
-            value: "reseller"
+            value: "reseller",
+            price: "Rp 505.749",
+            discount: "20%"
         }
     ];
 
     return (
         <Box mx={isMobile ? "5%" : "0"}>
-            <Text fontSize="16px" lineHeight="150%" className="secondaryFont" fontWeight="500" mt="16px">Pilih level member yang ingin kamu ajukan</Text>
-            <FormControl id="form">
-                <RadioGroup onChange={setValue} value={value} pos="relative">
-                    <Stack mt="20px" spacing="16px">
-                        <Box border="2px solid #A0AEC0" borderRadius="20px" _focusWithin={{ borderColor: "orange.500" }}>
-                            <Radio value={option[0].value} p="32px 16px" w="100%" h="100%" _checked={{ bg: "orange.500" }} transform="translateY(-12px)">
-                                <Flex>
-                                    <Text fontSize="16px" className="primaryFont" fontWeight="bold" color="orange.500">Reseller</Text>
-                                    <Text pos="absolute" right="32px" className="secondaryFont" fontSize="14px" fontWeight="500">Rp 505.749</Text>
-                                </Flex>
-                                <Text fontSize="14px" className="secondaryFont" fontWeight="500" mt="6px">Diskon hingga 20%</Text>
-                            </Radio>
-                        </Box>
-                        <Box border="2px solid #A0AEC0" borderRadius="20px" _focusWithin={{ borderColor: "orange.500" }}>
-                            <Radio value={option[1].value} p="32px 16px" w="100%" h="100%" _checked={{ bg: "orange.500" }} transform="translateY(-12px)">
-                                <Flex>
-                                    <Text fontSize="16px" className="primaryFont" fontWeight="bold" color="orange.500">Agen</Text>
-                                    <Text pos="absolute" right="32px" className="secondaryFont" fontSize="14px" fontWeight="500">Rp 2.005.749</Text>
-                                </Flex>
-                                <Text fontSize="14px" className="secondaryFont" fontWeight="500" mt="6px">Diskon hingga 30%</Text>
-                            </Radio>
-                        </Box>
+            <Text
+                fontSize="16px"
+                lineHeight="150%"
+                className="secondaryFont"
+                fontWeight="500"
+                mt="30px"
+                color={value === "agen" ? "orange.500" : "black"}>
+                {value === "agen" ? "Akunmu sudah level tertinggi (Agen)!" : "Pilih level member yang ingin kamu ajukan"}
+            </Text>
+
+            {value === "agen" ?
+                <Center mt={isMobile ? "50%" : "auto"}>
+                    <Image src="/images/agentAccount.svg" alt="" />
+                </Center> :
+                <FormControl id="form"><RadioGroup
+                    pos="relative">
+                    <Stack
+                        mt="20px"
+                        spacing="16px">
+                        {options.map((option) => {
+                            return (
+                                <Box
+                                    border="2px solid #A0AEC0"
+                                    borderRadius="20px"
+                                    _focusWithin={{ borderColor: "orange.500" }}
+                                    onClick={(e) => settempValue(e.target.value)}>
+                                    <Radio
+                                        value={option.value}
+                                        p="32px 16px"
+                                        w="100%"
+                                        h="100%"
+                                        _checked={{ bg: "orange.500" }}
+                                        transform="translateY(-12px)">
+                                        <Flex>
+                                            <Text
+                                                fontSize="16px"
+                                                className="primaryFont"
+                                                fontWeight="bold"
+                                                color="orange.500">
+                                                {option.name}
+                                            </Text>
+                                            <Text
+                                                pos="absolute"
+                                                right="32px"
+                                                className="secondaryFont"
+                                                fontSize="14px"
+                                                fontWeight="500">
+                                                {option.price}
+                                            </Text>
+                                        </Flex>
+                                        {option.discount === "" ? "" :
+                                            <Text
+                                                fontSize="14px"
+                                                className="secondaryFont"
+                                                fontWeight="500" mt="6px">
+                                                {`Diskon hingga ${option.discount}`}
+                                            </Text>}
+                                    </Radio>
+                                </Box>
+                            )
+                        })}
                     </Stack>
                 </RadioGroup>
+                </FormControl >}
+            <Flex justify="flex-end" w="100%">
                 <Button
-                    colorScheme="orange"
-                    borderRadius="20px"
-                    p="24px"
-                    pos="fixed"
-                    bottom="36px"
-                    type="submit"
-                    fontWeight="700"
                     className="primaryFont"
+                    fontWeight="700"
                     fontSize="18px"
+                    onClick={() => handleSubmit()}
+                    display={isMobile ? "block" : "none"}
+                    size="lg"
                     w="90%"
-                    d="flex"
-                    onClick={() => router.push("/profile")}
-                    visibility={isMobile ? "block" : "hidden"}>
-                    Update
+                    ml="5%"
+                    color="white"
+                    bg="orange.500"
+                    pos="absolute"
+                    bottom="36px"
+                    borderRadius="20px"
+                    _hover={{ bg: "orange.400" }}
+                >
+                    Konfirmasi Pesanan
                 </Button>
-
-
-                <Flex justify="flex-end" w="100%" mt="52px">
-                    <ButtonSubmit text="Konfirmasi" />
-                </Flex>
-            </FormControl >
+            </Flex>
         </Box >
 
 
