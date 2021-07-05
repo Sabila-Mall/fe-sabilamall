@@ -79,6 +79,7 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
             </Flex>
             <Stack
                 divider={<StackDivider color="gray.500" />}
+                mb="48px"
             >
                 {addressList.map((address) => {
                     const [name, setname] = useState(address.name)
@@ -240,8 +241,6 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
                                                         <option value="option3">Option 3</option>
                                                     </Select>
                                                 </GridItem>
-
-
                                             </Grid>
                                         </FormControl>
                                     </ModalBody>
@@ -283,6 +282,30 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
                     )
                 }
                 )}
+                {isMobile ? <Button
+                    borderColor="orange.500"
+                    borderWidth="1px"
+                    backgroundColor="white"
+                    color="orange.500"
+                    p="11px 38px"
+                    borderRadius="20px"
+                    mb="48px"
+                >
+                    <Flex>
+                        <IoIosAddCircle fontSize="16px" />
+                        <Text
+                            className="primaryFont"
+                            fontWeight="700"
+                            fontSize="10px"
+                            lineHeight="13px"
+                            transform="translateY(2px)"
+                            onClick={onOpen}
+                        >
+                            Tambah
+                        </Text>
+                    </Flex>
+                </Button> : <></>}
+
 
             </Stack>
         </Box>
