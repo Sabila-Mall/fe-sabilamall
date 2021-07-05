@@ -78,7 +78,7 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
                 </Button>
             </Flex>
             <Stack
-                divider={<StackDivider color="gray.500" />}
+                divider={isMobile ? <></> : <StackDivider color="gray.500" />}
                 mb="48px"
             >
                 {addressList.map((address) => {

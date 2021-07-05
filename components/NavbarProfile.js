@@ -23,6 +23,7 @@ const NavbarProfile = ({ section }) => {
       pl="20px"
       bg="white"
       zIndex="2"
+      pos="fixed"
     >
       <Box display="flex" alignItems="center">
         <Icon
