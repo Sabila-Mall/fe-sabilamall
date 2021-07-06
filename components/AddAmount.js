@@ -10,51 +10,64 @@ export const AddAmount = ({ setTotal, price, total }) => {
   const prices = parseInt(price.replace(/\./g, ""));
 
   return (
-    <Flex justifyContent="center">
-      <HStack w="8rem" alignItems="center" justifyContent={{ lg: "center" }}>
-        <Box
-          css={css`
-            :hover {
-              cursor: pointer;
-            }
-          `}
-        >
-          <AiOutlineMinusCircle
-            color="#E2E8F0"
-            size="1.5em"
-            onClick={() => {
-              if (amount > 0) setAmount(amount - 1);
-              setTotal(prices * amount);
-            }}
-          />
-        </Box>
+    <>
+      <Flex justifyContent="center">
+        <HStack w="8rem" alignItems="center" justifyContent={{ lg: "center" }}>
+          <Box
+            css={css`
+              :hover {
+                cursor: pointer;
+              }
+            `}
+          >
+            <AiOutlineMinusCircle
+              color="#E2E8F0"
+              size="1.5em"
+              onClick={() => {
+                if (amount > 0) setAmount(amount - 1);
+                setTotal(prices * amount);
+              }}
+            />
+          </Box>
 
-        <Input
-          color="black"
-          textAlign="center"
-          isDisabled
-          variant="outline"
-          w="5.5rem"
-          h="2rem"
-          placeholder={String(amount)}
-        />
-        <Box
-          css={css`
-            :hover {
-              cursor: pointer;
-            }
-          `}
-        >
-          <AiOutlinePlusCircle
-            color="#A0AEC0"
-            size="1.5em"
-            onClick={() => {
-              setAmount(amount + 1);
-              setTotal(prices * amount);
-            }}
+          <Input
+            color="black"
+            textAlign="center"
+            isDisabled
+            variant="outline"
+            w="5.5rem"
+            h="2rem"
+            placeholder={String(amount)}
           />
-        </Box>
-      </HStack>
-    </Flex>
+          <Box
+            css={css`
+              :hover {
+                cursor: pointer;
+              }
+            `}
+          >
+            <AiOutlinePlusCircle
+              color="#A0AEC0"
+              size="1.5em"
+              onClick={() => {
+                setAmount(amount + 1);
+                setTotal(prices * amount);
+              }}
+            />
+          </Box>
+        </HStack>
+      </Flex>
+      <Text
+        fontSize="0.75rem"
+        textAlign="center"
+        color="gray.400"
+        fontWeight="500"
+        _hover={{
+          cursor: "pointer",
+        }}
+      >
+        Hapus
+      </Text>
+    </>
   );
 };

@@ -33,10 +33,6 @@ export const ProductCart = ({ isDiscount, price }) => {
               src="/images/cart/cartimage.svg"
             />
           </Box>
-          <HStack pt="9.25px" color="#A0AEC0">
-            <RiPencilFill size="1.5em" />
-            <IoTrash size="1.5em" />
-          </HStack>
         </Flex>
 
         <Flex

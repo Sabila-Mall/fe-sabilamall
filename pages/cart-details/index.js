@@ -63,17 +63,7 @@ const cartDetails = () => {
 const AddVoucher = () => {
   return (
     <Box w={{ lg: "75%" }} mt={{ md: "1.5rem" }} pr={{ lg: "1.9rem" }}>
-      <Flex justifyContent={{ lg: "space-between" }} flexWrap="wrap">
-        <InputGroup w={{ base: "full", lg: "50%" }}>
-          <Input placeholder="Masukkan kode voucher" />
-          <InputRightAddon
-            color="white"
-            bgColor="orange.400"
-            children="Terapkan"
-            fontSize="0.875rem"
-          />
-        </InputGroup>
-
+      <Flex justifyContent={{ lg: "center" }}>
         <Button
           mt={{ base: "13px", lg: "0" }}
           mb={{ base: "2rem", lg: "0" }}
