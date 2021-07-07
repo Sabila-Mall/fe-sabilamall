@@ -5,41 +5,18 @@ import {
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
-  DrawerCloseButton, useDisclosure, Button, Text, Flex, Link
+  DrawerCloseButton, useDisclosure, Button, Text, Flex, Link, useBreakpointValue,
 } from "@chakra-ui/react";
 import React from "react";
 import QuickAddListItem from "./QuickAddListItem";
 
-const formatPrice = (price) => {
-  return new Intl.NumberFormat(
-    "id-ID",
-    { style: "decimal", currency: "IDR" })
-    .format(price);
-};
 
-const QuickAdd = () => {
+const QuickAdd = ({ products }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
 
-  const price = "99.999.999";
-
-  const products = [
-    {
-      "name": "Nama Produk Croissant Jujubes Sweet Sweet Powder Tiramisu Caramels",
-      "image": "",
-      "discount": 0,
-    },
-    {
-      "name": "Nama Produk Croissant Jujubes Sweet Sweet Powder Tiramisu Caramels",
-      "image": "",
-      "discount": 0,
-    },
-    {
-      "name": "Nama Produk Croissant Jujubes Sweet Sweet Powder Tiramisu Caramels",
-      "image": "",
-      "discount": 0,
-    },
-  ];
+  const total = "99.999.999";
+  const size = useBreakpointValue({ base: "full", md: "md" })
 
   return (
     <>
@@ -51,23 +28,25 @@ const QuickAdd = () => {
         placement="right"
         onClose={onClose}
         finalFocusRef={btnRef}
-        size={"md"}
+        size={size}
       >
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader textColor={"gray.500"} marginTop={6} marginLeft={8}>
+          <DrawerCloseButton color={"gray.500"}/>
+          <DrawerHeader textColor={"gray.500"} px={"2rem"} paddingTop={6}>
             <Text>Keranjang Saya</Text>
           </DrawerHeader>
 
-          <DrawerBody mx={8}>
+          <DrawerBody px={"2rem"}>
             <QuickAddListItem products={products}/>
           </DrawerBody>
 
-          <DrawerFooter borderTopWidth="1px" flexDirection={"column"}>
-            <Flex flexDirection={"row"} justifyContent={"space-between"} alignItems={"center"}>
-              <Text fontSize={"16px"} textColor={"gray.500"} flex={1}>Total</Text>
-              <Text textColor={"orange.400"} fontSize={"20"} fontWeight={"bold"} flex={1}>Rp${price}</Text>
+          <DrawerFooter borderTopWidth={"1px"} flexDirection={"column"}>
+            <Flex align={"center"} justify={"space-between"} w={"full"}>
+              <Text fontSize={"16px"} textColor={"gray.500"}>Total</Text>
+              <Text textColor={"orange.400"} fontSize={"20"} fontWeight={"bold"}>
+                Rp{total}
+              </Text>
             </Flex>
             <Text fontSize={"14px"} textColor={"gray.400"} className={"secondaryFont"}>
               Ongkos kirim akan dihitung saat proses checkout
