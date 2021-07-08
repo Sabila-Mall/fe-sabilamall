@@ -11,34 +11,39 @@ import React from "react";
 import QuickAddListItem from "./QuickAddListItem";
 
 
-const QuickAdd = ({ products }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = React.useRef();
+/**
+ * Component untuk drawer yang menampilkan isi barang sekarang, perlu ada button yang memanggil component ini
+ * @param products list dari produk, dimana tiap produk memiliki:
+ *  nama produk, path lokasi dari gambar produk, diskon, harga
+ * @param isDrawerOpen stattus drawer sekarang apakah sedang terbuka atau tidak [dapatkan dari useDisclosure()]
+ * @param onDrawerClose callback function yang dipanggil untuk close modal [dapatkan dari useDisclosure()]
+ */
+const QuickAdd = ({ products, isDrawerOpen, onDrawerClose }) => {
+  // const { isOpen, onOpen, onClose } = useDisclosure();
 
   const total = "99.999.999";
-  const size = useBreakpointValue({ base: "full", md: "md" })
+  const size = useBreakpointValue({ base: "full", md: "md" });
 
   return (
     <>
-      <Button ref={btnRef} onClick={onOpen}>
-        Open
-      </Button>
+      {/*<Button onClick={onOpen}>*/}
+      {/*  Open*/}
+      {/*</Button>*/}
       <Drawer
-        isOpen={isOpen}
+        isOpen={isDrawerOpen}
         placement="right"
-        onClose={onClose}
-        finalFocusRef={btnRef}
+        onClose={onDrawerClose}
         size={size}
       >
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerCloseButton color={"gray.500"}/>
+          <DrawerCloseButton color={"gray.500"} />
           <DrawerHeader textColor={"gray.500"} px={"2rem"} paddingTop={6}>
             <Text>Keranjang Saya</Text>
           </DrawerHeader>
 
           <DrawerBody px={"2rem"}>
-            <QuickAddListItem products={products}/>
+            <QuickAddListItem products={products} />
           </DrawerBody>
 
           <DrawerFooter borderTopWidth={"1px"} flexDirection={"column"}>
