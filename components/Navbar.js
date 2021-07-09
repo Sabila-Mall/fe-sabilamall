@@ -23,6 +23,7 @@ import {
   IoSearch,
   IoHeartSharp,
   IoNotifications,
+  IoCart,
 } from "react-icons/io5";
 
 import { menuCategory, menuSidebar, icons } from "../constants/navbarConstant";
@@ -111,16 +112,22 @@ const Navbar = () => {
           </InputGroup>
         </Box>
         <Box display="flex" alignItems="center" mr="20px">
+          <Icon as={IoNotifications} className={styles.navbarIcon} />
+          <Icon
+            as={IoCart}
+            className={styles.navbarIcon}
+            ml={{ base: "8px", md: "20px", lg: "25px" }}
+            display={{ base: "none", md: "block" }}
+          />
           <Icon
             as={IoHeartSharp}
             className={styles.navbarIcon}
-            mr={{ base: "8px", md: "20px", lg: "25px" }}
+            mx={{ base: "8px", md: "20px", lg: "25px" }}
           />
-          <Icon as={IoNotifications} className={styles.navbarIcon} />
           <Icon
             as={FaUser}
             className={styles.navbarIcon}
-            ml={{ base: "8px", md: "20px", lg: "25px" }}
+            // ml={{ base: "8px", md: "20px", lg: "25px" }}
             display={{ base: "none", md: "block" }}
           />
         </Box>
