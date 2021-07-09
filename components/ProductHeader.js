@@ -1,6 +1,7 @@
 import { Box, Text, Stack, StackDivider, Flex } from "@chakra-ui/react";
 import { FaStar } from "react-icons/fa";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
+import { RiCalendarEventFill } from "react-icons/ri";
 
 const ProductHeader = (libur) => {
   const stock = 999;
@@ -36,27 +37,36 @@ const ProductHeader = (libur) => {
         </Flex>
         <Text color="gray.500">Nama Supplier</Text>
         <Text color="gray.500">Terjual 9999</Text>
-        <Stack
-          color={stock > 0 ? "green.400" : "red.400"}
-          direction="row"
-          align="center"
-        >
-          <IoIosCheckmarkCircleOutline as="span" size="1.2em" />
-          <Text alignSelf="center">
-            {stock > 0 ? `Stok Tersedia (${stock})` : "Stok habis"}
-          </Text>
-        </Stack>
+        {libur ? (
+          <Flex alignItems="center">
+            <RiCalendarEventFill size="1.4em" color="#DD6B20" as="span" />
+            <Text color="orange.400" pl="0.5rem">
+              Toko Libur
+            </Text>
+          </Flex>
+        ) : (
+          <Stack
+            color={stock > 0 ? "green.400" : "red.400"}
+            direction="row"
+            align="center"
+          >
+            <IoIosCheckmarkCircleOutline as="span" size="1.2em" />
+            <Text alignSelf="center">
+              {stock > 0 ? `Stok Tersedia (${stock})` : "Stok habis"}
+            </Text>
+          </Stack>
+        )}
       </Stack>
 
       {libur && (
         <Box
           my="1rem"
-          w="full"
+          w={{ lg: "95%", xl: "full" }}
           bg="red.50"
           color="red.400"
           fontWeight="500"
           px="1rem"
-          py="0.5rem"
+          py={{ base: "0.5rem", xl: "1rem" }}
           border="1px red solid"
           borderRadius="8px"
           textAlign="center"
