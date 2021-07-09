@@ -21,7 +21,7 @@ const LayoutCategoryList = ({ isLoggedIn, category }) => {
             ? "repeat(7, 6rem)"
             : { md: "repeat(7,6rem)", lg: "repeat(7, 8rem)" }
         }
-        gap={4}
+        gap={isLoggedIn ? 4 : { md: 3, lg: 4 }}
       >
         {category.map((cat) => {
           return (
