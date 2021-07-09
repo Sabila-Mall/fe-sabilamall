@@ -3,7 +3,7 @@ import { FaStar } from "react-icons/fa";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { RiCalendarEventFill } from "react-icons/ri";
 
-const ProductHeader = (libur) => {
+const ProductHeader = (libur, preOrder) => {
   const stock = 999;
   const discount = 99;
   const rating = (5.0).toFixed(1);
@@ -74,6 +74,36 @@ const ProductHeader = (libur) => {
         >
           Toko ini sedang libur. [insert additional message here] Sweet Powder
           Tiramisu Caramels Caramels Caramels
+        </Box>
+      )}
+
+      {preOrder && (
+        <Box
+          my="1rem"
+          w={{ lg: "95%", xl: "full" }}
+          bg="orange.50"
+          color="orange.400"
+          fontWeight="500"
+          px="1rem"
+          py="0.5rem"
+          border="1px red solid"
+          borderRadius="8px"
+          fontSize="1rem"
+        >
+          <Flex justifyContent="space-between" px="1rem">
+            <Box>
+              <Text>Periode Pemesanan</Text>
+              <Text fontWeight="400" fontSize="1.2rem">
+                30/08/21 s.d. 30/09/21
+              </Text>
+            </Box>
+            <Box>
+              <Text>Estimasi Pengiriman</Text>
+              <Text fontWeight="400" fontSize="1.2rem">
+                30/08/21 s.d. 30/09/21
+              </Text>
+            </Box>
+          </Flex>
         </Box>
       )}
 

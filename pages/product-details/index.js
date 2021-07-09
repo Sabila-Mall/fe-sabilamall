@@ -49,7 +49,7 @@ const ProductDetails = () => {
             </Box>
           </Box>
           <Box w={{ base: "100%", lg: "43%" }} mr={{ lg: "1rem" }}>
-            <ProductHeader libur={true} />
+            <ProductHeader preOrder />
             <Box display={{ base: "none", lg: "block" }}>
               <ProductInformation />
             </Box>
