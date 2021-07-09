@@ -30,7 +30,7 @@ import {
 } from "../constants/dummyData";
 
 const Home = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const category = [
     [BsWatch, "Fashion Muslim"],
@@ -130,44 +130,44 @@ const Home = () => {
             <Img
               className="imageRound"
               src="/images/Carousel/1.jpg"
-              pl="0.5rem"
-              pr="0.5rem"
+              pl={{ base: "0.2rem", xl: "0.5rem" }}
+              pr={{ base: "0.2rem", xl: "0.5rem" }}
             />
             <Img
               className="imageRound"
               src="/images/Carousel/2.jpg"
-              pl="0.5rem"
-              pr="0.5rem"
+              pl={{ base: "0.2rem", xl: "0.5rem" }}
+              pr={{ base: "0.2rem", xl: "0.5rem" }}
             />
             <Img
               className="imageRound"
               src="/images/Carousel/3.jpg"
-              pl="0.5rem"
-              pr="0.5rem"
+              pl={{ base: "0.2rem", xl: "0.5rem" }}
+              pr={{ base: "0.2rem", xl: "0.5rem" }}
             />
             <Img
               className="imageRound"
               src="/images/Carousel/4.jpg"
-              pl="0.5rem"
-              pr="0.5rem"
+              pl={{ base: "0.2rem", xl: "0.5rem" }}
+              pr={{ base: "0.2rem", xl: "0.5rem" }}
             />
             <Img
               className="imageRound"
               src="/images/Carousel/5.jpg"
-              pl="0.5rem"
-              pr="0.5rem"
+              pl={{ base: "0.2rem", xl: "0.5rem" }}
+              pr={{ base: "0.2rem", xl: "0.5rem" }}
             />
             <Img
               className="imageRound"
               src="/images/Carousel/6.jpg"
-              pl="0.5rem"
-              pr="0.5rem"
+              pl={{ base: "0.2rem", xl: "0.5rem" }}
+              pr={{ base: "0.2rem", xl: "0.5rem" }}
             />
             <Img
               className="imageRound"
               src="/images/Carousel/7.jpg"
-              pl="0.5rem"
-              pr="0.5rem"
+              pl={{ base: "0.2rem", xl: "0.5rem" }}
+              pr={{ base: "0.2rem", xl: "0.5rem" }}
             />
           </Slider>
         </Box>
@@ -209,14 +209,9 @@ const Home = () => {
                 flexDirection="column"
                 alignItems="center"
                 paddingTop={{ base: "2rem", xl: "0px" }}
+                marginTop={isLoggedIn ? "0rem" : "2rem"}
+                marginBottom={isLoggedIn ? "0rem" : "1.5rem"}
               >
-                <Text
-                  className="primaryFont"
-                  fontWeight="700"
-                  fontSize="1.5rem"
-                >
-                  Kategori
-                </Text>
                 <LayoutCategoryList
                   isLoggedIn={isLoggedIn}
                   category={category}

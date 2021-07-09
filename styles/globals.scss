@@ -28,4 +28,7 @@ a {
 
 .imageRound {
   border-radius: 1.5rem !important;
+  @media (max-width: 768px) {
+    border-radius: 15px !important;
+  }
 }
