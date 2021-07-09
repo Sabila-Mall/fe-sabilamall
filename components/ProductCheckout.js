@@ -10,9 +10,11 @@ import {
   Select,
   Spacer,
   Text,
+  toast,
   useControllableState,
   VStack,
 } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
 import { FaWhatsapp, FaRegHeart } from "react-icons/fa";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { IoRemoveCircleOutline } from "react-icons/io5";
@@ -27,6 +29,7 @@ const formatPrice = (price) => {
 };
 
 const ProductCheckout = () => {
+  const toast = useToast();
   const colorVariance = 99;
   const sizeVariance = 99;
   const remainingStock = 9999;
@@ -180,6 +183,17 @@ const ProductCheckout = () => {
           fontSize={"16px"}
           fontWeight={"bold"}
           className={"primaryFont"}
+          onClick={() =>
+            toast({
+              title: "Berhasil",
+              description:
+                "Produk anda telah ditambahkan ke keranjang belanja.",
+              status: "success",
+              duration: 5000,
+              isClosable: true,
+              variant: "subtle",
+            })
+          }
         >
           Masukan ke Keranjang
         </Button>
