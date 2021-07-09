@@ -1,9 +1,11 @@
-import { Box, Text, Stack, StackDivider } from "@chakra-ui/react";
+import { Box, Text, Stack, StackDivider, Flex } from "@chakra-ui/react";
+import { FaStar } from "react-icons/fa";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 
-const ProductHeader = () => {
+const ProductHeader = (libur) => {
   const stock = 999;
   const discount = 99;
+  const rating = (5.0).toFixed(1);
   return (
     <Box ml="0.5rem">
       <Text
@@ -26,6 +28,12 @@ const ProductHeader = () => {
         mt={{ base: "8px", md: "16px" }}
         mb={{ base: "0.5rem", md: "12px" }}
       >
+        <Flex alignItems="center">
+          <FaStar color="gray" as="span" size={"1em"} />
+          <Text color="gray.500" pl="0.3rem">
+            {rating}
+          </Text>
+        </Flex>
         <Text color="gray.500">Nama Supplier</Text>
         <Text color="gray.500">Terjual 9999</Text>
         <Stack
@@ -33,12 +41,31 @@ const ProductHeader = () => {
           direction="row"
           align="center"
         >
-          <IoIosCheckmarkCircleOutline as="span" />
+          <IoIosCheckmarkCircleOutline as="span" size="1.2em" />
           <Text alignSelf="center">
             {stock > 0 ? `Stok Tersedia (${stock})` : "Stok habis"}
           </Text>
         </Stack>
       </Stack>
+
+      {libur && (
+        <Box
+          my="1rem"
+          w="full"
+          bg="red.50"
+          color="red.400"
+          fontWeight="500"
+          px="1rem"
+          py="0.5rem"
+          border="1px red solid"
+          borderRadius="8px"
+          textAlign="center"
+          fontSize="1rem"
+        >
+          Toko ini sedang libur. [insert additional message here] Sweet Powder
+          Tiramisu Caramels Caramels Caramels
+        </Box>
+      )}
 
       {discount ? (
         <Box d={{ base: "none", md: "block" }}>
