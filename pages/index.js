@@ -12,6 +12,7 @@ import {
   FaStethoscope,
 } from "react-icons/fa";
 import { IoFastFood, IoGift, IoArrowUp } from "react-icons/io5";
+import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
@@ -57,7 +58,7 @@ const Home = () => {
     dots: true,
     autoplay: true,
     autoplaySpeed: 5000,
-    arrows: false,
+    arrows: true,
   };
 
   const flashSaleRef = useRef();
@@ -100,6 +101,9 @@ const Home = () => {
     const elem = scrollRef.current.getBoundingClientRect();
   }, []);
 
+  const [display, setDisplay] = useState("none");
+  let ref = null;
+
   return (
     <>
       <Navbar />
@@ -125,51 +129,106 @@ const Home = () => {
             height="55%"
           />
         </Circle>
-        <Box marginTop="1.5rem">
-          <Slider {...settings}>
-            <Img
-              className="imageRound"
-              src="/images/Carousel/1.jpg"
-              pl={{ base: "0.2rem", xl: "0.5rem" }}
-              pr={{ base: "0.2rem", xl: "0.5rem" }}
-            />
-            <Img
-              className="imageRound"
-              src="/images/Carousel/2.jpg"
-              pl={{ base: "0.2rem", xl: "0.5rem" }}
-              pr={{ base: "0.2rem", xl: "0.5rem" }}
-            />
-            <Img
-              className="imageRound"
-              src="/images/Carousel/3.jpg"
-              pl={{ base: "0.2rem", xl: "0.5rem" }}
-              pr={{ base: "0.2rem", xl: "0.5rem" }}
-            />
-            <Img
-              className="imageRound"
-              src="/images/Carousel/4.jpg"
-              pl={{ base: "0.2rem", xl: "0.5rem" }}
-              pr={{ base: "0.2rem", xl: "0.5rem" }}
-            />
-            <Img
-              className="imageRound"
-              src="/images/Carousel/5.jpg"
-              pl={{ base: "0.2rem", xl: "0.5rem" }}
-              pr={{ base: "0.2rem", xl: "0.5rem" }}
-            />
-            <Img
-              className="imageRound"
-              src="/images/Carousel/6.jpg"
-              pl={{ base: "0.2rem", xl: "0.5rem" }}
-              pr={{ base: "0.2rem", xl: "0.5rem" }}
-            />
-            <Img
-              className="imageRound"
-              src="/images/Carousel/7.jpg"
-              pl={{ base: "0.2rem", xl: "0.5rem" }}
-              pr={{ base: "0.2rem", xl: "0.5rem" }}
-            />
-          </Slider>
+        <Box
+          marginTop="1.5rem"
+          position="relative"
+          onMouseEnter={() => setDisplay("block")}
+          onMouseLeave={() => setDisplay("none")}
+        >
+          <Box
+            onClick={() => {
+              if (ref !== null) {
+                ref.slickPrev();
+              }
+            }}
+            position="absolute"
+            zIndex={5}
+            top="50%"
+            transform="translate(0.4em, -50%)"
+            cursor="pointer"
+            display={display}
+          >
+            <Box
+              borderRadius="50%"
+              bg="white"
+              boxShadow="0px 2px 6px rgba(0, 0, 0, 0.25);"
+            >
+              <MdChevronLeft size="2em" />
+            </Box>
+          </Box>
+          <Box>
+            <Slider
+              ref={(node) => {
+                ref = node;
+              }}
+              {...settings}
+            >
+              <Img
+                className="imageRound"
+                src="/images/Carousel/1.jpg"
+                pl={{ base: "0.2rem", xl: "0.5rem" }}
+                pr={{ base: "0.2rem", xl: "0.5rem" }}
+              />
+              <Img
+                className="imageRound"
+                src="/images/Carousel/2.jpg"
+                pl={{ base: "0.2rem", xl: "0.5rem" }}
+                pr={{ base: "0.2rem", xl: "0.5rem" }}
+              />
+              <Img
+                className="imageRound"
+                src="/images/Carousel/3.jpg"
+                pl={{ base: "0.2rem", xl: "0.5rem" }}
+                pr={{ base: "0.2rem", xl: "0.5rem" }}
+              />
+              <Img
+                className="imageRound"
+                src="/images/Carousel/4.jpg"
+                pl={{ base: "0.2rem", xl: "0.5rem" }}
+                pr={{ base: "0.2rem", xl: "0.5rem" }}
+              />
+              <Img
+                className="imageRound"
+                src="/images/Carousel/5.jpg"
+                pl={{ base: "0.2rem", xl: "0.5rem" }}
+                pr={{ base: "0.2rem", xl: "0.5rem" }}
+              />
+              <Img
+                className="imageRound"
+                src="/images/Carousel/6.jpg"
+                pl={{ base: "0.2rem", xl: "0.5rem" }}
+                pr={{ base: "0.2rem", xl: "0.5rem" }}
+              />
+              <Img
+                className="imageRound"
+                src="/images/Carousel/7.jpg"
+                pl={{ base: "0.2rem", xl: "0.5rem" }}
+                pr={{ base: "0.2rem", xl: "0.5rem" }}
+              />
+            </Slider>
+          </Box>
+          <Box
+            onClick={() => {
+              if (ref !== null) {
+                ref.slickNext();
+              }
+            }}
+            position="absolute"
+            zIndex={5}
+            right={6}
+            top="50%"
+            transform="translate(1.1em, -50%)"
+            cursor="pointer"
+            display={display}
+          >
+            <Box
+              borderRadius="50%"
+              bg="white"
+              boxShadow="0px 2px 6px rgba(0, 0, 0, 0.25);"
+            >
+              <MdChevronRight size="2em" />
+            </Box>
+          </Box>
         </Box>
         <Box
           d="flex"
