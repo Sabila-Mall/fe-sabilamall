@@ -20,10 +20,12 @@ import {
   IoChevronBackCircle,
   IoChevronForwardCircle,
 } from "react-icons/io5";
+import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import Slider from "react-slick";
 
 import listSorting from "../constants/SortingProduct";
+import { useWindowSize } from "../hooks/useWindowSize";
 import styles from "../styles/Product.module.scss";
 import CardProduct from "./CardProduct";
 
@@ -55,50 +57,16 @@ const MenuSorting = () => (
 
 export const LayoutFlashSale = ({ data, flashSaleRef, headingText }) => {
   const [display, setDisplay] = useState("none");
-
+  const { width } = useWindowSize();
   let ref = null;
 
   const settings = {
     arrows: true,
     infinite: false,
     speed: 500,
-    slidesToShow: 6,
+    slidesToShow: width >= 768 ? width / 232 : width / 180,
     slidesToScroll: 3,
     initialSlid: 0,
-    responsive: [
-      {
-        breakpoint: 1256,
-        settings: {
-          slidesToShow: 5,
-        },
-      },
-      {
-        breakpoint: 1055,
-        settings: {
-          slidesToShow: 4,
-        },
-      },
-      {
-        breakpoint: 855,
-        settings: {
-          slidesToShow: 3,
-        },
-      },
-      {
-        breakpoint: 543,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-        },
-      },
-      {
-        breakpoint: 320,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-        },
-      },
-    ],
   };
 
   return (
@@ -130,23 +98,32 @@ export const LayoutFlashSale = ({ data, flashSaleRef, headingText }) => {
           position="absolute"
           zIndex={5}
           top="50%"
+          transform="translateX(0.4em)"
           cursor="pointer"
           display={display}
         >
-          <IoChevronBackCircle size="2em" color="black" />
+          <Box
+            borderRadius="50%"
+            bg="white"
+            boxShadow="0px 2px 6px rgba(0, 0, 0, 0.25);"
+          >
+            <MdChevronLeft size="2em" />
+          </Box>
         </Box>
-        <Slider
-          ref={(node) => {
-            ref = node;
-          }}
-          {...settings}
-        >
-          {data.map((item) => (
-            <Box key={item.id}>
-              <CardProduct key={item.id} {...item} />
-            </Box>
-          ))}
-        </Slider>
+        <Box overflow="hidden">
+          <Slider
+            ref={(node) => {
+              ref = node;
+            }}
+            {...settings}
+          >
+            {data.map((item) => (
+              <Box key={item.id}>
+                <CardProduct key={item.id} {...item} />
+              </Box>
+            ))}
+          </Slider>
+        </Box>
         <Box
           onClick={() => {
             if (ref !== null) {
@@ -155,12 +132,18 @@ export const LayoutFlashSale = ({ data, flashSaleRef, headingText }) => {
           }}
           position="absolute"
           zIndex={5}
-          right={2}
+          right={6}
           top="50%"
           cursor="pointer"
           display={display}
         >
-          <IoChevronForwardCircle size="2em" color="black" />
+          <Box
+            borderRadius="50%"
+            bg="white"
+            boxShadow="0px 2px 6px rgba(0, 0, 0, 0.25);"
+          >
+            <MdChevronRight size="2em" />
+          </Box>
         </Box>
         <Flex
           justify="flex-end"
@@ -233,14 +216,15 @@ const LayoutProductList = ({ data, endTime, flashSaleRef }) => {
               "repeat(3,1fr)",
               "repeat(4,1fr)",
               "repeat(5,1fr)",
-              "repeat(6,1fr)",
+              "repeat(7,1fr)",
+              "repeat(8, 1fr)",
             ]}
             columnGap={2}
             rowGap={4}
           >
             {data.map((item, index) => (
               <Box key={item.id}>
-                <CardProduct {...item} />
+                <CardProduct {...item} responsive={true} />
               </Box>
             ))}
           </Grid>
