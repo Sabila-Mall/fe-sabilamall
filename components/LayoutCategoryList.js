@@ -1,5 +1,4 @@
-import { Grid, Box } from "@chakra-ui/react";
-import Slider from "react-slick";
+import { Grid } from "@chakra-ui/react";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 
@@ -16,35 +15,26 @@ const LayoutCategoryList = ({ isLoggedIn, category }) => {
 
   return (
     <>
-      {isLoggedIn && (
-        <Grid templateColumns="repeat(7, 6rem)" gap={5}>
-          {category.map((cat) => {
-            return (
-              <CardCategory
-                icon={cat[0]}
-                name={cat[1]}
-                onClick={() => console.log(`redirect ke ${cat[1]}`)}
-                key={cat[1]}
-              />
-            );
-          })}
-        </Grid>
-      )}
-      {!isLoggedIn && (
-        // <Slider {...settings}>
-        //   {category.map((cat) => {
-        //     return (
-        //       <CardCategory
-        //         icon={cat[0]}
-        //         name={cat[1]}
-        //         onClick={() => console.log(`redirect ke ${cat[1]}`)}
-        //         key={cat[1]}
-        //       />
-        //     );
-        //   })}
-        // </Slider>
-        <></>
-      )}
+      <Grid
+        templateColumns={
+          isLoggedIn
+            ? "repeat(7, 6rem)"
+            : { md: "repeat(7,6rem)", lg: "repeat(7, 8rem)" }
+        }
+        gap={4}
+      >
+        {category.map((cat) => {
+          return (
+            <CardCategory
+              isLoggedIn={isLoggedIn}
+              icon={cat[0]}
+              name={cat[1]}
+              onClick={() => console.log(`redirect ke ${cat[1]}`)}
+              key={cat[1]}
+            />
+          );
+        })}
+      </Grid>
     </>
   );
 };
