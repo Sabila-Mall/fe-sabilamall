@@ -1,6 +1,7 @@
 import { Box, Text, Stack, StackDivider, Flex } from "@chakra-ui/react";
 import { FaStar } from "react-icons/fa";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
+import { IoTimeOutline } from "react-icons/io5";
 import { RiCalendarEventFill } from "react-icons/ri";
 
 const ProductHeader = (libur, preOrder) => {
@@ -55,6 +56,14 @@ const ProductHeader = (libur, preOrder) => {
               {stock > 0 ? `Stok Tersedia (${stock})` : "Stok habis"}
             </Text>
           </Stack>
+        )}
+        {preOrder && (
+          <Flex alignItems="center">
+            <IoTimeOutline size="1.4em" color="#ECC94B" as="span" />
+            <Text color="yellow.400" pl="0.5rem">
+              Toko Libur
+            </Text>
+          </Flex>
         )}
       </Stack>
 
