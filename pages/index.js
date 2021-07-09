@@ -18,7 +18,9 @@ import "slick-carousel/slick/slick.css";
 
 import Footer from "../components/Footer";
 import LayoutCategoryList from "../components/LayoutCategoryList";
-import LayoutProductList from "../components/LayoutProductList";
+import LayoutProductList, {
+  LayoutFlashSale,
+} from "../components/LayoutProductList";
 import Navbar from "../components/Navbar";
 import SMCard from "../components/SMCard";
 import {
@@ -65,12 +67,13 @@ const Home = () => {
   const [scrollVisible, setScrollVisible] = useState(false);
 
   function logit() {
-    const flashSaleData = flashSaleRef.current.getBoundingClientRect();
+    // const flashSaleData = flashSaleRef.current.getBoundingClientRect();
     const scrollData = scrollRef.current.getBoundingClientRect();
 
     if (
-      flashSaleData.top - scrollData.bottom < 0 &&
-      flashSaleData.bottom - scrollData.top < 0
+      // flashSaleData.top - scrollData.bottom < 0 &&
+      // flashSaleData.bottom - scrollData.top < 0
+      true
     ) {
       setInFlashSale(false);
     } else {
@@ -222,7 +225,7 @@ const Home = () => {
             </>
           )}
         </Box>
-        <LayoutProductList
+        {/* <LayoutProductList
           headingText="Flash Sale"
           bg="red.600"
           data={dataFlashSale}
@@ -232,7 +235,9 @@ const Home = () => {
           headingText="Discount"
           bg="white"
           data={dataDiscount}
-        />
+        /> */}
+        <LayoutFlashSale data={dataFlashSale} headingText="Flash Sale" />
+        <LayoutFlashSale data={dataDiscount} headingText="Discount" />
         <LayoutProductList
           headingText="Semua Produk"
           bg="white"

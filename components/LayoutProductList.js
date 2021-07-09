@@ -12,15 +12,22 @@ import {
   MenuList,
 } from "@chakra-ui/react";
 import { useState, useRef } from "react";
+import { BiChevronRightCircle, BiChevronLeftCircle } from "react-icons/bi";
 import {
   IoFilterOutline,
   IoArrowForwardOutline,
   IoChevronDown,
+  IoChevronBackCircle,
+  IoChevronForwardCircle,
 } from "react-icons/io5";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+import Slider from "react-slick";
 
 import listSorting from "../constants/SortingProduct";
 import styles from "../styles/Product.module.scss";
 import CardProduct from "./CardProduct";
+
+const px = [".7rem", "3rem", "2rem", "2rem", "5rem", "7.5rem"];
 
 const MenuSorting = () => (
   <Menu display={{ base: "none", md: "block" }}>
@@ -46,135 +53,204 @@ const MenuSorting = () => (
   </Menu>
 );
 
-const LayoutProductList = ({
-  headingText,
-  bg,
-  data,
-  endTime,
-  flashSaleRef,
-}) => {
-  const isFlashSale = headingText.toLowerCase() === "flash sale";
-  const isDiscount = headingText.toLowerCase() === "discount";
-  const isAllProduct = headingText.toLowerCase() === "semua produk";
+export const LayoutFlashSale = ({ data, flashSaleRef, headingText }) => {
+  const [display, setDisplay] = useState("none");
 
-  const [showOverlay, setShowOverlay] = useState(false);
-  const [isDown, setIsDown] = useState(false);
-  const [startX, setStartX] = useState(null);
-  const [scrollLeft, setScrollLeft] = useState(null);
-  const [cursor, setCursor] = useState("pointer");
+  let ref = null;
 
-  const refSlider = useRef();
-
-  const onMouseDownSlider = (e) => {
-    setIsDown(true);
-    setStartX(e.pageX - refSlider.current.offsetLeft);
-    setScrollLeft(refSlider.current.scrollLeft);
-    setCursor("grab");
+  const settings = {
+    arrows: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 6,
+    slidesToScroll: 3,
+    initialSlid: 0,
+    responsive: [
+      {
+        breakpoint: 1256,
+        settings: {
+          slidesToShow: 5,
+        },
+      },
+      {
+        breakpoint: 1055,
+        settings: {
+          slidesToShow: 4,
+        },
+      },
+      {
+        breakpoint: 855,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 543,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 320,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
   };
-
-  const onMouseMoveSlider = (e) => {
-    if (!isDown) return;
-
-    e.preventDefault();
-    const x = e.pageX - refSlider.current.offsetLeft;
-    const walk = (x - startX) * 3;
-    refSlider.current.scrollLeft = scrollLeft - walk;
-  };
-
-  let templateColumns = `repeat(${data.length}, 1fr)`;
-  if (headingText.toLowerCase() === "semua produk")
-    templateColumns = "repeat(2, 1fr)";
-
-  const px = [".7rem", "3rem", "2rem", "2rem", "5rem", "7.5rem"];
 
   return (
     <>
       <Box
-        bg={bg}
-        pt="32px"
+        pl={px}
+        position="relative"
+        overflow="hidden"
+        onMouseEnter={() => setDisplay("block")}
+        onMouseLeave={() => setDisplay("none")}
+        cursor="pointer"
+      >
+        <Heading
+          className={styles.primaryFont}
+          color="black"
+          fontWeight={700}
+          fontSize={{ base: "16px", md: "20px", lg: "24px" }}
+          lineHeight={{ base: "20.8px", md: "26px", lg: "31.2px" }}
+          mb="2.3rem"
+        >
+          {headingText}
+        </Heading>
+        <Box
+          onClick={() => {
+            if (ref !== null) {
+              ref.slickPrev();
+            }
+          }}
+          position="absolute"
+          zIndex={5}
+          top="50%"
+          cursor="pointer"
+          display={display}
+        >
+          <IoChevronBackCircle size="2em" color="black" />
+        </Box>
+        <Slider
+          ref={(node) => {
+            ref = node;
+          }}
+          {...settings}
+        >
+          {data.map((item) => (
+            <Box key={item.id}>
+              <CardProduct key={item.id} {...item} />
+            </Box>
+          ))}
+        </Slider>
+        <Box
+          onClick={() => {
+            if (ref !== null) {
+              ref.slickNext();
+            }
+          }}
+          position="absolute"
+          zIndex={5}
+          right={2}
+          top="50%"
+          cursor="pointer"
+          display={display}
+        >
+          <IoChevronForwardCircle size="2em" color="black" />
+        </Box>
+        <Flex
+          justify="flex-end"
+          mt="1rem"
+          mr="2rem"
+          color="black"
+          cursor="pointer"
+        >
+          <Text fontSize="16px" lineHeight="24px" fontWeight="500">
+            Lihat selengkapnya <Icon as={IoArrowForwardOutline} />
+          </Text>
+        </Flex>
+      </Box>
+      <Divider
+        orientation="horizontal"
+        w="100%"
+        colorScheme="gray"
+        my="1.5rem"
+      />
+    </>
+  );
+};
+
+const LayoutProductList = ({ data, endTime, flashSaleRef }) => {
+  let ref = null;
+
+  const settings = {
+    arrows: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 20,
+    slidesToScroll: 4,
+    responsive: [
+      {
+        // breakpoint: 325,
+        settings: {
+          slidesToShow: 4,
+        },
+      },
+    ],
+  };
+
+  const [showOverlay, setShowOverlay] = useState(false);
+
+  return (
+    <>
+      <Box
+        bg="white"
         pb="100px"
         overflowX="hidden"
         position="relative"
         ref={flashSaleRef}
       >
-        <Box px={isAllProduct && px}>
-          {isAllProduct && (
-            <Divider
-              orientation="horizontal"
-              w="100%"
-              colorScheme="gray"
-              mb="30px"
-            />
-          )}
-          {!isAllProduct && (
-            <Box
-              h="100%"
-              w={px}
-              position="absolute"
-              zIndex={2}
-              bg={bg}
-              left={0}
-              top={0}
-            />
-          )}
+        <Box px={px}>
           <Box
             className={styles.secondaryFont}
             mb="32px"
-            display={isAllProduct ? "flex" : "block"}
+            display="flex"
             alignItems="center"
             justifyContent="space-between"
             pr={{ lg: "40px" }}
           >
             <Heading
               className={styles.primaryFont}
-              color={bg === "white" ? "black" : "white"}
+              color={"black"}
               fontWeight={700}
               fontSize={{ base: "16px", md: "20px", lg: "24px" }}
               lineHeight={{ base: "20.8px", md: "26px", lg: "31.2px" }}
-              px={!isAllProduct && px}
-              mb={isFlashSale && { base: "8px" }}
+              // px={px}
             >
-              {headingText}
+              Semua Produk
             </Heading>
-            {isAllProduct && (
-              <Icon
-                onClick={() => setShowOverlay(!showOverlay)}
-                as={IoFilterOutline}
-                fontSize="24px"
-                display={{ base: "block", md: "none", lg: "none" }}
-              />
-            )}
-            {isAllProduct && <MenuSorting />}
+
+            <Icon
+              onClick={() => setShowOverlay(!showOverlay)}
+              as={IoFilterOutline}
+              fontSize="24px"
+              display={{ base: "block", md: "none", lg: "none" }}
+            />
+
+            <MenuSorting />
           </Box>
           <Grid
-            w={!isAllProduct ? "100vw" : "100%"}
-            overflowX="scroll"
+            w="100%"
             position="relative"
-            cursor={cursor}
-            className={styles.scrollX}
-            onMouseMove={onMouseMoveSlider}
-            onMouseDown={onMouseDownSlider}
-            px={!isAllProduct && px}
-            onMouseLeave={() => {
-              setIsDown(false);
-              setCursor("pointer");
-            }}
-            onMouseUp={() => {
-              setIsDown(false);
-              setCursor("pointer");
-            }}
-            ref={refSlider}
-            templateColumns={
-              isDiscount || isFlashSale
-                ? "repeat(800,1fr)"
-                : [
-                    templateColumns,
-                    "repeat(3,1fr)",
-                    "repeat(4,1fr)",
-                    "repeat(5,1fr)",
-                    "repeat(6,1fr)",
-                  ]
-            }
+            templateColumns={[
+              "repeat(2,1fr)",
+              "repeat(3,1fr)",
+              "repeat(4,1fr)",
+              "repeat(5,1fr)",
+              "repeat(6,1fr)",
+            ]}
             columnGap={2}
             rowGap={4}
           >
@@ -188,7 +264,7 @@ const LayoutProductList = ({
             position="absolute"
             right="159"
             bottom="10"
-            color={isDiscount ? "black" : "white"}
+            color="black"
             cursor="pointer"
           >
             <Text fontSize="16px" lineHeight="24px" fontWeight="500">
