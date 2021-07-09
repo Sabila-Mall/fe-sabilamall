@@ -57,8 +57,10 @@ const CardProduct = ({
 
   useEffect(() => {
     function handleResize() {
-      let width = document.getElementsByClassName("card-product")[0]
-        .clientWidth;
+      let width = responsive
+        ? document.getElementsByClassName("card-product-responsive")[0]
+            .clientWidth
+        : document.getElementsByClassName("card-product")[0].clientWidth;
       setImageHeight(width);
     }
     window.addEventListener("resize", handleResize);
@@ -73,7 +75,7 @@ const CardProduct = ({
       border="1px solid #CBD5E0"
       borderRadius="8px"
       bg="white"
-      className={responsive && "card-product"}
+      className={responsive ? "card-product-responsive" : "card-product"}
     >
       <Box
         bg="white"

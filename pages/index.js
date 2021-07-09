@@ -176,7 +176,7 @@ const Home = () => {
           flexDirection={{ base: "column", xl: "row" }}
           justifyContent="space-evenly"
           alignItems="center"
-          marginTop="2rem"
+          marginTop={isLoggedIn ? "4rem" : "2rem"}
           marginBottom="2rem"
         >
           {isLoggedIn && (
@@ -192,6 +192,7 @@ const Home = () => {
                   className="primaryFont"
                   fontWeight="700"
                   fontSize="1.5rem"
+                  marginBottom="2rem"
                 >
                   Kategori
                 </Text>
@@ -212,6 +213,15 @@ const Home = () => {
                 marginTop={isLoggedIn ? "0rem" : "2rem"}
                 marginBottom={isLoggedIn ? "0rem" : "1.5rem"}
               >
+                <Text
+                  className="primaryFont"
+                  fontWeight="700"
+                  fontSize="1.5rem"
+                  marginBottom="2rem"
+                >
+                  Kategori
+                </Text>
+
                 <LayoutCategoryList
                   isLoggedIn={isLoggedIn}
                   category={category}
