@@ -1,0 +1,28 @@
+.productDescription {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
+.subtotal {
+  @media screen and (max-width: 325px) {
+    font-size: 1rem !important;
+  }
+}
+
+.slickWidth {
+  width: 20rem;
+  @media screen and (max-width: 325px) {
+    width: 17rem;
+  }
+  @media screen and (min-width: 420px) {
+    width: 22.5rem;
+  }
+  @media screen and (min-width: 1024px) {
+    width: 20rem;
+  }
+  @media screen and (min-width: 1280px) {
+    width: 22.5rem;
+  }
+}
