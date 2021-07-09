@@ -136,9 +136,10 @@ const ProductInformation = () => {
                 border="1px"
                 borderColor="gray.200"
                 borderRadius="8px"
-                px="15px"
                 py="10px"
-                w="100%"
+                w="110%"
+                pl="0.7rem"
+                pr="0"
               >
                 <Text
                   className="primaryFont"
@@ -157,10 +158,20 @@ const ProductInformation = () => {
                   {vendor}
                 </Text>
                 <Text
+                  d="inline"
+                  color="gray.400"
+                  fontWeight="500"
+                  fontSize="1rem"
+                >
+                  Transaksi berhasil
+                </Text>
+                <Text
+                  ml="0.4rem"
                   className="secondaryFont"
                   fontWeight="500"
-                  fontSize="18px"
+                  fontSize="1rem"
                   color="orange.400"
+                  d="inline"
                 >
                   {vendorRating}%
                 </Text>
