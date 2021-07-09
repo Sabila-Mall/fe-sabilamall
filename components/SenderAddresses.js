@@ -26,22 +26,17 @@ const SenderAddresses = ({ isMobile }) => {
 
     let addresses = [
         {
+            name: "Farahhhhh",
+            phoneNumber: "0888888888"
+        },
+        {
             name: "Farahhhhhhh",
-            phoneNumber: "0888888888",
-            key: "0888888888"
+            phoneNumber: "0888888887"
         }
     ]
 
     const [addressList, setAddressList] = useState(addresses)
     const { isOpen, onOpen, onClose } = useDisclosure()
-
-    const addAddress = (name, phone) => {
-        const newAddress = {
-            name: name,
-            phoneNumber: phone
-        }
-        setAddressList([...addresses, newAddress])
-    }
 
     const deleteAddress = (phone) => {
         let outputList = [];
@@ -51,11 +46,12 @@ const SenderAddresses = ({ isMobile }) => {
                 outputList.push(addressList[i])
             }
         }
-        setAddressList([outputList])
+        console.log(outputList);
+        // setAddressList([outputList])
     }
 
     return (
-        <Stack dir="column">
+        <Stack dir="column" pb={isMobile ? "36px" : ""}>
             <Flex>
                 <Text
                     className="primaryFont"
@@ -76,12 +72,12 @@ const SenderAddresses = ({ isMobile }) => {
                     display={{ base: "none", md: "block" }}
                 >
                     <Flex>
-                        <IoIosAddCircle fontSize="16px" />
+                        <IoIosAddCircle fontSize="1rem" />
                         <Text
                             className="primaryFont"
                             fontWeight="700"
-                            fontSize="10px"
-                            lineHeight="13px"
+                            fontSize="0.875rem"
+                            lineHeight="100%"
                             transform="translateY(2px)"
                         >
                             Tambah
@@ -97,23 +93,12 @@ const SenderAddresses = ({ isMobile }) => {
                 const [tempPhoneNumber, settempPhoneNumber] = useState(phoneNumber)
 
                 const handleSubmit = () => {
-                    let flag = false
-                    for (let i = 0; i < addresses.length; i++) {
-                        if (addresses[i].phoneNumber === tempPhoneNumber) {
-                            flag = true
-                        }
-                    }
-                    if (flag) {
-                        setname(tempName)
-                        setphoneNumber(tempPhoneNumber)
-                    } else {
-                        addAddress(tempName, tempPhoneNumber)
-                    }
-
+                    console.log(tempName);
+                    console.log(tempPhoneNumber);
                 }
 
                 return (
-                    <Box>
+                    <Box key={phoneNumber}>
                         <AddressBox
                             name={name}
                             phoneNumber={phoneNumber}
@@ -130,7 +115,6 @@ const SenderAddresses = ({ isMobile }) => {
                                 pos="absolute"
                                 h={isMobile ? "calc(100% - 50px)" : "auto"}
                                 mt="50px"
-                                pt="48px"
                                 borderRadius={isMobile ? "0" : "20px"}
                                 bgColor={isMobile ? "#F7FAFC" : "white"}>
                                 {isMobile ? <></> : <ModalHeader>Ubah Alamat Pengirim</ModalHeader>}
@@ -147,14 +131,14 @@ const SenderAddresses = ({ isMobile }) => {
                                     <FormControl>
                                         <FormLabel>Nama Lengkap</FormLabel>
                                         <Input
-                                            id="name"
+
                                             value={tempName}
                                             onChange={(e) => settempName(e.target.value)}
                                             isRequired={true} />
 
                                         <FormLabel mt={4}>Nomor Telepon</FormLabel>
                                         <Input
-                                            id="phoneNumber"
+
                                             value={tempPhoneNumber}
                                             type="number"
                                             onChange={(e) => settempPhoneNumber(e.target.value)}
@@ -183,6 +167,29 @@ const SenderAddresses = ({ isMobile }) => {
                 )
             }
             )}
+            {isMobile ? <Button
+                borderColor="orange.500"
+                borderWidth="1px"
+                backgroundColor="white"
+                color="orange.500"
+                p="11px 38px"
+                borderRadius="20px"
+                mb="48px"
+            >
+                <Flex>
+                    <IoIosAddCircle fontSize="16px" />
+                    <Text
+                        className="primaryFont"
+                        fontWeight="700"
+                        fontSize="10px"
+                        lineHeight="13px"
+                        transform="translateY(2px)"
+                        onClick={onOpen}
+                    >
+                        Tambah
+                    </Text>
+                </Flex>
+            </Button> : <></>}
 
         </Stack>
 

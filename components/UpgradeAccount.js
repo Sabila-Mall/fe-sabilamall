@@ -116,10 +116,10 @@ export const UpgradeAccount = ({ isMobile, currentAccount }) => {
                     bg="orange.500"
                     pos={isMobile ? "absolute" : ""}
                     bottom={isMobile ? "36px" : ""}
-                    borderRadius="20px"
+                    borderRadius={isMobile ? "20px" : "6px"}
                     _hover={{ bg: "orange.400" }}
                 >
-                    Konfirmasi Pesanan
+                    {isMobile ? "Konfirmasi Pesanan" : "Konfirmasi"}
                 </Button>
             </Flex>
         </Box >

@@ -17,7 +17,8 @@ export const ChangeAddress = ({ isMobile }) => {
             district: "Sukmajaya",
             city: "Kota Depok",
             province: "Jawa Barat",
-            postalCode: "16417"
+            postalCode: "16417",
+            key: "012345678"
         },
         {
             name: "Farahhhhhhhhhh",
@@ -26,7 +27,8 @@ export const ChangeAddress = ({ isMobile }) => {
             district: "Sukmajaya",
             city: "Kota Depok",
             province: "Jawa Barat",
-            postalCode: "16417"
+            postalCode: "16417",
+            key: "088888888888"
         },
         {
             name: "Farahhhhhhhhhh",
@@ -35,7 +37,8 @@ export const ChangeAddress = ({ isMobile }) => {
             district: "Sukmajaya",
             city: "Kota Depok",
             province: "Jawa Barat",
-            postalCode: "16417"
+            postalCode: "16417",
+            key: "000000000"
         }
     ]
 

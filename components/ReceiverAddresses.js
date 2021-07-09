@@ -39,9 +39,9 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
                 outputList.push(addressList[i])
             }
         }
-        setAddressList(outputList)
+        console.log(outputList);
+        // setAddressList([outputList])
     }
-
     return (
         <Box>
             <Flex>
@@ -63,12 +63,12 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
                     display={{ base: "none", md: "block" }}
                 >
                     <Flex>
-                        <IoIosAddCircle fontSize="16px" />
+                        <IoIosAddCircle fontSize="1rem" />
                         <Text
                             className="primaryFont"
                             fontWeight="700"
-                            fontSize="10px"
-                            lineHeight="13px"
+                            fontSize="0.875rem"
+                            lineHeight="100%"
                             transform="translateY(2px)"
                             onClick={onOpen}
                         >
@@ -78,7 +78,7 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
                 </Button>
             </Flex>
             <Stack
-                divider={isMobile ? <></> : <StackDivider color="gray.500" />}
+                divider={<StackDivider color="gray.500" />}
                 mb="48px"
             >
                 {addressList.map((address) => {
@@ -99,19 +99,24 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
                     const [tempPostalCode, settempPostalCode] = useState(postalCode)
 
                     const handleSubmit = () => {
-                        setname(tempName)
-                        setphoneNumber(tempPhoneNumber)
-                        setfullAddress(tempFullAddress)
-                        setdistrict(tempDistrict)
-                        setcity(tempCity)
-                        setprovince(tempProvince)
-                        setpostalCode(tempPostalCode)
-
-                        settempName(name)
+                        // setname(tempName)
+                        // setphoneNumber(tempPhoneNumber)
+                        // setfullAddress(tempFullAddress)
+                        // setdistrict(tempDistrict)
+                        // setcity(tempCity)
+                        // setprovince(tempProvince)
+                        // setpostalCode(tempPostalCode)
+                        console.log(tempName);
+                        console.log(tempPhoneNumber);
+                        console.log(tempFullAddress);
+                        console.log(tempDistrict);
+                        console.log(tempCity);
+                        console.log(tempProvince);
+                        console.log(tempPostalCode);
                     }
 
                     return (
-                        <Box>
+                        <Box key={phoneNumber}>
                             <AddressBox
                                 name={name}
                                 phoneNumber={phoneNumber}
@@ -131,7 +136,7 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
                                 <ModalContent
                                     borderRadius={isMobile ? "0" : "20px"}
                                     bgColor={isMobile ? "#F7FAFC" : "white"}
-                                    h={isMobile ? "100%" : "auto"}
+                                    h={isMobile ? "calc(100% + 50px)" : "auto"}
                                     mt="50px">
 
                                     {isMobile ? <></> :
@@ -159,7 +164,7 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
                                         <FormControl>
                                             <Grid
                                                 templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }}
-                                                gap="24px">
+                                                gap={isMobile ? "16px" : "24px"}>
                                                 <GridItem colSpan={isMobile ? 2 : 1}>
                                                     <FormLabel
                                                         fontWeight="bold"
@@ -168,7 +173,6 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
                                                         Nama Lengkap
                                                     </FormLabel>
                                                     <Input
-                                                        id="name"
                                                         value={tempName}
                                                         onChange={(e) => settempName(e.target.value)}
                                                         isRequired={true} />
@@ -181,7 +185,6 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
                                                         Nomor Telepon
                                                     </FormLabel>
                                                     <Input
-                                                        id="phoneNumber"
                                                         value={tempPhoneNumber}
                                                         onChange={(e) => settempPhoneNumber(e.target.value)}
                                                         type="number"
@@ -196,7 +199,6 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
                                                         Alamat Lengkap
                                                     </FormLabel>
                                                     <Textarea
-                                                        id="address"
                                                         value={tempFullAddress}
                                                         onChange={(e) => settempFullAddress(e.target.value)}
                                                         isRequired={true} />
@@ -292,14 +294,13 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
                     mb="48px"
                 >
                     <Flex>
-                        <IoIosAddCircle fontSize="16px" />
+                        <IoIosAddCircle fontSize="1rem" />
                         <Text
                             className="primaryFont"
                             fontWeight="700"
-                            fontSize="10px"
-                            lineHeight="13px"
+                            fontSize="0.875rem"
+                            lineHeight="100%"
                             transform="translateY(2px)"
-                            onClick={onOpen}
                         >
                             Tambah
                         </Text>
@@ -308,7 +309,7 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
 
 
             </Stack>
-        </Box>
+        </Box >
     )
 }
 
