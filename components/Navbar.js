@@ -13,8 +13,8 @@ import {
   AccordionPanel,
   AccordionButton,
   InputLeftElement,
+  Link,
 } from "@chakra-ui/react";
-import Link from "next/link";
 import React, { useState } from "react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
@@ -112,24 +112,26 @@ const Navbar = () => {
           </InputGroup>
         </Box>
         <Box display="flex" alignItems="center" mr="20px">
-          <Icon as={IoNotifications} className={styles.navbarIcon} />
-          <Icon
-            as={IoCart}
-            className={styles.navbarIcon}
+          <Link href="/">
+            <Icon as={IoNotifications} className={styles.navbarIcon} />
+          </Link>
+          <Link
+            href="/"
+            display={{ base: "none", md: "block" }}
             ml={{ base: "8px", md: "20px", lg: "25px" }}
-            display={{ base: "none", md: "block" }}
-          />
-          <Icon
-            as={IoHeartSharp}
-            className={styles.navbarIcon}
-            mx={{ base: "8px", md: "20px", lg: "25px" }}
-          />
-          <Icon
-            as={FaUser}
-            className={styles.navbarIcon}
-            // ml={{ base: "8px", md: "20px", lg: "25px" }}
-            display={{ base: "none", md: "block" }}
-          />
+          >
+            <Icon as={IoCart} className={styles.navbarIcon} />
+          </Link>
+          <Link href="/" mx={{ base: "8px", md: "20px", lg: "25px" }}>
+            <Icon as={IoHeartSharp} className={styles.navbarIcon} />
+          </Link>
+          <Link href="/">
+            <Icon
+              as={FaUser}
+              className={styles.navbarIcon}
+              display={{ base: "none", md: "block" }}
+            />
+          </Link>
         </Box>
         <Box
           className={styles.boxSearch}
