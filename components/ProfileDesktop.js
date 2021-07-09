@@ -18,7 +18,7 @@ const ProfileDesktop = ({ section, element }) => {
   const menu = [
     { text: "Profile Saya", path: "/profile", icon: FaUser },
     {
-      text: "Alamat Pengiriman",
+      text: "Data Pengiriman",
       path: "/profile/alamat-pengiriman",
       icon: VscPackage,
     },

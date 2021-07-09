@@ -18,7 +18,8 @@ export const UpgradeAccount = ({ isMobile, currentAccount }) => {
     const [tempValue, settempValue] = useState(value)
 
     const handleSubmit = () => {
-        setValue(tempValue)
+        console.log(tempValue);
+        // setValue(tempValue)
     }
 
     const options = [
@@ -60,6 +61,7 @@ export const UpgradeAccount = ({ isMobile, currentAccount }) => {
                         {options.map((option) => {
                             return (
                                 <Box
+                                    key={option.value}
                                     border="2px solid #A0AEC0"
                                     borderRadius="20px"
                                     _focusWithin={{ borderColor: "orange.500" }}
