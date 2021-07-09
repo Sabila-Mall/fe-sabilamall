@@ -54,7 +54,7 @@ const QuickAddItem = ({ product }) => {
       <Flex align={"center"} justify={"space-between"} w={"full"}>
         <VStack align={"start"} spacing={"0.25rem"} w={"full"}>
           <Text textColor={"gray.500"} fontSize={"0.75rem"}>Jumlah</Text>
-          <HStack align={"center"} justify={"space-between"} w={"full"} spacing={"8rem"}>
+          <HStack align={"center"} justify={"space-between"} w={"full"} spacing={{ base: "2rem", md: "8rem"}}>
             <HStack>
               <IconButton
                 aria-label={"minus"}
