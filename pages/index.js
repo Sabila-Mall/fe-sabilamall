@@ -34,7 +34,7 @@ const Home = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const category = [
-    [BsWatch, "Fashion Muslim"],
+    ["/images/fashionMuslim.svg", "Fashion Muslim"],
     [FaBaby, "Fashion Bayi"],
     [BsWatch, "Aksesoris Fashion"],
     [BsBagFill, "Sepatu dan Tas"],
