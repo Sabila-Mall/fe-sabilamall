@@ -88,12 +88,14 @@ export const LayoutFlashSale = ({ data, flashSaleRef, headingText }) => {
         breakpoint: 543,
         settings: {
           slidesToShow: 2,
+          slidesToScroll: 2,
         },
       },
       {
         breakpoint: 320,
         settings: {
           slidesToShow: 1,
+          slidesToScroll: 1,
         },
       },
     ],
@@ -183,24 +185,6 @@ export const LayoutFlashSale = ({ data, flashSaleRef, headingText }) => {
 };
 
 const LayoutProductList = ({ data, endTime, flashSaleRef }) => {
-  let ref = null;
-
-  const settings = {
-    arrows: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 20,
-    slidesToScroll: 4,
-    responsive: [
-      {
-        // breakpoint: 325,
-        settings: {
-          slidesToShow: 4,
-        },
-      },
-    ],
-  };
-
   const [showOverlay, setShowOverlay] = useState(false);
 
   return (
