@@ -35,9 +35,29 @@ const AlamatPenerima = () => {
       nama: "Ariq",
       nomor: "081122334455",
     },
+    {
+      nama: "Ariq",
+      nomor: "081122334455",
+    },
+    {
+      nama: "Ariq",
+      nomor: "081122334455",
+    },
   ];
 
   const dataPenerima = [
+    {
+      nama: "Ariq",
+      nomor: "081122334455",
+      alamat:
+        "Jl. Margonda Raya, Pondok Cina, Kecamatan Beji, Kota Depok, Jawa Barat 16424",
+    },
+    {
+      nama: "Ariq",
+      nomor: "081122334455",
+      alamat:
+        "Jl. Margonda Raya, Pondok Cina, Kecamatan Beji, Kota Depok, Jawa Barat 16424",
+    },
     {
       nama: "Ariq",
       nomor: "081122334455",
@@ -335,14 +355,11 @@ const AlamatPenerima = () => {
                         }
                       }
                     >
-                      <RadioGroup
-                        onChange={(e) => pengirimRadioHandler(e)}
-                        // value={value}
-                      >
+                      <RadioGroup onChange={(e) => pengirimRadioHandler(e)}>
                         <Grid
                           templateColumns={{
                             base: "repeat(1,1fr)",
-                            md: "repeat(2,1fr)",
+                            lg: "repeat(2,1fr)",
                           }}
                           gap={4}
                         >
@@ -364,6 +381,7 @@ const AlamatPenerima = () => {
                                     flexDir="row"
                                     padding="5px 10px 5px 10px"
                                     as="label"
+                                    key={index}
                                     htmlFor={index}
                                     cursor="pointer"
                                   >
@@ -529,6 +547,7 @@ const AlamatPenerima = () => {
                                     flexDir="row"
                                     padding="7px 10px 7px 10px"
                                     as="label"
+                                    key={index}
                                     htmlFor={`-${index}`}
                                     cursor="pointer"
                                   >
