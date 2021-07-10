@@ -328,7 +328,6 @@ const AlamatPenerima = () => {
                       marginBottom="1rem"
                     >
                       <Input
-                        type="tel"
                         placeholder="Cari alamat"
                         color="gray.500"
                         fontSize="sm"
@@ -502,7 +501,6 @@ const AlamatPenerima = () => {
                       marginBottom="1rem"
                     >
                       <Input
-                        type="tel"
                         placeholder="Cari alamat"
                         color="gray.500"
                         fontSize="sm"
