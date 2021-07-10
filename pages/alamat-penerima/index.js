@@ -22,6 +22,7 @@ import {
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { FiChevronRight } from "react-icons/fi";
 
@@ -29,6 +30,134 @@ import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
 
 const AlamatPenerima = () => {
+  const dataPengirim = [
+    {
+      nama: "Ariq",
+      nomor: "081122334455",
+    },
+  ];
+
+  const dataPenerima = [
+    {
+      nama: "Ariq",
+      nomor: "081122334455",
+      alamat:
+        "Jl. Margonda Raya, Pondok Cina, Kecamatan Beji, Kota Depok, Jawa Barat 16424",
+    },
+  ];
+
+  const negara = ["Indonesia", "Malaysia", "Singapore"];
+  const provinsi = ["DKI Jakarta", "Jawa Barat", "Jawa Tengah"];
+  const kota = ["Bandung", "Jakarta Barat", "Jakarta Utara"];
+  const kecamatan = ["Kedoya Utara", "Kedoya Barat", "Kedoya Tenggara"];
+  const kodePos = ["18181", "27272", "89898"];
+
+  const [pengirimCurrentTab, setPengirimCurrentTab] = useState(0);
+  const [penerimaCurrentTab, setPenerimaCurrentTab] = useState(0);
+
+  const [pengirimSearch, setPengirimSearch] = useState("");
+  const [penerimaSearch, setPenerimaSearch] = useState("");
+
+  const [namaPengirim, setNamaPengirim] = useState("");
+  const [alamatPengirim, setAlamatPengirim] = useState("");
+
+  const [namaTextPengirim, setNamaTextPengirim] = useState("");
+  const [ponselPengirim, setPonselPengirim] = useState("");
+
+  const [namaPenerima, setNamaPenerima] = useState("");
+  const [nomorPenerima, setNomorPenerima] = useState("");
+  const [alamatPenerima, setAlamatPenerima] = useState("");
+
+  const [namaAwalPenerima, setNamaAwalPenerima] = useState("");
+  const [namaAkhirPenerima, setNamaAkhirPenerima] = useState("");
+  const [negaraPenerima, setNegaraPenerima] = useState("");
+  const [provinsiPenerima, setProvinsiPenerima] = useState("");
+  const [kotaPenerima, setKotaPenerima] = useState("");
+  const [kecamatanPenerima, setKecamatanPenerima] = useState("");
+  const [kodePosPenerima, setKodePosPenerima] = useState("");
+  const [ponselPenerima, setPonselPenerima] = useState("");
+  const [alamatTextPenerima, setAlamatTextPenerima] = useState("");
+
+  const pengirimRadioHandler = (e) => {
+    setNamaPengirim(dataPengirim[e].nama);
+    setAlamatPengirim(dataPengirim[e].alamat);
+  };
+
+  const penerimaRadioHandler = (e) => {
+    setNamaPenerima(dataPenerima[e].nama);
+    setNomorPenerima(dataPenerima[e].nomor);
+    setAlamatPenerima(dataPenerima[e].alamat);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (pengirimCurrentTab == 0 && penerimaCurrentTab == 0) {
+      console.log("submit type 0");
+    } else if (pengirimCurrentTab == 0 && penerimaCurrentTab == 1) {
+      console.log("submit type 1");
+    } else if (pengirimCurrentTab == 1 && penerimaCurrentTab == 0) {
+      console.log("submit type 2");
+    } else {
+      console.log("submit type 3");
+    }
+  };
+
+  const handleDisable = () => {
+    if (pengirimCurrentTab == 0 && penerimaCurrentTab == 0) {
+      if (namaPengirim !== "" && namaPenerima !== "") {
+        return false;
+      } else {
+        return true;
+      }
+    } else if (pengirimCurrentTab == 0 && penerimaCurrentTab == 1) {
+      if (
+        namaPengirim !== "" &&
+        namaAwalPenerima !== "" &&
+        namaAkhirPenerima !== "" &&
+        negaraPenerima !== "" &&
+        provinsiPenerima !== "" &&
+        kotaPenerima !== "" &&
+        kecamatanPenerima !== "" &&
+        kodePosPenerima !== "" &&
+        ponselPenerima !== "" &&
+        alamatTextPenerima !== ""
+      ) {
+        return false;
+      } else {
+        return true;
+      }
+    } else if (pengirimCurrentTab == 1 && penerimaCurrentTab == 0) {
+      if (
+        namaTextPengirim !== "" &&
+        ponselPengirim !== "" &&
+        namaPenerima !== ""
+      ) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      if (
+        namaTextPengirim !== "" &&
+        ponselPengirim !== "" &&
+        namaAwalPenerima !== "" &&
+        namaAkhirPenerima !== "" &&
+        negaraPenerima !== "" &&
+        provinsiPenerima !== "" &&
+        kotaPenerima !== "" &&
+        kecamatanPenerima !== "" &&
+        kodePosPenerima !== "" &&
+        ponselPenerima !== "" &&
+        alamatTextPenerima !== ""
+      ) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -135,7 +264,11 @@ const AlamatPenerima = () => {
               <Text className="primaryFont" fontWeight="700" fontSize="1.25rem">
                 Data Pengirim
               </Text>
-              <Tabs variant="unstyled" marginTop="0.5rem">
+              <Tabs
+                variant="unstyled"
+                marginTop="0.5rem"
+                onChange={(e) => setPengirimCurrentTab(e)}
+              >
                 <TabList>
                   <Tab
                     color="gray.500"
@@ -179,6 +312,7 @@ const AlamatPenerima = () => {
                         placeholder="Cari alamat"
                         color="gray.500"
                         fontSize="sm"
+                        onChange={(e) => setPengirimSearch(e.target.value)}
                       />
                       <InputRightElement
                         children={<BiSearch color="black" />}
@@ -201,7 +335,10 @@ const AlamatPenerima = () => {
                         }
                       }
                     >
-                      <RadioGroup>
+                      <RadioGroup
+                        onChange={(e) => pengirimRadioHandler(e)}
+                        // value={value}
+                      >
                         <Grid
                           templateColumns={{
                             base: "repeat(1,1fr)",
@@ -209,144 +346,45 @@ const AlamatPenerima = () => {
                           }}
                           gap={4}
                         >
-                          <Box
-                            w="100%"
-                            border="1px solid"
-                            borderColor="gray.400"
-                            borderRadius="md"
-                            d="flex"
-                            flexDir="row"
-                            padding="5px 10px 5px 10px"
-                            as="label"
-                            for="1"
-                            cursor="pointer"
-                          >
-                            <Radio value="1" id="1" />
-                            <Box
-                              d="flex"
-                              flexDir="column"
-                              marginLeft="2ch"
-                              fontSize="0.8rem"
-                            >
-                              <Text>Ariq</Text>
-                              <Text>081122334455</Text>
-                            </Box>
-                          </Box>
-                          <Box
-                            w="100%"
-                            border="1px solid"
-                            borderColor="gray.400"
-                            borderRadius="md"
-                            d="flex"
-                            flexDir="row"
-                            padding="5px 10px 5px 10px"
-                            as="label"
-                            for="2"
-                            cursor="pointer"
-                          >
-                            <Radio value="2" id="2" />
-                            <Box
-                              d="flex"
-                              flexDir="column"
-                              marginLeft="2ch"
-                              fontSize="0.8rem"
-                            >
-                              <Text>Ariq</Text>
-                              <Text>081122334455</Text>
-                            </Box>
-                          </Box>
-                          <Box
-                            w="100%"
-                            border="1px solid"
-                            borderColor="gray.400"
-                            borderRadius="md"
-                            d="flex"
-                            flexDir="row"
-                            padding="5px 10px 5px 10px"
-                            as="label"
-                            for="3"
-                            cursor="pointer"
-                          >
-                            <Radio value="3" id="3" />
-                            <Box
-                              d="flex"
-                              flexDir="column"
-                              marginLeft="2ch"
-                              fontSize="0.8rem"
-                            >
-                              <Text>Ariq</Text>
-                              <Text>081122334455</Text>
-                            </Box>
-                          </Box>
-                          <Box
-                            w="100%"
-                            border="1px solid"
-                            borderColor="gray.400"
-                            borderRadius="md"
-                            d="flex"
-                            flexDir="row"
-                            padding="5px 10px 5px 10px"
-                            as="label"
-                            for="4"
-                            cursor="pointer"
-                          >
-                            <Radio value="4" id="4" />
-                            <Box
-                              d="flex"
-                              flexDir="column"
-                              marginLeft="2ch"
-                              fontSize="0.8rem"
-                            >
-                              <Text>Ariq</Text>
-                              <Text>081122334455</Text>
-                            </Box>
-                          </Box>
-                          <Box
-                            w="100%"
-                            border="1px solid"
-                            borderColor="gray.400"
-                            borderRadius="md"
-                            d="flex"
-                            flexDir="row"
-                            padding="5px 10px 5px 10px"
-                            as="label"
-                            for="5"
-                            cursor="pointer"
-                          >
-                            <Radio value="5" id="5" />
-                            <Box
-                              d="flex"
-                              flexDir="column"
-                              marginLeft="2ch"
-                              fontSize="0.8rem"
-                            >
-                              <Text>Ariq</Text>
-                              <Text>081122334455</Text>
-                            </Box>
-                          </Box>
-                          <Box
-                            w="100%"
-                            border="1px solid"
-                            borderColor="gray.400"
-                            borderRadius="md"
-                            d="flex"
-                            flexDir="row"
-                            padding="5px 10px 5px 10px"
-                            as="label"
-                            for="6"
-                            cursor="pointer"
-                          >
-                            <Radio value="6" id="6" />
-                            <Box
-                              d="flex"
-                              flexDir="column"
-                              marginLeft="2ch"
-                              fontSize="0.8rem"
-                            >
-                              <Text>Ariq</Text>
-                              <Text>081122334455</Text>
-                            </Box>
-                          </Box>
+                          {dataPengirim &&
+                            dataPengirim.map((data, index) => {
+                              if (
+                                data.nama
+                                  .toLowerCase()
+                                  .includes(pengirimSearch.toLowerCase()) ||
+                                data.nomor.includes(pengirimSearch)
+                              ) {
+                                return (
+                                  <Box
+                                    w="100%"
+                                    border="1px solid"
+                                    borderColor="gray.400"
+                                    borderRadius="md"
+                                    d="flex"
+                                    flexDir="row"
+                                    padding="5px 10px 5px 10px"
+                                    as="label"
+                                    htmlFor={index}
+                                    cursor="pointer"
+                                  >
+                                    <Radio
+                                      value={`${index}`}
+                                      id={index}
+                                      cursor="pointer"
+                                    />
+                                    <Box
+                                      d="flex"
+                                      flexDir="column"
+                                      marginLeft="2ch"
+                                      fontSize="0.8rem"
+                                    >
+                                      <Text>{data.nama}</Text>
+                                      <Text>{data.nomor}</Text>
+                                    </Box>
+                                  </Box>
+                                );
+                              }
+                            })}
                         </Grid>
                       </RadioGroup>
                     </Box>
@@ -369,6 +407,8 @@ const AlamatPenerima = () => {
                         <Input
                           placeholder="Masukkan nama pengirim"
                           marginTop="0.5rem"
+                          fontSize="sm"
+                          onChange={(e) => setNamaTextPengirim(e.target.value)}
                         />
                       </Box>
                       <Box w={{ base: "100%", md: "47.5%" }}>
@@ -383,6 +423,8 @@ const AlamatPenerima = () => {
                         <Input
                           placeholder="Masukkan nomor ponsel pengirim"
                           marginTop="0.5rem"
+                          fontSize="sm"
+                          onChange={(e) => setPonselPengirim(e.target.value)}
                         />
                       </Box>
                     </Box>
@@ -398,7 +440,11 @@ const AlamatPenerima = () => {
               >
                 Data Alamat Penerima
               </Text>
-              <Tabs variant="unstyled" marginTop="0.5rem">
+              <Tabs
+                variant="unstyled"
+                marginTop="0.5rem"
+                onChange={(e) => setPenerimaCurrentTab(e)}
+              >
                 <TabList>
                   <Tab
                     color="gray.400"
@@ -442,6 +488,7 @@ const AlamatPenerima = () => {
                         placeholder="Cari alamat"
                         color="gray.500"
                         fontSize="sm"
+                        onChange={(e) => setPenerimaSearch(e.target.value)}
                       />
                       <InputRightElement
                         children={<BiSearch color="black" />}
@@ -451,7 +498,7 @@ const AlamatPenerima = () => {
                       height={{ base: "31rem", md: "20rem" }}
                       overflowY="scroll"
                     >
-                      <RadioGroup>
+                      <RadioGroup onChange={(e) => penerimaRadioHandler(e)}>
                         <Grid
                           templateColumns={{
                             base: "repeat(1,1fr)",
@@ -459,168 +506,51 @@ const AlamatPenerima = () => {
                           }}
                           gap={4}
                         >
-                          <Box
-                            w="100%"
-                            border="1px solid"
-                            borderColor="gray.400"
-                            borderRadius="md"
-                            d="flex"
-                            flexDir="row"
-                            padding="7px 10px 7px 10px"
-                            as="label"
-                            for="1"
-                            cursor="pointer"
-                          >
-                            <Radio value="1" id="1" />
-                            <Box
-                              d="flex"
-                              flexDir="column"
-                              marginLeft="2ch"
-                              fontSize="0.8rem"
-                            >
-                              <Text>Ariq</Text>
-                              <Text>081122334455</Text>
-                              <Text>
-                                Jl. Margonda Raya, Pondok Cina, Kecamatan Beji,
-                                Kota Depok, Jawa Barat 16424
-                              </Text>
-                            </Box>
-                          </Box>
-                          <Box
-                            w="100%"
-                            border="1px solid"
-                            borderColor="gray.400"
-                            borderRadius="md"
-                            d="flex"
-                            flexDir="row"
-                            padding="7px 10px 7px 10px"
-                            as="label"
-                            for="1"
-                            cursor="pointer"
-                          >
-                            <Radio value="1" id="1" />
-                            <Box
-                              d="flex"
-                              flexDir="column"
-                              marginLeft="2ch"
-                              fontSize="0.8rem"
-                            >
-                              <Text>Ariq</Text>
-                              <Text>081122334455</Text>
-                              <Text>
-                                Jl. Margonda Raya, Pondok Cina, Kecamatan Beji,
-                                Kota Depok, Jawa Barat 16424
-                              </Text>
-                            </Box>
-                          </Box>
-                          <Box
-                            w="100%"
-                            border="1px solid"
-                            borderColor="gray.400"
-                            borderRadius="md"
-                            d="flex"
-                            flexDir="row"
-                            padding="7px 10px 7px 10px"
-                            as="label"
-                            for="1"
-                            cursor="pointer"
-                          >
-                            <Radio value="1" id="1" />
-                            <Box
-                              d="flex"
-                              flexDir="column"
-                              marginLeft="2ch"
-                              fontSize="0.8rem"
-                            >
-                              <Text>Ariq</Text>
-                              <Text>081122334455</Text>
-                              <Text>
-                                Jl. Margonda Raya, Pondok Cina, Kecamatan Beji,
-                                Kota Depok, Jawa Barat 16424
-                              </Text>
-                            </Box>
-                          </Box>
-                          <Box
-                            w="100%"
-                            border="1px solid"
-                            borderColor="gray.400"
-                            borderRadius="md"
-                            d="flex"
-                            flexDir="row"
-                            padding="7px 10px 7px 10px"
-                            as="label"
-                            for="1"
-                            cursor="pointer"
-                          >
-                            <Radio value="1" id="1" />
-                            <Box
-                              d="flex"
-                              flexDir="column"
-                              marginLeft="2ch"
-                              fontSize="0.8rem"
-                            >
-                              <Text>Ariq</Text>
-                              <Text>081122334455</Text>
-                              <Text>
-                                Jl. Margonda Raya, Pondok Cina, Kecamatan Beji,
-                                Kota Depok, Jawa Barat 16424
-                              </Text>
-                            </Box>
-                          </Box>
-                          <Box
-                            w="100%"
-                            border="1px solid"
-                            borderColor="gray.400"
-                            borderRadius="md"
-                            d="flex"
-                            flexDir="row"
-                            padding="7px 10px 7px 10px"
-                            as="label"
-                            for="1"
-                            cursor="pointer"
-                          >
-                            <Radio value="1" id="1" />
-                            <Box
-                              d="flex"
-                              flexDir="column"
-                              marginLeft="2ch"
-                              fontSize="0.8rem"
-                            >
-                              <Text>Ariq</Text>
-                              <Text>081122334455</Text>
-                              <Text>
-                                Jl. Margonda Raya, Pondok Cina, Kecamatan Beji,
-                                Kota Depok, Jawa Barat 16424
-                              </Text>
-                            </Box>
-                          </Box>
-                          <Box
-                            w="100%"
-                            border="1px solid"
-                            borderColor="gray.400"
-                            borderRadius="md"
-                            d="flex"
-                            flexDir="row"
-                            padding="7px 10px 7px 10px"
-                            as="label"
-                            for="1"
-                            cursor="pointer"
-                          >
-                            <Radio value="1" id="1" />
-                            <Box
-                              d="flex"
-                              flexDir="column"
-                              marginLeft="2ch"
-                              fontSize="0.8rem"
-                            >
-                              <Text>Ariq</Text>
-                              <Text>081122334455</Text>
-                              <Text>
-                                Jl. Margonda Raya, Pondok Cina, Kecamatan Beji,
-                                Kota Depok, Jawa Barat 16424
-                              </Text>
-                            </Box>
-                          </Box>
+                          {dataPenerima &&
+                            dataPenerima.map((data, index) => {
+                              if (
+                                data.nama
+                                  .toLowerCase()
+                                  .includes(penerimaSearch.toLowerCase()) ||
+                                data.nomor
+                                  .toLowerCase()
+                                  .includes(penerimaSearch.toLowerCase()) ||
+                                data.alamat
+                                  .toLowerCase()
+                                  .includes(penerimaSearch.toLowerCase())
+                              ) {
+                                return (
+                                  <Box
+                                    w="100%"
+                                    border="1px solid"
+                                    borderColor="gray.400"
+                                    borderRadius="md"
+                                    d="flex"
+                                    flexDir="row"
+                                    padding="7px 10px 7px 10px"
+                                    as="label"
+                                    htmlFor={`-${index}`}
+                                    cursor="pointer"
+                                  >
+                                    <Radio
+                                      value={`${index}`}
+                                      id={`-${index}`}
+                                      cursor="pointer"
+                                    />
+                                    <Box
+                                      d="flex"
+                                      flexDir="column"
+                                      marginLeft="2ch"
+                                      fontSize="0.8rem"
+                                    >
+                                      <Text>{data.nama}</Text>
+                                      <Text>{data.nomor}</Text>
+                                      <Text>{data.alamat}</Text>
+                                    </Box>
+                                  </Box>
+                                );
+                              }
+                            })}
                         </Grid>
                       </RadioGroup>
                     </Box>
@@ -643,6 +573,8 @@ const AlamatPenerima = () => {
                         <Input
                           placeholder="Masukkan nama awal penerima"
                           marginTop="0.5rem"
+                          fontSize="sm"
+                          onChange={(e) => setNamaAwalPenerima(e.target.value)}
                         />
                         <Text
                           className="secondaryFont"
@@ -655,16 +587,17 @@ const AlamatPenerima = () => {
                         <Select
                           placeholder="Pilih negara penerima"
                           marginTop="0.5rem"
+                          fontSize="sm"
+                          onChange={(e) => setNegaraPenerima(e.target.value)}
                         >
-                          <option key="1" value="Nanti di map">
-                            Nanti di map
-                          </option>
-                          <option key="2" value="Nanti di map">
-                            Nanti di map
-                          </option>
-                          <option key="3" value="Nanti di map">
-                            Nanti di map
-                          </option>
+                          {negara &&
+                            negara.map((data, index) => {
+                              return (
+                                <option key={index} value={data}>
+                                  {data}
+                                </option>
+                              );
+                            })}
                         </Select>
                         <Text
                           className="secondaryFont"
@@ -677,16 +610,17 @@ const AlamatPenerima = () => {
                         <Select
                           placeholder="Pilih kota tujuan penerima"
                           marginTop="0.5rem"
+                          fontSize="sm"
+                          onChange={(e) => setKotaPenerima(e.target.value)}
                         >
-                          <option key="1" value="Nanti di map">
-                            Nanti di map
-                          </option>
-                          <option key="2" value="Nanti di map">
-                            Nanti di map
-                          </option>
-                          <option key="3" value="Nanti di map">
-                            Nanti di map
-                          </option>
+                          {kota &&
+                            kota.map((data, index) => {
+                              return (
+                                <option key={index} value={data}>
+                                  {data}
+                                </option>
+                              );
+                            })}
                         </Select>
                         <Text
                           className="secondaryFont"
@@ -699,16 +633,17 @@ const AlamatPenerima = () => {
                         <Select
                           placeholder="Pilih kode pos penerima"
                           marginTop="0.5rem"
+                          fontSize="sm"
+                          onChange={(e) => setKodePosPenerima(e.target.value)}
                         >
-                          <option key="1" value="Nanti di map">
-                            Nanti di map
-                          </option>
-                          <option key="2" value="Nanti di map">
-                            Nanti di map
-                          </option>
-                          <option key="3" value="Nanti di map">
-                            Nanti di map
-                          </option>
+                          {kodePos &&
+                            kodePos.map((data, index) => {
+                              return (
+                                <option key={index} value={data}>
+                                  {data}
+                                </option>
+                              );
+                            })}
                         </Select>
                       </Box>
                       <Box
@@ -725,6 +660,8 @@ const AlamatPenerima = () => {
                         <Input
                           placeholder="Masukkan nama akhir penerima"
                           marginTop="0.5rem"
+                          fontSize="sm"
+                          onChange={(e) => setNamaAkhirPenerima(e.target.value)}
                         />
                         <Text
                           className="secondaryFont"
@@ -737,16 +674,17 @@ const AlamatPenerima = () => {
                         <Select
                           placeholder="Pilih provinsi penerima"
                           marginTop="0.5rem"
+                          fontSize="sm"
+                          onChange={(e) => setProvinsiPenerima(e.target.value)}
                         >
-                          <option key="1" value="Nanti di map">
-                            Nanti di map
-                          </option>
-                          <option key="2" value="Nanti di map">
-                            Nanti di map
-                          </option>
-                          <option key="3" value="Nanti di map">
-                            Nanti di map
-                          </option>
+                          {provinsi &&
+                            provinsi.map((data, index) => {
+                              return (
+                                <option key={index} value={data}>
+                                  {data}
+                                </option>
+                              );
+                            })}
                         </Select>
                         <Text
                           className="secondaryFont"
@@ -759,16 +697,17 @@ const AlamatPenerima = () => {
                         <Select
                           placeholder="Pilih kecamatan penerima"
                           marginTop="0.5rem"
+                          fontSize="sm"
+                          onChange={(e) => setKecamatanPenerima(e.target.value)}
                         >
-                          <option key="1" value="Nanti di map">
-                            Nanti di map
-                          </option>
-                          <option key="2" value="Nanti di map">
-                            Nanti di map
-                          </option>
-                          <option key="3" value="Nanti di map">
-                            Nanti di map
-                          </option>
+                          {kecamatan &&
+                            kecamatan.map((data, index) => {
+                              return (
+                                <option key={index} value={data}>
+                                  {data}
+                                </option>
+                              );
+                            })}
                         </Select>
                         <Text
                           className="secondaryFont"
@@ -778,20 +717,12 @@ const AlamatPenerima = () => {
                         >
                           Ponsel
                         </Text>
-                        <Select
+                        <Input
                           placeholder="Pilih nomor ponsel penerima"
                           marginTop="0.5rem"
-                        >
-                          <option key="1" value="Nanti di map">
-                            Nanti di map
-                          </option>
-                          <option key="2" value="Nanti di map">
-                            Nanti di map
-                          </option>
-                          <option key="3" value="Nanti di map">
-                            Nanti di map
-                          </option>
-                        </Select>
+                          fontSize="sm"
+                          onChange={(e) => setPonselPenerima(e.target.value)}
+                        />
                       </Box>
                     </Box>
                     <Text
@@ -806,6 +737,8 @@ const AlamatPenerima = () => {
                       placeholder="Masukkan alamat penerima"
                       marginTop="0.5rem"
                       resize="none"
+                      fontSize="sm"
+                      onChange={(e) => setAlamatTextPenerima(e.target.value)}
                     />
                   </TabPanel>
                 </TabPanels>
@@ -815,9 +748,12 @@ const AlamatPenerima = () => {
                 <Button
                   bg="red.500"
                   color="white"
-                  w={{ base: "100%", md: "15%" }}
+                  _hover={{ bg: "red.600" }}
+                  w={{ base: "100%", md: "10ch" }}
                   marginBottom="2rem"
                   marginRight={{ base: "0rem", md: "1rem" }}
+                  isDisabled={handleDisable()}
+                  onClick={(e) => handleSubmit(e)}
                 >
                   Lanjutkan
                 </Button>
@@ -840,6 +776,7 @@ const AlamatPenerima = () => {
                 className="primaryFont"
                 fontSize="1.125rem"
                 fontWeight="700"
+                isTruncated
               >
                 Ringkasan
               </Text>
@@ -849,13 +786,19 @@ const AlamatPenerima = () => {
                 justifyContent="space-between"
                 marginTop="0.5rem"
               >
-                <Text color="gray.500" className="primaryFont" fontWeight="700">
+                <Text
+                  color="gray.500"
+                  className="primaryFont"
+                  fontWeight="700"
+                  isTruncated
+                >
                   Jumlah
                 </Text>
                 <Text
                   color="gray.500"
                   className="secondaryFont"
                   fontWeight="500"
+                  isTruncated
                 >
                   9.999.999 pcs
                 </Text>
@@ -866,13 +809,19 @@ const AlamatPenerima = () => {
                 justifyContent="space-between"
                 marginTop="0.3rem"
               >
-                <Text color="gray.500" className="primaryFont" fontWeight="700">
+                <Text
+                  color="gray.500"
+                  className="primaryFont"
+                  fontWeight="700"
+                  isTruncated
+                >
                   Berat
                 </Text>
                 <Text
                   color="gray.500"
                   className="secondaryFont"
                   fontWeight="500"
+                  isTruncated
                 >
                   1.000.000 gr
                 </Text>
@@ -882,6 +831,7 @@ const AlamatPenerima = () => {
                 className="primaryFont"
                 fontSize="1.125rem"
                 fontWeight="700"
+                isTruncated
               >
                 Pembayaran
               </Text>
@@ -891,13 +841,19 @@ const AlamatPenerima = () => {
                 justifyContent="space-between"
                 marginTop="0.5rem"
               >
-                <Text color="gray.500" className="primaryFont" fontWeight="700">
+                <Text
+                  color="gray.500"
+                  className="primaryFont"
+                  fontWeight="700"
+                  isTruncated
+                >
                   Subtotal
                 </Text>
                 <Text
                   color="gray.500"
                   className="secondaryFont"
                   fontWeight="500"
+                  isTruncated
                 >
                   Rp99.999.999
                 </Text>
@@ -908,13 +864,19 @@ const AlamatPenerima = () => {
                 justifyContent="space-between"
                 marginTop="0.3rem"
               >
-                <Text color="gray.500" className="primaryFont" fontWeight="700">
+                <Text
+                  color="gray.500"
+                  className="primaryFont"
+                  fontWeight="700"
+                  isTruncated
+                >
                   Diskon
                 </Text>
                 <Text
                   color="gray.500"
                   className="secondaryFont"
                   fontWeight="500"
+                  isTruncated
                 >
                   Rp99.999.999
                 </Text>
@@ -925,13 +887,19 @@ const AlamatPenerima = () => {
                 justifyContent="space-between"
                 marginTop="0.3rem"
               >
-                <Text color="gray.500" className="primaryFont" fontWeight="700">
+                <Text
+                  color="gray.500"
+                  className="primaryFont"
+                  fontWeight="700"
+                  isTruncated
+                >
                   Pengiriman
                 </Text>
                 <Text
                   color="gray.500"
                   className="secondaryFont"
                   fontWeight="500"
+                  isTruncated
                 >
                   Rp99.999.999
                 </Text>
@@ -943,7 +911,12 @@ const AlamatPenerima = () => {
                 justifyContent="space-between"
                 marginTop="0.3rem"
               >
-                <Text color="gray.500" className="primaryFont" fontWeight="700">
+                <Text
+                  color="gray.500"
+                  className="primaryFont"
+                  fontWeight="700"
+                  isTruncated
+                >
                   Total
                 </Text>
                 <Text
@@ -951,6 +924,7 @@ const AlamatPenerima = () => {
                   className="secondaryFont"
                   fontWeight="500"
                   fontSize="1.25rem"
+                  isTruncated
                 >
                   Rp99.999.999
                 </Text>
