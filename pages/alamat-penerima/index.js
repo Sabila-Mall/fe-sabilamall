@@ -169,7 +169,7 @@ const AlamatPenerima = () => {
         alignItems="center"
         marginTop={{ base: "2rem", md: "3rem" }}
       >
-        <Box w={{ base: "90vw", md: "80vw" }}>
+        <Box w={{ base: "90vw", lg: "80vw" }}>
           <Breadcrumb
             spacing="8px"
             separator={<FiChevronRight color="gray.500" />}
@@ -248,17 +248,17 @@ const AlamatPenerima = () => {
           </Text>
         </Box>
         <Box
-          w={{ base: "90vw", md: "80vw" }}
+          w={{ base: "90vw", lg: "80vw" }}
           marginTop="2rem"
           d="flex"
           justifyContent="space-between"
-          flexDir={{ base: "column-reverse", md: "row" }}
+          flexDir={{ base: "column-reverse", lg: "row" }}
         >
           <Box
-            w={{ base: "100%", md: "65%" }}
-            d={{ base: "flex", md: "inline" }}
-            flexDir={{ base: "column", md: "row" }}
-            alignItems={{ base: "center", md: "stretch" }}
+            w={{ base: "100%", lg: "65%" }}
+            d={{ base: "flex", lg: "inline" }}
+            flexDir={{ base: "column", lg: "row" }}
+            alignItems={{ base: "center", lg: "stretch" }}
           >
             <Box w="100%">
               <Text className="primaryFont" fontWeight="700" fontSize="1.25rem">
@@ -303,7 +303,7 @@ const AlamatPenerima = () => {
                 <TabPanels>
                   <TabPanel>
                     <InputGroup
-                      width={{ base: "100%", md: "48%" }}
+                      width={{ base: "100%", lg: "48%" }}
                       marginTop="0.5rem"
                       marginBottom="1rem"
                     >
@@ -319,7 +319,7 @@ const AlamatPenerima = () => {
                       />
                     </InputGroup>
                     <Box
-                      height={{ base: "11.5rem", md: "7.3rem" }}
+                      height={{ base: "11.5rem", lg: "7.3rem" }}
                       overflowY="scroll"
                       css={
                         {
@@ -393,10 +393,10 @@ const AlamatPenerima = () => {
                     <Box
                       w="100%"
                       d="flex"
-                      flexDir={{ base: "column", md: "row" }}
+                      flexDir={{ base: "column", lg: "row" }}
                       justifyContent="space-between"
                     >
-                      <Box w={{ base: "100%", md: "47.5%" }}>
+                      <Box w={{ base: "100%", lg: "47.5%" }}>
                         <Text
                           className="secondaryFont"
                           fontWeight="500"
@@ -411,12 +411,12 @@ const AlamatPenerima = () => {
                           onChange={(e) => setNamaTextPengirim(e.target.value)}
                         />
                       </Box>
-                      <Box w={{ base: "100%", md: "47.5%" }}>
+                      <Box w={{ base: "100%", lg: "47.5%" }}>
                         <Text
                           className="secondaryFont"
                           fontWeight="500"
                           fontSize="0.875rem"
-                          marginTop={{ base: "1rem", md: "0rem" }}
+                          marginTop={{ base: "1rem", lg: "0rem" }}
                         >
                           Ponsel Pengirim
                         </Text>
@@ -479,7 +479,7 @@ const AlamatPenerima = () => {
                 <TabPanels>
                   <TabPanel>
                     <InputGroup
-                      width={{ base: "100%", md: "48%" }}
+                      width={{ base: "100%", lg: "48%" }}
                       marginTop="0.5rem"
                       marginBottom="1rem"
                     >
@@ -495,14 +495,14 @@ const AlamatPenerima = () => {
                       />
                     </InputGroup>
                     <Box
-                      height={{ base: "31rem", md: "20rem" }}
+                      height={{ base: "31rem", lg: "20rem" }}
                       overflowY="scroll"
                     >
                       <RadioGroup onChange={(e) => penerimaRadioHandler(e)}>
                         <Grid
                           templateColumns={{
                             base: "repeat(1,1fr)",
-                            md: "repeat(2,1fr)",
+                            lg: "repeat(2,1fr)",
                           }}
                           gap={4}
                         >
@@ -559,10 +559,10 @@ const AlamatPenerima = () => {
                     <Box
                       w="100%"
                       d="flex"
-                      flexDir={{ base: "column", md: "row" }}
+                      flexDir={{ base: "column", lg: "row" }}
                       justifyContent="space-between"
                     >
-                      <Box w={{ base: "100%", md: "47.5%" }}>
+                      <Box w={{ base: "100%", lg: "47.5%" }}>
                         <Text
                           className="secondaryFont"
                           fontWeight="500"
@@ -647,8 +647,8 @@ const AlamatPenerima = () => {
                         </Select>
                       </Box>
                       <Box
-                        w={{ base: "100%", md: "47.5%" }}
-                        marginTop={{ base: "1rem", md: "0rem" }}
+                        w={{ base: "100%", lg: "47.5%" }}
+                        marginTop={{ base: "1rem", lg: "0rem" }}
                       >
                         <Text
                           className="secondaryFont"
@@ -749,9 +749,9 @@ const AlamatPenerima = () => {
                   bg="red.500"
                   color="white"
                   _hover={{ bg: "red.600" }}
-                  w={{ base: "100%", md: "10ch" }}
+                  w={{ base: "100%", lg: "10ch" }}
                   marginBottom="2rem"
-                  marginRight={{ base: "0rem", md: "1rem" }}
+                  marginRight={{ base: "0rem", lg: "1rem" }}
                   isDisabled={handleDisable()}
                   onClick={(e) => handleSubmit(e)}
                 >
@@ -760,7 +760,7 @@ const AlamatPenerima = () => {
               </Box>
             </Box>
           </Box>
-          <Box w={{ base: "100%", md: "25%" }}>
+          <Box w={{ base: "100%", lg: "25%" }}>
             <Box
               w="100%"
               border="1px solid"
@@ -769,8 +769,8 @@ const AlamatPenerima = () => {
               paddingX="1.5ch"
               paddingY="1ch"
               position="sticky"
-              top={{ base: "0px", md: "calc(71px + 5rem)" }}
-              marginBottom={{ base: "2rem", md: "6.5rem" }}
+              top={{ base: "0px", lg: "calc(71px + 5rem)" }}
+              marginBottom={{ base: "2rem", lg: "6.5rem" }}
             >
               <Text
                 className="primaryFont"
