@@ -575,173 +575,222 @@ const AlamatPenerima = () => {
                     </Box>
                   </TabPanel>
                   <TabPanel>
-                    <Box
-                      w="100%"
-                      d="flex"
-                      flexDir={{ base: "column", lg: "row" }}
-                      justifyContent="space-between"
-                    >
-                      <Box w={{ base: "100%", lg: "47.5%" }}>
-                        <Text
-                          className="secondaryFont"
-                          fontWeight="500"
-                          fontSize="0.875rem"
+                    <Box w="100%" d="flex" flexDir="column">
+                      <Box
+                        w="100%"
+                        d="flex"
+                        justifyContent="space-between"
+                        flexDir={{ base: "column", lg: "row" }}
+                      >
+                        <Box w={{ base: "100%", lg: "47.5%" }}>
+                          <Text
+                            className="secondaryFont"
+                            fontWeight="500"
+                            fontSize="0.875rem"
+                          >
+                            Nama Awal
+                          </Text>
+                          <Input
+                            placeholder="Masukkan nama awal penerima"
+                            marginTop="0.5rem"
+                            fontSize="sm"
+                            onChange={(e) =>
+                              setNamaAwalPenerima(e.target.value)
+                            }
+                          />
+                        </Box>
+                        <Box
+                          w={{ base: "100%", lg: "47.5%" }}
+                          marginTop={{ base: "1rem", lg: "0rem" }}
                         >
-                          Nama Awal
-                        </Text>
-                        <Input
-                          placeholder="Masukkan nama awal penerima"
-                          marginTop="0.5rem"
-                          fontSize="sm"
-                          onChange={(e) => setNamaAwalPenerima(e.target.value)}
-                        />
-                        <Text
-                          className="secondaryFont"
-                          fontWeight="500"
-                          fontSize="0.875rem"
-                          marginTop="1rem"
-                        >
-                          Negara
-                        </Text>
-                        <Select
-                          placeholder="Pilih negara penerima"
-                          marginTop="0.5rem"
-                          fontSize="sm"
-                          onChange={(e) => setNegaraPenerima(e.target.value)}
-                        >
-                          {negara &&
-                            negara.map((data, index) => {
-                              return (
-                                <option key={index} value={data}>
-                                  {data}
-                                </option>
-                              );
-                            })}
-                        </Select>
-                        <Text
-                          className="secondaryFont"
-                          fontWeight="500"
-                          fontSize="0.875rem"
-                          marginTop="1rem"
-                        >
-                          Kota Tujuan
-                        </Text>
-                        <Select
-                          placeholder="Pilih kota tujuan penerima"
-                          marginTop="0.5rem"
-                          fontSize="sm"
-                          onChange={(e) => setKotaPenerima(e.target.value)}
-                        >
-                          {kota &&
-                            kota.map((data, index) => {
-                              return (
-                                <option key={index} value={data}>
-                                  {data}
-                                </option>
-                              );
-                            })}
-                        </Select>
-                        <Text
-                          className="secondaryFont"
-                          fontWeight="500"
-                          fontSize="0.875rem"
-                          marginTop="1rem"
-                        >
-                          Kode Pos
-                        </Text>
-                        <Select
-                          placeholder="Pilih kode pos penerima"
-                          marginTop="0.5rem"
-                          fontSize="sm"
-                          onChange={(e) => setKodePosPenerima(e.target.value)}
-                        >
-                          {kodePos &&
-                            kodePos.map((data, index) => {
-                              return (
-                                <option key={index} value={data}>
-                                  {data}
-                                </option>
-                              );
-                            })}
-                        </Select>
+                          <Text
+                            className="secondaryFont"
+                            fontWeight="500"
+                            fontSize="0.875rem"
+                          >
+                            Nama Akhir
+                          </Text>
+                          <Input
+                            placeholder="Masukkan nama akhir penerima"
+                            marginTop="0.5rem"
+                            fontSize="sm"
+                            onChange={(e) =>
+                              setNamaAkhirPenerima(e.target.value)
+                            }
+                          />
+                        </Box>
                       </Box>
                       <Box
-                        w={{ base: "100%", lg: "47.5%" }}
+                        w="100%"
+                        d="flex"
+                        justifyContent="space-between"
+                        flexDir={{ base: "column", lg: "row" }}
                         marginTop={{ base: "1rem", lg: "0rem" }}
                       >
-                        <Text
-                          className="secondaryFont"
-                          fontWeight="500"
-                          fontSize="0.875rem"
+                        <Box
+                          w={{ base: "100%", lg: "47.5%" }}
+                          marginTop={{ base: "0rem", lg: "1rem" }}
                         >
-                          Nama Akhir
-                        </Text>
-                        <Input
-                          placeholder="Masukkan nama akhir penerima"
-                          marginTop="0.5rem"
-                          fontSize="sm"
-                          onChange={(e) => setNamaAkhirPenerima(e.target.value)}
-                        />
-                        <Text
-                          className="secondaryFont"
-                          fontWeight="500"
-                          fontSize="0.875rem"
-                          marginTop="1rem"
+                          <Text
+                            className="secondaryFont"
+                            fontWeight="500"
+                            fontSize="0.875rem"
+                          >
+                            Negara
+                          </Text>
+                          <Select
+                            placeholder="Pilih negara penerima"
+                            marginTop="0.5rem"
+                            fontSize="sm"
+                            onChange={(e) => setNegaraPenerima(e.target.value)}
+                          >
+                            {negara &&
+                              negara.map((data, index) => {
+                                return (
+                                  <option key={index} value={data}>
+                                    {data}
+                                  </option>
+                                );
+                              })}
+                          </Select>
+                        </Box>
+                        <Box w={{ base: "100%", lg: "47.5%" }} marginTop="1rem">
+                          <Text
+                            className="secondaryFont"
+                            fontWeight="500"
+                            fontSize="0.875rem"
+                          >
+                            Provinsi
+                          </Text>
+                          <Select
+                            placeholder="Pilih provinsi penerima"
+                            marginTop="0.5rem"
+                            fontSize="sm"
+                            onChange={(e) =>
+                              setProvinsiPenerima(e.target.value)
+                            }
+                          >
+                            {provinsi &&
+                              provinsi.map((data, index) => {
+                                return (
+                                  <option key={index} value={data}>
+                                    {data}
+                                  </option>
+                                );
+                              })}
+                          </Select>
+                        </Box>
+                      </Box>
+                      <Box
+                        w="100%"
+                        d="flex"
+                        justifyContent="space-between"
+                        flexDir={{ base: "column", lg: "row" }}
+                        marginTop={{ base: "1rem", lg: "0rem" }}
+                      >
+                        <Box
+                          w={{ base: "100%", lg: "47.5%" }}
+                          marginTop={{ base: "0rem", lg: "1rem" }}
                         >
-                          Provinsi
-                        </Text>
-                        <Select
-                          placeholder="Pilih provinsi penerima"
-                          marginTop="0.5rem"
-                          fontSize="sm"
-                          onChange={(e) => setProvinsiPenerima(e.target.value)}
+                          <Text
+                            className="secondaryFont"
+                            fontWeight="500"
+                            fontSize="0.875rem"
+                          >
+                            Kota Tujuan
+                          </Text>
+                          <Select
+                            placeholder="Pilih kota tujuan penerima"
+                            marginTop="0.5rem"
+                            fontSize="sm"
+                            onChange={(e) => setKotaPenerima(e.target.value)}
+                          >
+                            {kota &&
+                              kota.map((data, index) => {
+                                return (
+                                  <option key={index} value={data}>
+                                    {data}
+                                  </option>
+                                );
+                              })}
+                          </Select>
+                        </Box>
+                        <Box w={{ base: "100%", lg: "47.5%" }} marginTop="1rem">
+                          <Text
+                            className="secondaryFont"
+                            fontWeight="500"
+                            fontSize="0.875rem"
+                          >
+                            Kecamatan
+                          </Text>
+                          <Select
+                            placeholder="Pilih kecamatan penerima"
+                            marginTop="0.5rem"
+                            fontSize="sm"
+                            onChange={(e) =>
+                              setKecamatanPenerima(e.target.value)
+                            }
+                          >
+                            {kecamatan &&
+                              kecamatan.map((data, index) => {
+                                return (
+                                  <option key={index} value={data}>
+                                    {data}
+                                  </option>
+                                );
+                              })}
+                          </Select>
+                        </Box>
+                      </Box>
+                      <Box
+                        w="100%"
+                        d="flex"
+                        justifyContent="space-between"
+                        flexDir={{ base: "column", lg: "row" }}
+                        marginTop={{ base: "1rem", lg: "0rem" }}
+                      >
+                        <Box
+                          w={{ base: "100%", lg: "47.5%" }}
+                          marginTop={{ base: "0rem", lg: "1rem" }}
                         >
-                          {provinsi &&
-                            provinsi.map((data, index) => {
-                              return (
-                                <option key={index} value={data}>
-                                  {data}
-                                </option>
-                              );
-                            })}
-                        </Select>
-                        <Text
-                          className="secondaryFont"
-                          fontWeight="500"
-                          fontSize="0.875rem"
-                          marginTop="1rem"
-                        >
-                          Kecamatan
-                        </Text>
-                        <Select
-                          placeholder="Pilih kecamatan penerima"
-                          marginTop="0.5rem"
-                          fontSize="sm"
-                          onChange={(e) => setKecamatanPenerima(e.target.value)}
-                        >
-                          {kecamatan &&
-                            kecamatan.map((data, index) => {
-                              return (
-                                <option key={index} value={data}>
-                                  {data}
-                                </option>
-                              );
-                            })}
-                        </Select>
-                        <Text
-                          className="secondaryFont"
-                          fontWeight="500"
-                          fontSize="0.875rem"
-                          marginTop="1rem"
-                        >
-                          Ponsel
-                        </Text>
-                        <Input
-                          placeholder="Pilih nomor ponsel penerima"
-                          marginTop="0.5rem"
-                          fontSize="sm"
-                          onChange={(e) => setPonselPenerima(e.target.value)}
-                        />
+                          <Text
+                            className="secondaryFont"
+                            fontWeight="500"
+                            fontSize="0.875rem"
+                          >
+                            Kode Pos
+                          </Text>
+                          <Select
+                            placeholder="Pilih kode pos penerima"
+                            marginTop="0.5rem"
+                            fontSize="sm"
+                            onChange={(e) => setKodePosPenerima(e.target.value)}
+                          >
+                            {kodePos &&
+                              kodePos.map((data, index) => {
+                                return (
+                                  <option key={index} value={data}>
+                                    {data}
+                                  </option>
+                                );
+                              })}
+                          </Select>
+                        </Box>
+                        <Box w={{ base: "100%", lg: "47.5%" }} marginTop="1rem">
+                          <Text
+                            className="secondaryFont"
+                            fontWeight="500"
+                            fontSize="0.875rem"
+                          >
+                            Ponsel
+                          </Text>
+                          <Input
+                            placeholder="Pilih nomor ponsel penerima"
+                            marginTop="0.5rem"
+                            fontSize="sm"
+                            onChange={(e) => setPonselPenerima(e.target.value)}
+                          />
+                        </Box>
                       </Box>
                     </Box>
                     <Text
