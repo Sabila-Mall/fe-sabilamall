@@ -5,7 +5,7 @@ import {
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
-  DrawerCloseButton, useDisclosure, Button, Text, Flex, Link, useBreakpointValue,
+  DrawerCloseButton, Button, Text, Flex, Link, useBreakpointValue,
 } from "@chakra-ui/react";
 import React from "react";
 import QuickAddListItem from "./QuickAddListItem";
@@ -19,16 +19,12 @@ import QuickAddListItem from "./QuickAddListItem";
  * @param onDrawerClose callback function yang dipanggil untuk close modal [dapatkan dari useDisclosure()]
  */
 const QuickAdd = ({ products, isDrawerOpen, onDrawerClose }) => {
-  // const { isOpen, onOpen, onClose } = useDisclosure();
 
   const total = "99.999.999";
   const size = useBreakpointValue({ base: "full", md: "md" });
 
   return (
     <>
-      {/*<Button onClick={onOpen}>*/}
-      {/*  Open*/}
-      {/*</Button>*/}
       <Drawer
         isOpen={isDrawerOpen}
         placement="right"
@@ -37,9 +33,13 @@ const QuickAdd = ({ products, isDrawerOpen, onDrawerClose }) => {
       >
         <DrawerOverlay />
         <DrawerContent>
-          <DrawerCloseButton color={"gray.500"} />
+          <DrawerCloseButton
+            color={"gray.500"}
+            marginTop={"1rem"}
+            marginRight={{ base: "2rem", xl: "2.5rem" }}
+          />
           <DrawerHeader textColor={"gray.500"} px={"2rem"} paddingTop={6}>
-            <Text>Keranjang Saya</Text>
+            <Text className={"secondaryFont"}>Keranjang Saya</Text>
           </DrawerHeader>
 
           <DrawerBody px={"2rem"}>
@@ -48,8 +48,19 @@ const QuickAdd = ({ products, isDrawerOpen, onDrawerClose }) => {
 
           <DrawerFooter borderTopWidth={"1px"} flexDirection={"column"}>
             <Flex align={"center"} justify={"space-between"} w={"full"}>
-              <Text fontSize={"16px"} textColor={"gray.500"}>Total</Text>
-              <Text textColor={"orange.400"} fontSize={"20"} fontWeight={"bold"}>
+              <Text
+                className={"secondaryFont"}
+                fontSize={"16px"}
+                textColor={"gray.500"}
+              >
+                Total
+              </Text>
+              <Text
+                className={"primaryFont"}
+                textColor={"orange.400"}
+                fontSize={"20"}
+                fontWeight={"bold"}
+              >
                 Rp{total}
               </Text>
             </Flex>
