@@ -13,7 +13,7 @@ import {
   AccordionPanel,
   AccordionButton,
   InputLeftElement,
-  Link,
+  Link, useDisclosure,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
@@ -28,6 +28,9 @@ import {
 
 import { menuCategory, menuSidebar, icons } from "../constants/navbarConstant";
 import styles from "../styles/Navbar.module.scss";
+import QuickAdd from "./QuickAdd";
+
+import { productList } from "../constants/dummyData";
 
 const NavbarBottom = () => (
   <Box
@@ -49,6 +52,11 @@ const Navbar = () => {
   const [isSearched, setIsSearched] = useState(false);
   const [isMainMenu, setIsMainMenu] = useState(false);
   const [isCategoryMenu, setIsCategoryMenu] = useState(false);
+
+  const drawerDisclosure = useDisclosure();
+  const isDrawerOpen = drawerDisclosure.isOpen;
+  const onDrawerOpen = drawerDisclosure.onOpen;
+  const onDrawerClose = drawerDisclosure.onClose;
 
   const handleClickOverlay = () => {
     setIsMainMenu(false);
@@ -116,7 +124,7 @@ const Navbar = () => {
             <Icon as={IoNotifications} className={styles.navbarIcon} />
           </Link>
           <Link
-            href="/"
+            onClick={onDrawerOpen}
             display={{ base: "none", md: "block" }}
             ml={{ base: "8px", md: "20px", lg: "25px" }}
           >
@@ -323,6 +331,7 @@ const Navbar = () => {
         </VStack>
       </Box>
       <NavbarBottom />
+      <QuickAdd products={productList} onDrawerClose={onDrawerClose} isDrawerOpen={isDrawerOpen}/>
     </>
   );
 };
