@@ -53,7 +53,7 @@ const ProfileMobile = ({ sm }) => {
           secondaryAction={logoutHandler}
         />
         <NavbarProfile section="Akun Saya" />
-        <Box mt="20px" px="16px" pt="18px">
+        <Box mt="3.2rem" px="1rem" pt="1.12rem">
           <Flex alignItems="center" justifyContent="space-between">
             <Flex
               alignItems="center"
