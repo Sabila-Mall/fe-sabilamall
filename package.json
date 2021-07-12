@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^1.0.14",
     "@chakra-ui/react": "^1.6.0",
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.3.0",
@@ -19,8 +20,8 @@
     "react-dom": "17.0.2",
     "react-hook-form": "^7.10.0",
     "react-icons": "^4.2.0",
-    "react-star-ratings": "^2.3.0",
     "react-slick": "^0.28.1",
+    "react-star-ratings": "^2.3.0",
     "sass": "^1.32.12",
     "slick-carousel": "^1.8.1"
   },
