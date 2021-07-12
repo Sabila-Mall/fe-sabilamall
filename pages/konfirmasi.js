@@ -1,7 +1,17 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from "@chakra-ui/react";
 
 import { Form, SummaryBox } from "../components/ConfirmComponents";
 import { Layout } from "../components/Layout";
+
+const TextStyled = ({ text }) => (
+  <Text
+    fontWeight={700}
+    fontSize="1.25rem"
+    display={{ base: "none", lg: "block" }}
+  >
+    {text}
+  </Text>
+);
 
 const Konfirmasi = () => {
   const breadcrumbItems = [
@@ -19,12 +29,25 @@ const Konfirmasi = () => {
 
   return (
     <Layout sticky hasNavbar hasBreadCrumb breadCrumbItem={breadcrumbItems}>
-      <Box my="1.375rem">
-        <SummaryBox dataSummary={dataSummary} />
-      </Box>
-      <Box>
-        <Form />
-      </Box>
+      <Flex
+        className="primaryFont"
+        justifyContent="center"
+        flexDirection={{ base: "column", lg: "row-reverse" }}
+        pt={{ base: "0", lg: "4rem" }}
+      >
+        <Box my={{ base: "1.375rem", lg: "0" }} ml={{ base: "0", lg: "4rem" }}>
+          <TextStyled text="Detail Pesanan" />
+          <SummaryBox dataSummary={dataSummary} />
+          <Image
+            src="/images/mascot-confirm.svg"
+            display={{ base: "none", lg: "block" }}
+          />
+        </Box>
+        <Box>
+          <TextStyled text="Form Konfirmasi Bayar" />
+          <Form />
+        </Box>
+      </Flex>
     </Layout>
   );
 };

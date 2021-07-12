@@ -7,17 +7,20 @@ import {
   Box,
   Flex,
   Text,
+  Button,
 } from "@chakra-ui/react";
 
 export const SummaryBox = ({ dataSummary }) => (
   <Box
+    className="primaryFont"
     borderRadius=".75rem"
     border="1px solid #CBD5E0"
     pt="1.625rem"
     pb=".805rem"
     px=".75rem"
     fontSize={{ base: ".9rem", md: "1rem" }}
-    className="primaryFont"
+    width={{ base: "100%", lg: "23rem" }}
+    mt={{ base: "0", lg: ".75rem" }}
   >
     {dataSummary.map(({ info, value }) => (
       <Flex color="gray.500" key={info} justify="space-between" mb="0.82rem">
@@ -110,7 +113,11 @@ export const Form = () => {
   ];
 
   return (
-    <FormControl className="primaryFont">
+    <FormControl
+      as="form"
+      className="primaryFont"
+      width={{ base: "100%", lg: "23rem" }}
+    >
       <FormFieldGroup>
         <FormField
           textLabel="Metode Pembayaran"
@@ -152,6 +159,16 @@ export const Form = () => {
           type="textarea"
         />
       </FormFieldGroup>
+      <Flex justify="flex-end">
+        <Button
+          type="submit"
+          bg="orange.500"
+          color="white"
+          _focus={{ outline: "none" }}
+        >
+          Kirim Konfirmasi
+        </Button>
+      </Flex>
     </FormControl>
   );
 };
