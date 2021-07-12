@@ -10,18 +10,16 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Button,
 } from "@chakra-ui/react";
-import { useState, useRef } from "react";
-import { BiChevronRightCircle, BiChevronLeftCircle } from "react-icons/bi";
+import { useState } from "react";
 import {
   IoFilterOutline,
   IoArrowForwardOutline,
   IoChevronDown,
-  IoChevronBackCircle,
-  IoChevronForwardCircle,
 } from "react-icons/io5";
+import { IoArrowDown } from "react-icons/io5";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import Slider from "react-slick";
 
 import listSorting from "../constants/SortingProduct";
@@ -228,17 +226,17 @@ const LayoutProductList = ({ data, endTime, flashSaleRef }) => {
               </Box>
             ))}
           </Grid>
-          <Box
-            position="absolute"
-            right="159"
-            bottom="10"
-            color="black"
-            cursor="pointer"
-          >
-            <Text fontSize="16px" lineHeight="24px" fontWeight="500">
-              Lihat selengkapnya <Icon as={IoArrowForwardOutline} />
-            </Text>
-          </Box>
+          <Flex justify="center" mt="1rem">
+            <Button
+              bg="white"
+              border="2.5px solid #E53E3E"
+              borderRadius="29px"
+              color="red.500"
+              _focus={{ outline: "none" }}
+            >
+              Lihat Lebih Banyak <Icon as={IoArrowDown} ml=".5rem" />
+            </Button>
+          </Flex>
         </Box>
       </Box>
       <Box

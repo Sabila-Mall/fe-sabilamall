@@ -107,7 +107,7 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <Box as="main" pt={{ base: "51px", md: "71px" }}>
+      <Box as="main" pt={{ base: "51px", md: "71px" }} overflow="hidden">
         <Circle
           bg={inFlashSale ? "white" : "red.600"}
           size="40px"
