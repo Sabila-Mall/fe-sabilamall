@@ -12,7 +12,9 @@ import {
   AccordionItem,
   AccordionPanel,
   AccordionButton,
+  Flex,
   InputLeftElement,
+  Avatar,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -44,6 +46,39 @@ const NavbarBottom = () => (
   </Box>
 );
 
+const UserInfo = ({ useBorder }) => (
+  <Flex
+    borderBottom={useBorder && "1px solid #e2e8f0"}
+    align="center"
+    pb="1rem"
+    justify="flex-start"
+    w="70vw"
+    mt=".8rem"
+  >
+    <Image w="3.4rem" h="3.4rem" src="/images/navbar/eclipse.svg" />
+    <Box ml=".5rem" fontSize="14px">
+      <Text fontWeight="700">Nama Siapa Hayoo</Text>
+      <Flex>
+        <Text>D0101</Text>
+        <Flex
+          h="22px"
+          px=".5rem"
+          py=".5rem"
+          bg="gray.400"
+          align="center"
+          justify="center"
+          borderRadius="30px"
+          color="white"
+          fontSize="12px"
+          ml="2rem"
+        >
+          Reguler
+        </Flex>
+      </Flex>
+    </Box>
+  </Flex>
+);
+
 const Navbar = () => {
   const [isSearched, setIsSearched] = useState(false);
   const [isMainMenu, setIsMainMenu] = useState(false);
@@ -71,7 +106,10 @@ const Navbar = () => {
             as={IoMenu}
             className={styles.navbarIcon}
             display={{ base: "block", md: "none" }}
-            onClick={() => setIsMainMenu(!isMainMenu)}
+            onClick={() => {
+              setIsMainMenu(!isMainMenu);
+              setIsCategoryMenu(false);
+            }}
           />
           <Image
             src="/images/Navbar/logo.svg"
@@ -202,6 +240,7 @@ const Navbar = () => {
           </Heading>
         </Box>
         <VStack spacing={1} px="10px" pt="5px">
+          <UserInfo />
           {menuSidebar.menu.map((item) => {
             if (item.id === "kb") {
               return (
@@ -281,11 +320,16 @@ const Navbar = () => {
           </Heading>
         </Box>
         <VStack spacing={1} px="10px" pt="5px">
+          <UserInfo useBorder={false} />
           <Accordion defaultIndex={[0]} borderWidth="0" allowMultiple>
             {menuCategory.menu.map((item) => {
               return (
                 <AccordionItem key={item.id}>
-                  <AccordionButton borderWidth="0" borderColor="transparent">
+                  <AccordionButton
+                    borderWidth="0"
+                    borderColor="transparent"
+                    _focus={{ outline: "none" }}
+                  >
                     <Box className={styles.boxCategoryMenu}>
                       <Heading
                         className={styles.fontSizeSidebar}
