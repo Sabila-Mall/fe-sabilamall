@@ -95,7 +95,12 @@ const ProfileMobile = ({ sm }) => {
                 </Text>
               </Box>
             </Flex>
-            <ButtonStatusUser text="Reguler" />
+            <Box d="flex" flexDirection="column" alignItems="center">
+              <Text fontSize="14px" mb="4px">
+                123456
+              </Text>
+              <ButtonStatusUser text="Reguler" />
+            </Box>
           </Flex>
           <SMCard sm={sm} w="308px" />
           <Box display="flex" justifyContent="space-evenly" mt="20px">

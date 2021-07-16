@@ -94,7 +94,12 @@ export const CardProfile = ({ sm }) => {
         >
           messigoat@biyac.com
         </Text>
-        <ButtonStatusUser text="Reguler" mt="8px" />
+        <Box display="flex" alignItems="center" mt="8px">
+          <Text fontSize="0.9rem" mr="1rem">
+            123456
+          </Text>
+          <ButtonStatusUser text="Reguler" />
+        </Box>
       </Flex>
       <Box px="10px" mt="50px">
         <SMCard sm={sm} />
