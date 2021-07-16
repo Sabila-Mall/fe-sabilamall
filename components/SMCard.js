@@ -20,7 +20,7 @@ const SMCard = ({ width }) => {
           d="flex"
           flexDirection="row"
         >
-          <Box marginRight="0.6rem">
+          <Box marginRight={{ base: "0.3rem", sm: "0.6rem" }} ml="0.6rem">
             <Text
               color="red.600"
               className="primaryFont"
@@ -37,7 +37,7 @@ const SMCard = ({ width }) => {
               Rp. 100.000.000
             </Text>
           </Box>
-          <Box marginLeft="0.7rem">
+          <Box marginLeft={{ base: "0.3rem", sm: "0.7rem" }}>
             <Text
               color="red.600"
               className="primaryFont"
@@ -57,12 +57,16 @@ const SMCard = ({ width }) => {
         </Center>
         <Center w="40%" h="2rem">
           <Square
-            size="3rem"
-            marginRight="0.7rem"
+            size={{ base: "2.8rem", sm: "3rem" }}
+            marginRight={{ base: "0.3rem", sm: "0.7rem" }}
             flexDirection="column"
             cursor="pointer"
           >
-            <Icon as={IoIosAddCircle} color="red.600" boxSize="2rem" />
+            <Icon
+              as={IoIosAddCircle}
+              color="red.600"
+              boxSize={{ base: "1.8rem", sm: "2rem" }}
+            />
             <Text
               fontSize="0.75rem"
               className="secondaryFont"
@@ -73,8 +77,8 @@ const SMCard = ({ width }) => {
             </Text>
           </Square>
           <Square
-            size="3rem"
-            marginLeft="0.7rem"
+            size={{ base: "2.8rem", sm: "3rem" }}
+            marginLeft={{ base: "0.3rem", sm: "0.7rem" }}
             flexDirection="column"
             cursor="pointer"
           >
@@ -82,7 +86,7 @@ const SMCard = ({ width }) => {
               as={FaHistory}
               color="red.600"
               marginTop="0.1rem"
-              boxSize="1.8rem"
+              boxSize={{ base: "1.6rem", sm: "1.8rem" }}
               marginBottom="0.1rem"
             />
             <Text
@@ -104,6 +108,7 @@ const SMCard = ({ width }) => {
         borderBottomRightRadius="lg"
         d="flex"
         flexDirection="row"
+        justifyContent="center"
       >
         <Box
           w="40%"
@@ -130,7 +135,7 @@ const SMCard = ({ width }) => {
           </Circle>
         </Box>
         <Center
-          w="60%"
+          w={{ base: "50%", md: "60%" }}
           h="100%"
           borderBottomRightRadius="lg"
           flexDirection="column"
