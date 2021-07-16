@@ -76,6 +76,7 @@ const CardProduct = ({
       borderRadius="8px"
       bg="white"
       className={responsive ? "card-product-responsive" : "card-product"}
+      cursor="pointer"
     >
       <Box
         bg="white"

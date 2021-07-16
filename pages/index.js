@@ -10,6 +10,7 @@ import {
   FaPencilRuler,
   FaRobot,
   FaStethoscope,
+  FaHeadphonesAlt,
 } from "react-icons/fa";
 import { IoFastFood, IoGift, IoArrowUp } from "react-icons/io5";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
@@ -31,10 +32,10 @@ import {
 } from "../constants/dummyData";
 
 const Home = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const category = [
-    ["/images/fashionMuslim.svg", "Fashion Muslim"],
+    ["images/fashionMuslim.svg", "Fashion Muslim"],
     [FaBaby, "Fashion Bayi"],
     [BsWatch, "Aksesoris Fashion"],
     [BsBagFill, "Sepatu dan Tas"],
@@ -46,8 +47,8 @@ const Home = () => {
     [FaRobot, "Mainan"],
     [IoFastFood, "Makanan dan Minuman"],
     [FaStethoscope, "Kesehatan"],
-    [IoGift, "Serba-serbi"],
-    [IoGift, "Apalagi :("],
+    [FaHeadphonesAlt, "Elektronik"],
+    [IoGift, "Serba-Serbi"],
   ];
 
   const settings = {
@@ -246,6 +247,7 @@ const Home = () => {
                 flexDirection="column"
                 alignItems="center"
                 paddingTop={{ base: "2rem", xl: "0px" }}
+                mb="1rem"
               >
                 <Text
                   className="primaryFont"
@@ -300,7 +302,11 @@ const Home = () => {
           bg="white"
           data={dataDiscount}
         /> */}
-        <LayoutFlashSale data={dataFlashSale} headingText="Flash Sale" />
+        <LayoutFlashSale
+          data={dataFlashSale}
+          headingText="Flash Sale"
+          hasBackground={true}
+        />
         <LayoutFlashSale data={dataDiscount} headingText="Discount" />
         <LayoutProductList
           headingText="Semua Produk"

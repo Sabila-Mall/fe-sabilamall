@@ -4,7 +4,7 @@ import { IoIosAddCircle } from "react-icons/io";
 
 const SMCard = ({ width }) => {
   return (
-    <Box w={width} h="15rem" borderRadius="lg">
+    <Box pt="3.5rem" w={width} h="18.5rem" borderRadius="lg" mb="1rem">
       <Center
         bg="gray.50"
         w="100%"

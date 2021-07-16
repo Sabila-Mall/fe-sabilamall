@@ -53,7 +53,12 @@ const MenuSorting = () => (
   </Menu>
 );
 
-export const LayoutFlashSale = ({ data, flashSaleRef, headingText }) => {
+export const LayoutFlashSale = ({
+  data,
+  flashSaleRef,
+  headingText,
+  hasBackground,
+}) => {
   const [display, setDisplay] = useState("none");
   const { width } = useWindowSize();
   let ref = null;
@@ -70,20 +75,23 @@ export const LayoutFlashSale = ({ data, flashSaleRef, headingText }) => {
   return (
     <>
       <Box
+        pt="6"
+        pb="5"
         pl={px}
         position="relative"
         overflow="hidden"
         onMouseEnter={() => setDisplay("block")}
         onMouseLeave={() => setDisplay("none")}
-        cursor="pointer"
+        background={hasBackground ? "orange.400" : "none"}
       >
         <Heading
           className={styles.primaryFont}
-          color="black"
+          color={hasBackground ? "white" : "black"}
           fontWeight={700}
           fontSize={{ base: "16px", md: "20px", lg: "24px" }}
           lineHeight={{ base: "20.8px", md: "26px", lg: "31.2px" }}
           mb="2.3rem"
+          textShadow={hasBackground ? "0 0 2px white" : "none"}
         >
           {headingText}
         </Heading>
@@ -150,7 +158,13 @@ export const LayoutFlashSale = ({ data, flashSaleRef, headingText }) => {
           color="black"
           cursor="pointer"
         >
-          <Text fontSize="16px" lineHeight="24px" fontWeight="500">
+          <Text
+            color={hasBackground ? "white" : "black"}
+            fontSize="16px"
+            lineHeight="24px"
+            fontWeight="500"
+            pr={px}
+          >
             Lihat selengkapnya <Icon as={IoArrowForwardOutline} />
           </Text>
         </Flex>
