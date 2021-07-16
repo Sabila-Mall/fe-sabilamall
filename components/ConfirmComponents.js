@@ -164,6 +164,7 @@ export const Form = () => {
           type="submit"
           bg="orange.500"
           color="white"
+          _hover={{ bg: "orange.400" }}
           _focus={{ outline: "none" }}
         >
           Kirim Konfirmasi
