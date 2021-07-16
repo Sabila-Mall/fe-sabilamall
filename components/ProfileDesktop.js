@@ -90,7 +90,6 @@ const ProfileDesktop = ({ section, element }) => {
             fontSize="28px"
             lineHeight="33.6px"
             mt="28px"
-            ml="8px"
           >
             {section}
           </Heading>
