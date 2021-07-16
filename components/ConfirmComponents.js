@@ -9,6 +9,7 @@ import {
   Text,
   Button,
 } from "@chakra-ui/react";
+import { useForm } from "react-hook-form";
 
 export const SummaryBox = ({ dataSummary }) => (
   <Box
@@ -20,7 +21,9 @@ export const SummaryBox = ({ dataSummary }) => (
     px=".75rem"
     fontSize={{ base: ".9rem", md: "1rem" }}
     width={{ base: "100%", lg: "23rem" }}
+    maxWidth="23rem"
     mt={{ base: "0", lg: ".75rem" }}
+    mx="auto"
   >
     {dataSummary.map(({ info, value }) => (
       <Flex color="gray.500" key={info} justify="space-between" mb="0.82rem">
@@ -42,27 +45,53 @@ const FormFieldGroup = ({ textHead, children }) => (
   </Box>
 );
 
-const FormField = ({ textLabel, placeholder, type = "text", options }) => {
+const FormField = ({
+  textLabel,
+  placeholder,
+  type = "text",
+  options,
+  min = 1,
+  register,
+  id,
+}) => {
   let inputElement = null;
 
-  if (
-    type === "text" ||
-    type === "email" ||
-    type == "date" ||
-    type == "number"
-  ) {
+  if (type === "text" || type === "email") {
     inputElement = (
       <Input
         _focus={{ outline: "none" }}
         placeholder={placeholder}
         type={type}
+        required={true}
+        id={id}
+        {...register(id)}
+      />
+    );
+  }
+
+  if (type == "number" || type == "date") {
+    inputElement = (
+      <Input
+        _focus={{ outline: "none" }}
+        placeholder={placeholder}
+        type={type}
+        min={min}
+        required={true}
+        id={id}
+        {...register(id)}
       />
     );
   }
 
   if (type === "select") {
     inputElement = (
-      <Select placeholder={placeholder} _focus={{ outline: "none" }}>
+      <Select
+        placeholder={placeholder}
+        _focus={{ outline: "none" }}
+        required={true}
+        id={id}
+        {...register(id)}
+      >
         {options.map(({ text }) => (
           <option value={text} key={text}>
             {text}
@@ -78,6 +107,8 @@ const FormField = ({ textLabel, placeholder, type = "text", options }) => {
         placeholder={placeholder}
         size="md"
         _focus={{ outline: "none" }}
+        id={id}
+        {...register(id)}
       />
     );
   }
@@ -98,6 +129,15 @@ const FormField = ({ textLabel, placeholder, type = "text", options }) => {
 };
 
 export const Form = () => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => console.log(data);
+
   const methods = [
     { text: "Metode 1" },
     { text: "Metode 2" },
@@ -112,17 +152,29 @@ export const Form = () => {
     { text: "BI" },
   ];
 
+  let today = new Date();
+  const dd = String(today.getDate()).padStart(2, "0");
+  const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+  const yyyy = today.getFullYear();
+
+  today = yyyy + "-" + mm + "-" + dd;
+
   return (
     <FormControl
       as="form"
       className="primaryFont"
+      mx="auto"
+      maxWidth="23rem"
       width={{ base: "100%", lg: "23rem" }}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <FormFieldGroup>
         <FormField
           textLabel="Metode Pembayaran"
           type="select"
           options={methods}
+          id="metode"
+          register={register}
         />
       </FormFieldGroup>
       <FormFieldGroup textHead="Pengirim">
@@ -130,10 +182,14 @@ export const Form = () => {
           textLabel="Pilih Bank Pengirim"
           type="select"
           options={banks}
+          id="bankPengirim"
+          register={register}
         />
         <FormField
           textLabel="Nama Pengirim"
           placeholder="Masukkan nama awal penerima"
+          id="nama"
+          register={register}
         />
       </FormFieldGroup>
       <FormFieldGroup textHead="Penerima">
@@ -142,21 +198,30 @@ export const Form = () => {
           type="select"
           placeholder="Pilih Bank Tujuan Transfer"
           options={banks}
+          id="bankTujuan"
+          register={register}
         />
         <FormField
           textLabel="Tanggal Transfer"
           placeholder="Pilih tanggal transfer"
           type="date"
+          min={today}
+          id="tanggalTransfer"
+          register={register}
         />
         <FormField
           textLabel="Nominal Transfer"
           placeholder="Masukkan nominal transfer"
           type="number"
+          id="nominalTransfer"
+          register={register}
         />
         <FormField
           textLabel="Catatan"
           placeholder="Masukkan alamat penerima"
           type="textarea"
+          id="catatan"
+          register={register}
         />
       </FormFieldGroup>
       <Flex justify="flex-end">
