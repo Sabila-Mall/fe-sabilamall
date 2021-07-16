@@ -56,7 +56,7 @@ const FormField = ({
 }) => {
   let inputElement = null;
 
-  if (type === "text" || type === "email") {
+  if (type === "text" || type === "email" || type === "date") {
     inputElement = (
       <Input
         _focus={{ outline: "none" }}
@@ -69,7 +69,7 @@ const FormField = ({
     );
   }
 
-  if (type == "number" || type == "date") {
+  if (type == "number") {
     inputElement = (
       <Input
         _focus={{ outline: "none" }}
@@ -152,12 +152,12 @@ export const Form = () => {
     { text: "BI" },
   ];
 
-  let today = new Date();
-  const dd = String(today.getDate()).padStart(2, "0");
-  const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-  const yyyy = today.getFullYear();
+  // let today = new Date();
+  // const dd = String(today.getDate()).padStart(2, "0");
+  // const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+  // const yyyy = today.getFullYear();
 
-  today = yyyy + "-" + mm + "-" + dd;
+  // today = yyyy + "-" + mm + "-" + dd;
 
   return (
     <FormControl
@@ -205,7 +205,6 @@ export const Form = () => {
           textLabel="Tanggal Transfer"
           placeholder="Pilih tanggal transfer"
           type="date"
-          min={today}
           id="tanggalTransfer"
           register={register}
         />
