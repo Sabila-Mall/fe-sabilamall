@@ -147,7 +147,16 @@ const ProfileMobile = ({ sm }) => {
                 </Text>
               </Box>
             ))}
-            <StackDivider borderColor="gray.200" />
+            <Text
+              textAlign="center"
+              fontSize="12px"
+              fontFamily="Inter"
+              fontWeight="500"
+              color="gray.400"
+              mt="1.2rem"
+            >
+              Sabila Mall v9.99.99
+            </Text>
           </VStack>
         </Box>
       </Box>
