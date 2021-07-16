@@ -10,6 +10,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
+  Button,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import {
@@ -17,10 +18,16 @@ import {
   IoArrowForwardOutline,
   IoChevronDown,
 } from "react-icons/io5";
+import { IoArrowDown } from "react-icons/io5";
+import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+import Slider from "react-slick";
 
 import listSorting from "../constants/SortingProduct";
+import { useWindowSize } from "../hooks/useWindowSize";
 import styles from "../styles/Product.module.scss";
 import CardProduct from "./CardProduct";
+
+const px = [".7rem", "3rem", "2rem", "2rem", "5rem", "7.5rem"];
 
 const MenuSorting = () => (
   <Menu display={{ base: "none", md: "block" }}>
@@ -46,101 +53,216 @@ const MenuSorting = () => (
   </Menu>
 );
 
-const LayoutProductList = ({ headingText, bg, data, endTime }) => {
-  let templateColumns = `repeat(${data.length}, 1fr)`;
-  const isFlashSale = headingText.toLowerCase() === "flash sale";
-  const isDiscount = headingText.toLowerCase() === "discount";
-  const isAllProduct = headingText.toLowerCase() === "semua produk";
+export const LayoutFlashSale = ({
+  data,
+  flashSaleRef,
+  headingText,
+  hasBackground,
+}) => {
+  const [display, setDisplay] = useState("none");
+  const { width } = useWindowSize();
+  let ref = null;
 
-  const [showOverlay, setShowOverlay] = useState(false);
-
-  if (headingText.toLowerCase() === "semua produk")
-    templateColumns = "repeat(2, 1fr)";
+  const settings = {
+    arrows: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: width >= 768 ? width / 232 : width / 180,
+    slidesToScroll: 3,
+    initialSlid: 0,
+  };
 
   return (
     <>
-      <Box bg={bg} pt="32px" pb="100px" overflowX="hidden" position="relative">
-        <Box px={[".7rem", "3rem", "2rem", "2rem", "5rem", "7.5rem"]}>
-          {isAllProduct && (
-            <Divider
-              orientation="horizontal"
-              w="100%"
-              colorScheme="gray"
-              mb="30px"
-            />
-          )}
+      <Box
+        pt="6"
+        pb="5"
+        pl={px}
+        position="relative"
+        overflow="hidden"
+        onMouseEnter={() => setDisplay("block")}
+        onMouseLeave={() => setDisplay("none")}
+        background={hasBackground ? "orange.400" : "none"}
+      >
+        <Heading
+          className={styles.primaryFont}
+          color={hasBackground ? "white" : "black"}
+          fontWeight={700}
+          fontSize={{ base: "16px", md: "20px", lg: "24px" }}
+          lineHeight={{ base: "20.8px", md: "26px", lg: "31.2px" }}
+          mb="2.3rem"
+          textShadow={hasBackground ? "0 0 2px white" : "none"}
+        >
+          {headingText}
+        </Heading>
+        <Box
+          onClick={() => {
+            if (ref !== null) {
+              ref.slickPrev();
+            }
+          }}
+          position="absolute"
+          zIndex={5}
+          top="50%"
+          transform="translateX(0.4em)"
+          cursor="pointer"
+          display={display}
+        >
+          <Box
+            borderRadius="50%"
+            bg="white"
+            boxShadow="0px 2px 6px rgba(0, 0, 0, 0.25);"
+          >
+            <MdChevronLeft size="2em" />
+          </Box>
+        </Box>
+        <Box overflow="hidden">
+          <Slider
+            ref={(node) => {
+              ref = node;
+            }}
+            {...settings}
+          >
+            {data.map((item) => (
+              <Box key={item.id}>
+                <CardProduct key={item.id} {...item} />
+              </Box>
+            ))}
+          </Slider>
+        </Box>
+        <Box
+          onClick={() => {
+            if (ref !== null) {
+              ref.slickNext();
+            }
+          }}
+          position="absolute"
+          zIndex={5}
+          right={6}
+          top="50%"
+          cursor="pointer"
+          display={display}
+        >
+          <Box
+            borderRadius="50%"
+            bg="white"
+            boxShadow="0px 2px 6px rgba(0, 0, 0, 0.25);"
+          >
+            <MdChevronRight size="2em" />
+          </Box>
+        </Box>
+        <Flex
+          justify="flex-end"
+          mt="1rem"
+          mr="2rem"
+          color="black"
+          cursor="pointer"
+        >
+          <Text
+            color={hasBackground ? "white" : "black"}
+            fontSize="16px"
+            lineHeight="24px"
+            fontWeight="500"
+            pr={px}
+          >
+            Lihat selengkapnya <Icon as={IoArrowForwardOutline} />
+          </Text>
+        </Flex>
+      </Box>
+      <Divider
+        orientation="horizontal"
+        w="100%"
+        colorScheme="gray"
+        my="1.5rem"
+      />
+    </>
+  );
+};
+
+const LayoutProductList = ({ data, endTime, flashSaleRef }) => {
+  const [showOverlay, setShowOverlay] = useState(false);
+
+  return (
+    <>
+      <Box
+        bg="white"
+        pb="100px"
+        overflowX="hidden"
+        position="relative"
+        ref={flashSaleRef}
+      >
+        <Box px={px}>
           <Box
             className={styles.secondaryFont}
             mb="32px"
-            display={isAllProduct ? "flex" : "block"}
+            display="flex"
             alignItems="center"
             justifyContent="space-between"
             pr={{ lg: "40px" }}
           >
             <Heading
               className={styles.primaryFont}
-              color={bg === "white" ? "black" : "white"}
+              color={"black"}
               fontWeight={700}
               fontSize={{ base: "16px", md: "20px", lg: "24px" }}
               lineHeight={{ base: "20.8px", md: "26px", lg: "31.2px" }}
-              mb={isFlashSale && { base: "8px" }}
+              // px={px}
             >
-              {headingText}
+              Semua Produk
             </Heading>
-            {isAllProduct && (
-              <Icon
-                onClick={() => setShowOverlay(!showOverlay)}
-                as={IoFilterOutline}
-                fontSize="24px"
-                display={{ base: "block", md: "none", lg: "none" }}
-              />
-            )}
-            {isAllProduct && <MenuSorting />}
+
+            <Icon
+              onClick={() => setShowOverlay(!showOverlay)}
+              as={IoFilterOutline}
+              fontSize="24px"
+              display={{ base: "block", md: "none", lg: "none" }}
+            />
+
+            <MenuSorting />
           </Box>
           <Grid
-            w={!isAllProduct ? "100vw" : "100%"}
-            overflowX="auto"
-            templateColumns={
-              isDiscount || isFlashSale
-                ? "repeat(800,1fr)"
-                : [
-                    templateColumns,
-                    "repeat(3,1fr)",
-                    "repeat(4,1fr)",
-                    "repeat(5,1fr)",
-                    "repeat(6,1fr)",
-                  ]
-            }
+            w="100%"
+            position="relative"
+            templateColumns={[
+              "repeat(2,1fr)",
+              "repeat(3,1fr)",
+              "repeat(4,1fr)",
+              "repeat(5,1fr)",
+              "repeat(7,1fr)",
+              "repeat(8, 1fr)",
+            ]}
             columnGap={2}
             rowGap={4}
           >
-            {data.map((item) => (
-              <CardProduct {...item} key={item.id} />
+            {data.map((item, index) => (
+              <Box key={item.id}>
+                <CardProduct {...item} responsive={true} />
+              </Box>
             ))}
           </Grid>
-          <Box
-            position="absolute"
-            right="159"
-            bottom="10"
-            color={isDiscount ? "black" : "white"}
-            cursor="pointer"
-          >
-            <Text fontSize="16px" lineHeight="24px" fontWeight="500">
-              Lihat selengkapnya <Icon as={IoArrowForwardOutline} />
-            </Text>
-          </Box>
+          <Flex justify="center" mt="1rem">
+            <Button
+              bg="white"
+              border="2.5px solid #E53E3E"
+              borderRadius="29px"
+              color="red.500"
+              _focus={{ outline: "none" }}
+            >
+              Lihat Lebih Banyak <Icon as={IoArrowDown} ml=".5rem" />
+            </Button>
+          </Flex>
         </Box>
       </Box>
       <Box
         w="100vw"
+        h={showOverlay ? "280px" : "0"}
         pl="16px"
         position="fixed"
         bg="white"
         zIndex="10"
         bottom="0"
         pt="8px"
-        h={showOverlay ? "auto" : "0"}
-        transition="height 2s linear 1s"
+        transition="all .2s linear"
         display={{ base: "block", md: "none" }}
       >
         {listSorting.map((item) => (
@@ -155,6 +277,17 @@ const LayoutProductList = ({ headingText, bg, data, endTime }) => {
           </Text>
         ))}
       </Box>
+      {showOverlay && (
+        <Box
+          w="100vw"
+          h="100vh"
+          position="fixed"
+          zIndex="9"
+          bottom="0"
+          bg="transparent"
+          onClick={() => setShowOverlay(false)}
+        ></Box>
+      )}
     </>
   );
 };
