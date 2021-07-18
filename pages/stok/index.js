@@ -10,6 +10,7 @@ import {
   InputLeftElement,
   Input,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import { FiChevronRight, FiSearch } from "react-icons/fi";
 
 import Footer from "../../components/Footer";
@@ -18,6 +19,9 @@ import StokItem from "../../components/StokItem";
 import { supplier, stocks } from "../../constants/stokData";
 
 const Stok = () => {
+  const [supplierFilter, setSupplierFilter] = useState("");
+  const [nameSearch, setNameSearch] = useState("");
+
   return (
     <>
       <Navbar />
@@ -66,7 +70,11 @@ const Stok = () => {
             flexDir="row"
             justifyContent="space-between"
           >
-            <Select placeholder="Cari supplier" w="30%">
+            <Select
+              placeholder="Cari supplier"
+              w="30%"
+              onChange={(e) => setSupplierFilter(e.target.value)}
+            >
               {supplier &&
                 supplier.map((child) => {
                   return (
@@ -78,7 +86,11 @@ const Stok = () => {
             </Select>
             <InputGroup w="69%">
               <InputLeftElement children={<FiSearch color="red.500" />} />
-              <Input placeholder="Cari produk" fontSize="sm" />
+              <Input
+                placeholder="Cari produk"
+                fontSize="sm"
+                onChange={(e) => setNameSearch(e.target.value)}
+              />
             </InputGroup>
           </Box>
           <Box
@@ -91,15 +103,22 @@ const Stok = () => {
           >
             {stocks &&
               stocks.map((stock) => {
-                return (
-                  <StokItem
-                    img={stock.img}
-                    nama={stock.nama}
-                    supplier={stock.supplier}
-                    tag={stock.tag}
-                    variant={stock.variant}
-                  />
-                );
+                if (
+                  stock.nama.toLowerCase().includes(nameSearch.toLowerCase()) &&
+                  stock.supplier
+                    .toLowerCase()
+                    .includes(supplierFilter.toLowerCase())
+                ) {
+                  return (
+                    <StokItem
+                      img={stock.img}
+                      nama={stock.nama}
+                      supplier={stock.supplier}
+                      tag={stock.tag}
+                      variant={stock.variant}
+                    />
+                  );
+                }
               })}
           </Box>
         </Box>

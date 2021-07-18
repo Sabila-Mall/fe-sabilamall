@@ -4,7 +4,7 @@ export let stocks = [
     img:
       "https://www.planetware.com/wpimages/2020/02/france-in-pictures-beautiful-places-to-photograph-eiffel-tower.jpg",
     nama: "Nama Produk Croissant Tiramisu",
-    supplier: "Ini Nama Vendor Suppliernya",
+    supplier: "Supplier A",
     tag: "Reguler",
     variant: [
       {
@@ -27,8 +27,8 @@ export let stocks = [
   {
     img:
       "https://www.planetware.com/wpimages/2020/02/france-in-pictures-beautiful-places-to-photograph-eiffel-tower.jpg",
-    nama: "Nama Produk Croissant Tiramisu",
-    supplier: "Ini Nama Vendor Suppliernya",
+    nama: "Bukan Nama Produk Croissant Tiramisu",
+    supplier: "Supplier B",
     tag: "Reguler",
     variant: [
       {
