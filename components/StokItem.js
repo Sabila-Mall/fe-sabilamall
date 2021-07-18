@@ -14,7 +14,11 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { BsClock } from "react-icons/bs";
-import { IoCartOutline, IoFileTrayStackedOutline } from "react-icons/io5";
+import {
+  IoCartOutline,
+  IoFileTrayStackedOutline,
+  IoFileTrayStacked,
+} from "react-icons/io5";
 
 const StokItem = ({ img, nama, supplier, tag, variant }) => {
   return (
@@ -63,8 +67,8 @@ const StokItem = ({ img, nama, supplier, tag, variant }) => {
           w={{ base: "100%", md: "50%" }}
           pt="0.5rem"
           pb="0.8rem"
-          pr={{ base: "0.5rem", md: "0.5rem", lg: "0rem" }}
-          pl={{ base: "0.5rem", md: "0.5rem", lg: "0rem" }}
+          pr={{ base: "0.5rem", lg: "0rem" }}
+          pl={{ base: "0.5rem", lg: "0rem" }}
         >
           <Accordion allowToggle w="100%">
             <AccordionItem borderBottom="0px">
@@ -79,7 +83,10 @@ const StokItem = ({ img, nama, supplier, tag, variant }) => {
                       flexDir="row"
                       alignItems="center"
                     >
-                      <IoFileTrayStackedOutline size="1.5rem" />
+                      {!isExpanded && (
+                        <IoFileTrayStackedOutline size="1.5rem" />
+                      )}
+                      {isExpanded && <IoFileTrayStacked size="1.5rem" />}
                       <Text ml="0.9ch">Varian Produk</Text>
                     </Box>
                     <AccordionIcon />
@@ -188,7 +195,7 @@ const StokItem = ({ img, nama, supplier, tag, variant }) => {
             colorScheme="orange"
             className="primaryFont"
             w="7.5ch"
-            mr={{ base: "0.4rem", md: "0rem" }}
+            mr={{ base: "0.5rem", md: "0rem" }}
           >
             Beli
           </Button>
