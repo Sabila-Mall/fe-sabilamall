@@ -39,7 +39,7 @@ const Stok = () => {
           maxW="1536px"
           mt="2rem"
         >
-          <Box w={{ base: "90%", lg: "80%" }}>
+          <Box w={{ base: "90%", md: "80%" }}>
             <Breadcrumb
               spacing="8px"
               separator={<FiChevronRight color="gray.500" />}
@@ -66,15 +66,15 @@ const Stok = () => {
             </Breadcrumb>
           </Box>
           <Box
-            w={{ base: "90%", lg: "80%" }}
+            w={{ base: "90%", md: "80%" }}
             marginTop="2rem"
             d="flex"
-            flexDir="row"
+            flexDir={{ base: "column", md: "row" }}
             justifyContent="space-between"
           >
             <Select
               placeholder="Cari supplier"
-              w="30%"
+              w={{ base: "100%", md: "30%" }}
               onChange={(e) => setSupplierFilter(e.target.value)}
             >
               {supplier &&
@@ -86,7 +86,10 @@ const Stok = () => {
                   );
                 })}
             </Select>
-            <InputGroup w="69%">
+            <InputGroup
+              w={{ base: "100%", md: "69%" }}
+              mt={{ base: "1rem", md: "0rem" }}
+            >
               <InputLeftElement children={<FiSearch color="red.500" />} />
               <Input
                 placeholder="Cari produk"
@@ -97,7 +100,7 @@ const Stok = () => {
           </Box>
           <Box
             mb="2rem"
-            w={{ base: "90%", lg: "80%" }}
+            w={{ base: "90%", md: "80%" }}
             marginTop="1rem"
             d="flex"
             flexDir="column"
@@ -134,7 +137,12 @@ const Stok = () => {
                 borderRadius="md"
               >
                 <Img src="/images/9.svg" boxSize="20rem" />
-                <Text color="gray.500" w="50ch" textAlign="center">
+                <Text
+                  color="gray.500"
+                  w={{ base: "28ch", md: "50ch" }}
+                  textAlign="center"
+                  className="secondaryFont"
+                >
                   Silakan pilih supplier atau cari berdasarkan nama produk untuk
                   melihat data stok yang tersedia.
                 </Text>

@@ -19,10 +19,17 @@ import { IoCartOutline, IoFileTrayStackedOutline } from "react-icons/io5";
 const StokItem = ({ img, nama, supplier, tag, variant }) => {
   return (
     <>
-      <Flex w="100%" bg="gray.100" borderRadius="md" boxShadow="md" mb="1rem">
-        <Flex w="40%" padding="0.8rem">
+      <Flex
+        w="100%"
+        bg="gray.100"
+        borderRadius="md"
+        boxShadow="md"
+        mb="1rem"
+        flexDir={{ base: "column", md: "row" }}
+      >
+        <Flex w={{ base: "100%", md: "40%" }} padding="0.8rem">
           <Img src={img} w="6rem" h="6rem" borderRadius="md" />
-          <Box className="secondaryFont" marginLeft="0.75rem">
+          <Box className="secondaryFont" marginLeft="0.75rem" w="100%">
             <Text color="gray.700" fontWeight="100" fontSize="1.125rem">
               {nama}
             </Text>
@@ -45,7 +52,7 @@ const StokItem = ({ img, nama, supplier, tag, variant }) => {
             </Tag>
           </Box>
         </Flex>
-        <Flex w="50%" pt="0.5rem" pb="0.8rem">
+        <Flex w={{ base: "100%", md: "50%" }} pt="0.5rem" pb="0.8rem">
           <Accordion allowToggle w="100%">
             <AccordionItem borderBottom="0px">
               {({ isExpanded }) => (
@@ -69,6 +76,7 @@ const StokItem = ({ img, nama, supplier, tag, variant }) => {
                     borderTopColor="gray.200"
                     borderBottom="1px"
                     borderBottomColor="gray.500"
+                    mx={{ base: "0.4rem", md: "0rem" }}
                     d="flex"
                     flexDir="row"
                     color="gray.500"
@@ -80,10 +88,10 @@ const StokItem = ({ img, nama, supplier, tag, variant }) => {
                     <Box w="40%">
                       <Text>Warna</Text>
                     </Box>
-                    <Box w="50%">
+                    <Box w={{ base: "40%", md: "50%" }}>
                       <Text>Ukuran</Text>
                     </Box>
-                    <Box w="10%">
+                    <Box w={{ base: "20%", md: "10%" }}>
                       <Text>Stok</Text>
                     </Box>
                   </Box>
@@ -92,6 +100,7 @@ const StokItem = ({ img, nama, supplier, tag, variant }) => {
                     color="gray.500"
                     className="secondaryFont"
                     fontSize="0.875rem"
+                    mx={{ base: "0.4rem", md: "0rem" }}
                   >
                     {variant &&
                       variant.map((vari) => {
@@ -113,7 +122,7 @@ const StokItem = ({ img, nama, supplier, tag, variant }) => {
                                   </Text>
                                 )}
                               </Box>
-                              <Box w="50%">
+                              <Box w={{ base: "40%", md: "50%" }}>
                                 {vari.ukuran.length !== 0 &&
                                   vari.ukuran.map((ukur) => {
                                     return <Text>{ukur}</Text>;
@@ -124,7 +133,7 @@ const StokItem = ({ img, nama, supplier, tag, variant }) => {
                                   </Text>
                                 )}
                               </Box>
-                              <Box w="10%">
+                              <Box w={{ base: "20%", md: "10%" }}>
                                 {vari.stok &&
                                   vari.stok.map((stokk) => {
                                     if (stokk !== 0) {
@@ -145,6 +154,7 @@ const StokItem = ({ img, nama, supplier, tag, variant }) => {
                     fontSize="0.875rem"
                     className="secondaryFont"
                     cursor="pointer"
+                    mx={{ base: "0.4rem", md: "0rem" }}
                   >
                     {isExpanded ? "Sembunyikan" : "Lihat varian produk"}
                   </Text>
@@ -153,8 +163,19 @@ const StokItem = ({ img, nama, supplier, tag, variant }) => {
             </AccordionItem>
           </Accordion>
         </Flex>
-        <Flex w="10%" d="flex" justifyContent="center" pt="0.6rem">
-          <Button colorScheme="orange" className="primaryFont" w="7.5ch">
+        <Flex
+          w={{ base: "100%", md: "10%" }}
+          d="flex"
+          justifyContent={{ base: "flex-end", md: "center" }}
+          pt={{ base: "0rem", md: "0.6rem" }}
+          mb={{ base: "0.4rem", md: "0rem" }}
+        >
+          <Button
+            colorScheme="orange"
+            className="primaryFont"
+            w="7.5ch"
+            mr={{ base: "0.4rem", md: "0rem" }}
+          >
             Beli
           </Button>
         </Flex>
