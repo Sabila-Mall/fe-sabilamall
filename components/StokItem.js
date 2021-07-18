@@ -30,10 +30,17 @@ const StokItem = ({ img, nama, supplier, tag, variant }) => {
         <Flex w={{ base: "100%", md: "40%" }} padding="0.8rem">
           <Img src={img} w="6rem" h="6rem" borderRadius="md" />
           <Box className="secondaryFont" marginLeft="0.75rem" w="100%">
-            <Text color="gray.700" fontWeight="100" fontSize="1.125rem">
+            <Text
+              color="gray.700"
+              fontWeight="100"
+              fontSize={{ base: "1.125rem", md: "1rem", lg: "1.125rem" }}
+            >
               {nama}
             </Text>
-            <Text color="gray.600" fontSize="1rem">
+            <Text
+              color="gray.600"
+              fontSize={{ base: "1rem", md: "0.8rem", lg: "1rem" }}
+            >
               {supplier}
             </Text>
             <Tag
@@ -52,7 +59,13 @@ const StokItem = ({ img, nama, supplier, tag, variant }) => {
             </Tag>
           </Box>
         </Flex>
-        <Flex w={{ base: "100%", md: "50%" }} pt="0.5rem" pb="0.8rem">
+        <Flex
+          w={{ base: "100%", md: "50%" }}
+          pt="0.5rem"
+          pb="0.8rem"
+          pr={{ base: "0.5rem", md: "0.5rem", lg: "0rem" }}
+          pl={{ base: "0.5rem", md: "0.5rem", lg: "0rem" }}
+        >
           <Accordion allowToggle w="100%">
             <AccordionItem borderBottom="0px">
               {({ isExpanded }) => (
@@ -88,10 +101,10 @@ const StokItem = ({ img, nama, supplier, tag, variant }) => {
                     <Box w="40%">
                       <Text>Warna</Text>
                     </Box>
-                    <Box w={{ base: "40%", md: "50%" }}>
+                    <Box w={{ base: "40%", lg: "50%" }}>
                       <Text>Ukuran</Text>
                     </Box>
-                    <Box w={{ base: "20%", md: "10%" }}>
+                    <Box w={{ base: "20%", lg: "10%" }}>
                       <Text>Stok</Text>
                     </Box>
                   </Box>
@@ -122,7 +135,7 @@ const StokItem = ({ img, nama, supplier, tag, variant }) => {
                                   </Text>
                                 )}
                               </Box>
-                              <Box w={{ base: "40%", md: "50%" }}>
+                              <Box w={{ base: "40%", lg: "50%" }}>
                                 {vari.ukuran.length !== 0 &&
                                   vari.ukuran.map((ukur) => {
                                     return <Text>{ukur}</Text>;
@@ -133,7 +146,7 @@ const StokItem = ({ img, nama, supplier, tag, variant }) => {
                                   </Text>
                                 )}
                               </Box>
-                              <Box w={{ base: "20%", md: "10%" }}>
+                              <Box w={{ base: "20%", lg: "10%" }}>
                                 {vari.stok &&
                                   vari.stok.map((stokk) => {
                                     if (stokk !== 0) {
@@ -169,6 +182,7 @@ const StokItem = ({ img, nama, supplier, tag, variant }) => {
           justifyContent={{ base: "flex-end", md: "center" }}
           pt={{ base: "0rem", md: "0.6rem" }}
           mb={{ base: "0.4rem", md: "0rem" }}
+          pr={{ base: "0rem", md: "0.5rem", lg: "0rem" }}
         >
           <Button
             colorScheme="orange"
