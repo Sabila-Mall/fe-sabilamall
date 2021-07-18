@@ -9,6 +9,8 @@ import {
   InputGroup,
   InputLeftElement,
   Input,
+  Flex,
+  Img,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { FiChevronRight, FiSearch } from "react-icons/fi";
@@ -101,7 +103,8 @@ const Stok = () => {
             flexDir="column"
             justifyContent="space-between"
           >
-            {stocks &&
+            {!(nameSearch === "" && supplierFilter === "") &&
+              stocks &&
               stocks.map((stock) => {
                 if (
                   stock.nama.toLowerCase().includes(nameSearch.toLowerCase()) &&
@@ -120,6 +123,23 @@ const Stok = () => {
                   );
                 }
               })}
+            {nameSearch === "" && supplierFilter === "" && (
+              <Flex
+                border="1px"
+                borderColor="gray.300"
+                flexDir="column"
+                alignItems="center"
+                justifyContent="center"
+                py="1.5rem"
+                borderRadius="md"
+              >
+                <Img src="/images/9.svg" boxSize="20rem" />
+                <Text color="gray.500" w="50ch" textAlign="center">
+                  Silakan pilih supplier atau cari berdasarkan nama produk untuk
+                  melihat data stok yang tersedia.
+                </Text>
+              </Flex>
+            )}
           </Box>
         </Box>
       </Box>
