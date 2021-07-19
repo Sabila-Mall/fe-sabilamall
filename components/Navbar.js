@@ -83,6 +83,7 @@ const Navbar = () => {
   const [isSearched, setIsSearched] = useState(false);
   const [isMainMenu, setIsMainMenu] = useState(false);
   const [isCategoryMenu, setIsCategoryMenu] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleClickOverlay = () => {
     setIsMainMenu(false);
@@ -93,15 +94,11 @@ const Navbar = () => {
     <>
       <Box
         className={styles.navbarTop}
-        px={{ md: "40px", lg: "80px", xl: "120px" }}
+        px={{ base: "1.5rem", md: "5px", lg: "35px", xl: "70px" }}
         h={{ base: "50px", md: "70px" }}
         zIndex={isSearched ? "5" : "10"}
       >
-        <Box
-          display="flex"
-          alignItems="center"
-          ml={{ base: "15px", md: "20px" }}
-        >
+        <Box display="flex" alignItems="center" ml={{ md: "5px", lg: "20px" }}>
           <Icon
             as={IoMenu}
             className={styles.navbarIcon}
@@ -148,19 +145,37 @@ const Navbar = () => {
             />
           </InputGroup>
         </Box>
-        <Box display="flex" alignItems="center" mr="20px">
+        <Box display="flex" alignItems="center" mr={{ md: "5px", lg: "20px" }}>
           <Icon
             as={IoHeartSharp}
             className={styles.navbarIcon}
-            mr={{ base: "8px", md: "20px", lg: "25px" }}
+            mr={{ base: "8px", md: "15px", lg: "25px" }}
           />
           <Icon as={IoNotifications} className={styles.navbarIcon} />
           <Icon
             as={FaUser}
             className={styles.navbarIcon}
-            ml={{ base: "8px", md: "20px", lg: "25px" }}
+            ml={{ base: "8px", md: "15px", lg: "25px" }}
+            mr={isLoggedIn ? "1rem" : "0rem"}
             display={{ base: "none", md: "block" }}
           />
+          {isLoggedIn && (
+            <Box display={{ base: "none", md: "block" }} fontSize="12px">
+              <Text fontWeight="bold">Kim Jong Un</Text>
+              <Flex w="full" justify="space-between">
+                <Text mr=".7rem">CSUI2021</Text>
+                <Box
+                  bg="gray.400"
+                  color="white"
+                  px=".4rem"
+                  py=".1rem"
+                  borderRadius="30px"
+                >
+                  Reguler
+                </Box>
+              </Flex>
+            </Box>
+          )}
         </Box>
         <Box
           className={styles.boxSearch}
@@ -240,7 +255,7 @@ const Navbar = () => {
           </Heading>
         </Box>
         <VStack spacing={1} px="10px" pt="5px">
-          <UserInfo />
+          {isLoggedIn && <UserInfo />}
           {menuSidebar.menu.map((item) => {
             if (item.id === "kb") {
               return (
@@ -320,7 +335,7 @@ const Navbar = () => {
           </Heading>
         </Box>
         <VStack spacing={1} px="10px" pt="5px">
-          <UserInfo useBorder={false} />
+          {isLoggedIn && <UserInfo useBorder={false} />}
           <Accordion defaultIndex={[0]} borderWidth="0" allowMultiple>
             {menuCategory.menu.map((item) => {
               return (
