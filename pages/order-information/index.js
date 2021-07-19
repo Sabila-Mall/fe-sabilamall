@@ -19,6 +19,7 @@ import NavbarProfile from "../../components/NavbarProfile";
 import { useRouter } from "next/router";
 import { IoCopy } from "react-icons/io5"
 import OrderProductsTable, { OrderProductsTableMobile } from "../../components/OrderProductsTable";
+import ScrollButton from "../../components/ScrollButton";
 
 const OrderInformation = () => {
     const [isMobile] = useMediaQuery("(max-width: 48em)")
@@ -114,7 +115,7 @@ const OrderInformation = () => {
 
 
     return (
-        <>
+        <Box>
             {isMobile ?
                 <NavbarProfile section="Informasi Pesanan" onClick={() => router.push("/profile")} /> :
                 <></>
@@ -123,7 +124,8 @@ const OrderInformation = () => {
                 bg="gray.50"
                 h="100%"
                 px={{ base: "16px", md: "" }}
-                pt={{ base: "66px", md: "84" }}>
+                pt={{ base: "66px", md: "84px" }}
+                pb={{ base: "66px", md: "" }}>
 
                 <Flex
                     justify="center"
@@ -427,7 +429,9 @@ const OrderInformation = () => {
                     </Stack>
                 </Flex>
             </Box>
-        </>
+            {isMobile ?
+                <ScrollButton /> : <></>}
+        </Box>
     )
 }
 
