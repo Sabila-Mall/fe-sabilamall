@@ -76,7 +76,7 @@ const Bank = ({ bank, number }) => {
       <Text>{bank}</Text>
       <Flex alignItems="center">
         <Text mr="0.5rem">{number}</Text>
-        <IoCopyOutline color="#DD6B20" size="1.3em" />
+        <IoCopyOutline color="#DD6B20" size="1.3em" cursor="pointer" />
       </Flex>
     </Flex>
   );
