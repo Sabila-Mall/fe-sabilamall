@@ -13,6 +13,7 @@ import {
   Box,
   Text,
 } from "@chakra-ui/react";
+import { useRef } from "react";
 import { BsClock } from "react-icons/bs";
 import {
   IoCartOutline,
@@ -21,6 +22,8 @@ import {
 } from "react-icons/io5";
 
 const StokItem = ({ img, nama, supplier, tag, variant }) => {
+  const referenceAccordion = useRef(null);
+
   return (
     <>
       <Flex
@@ -74,7 +77,11 @@ const StokItem = ({ img, nama, supplier, tag, variant }) => {
             <AccordionItem borderBottom="0px">
               {({ isExpanded }) => (
                 <>
-                  <AccordionButton d="flex" justifyContent="space-between">
+                  <AccordionButton
+                    d="flex"
+                    justifyContent="space-between"
+                    ref={referenceAccordion}
+                  >
                     <Box
                       textAlign="left"
                       color="gray.500"
@@ -175,6 +182,7 @@ const StokItem = ({ img, nama, supplier, tag, variant }) => {
                     className="secondaryFont"
                     cursor="pointer"
                     mx={{ base: "0.4rem", md: "0rem" }}
+                    onClick={() => referenceAccordion.current.click()}
                   >
                     {isExpanded ? "Sembunyikan" : "Lihat varian produk"}
                   </Text>
