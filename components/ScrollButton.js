@@ -1,7 +1,6 @@
-import { Button, Circle, IconButton } from '@chakra-ui/react';
+import { IconButton } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { ArrowUpIcon } from '@chakra-ui/icons'
-import { FaArrowCircleUp } from 'react-icons/fa';
 
 const ScrollButton = () => {
 
@@ -25,16 +24,6 @@ const ScrollButton = () => {
     };
 
     window.addEventListener('scroll', toggleVisible);
-    {/* <Circle
-                    pos="fixed"
-                    right="1rem"
-                    bottom="1rem"
-                    size="48px"
-                    bg="orange.500"
-                    color="white"
-                    onClick={scrollUp}>
-                    <ArrowUpIcon />
-                </Circle>  */}
     return (
         <IconButton
             colorScheme="orange"
