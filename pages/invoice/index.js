@@ -1,4 +1,5 @@
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import { IoCopyOutline } from "react-icons/io5";
 
 import { Layout } from "../../components/Layout";
 
@@ -45,16 +46,22 @@ const Invoice = () => {
           <Text>
             Pembayaran dilakukan dengan melakukan Transfer ke Rekening berikut:
           </Text>
-          <Flex flexDir="column" w={{ base: "60%", lg: "45%" }} mb="0.5rem">
+          <Flex flexDir="column" w={{ base: "60%", lg: "40%" }} mb="0.5rem">
             <Bank bank="BCA" number="8691879542" />
             <Bank bank="Mandiri" number="1570007081186" />
             <Bank bank="BRI" number="954406744" />
             <Bank bank="BSI" number="716111613" />
           </Flex>
           <Text>a.n. SABILAMALL NIAGA DIGITAL PT</Text>
-          <Button colorScheme="orange" w="full" mt="1rem">
-            Konfirmasi Pembayaran
-          </Button>
+          <Flex justifyContent={{ lg: "flex-end" }} w="full">
+            <Button
+              colorScheme="orange"
+              w={{ base: "full", lg: "15rem" }}
+              mt="1rem"
+            >
+              Konfirmasi Pembayaran
+            </Button>
+          </Flex>
         </Box>
       </Layout>
     </>
@@ -67,7 +74,10 @@ const Bank = ({ bank, number }) => {
   return (
     <Flex justifyContent="space-between" textAlign="left">
       <Text>{bank}</Text>
-      <Text>{number}</Text>
+      <Flex alignItems="center">
+        <Text mr="0.5rem">{number}</Text>
+        <IoCopyOutline color="#DD6B20" size="1.3em" />
+      </Flex>
     </Flex>
   );
 };
