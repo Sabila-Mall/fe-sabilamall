@@ -185,15 +185,15 @@ const SenderAddresses = ({ isMobile }) => {
           borderRadius="20px"
           mb="48px"
         >
-          <Flex>
+          <Flex alignItems="center">
             <IoIosAddCircle fontSize="16px" />
             <Text
               className="primaryFont"
               fontWeight="700"
-              fontSize="10px"
+              fontSize="0.8rem"
               lineHeight="13px"
-              transform="translateY(2px)"
               onClick={onOpen}
+              ml="0.25rem"
             >
               Tambah
             </Text>

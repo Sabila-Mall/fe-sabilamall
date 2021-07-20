@@ -19,23 +19,9 @@ import {
 import { useState } from "react";
 
 import { useWindowSize } from "../hooks/useWindowSize";
+import styles2 from "../styles/InvoiceUpgradeTable.module.scss";
 import styles from "../styles/UpgradeAccount.module.scss";
 import NavbarProfile from "./NavbarProfile";
-
-const TH_PROPERTIES = {
-  fontFamily: "Work Sans",
-  color: "black",
-  fontWeight: "bold",
-  fontSize: "14px",
-  p: "1rem 0.75rem",
-};
-
-const TD_PROPERTIES = {
-  p: "1rem 0.75rem",
-  fontFamily: "Inter",
-  fontWeight: "500",
-  fontSize: "14px",
-};
 
 export const UpgradeAccount = ({ isMobile, currentAccount }) => {
   const [value, setValue] = useState(currentAccount);
@@ -62,7 +48,7 @@ export const UpgradeAccount = ({ isMobile, currentAccount }) => {
   ];
 
   return (
-    <Box mx={isMobile ? "5%" : "0"}>
+    <Box mx={isMobile ? "5%" : "0"} pt={{ base: "3rem", md: "0" }}>
       <Text
         fontSize="16px"
         lineHeight="150%"
@@ -70,10 +56,15 @@ export const UpgradeAccount = ({ isMobile, currentAccount }) => {
         fontWeight="500"
         mt="30px"
         mb="1rem"
+        display={{ base: "none", md: "block" }}
       >
         Invoice Upgrade Level Member
       </Text>
-      <Box overflowX={{ base: "scroll", lg: "auto" }} minW="100%">
+      <Box
+        overflowX={{ base: "scroll", lg: "auto" }}
+        minW="100%"
+        display={{ base: "none", md: "block" }}
+      >
         <Box
           border="1px solid #CBD5E0"
           borderRadius="12px"
@@ -83,25 +74,25 @@ export const UpgradeAccount = ({ isMobile, currentAccount }) => {
           p="0.75rem"
           pb="0"
         >
-          <Table variant="simple">
+          <Table variant="simple" className={styles2.invoiceTable}>
             <Thead>
               <Tr>
                 {width >= 1200 ? (
                   <>
-                    <Th {...TH_PROPERTIES}>Invoice ID</Th>
-                    <Th {...TH_PROPERTIES}>
+                    <Th>Invoice ID</Th>
+                    <Th>
                       Tanggal <br /> Pesanan
                     </Th>
-                    <Th {...TH_PROPERTIES}>Deskripsi</Th>
+                    <Th>Deskripsi</Th>
                   </>
                 ) : (
-                  <Th {...TH_PROPERTIES}>Deskripsi</Th>
+                  <Th>Deskripsi</Th>
                 )}
 
-                <Th {...TH_PROPERTIES}>
+                <Th>
                   Jumlah <br /> Tagihan
                 </Th>
-                <Th {...TH_PROPERTIES}>
+                <Th>
                   Status <br /> Pembayaran
                 </Th>
               </Tr>
@@ -110,12 +101,12 @@ export const UpgradeAccount = ({ isMobile, currentAccount }) => {
               <Tr>
                 {width >= 1200 ? (
                   <>
-                    <Td {...TD_PROPERTIES}>UO121212</Td>
-                    <Td {...TD_PROPERTIES}>4 Juli 2021</Td>
-                    <Td {...TD_PROPERTIES}>Upgrade to Reseller</Td>
+                    <Td>UO121212</Td>
+                    <Td>4 Juli 2021</Td>
+                    <Td>Upgrade to Reseller</Td>
                   </>
                 ) : (
-                  <Td {...TD_PROPERTIES}>
+                  <Td>
                     <Text fontWeight="bold" mb="0.5rem">
                       UO121212
                     </Text>
@@ -123,8 +114,8 @@ export const UpgradeAccount = ({ isMobile, currentAccount }) => {
                     <Text fontSize="0.75rem">4 Juli 2021</Text>
                   </Td>
                 )}
-                <Td {...TD_PROPERTIES}>Rp9.999.999</Td>
-                <Td {...TD_PROPERTIES}>
+                <Td>Rp9.999.999</Td>
+                <Td>
                   <Box
                     display="flex"
                     justifyContent="space-between"
@@ -144,12 +135,12 @@ export const UpgradeAccount = ({ isMobile, currentAccount }) => {
               <Tr>
                 {width >= 1200 ? (
                   <>
-                    <Td {...TD_PROPERTIES}>UO121212</Td>
-                    <Td {...TD_PROPERTIES}>4 Juli 2021</Td>
-                    <Td {...TD_PROPERTIES}>Upgrade to Reseller</Td>
+                    <Td>UO121212</Td>
+                    <Td>4 Juli 2021</Td>
+                    <Td>Upgrade to Reseller</Td>
                   </>
                 ) : (
-                  <Td {...TD_PROPERTIES}>
+                  <Td>
                     <Text fontWeight="bold" mb="0.5rem">
                       UO121212
                     </Text>
@@ -157,8 +148,8 @@ export const UpgradeAccount = ({ isMobile, currentAccount }) => {
                     <Text fontSize="0.75rem">4 Juli 2021</Text>
                   </Td>
                 )}
-                <Td {...TD_PROPERTIES}>Rp9.999.999</Td>
-                <Td {...TD_PROPERTIES}>
+                <Td>Rp9.999.999</Td>
+                <Td>
                   <Box
                     display="flex"
                     justifyContent="space-between"
@@ -272,7 +263,7 @@ export const UpgradeAccount = ({ isMobile, currentAccount }) => {
           bg="orange.500"
           pos={isMobile ? "absolute" : ""}
           bottom={isMobile ? "36px" : ""}
-          borderRadius={isMobile ? "20px" : "6px"}
+          borderRadius="6px"
           _hover={{ bg: "orange.400" }}
         >
           {isMobile ? "Konfirmasi Pesanan" : "Konfirmasi"}

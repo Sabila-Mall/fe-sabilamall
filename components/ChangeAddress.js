@@ -39,7 +39,10 @@ export const ChangeAddress = ({ isMobile }) => {
   ];
 
   return (
-    <Box bgColor={isMobile ? "gray.50" : "white"} pt="1rem">
+    <Box
+      bgColor={isMobile ? "gray.50" : "white"}
+      pt={{ base: "5rem", md: "1rem" }}
+    >
       <Box
         mt={isMobile ? "0" : "10px"}
         w={isMobile ? "90%" : "auto"}
@@ -54,14 +57,14 @@ export const ChangeAddress = ({ isMobile }) => {
         </Stack>
       </Box>
       <Box
-        mt={{ base: "100px", md: "20px" }}
+        mt="20px"
         px="16px"
         w={isMobile ? "90%" : "auto"}
         mx={isMobile ? "5%" : "auto"}
-        pt="18px"
         borderRadius="20px"
         boxShadow="md"
         bgColor="white"
+        mb="1rem"
       >
         <ReceiverAddresses addresses={receiverAddresses} isMobile={isMobile} />
       </Box>

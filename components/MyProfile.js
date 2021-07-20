@@ -9,7 +9,7 @@ const MyProfile = () => {
 
   const onSubmit = (values) => console.log(values);
   return (
-    <FormControl w="100%" px="10px" mt="30px">
+    <FormControl w="100%" mt="30px">
       <Flex w="100%" justify="space-between">
         <InputBoxAndLabel
           register={register}

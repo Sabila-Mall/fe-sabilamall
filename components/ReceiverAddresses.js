@@ -44,7 +44,7 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
     // setAddressList([outputList])
   };
   return (
-    <Box pt="1rem">
+    <Box pt="1rem" pb={isMobile ? "36px" : ""}>
       <Flex alignItems="center">
         <Text
           className="primaryFont"
@@ -80,7 +80,7 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
         </Button>
       </Flex>
       <Divider mt="0.5rem" />
-      <Stack mb="48px">
+      <Stack>
         {addressList.map((address) => {
           const [name, setname] = useState(address.name);
           const [phoneNumber, setphoneNumber] = useState(address.phoneNumber);
@@ -322,14 +322,14 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
             borderRadius="20px"
             mb="48px"
           >
-            <Flex>
+            <Flex alignItems="center">
               <IoIosAddCircle fontSize="1rem" />
               <Text
                 className="primaryFont"
                 fontWeight="700"
-                fontSize="0.875rem"
+                fontSize="0.8em"
                 lineHeight="100%"
-                transform="translateY(2px)"
+                ml="0.25rem"
               >
                 Tambah
               </Text>

@@ -6,6 +6,7 @@ import {
   VStack,
   StackDivider,
   Flex,
+  Divider,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { useRouter } from "next/router";
@@ -28,8 +29,11 @@ const ProfileMobile = ({ sm }) => {
   const profileMenu = [
     { text: "Ubah Password", path: "/profile/ubah-password" },
     { text: "Alamat Pengiriman", path: "/profile/alamat-pengiriman" },
-    { text: "Edit Profile", path: "/" },
-    { text: "Upgrade Akun", path: "/profile/profile-saya" },
+    { text: "Edit Profile", path: "/profile/edit-profile" },
+    {
+      text: "Upgrade Akun",
+      path: ["/profile/invoice-upgrade-akun", "/profile/profile-saya"],
+    },
     { text: "Pusat Bantuan", path: "/" },
     { text: "Keluar", path: "/" },
   ];
@@ -130,23 +134,73 @@ const ProfileMobile = ({ sm }) => {
             align="stretch"
           >
             <StackDivider borderColor="gray.200" />
-            {profileMenu.map((menu) => (
-              <Box key={menu.text}>
-                <Text
-                  onClick={
-                    menu.text === "Keluar"
-                      ? onOpen
-                      : () => router.push(menu.path)
-                  }
-                  className="secondaryFont"
-                  fontSize="16px"
-                  fontWeight="500"
-                  lineHeight="24px"
+            {profileMenu.map((menu) =>
+              menu.text === "Upgrade Akun" ? (
+                <VStack
+                  divider={<StackDivider borderColor="gray.200" />}
+                  align="stretch"
                 >
-                  {menu.text}
-                </Text>
-              </Box>
-            ))}
+                  <Box key={menu.text}>
+                    <Text
+                      className="secondaryFont"
+                      fontSize="16px"
+                      fontWeight="500"
+                      lineHeight="24px"
+                    >
+                      {menu.text}
+                    </Text>
+                  </Box>
+                  <Box key={menu.text}>
+                    <Text
+                      onClick={
+                        menu.text === "Keluar"
+                          ? onOpen
+                          : () => router.push(menu.path[0])
+                      }
+                      className="secondaryFont"
+                      fontSize="16px"
+                      fontWeight="500"
+                      lineHeight="24px"
+                      ml="1rem"
+                    >
+                      Invoice Upgrade Akun
+                    </Text>
+                  </Box>
+                  <Box key={menu.text}>
+                    <Text
+                      onClick={
+                        menu.text === "Keluar"
+                          ? onOpen
+                          : () => router.push(menu.path[1])
+                      }
+                      className="secondaryFont"
+                      fontSize="16px"
+                      fontWeight="500"
+                      lineHeight="24px"
+                      ml="1rem"
+                    >
+                      Request Upgrade Akun
+                    </Text>
+                  </Box>
+                </VStack>
+              ) : (
+                <Box key={menu.text}>
+                  <Text
+                    onClick={
+                      menu.text === "Keluar"
+                        ? onOpen
+                        : () => router.push(menu.path)
+                    }
+                    className="secondaryFont"
+                    fontSize="16px"
+                    fontWeight="500"
+                    lineHeight="24px"
+                  >
+                    {menu.text}
+                  </Text>
+                </Box>
+              ),
+            )}
             <Text
               textAlign="center"
               fontSize="12px"
