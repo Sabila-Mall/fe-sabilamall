@@ -49,7 +49,7 @@ const Card = ({ textHead, textBody, icon }) => (
       />
       <Text
         textAlign={{ base: "center", md: "left" }}
-        fontSize="1.12rem"
+        fontSize="1.1rem"
         lineHeight="1.7rem"
       >
         {textHead}
