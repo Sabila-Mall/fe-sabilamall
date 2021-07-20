@@ -26,7 +26,7 @@ export const EditProfile = ({ isMobile }) => {
             register={register}
             text="Nama Depan"
             name={isMobile ? "namaDepanMobile" : "namaDepan"}
-            mt={{ base: "50px", md: "25px" }}
+            mt={isMobile ? "2rem" : "0"}
             type="text"
           />
           <InputBoxAndLabel
@@ -85,7 +85,7 @@ export const EditProfile = ({ isMobile }) => {
           </Button>
         </Box>
         <Flex justify="flex-end" w="100%" mt="70px">
-          <ButtonSubmit text="Ubah Password" />
+          <ButtonSubmit text="Edit Profile" />
         </Flex>
       </FormControl>
       {/* </Box> */}

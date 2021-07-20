@@ -26,7 +26,7 @@ export const ChangePassword = ({ isMobile }) => {
             register={register}
             text="Password Lama"
             name={isMobile ? "oldPasswordMobile" : "oldPassword"}
-            mt="2rem"
+            mt={isMobile ? "2rem" : "0"}
             type="password"
           />
           <InputBoxAndLabel
