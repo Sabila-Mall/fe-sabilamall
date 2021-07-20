@@ -5,7 +5,7 @@ import { ButtonSubmit } from "./ButtonProfile";
 import InputBoxAndLabel from "./InputBoxAndLabel";
 import NavbarProfile from "./NavbarProfile";
 
-export const ChangePassword = ({ isMobile }) => {
+export const EditProfile = ({ isMobile }) => {
   const { handleSubmit, register, errors } = useForm();
 
   const onSubmit = (values) => console.log(values);
@@ -24,27 +24,48 @@ export const ChangePassword = ({ isMobile }) => {
         <Box px="28px">
           <InputBoxAndLabel
             register={register}
-            text="Password Lama"
-            name={isMobile ? "oldPasswordMobile" : "oldPassword"}
-            mt="2rem"
-            type="password"
-          />
-          <InputBoxAndLabel
-            register={register}
-            text="Password Baru"
-            name={isMobile ? "newPasswordMobile" : "newPassword"}
+            text="Nama Depan"
+            name={isMobile ? "namaDepanMobile" : "namaDepan"}
             mt={{ base: "50px", md: "25px" }}
-            type="password"
+            type="text"
           />
           <InputBoxAndLabel
             register={register}
-            text="Konfirmasi Password Baru"
-            name={isMobile ? "newPasswordConfirmMobile" : "newPasswordConfirm"}
+            text="Nama Belakang"
+            name={isMobile ? "namaBelakangMobile" : "namaBelakang"}
             mt="20px"
-            type="password"
+            type="text"
+          />
+          <InputBoxAndLabel
+            register={register}
+            text="Email"
+            name={isMobile ? "emailMobile" : "email"}
+            mt="20px"
+            type="email"
+          />
+          <InputBoxAndLabel
+            register={register}
+            text="Jenis Kelamin"
+            name={isMobile ? "jenisKelaminMobile" : "jenisKelamin"}
+            mt="20px"
+            type="select"
+            options={[
+              {
+                value: "pria",
+                text: "Pria",
+              },
+              { value: "wanita", text: "Wanita" },
+            ]}
+          />
+          <InputBoxAndLabel
+            register={register}
+            text="Tanggal Lahir"
+            name={isMobile ? "tanggalLahirMobile" : "tanggalLahir"}
+            mt="20px"
+            type="date"
           />
         </Box>
-        <Box position="absolute" w="100%" px="28px" bottom={20}>
+        <Box position="absolute" w="100%" px="28px" bottom={10}>
           <Button
             className="primaryFont"
             type="submit"
@@ -60,7 +81,7 @@ export const ChangePassword = ({ isMobile }) => {
             border="none"
             display={{ base: "block", md: "none" }}
           >
-            Ubah Password
+            Update Profile
           </Button>
         </Box>
         <Flex justify="flex-end" w="100%" mt="70px">
@@ -72,9 +93,9 @@ export const ChangePassword = ({ isMobile }) => {
   );
 };
 
-export const ChangePasswordMobile = () => (
+export const EditProfileMobile = () => (
   <Box display={{ base: "block", md: "none" }} h="100vh">
-    <NavbarProfile section={"Ubah Password"} />
-    <ChangePassword isMobile={true} />
+    <NavbarProfile section={"Edit Profile"} />
+    <EditProfile isMobile={true} />
   </Box>
 );
