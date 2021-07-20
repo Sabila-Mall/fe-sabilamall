@@ -72,11 +72,12 @@ export const UpgradeAccount = ({ isMobile, currentAccount }) => {
       >
         Invoice Upgrade Level Member
       </Text>
-      <Box overflowX={{ base: "scroll", lg: "auto" }}>
+      <Box overflowX={{ base: "scroll", lg: "auto" }} minW="100%">
         <Box
           border="1px solid #CBD5E0"
           borderRadius="12px"
           overflow="hidden"
+          minW="100%"
           width="fit-content"
           p="0.75rem"
           pb="0"
@@ -164,6 +165,7 @@ export const UpgradeAccount = ({ isMobile, currentAccount }) => {
                     borderRadius="20px"
                     _focusWithin={{ borderColor: "orange.500" }}
                     onClick={(e) => settempValue(e.target.value)}
+                    className={styles.radioCard}
                   >
                     <Radio
                       value={option.value}
