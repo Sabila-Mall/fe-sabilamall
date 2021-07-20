@@ -1,9 +1,9 @@
-.layout {
+@mixin layout-style {
   width: calc(100vw - (100vw - 100%));
   background-color: transparent;
   min-height: 100vh;
   position: relative;
-  overflow: hidden;
+
   padding-top: 20px;
   padding-bottom: 20px;
   @media (max-width: 576px) {
@@ -15,4 +15,13 @@
       margin-left: 16px;
     }
   }
+}
+
+.layout {
+  @include layout-style();
+  overflow: hidden;
+}
+
+.sticklayout {
+  @include layout-style();
 }
