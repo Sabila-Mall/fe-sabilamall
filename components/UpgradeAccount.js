@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 
+import { useWindowSize } from "../hooks/useWindowSize";
 import styles from "../styles/UpgradeAccount.module.scss";
 import NavbarProfile from "./NavbarProfile";
 
@@ -39,7 +40,7 @@ const TD_PROPERTIES = {
 export const UpgradeAccount = ({ isMobile, currentAccount }) => {
   const [value, setValue] = useState(currentAccount);
   const [tempValue, settempValue] = useState(value);
-
+  const { width } = useWindowSize();
   const handleSubmit = () => {
     console.log(tempValue);
     // setValue(tempValue)
@@ -85,11 +86,18 @@ export const UpgradeAccount = ({ isMobile, currentAccount }) => {
           <Table variant="simple">
             <Thead>
               <Tr>
-                <Th {...TH_PROPERTIES}>Invoice ID</Th>
-                <Th {...TH_PROPERTIES}>
-                  Tanggal <br /> Pesanan
-                </Th>
-                <Th {...TH_PROPERTIES}>Deskripsi</Th>
+                {width >= 1200 ? (
+                  <>
+                    <Th {...TH_PROPERTIES}>Invoice ID</Th>
+                    <Th {...TH_PROPERTIES}>
+                      Tanggal <br /> Pesanan
+                    </Th>
+                    <Th {...TH_PROPERTIES}>Deskripsi</Th>
+                  </>
+                ) : (
+                  <Th {...TH_PROPERTIES}>Deskripsi</Th>
+                )}
+
                 <Th {...TH_PROPERTIES}>
                   Jumlah <br /> Tagihan
                 </Th>
@@ -100,33 +108,69 @@ export const UpgradeAccount = ({ isMobile, currentAccount }) => {
             </Thead>
             <Tbody>
               <Tr>
-                <Td {...TD_PROPERTIES}>UO121212</Td>
-                <Td {...TD_PROPERTIES}>4 Juli 2021</Td>
-                <Td {...TD_PROPERTIES}>Upgrade to Reseller</Td>
+                {width >= 1200 ? (
+                  <>
+                    <Td {...TD_PROPERTIES}>UO121212</Td>
+                    <Td {...TD_PROPERTIES}>4 Juli 2021</Td>
+                    <Td {...TD_PROPERTIES}>Upgrade to Reseller</Td>
+                  </>
+                ) : (
+                  <Td {...TD_PROPERTIES}>
+                    <Text fontWeight="bold" mb="0.5rem">
+                      UO121212
+                    </Text>
+                    <Text mb="0.25rem">Upgrade to Reseller</Text>
+                    <Text fontSize="0.75rem">4 Juli 2021</Text>
+                  </Td>
+                )}
                 <Td {...TD_PROPERTIES}>Rp9.999.999</Td>
                 <Td {...TD_PROPERTIES}>
                   <Box
                     display="flex"
                     justifyContent="space-between"
-                    alignItems="center"
+                    alignItems={{ base: "flex-start", lg: "center" }}
+                    flexDirection={{ base: "column", lg: "row" }}
                   >
-                    <Text mr="2rem">Pending</Text>
+                    <Text
+                      mr={{ base: 0, lg: "2rem" }}
+                      mb={{ base: "1rem", lg: 0 }}
+                    >
+                      Pending
+                    </Text>
                     <ConfirmButton />
                   </Box>
                 </Td>
               </Tr>
               <Tr>
-                <Td {...TD_PROPERTIES}>UO121212</Td>
-                <Td {...TD_PROPERTIES}>4 Juli 2021</Td>
-                <Td {...TD_PROPERTIES}>Upgrade to Reseller</Td>
+                {width >= 1200 ? (
+                  <>
+                    <Td {...TD_PROPERTIES}>UO121212</Td>
+                    <Td {...TD_PROPERTIES}>4 Juli 2021</Td>
+                    <Td {...TD_PROPERTIES}>Upgrade to Reseller</Td>
+                  </>
+                ) : (
+                  <Td {...TD_PROPERTIES}>
+                    <Text fontWeight="bold" mb="0.5rem">
+                      UO121212
+                    </Text>
+                    <Text mb="0.25rem">Upgrade to Reseller</Text>
+                    <Text fontSize="0.75rem">4 Juli 2021</Text>
+                  </Td>
+                )}
                 <Td {...TD_PROPERTIES}>Rp9.999.999</Td>
                 <Td {...TD_PROPERTIES}>
                   <Box
                     display="flex"
                     justifyContent="space-between"
-                    alignItems="center"
+                    alignItems={{ base: "flex-start", lg: "center" }}
+                    flexDirection={{ base: "column", lg: "row" }}
                   >
-                    <Text mr="2rem">Pending</Text>
+                    <Text
+                      mr={{ base: 0, lg: "2rem" }}
+                      mb={{ base: "1rem", lg: 0 }}
+                    >
+                      Pending
+                    </Text>
                     <ConfirmButton />
                   </Box>
                 </Td>
