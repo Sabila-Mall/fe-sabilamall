@@ -13,8 +13,9 @@ import {
   AccordionPanel,
   AccordionButton,
   InputLeftElement,
+  Link,
+  useDisclosure,
 } from "@chakra-ui/react";
-import Link from "next/link";
 import React, { useState } from "react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
@@ -23,31 +24,45 @@ import {
   IoSearch,
   IoHeartSharp,
   IoNotifications,
+  IoCart,
 } from "react-icons/io5";
 
+import { productList } from "../constants/dummyData";
 import { menuCategory, menuSidebar, icons } from "../constants/navbarConstant";
 import styles from "../styles/Navbar.module.scss";
+import QuickAdd from "./QuickAdd";
 
-const NavbarBottom = () => (
-  <Box
-    as="nav"
-    className={styles.navbarBottom}
-    zIndex="10"
-    display={{ base: "flex", md: "none" }}
-  >
-    {icons.map((icon) => (
-      <Box className={styles.boxIcon} key={icon.id}>
-        <Icon as={icon.iconElement} className={styles.navbarIcon} />
-        <Text className={styles.boxIconText}>{icon.text}</Text>
-      </Box>
-    ))}
-  </Box>
-);
+const NavbarBottom = ({ onDrawerOpen }) => {
+  return (
+    <Box
+      as="nav"
+      className={styles.navbarBottom}
+      zIndex="10"
+      display={{ base: "flex", md: "none" }}
+    >
+      {icons.map((icon) => (
+        <Box
+          className={styles.boxIcon}
+          key={icon.id}
+          onClick={icon.text === "Keranjang" ? onDrawerOpen : () => {}}
+        >
+          <Icon as={icon.iconElement} className={styles.navbarIcon} />
+          <Text className={styles.boxIconText}>{icon.text}</Text>
+        </Box>
+      ))}
+    </Box>
+  );
+};
 
 const Navbar = () => {
   const [isSearched, setIsSearched] = useState(false);
   const [isMainMenu, setIsMainMenu] = useState(false);
   const [isCategoryMenu, setIsCategoryMenu] = useState(false);
+
+  const drawerDisclosure = useDisclosure();
+  const isDrawerOpen = drawerDisclosure.isOpen;
+  const onDrawerOpen = drawerDisclosure.onOpen;
+  const onDrawerClose = drawerDisclosure.onClose;
 
   const handleClickOverlay = () => {
     setIsMainMenu(false);
@@ -71,12 +86,10 @@ const Navbar = () => {
             as={IoMenu}
             className={styles.navbarIcon}
             display={{ base: "block", md: "none" }}
-
             onClick={() => {
               setIsMainMenu((prev) => !prev);
               setIsCategoryMenu(false);
             }}
-
           />
           <Image
             src="/images/Navbar/logo.svg"
@@ -116,18 +129,26 @@ const Navbar = () => {
           </InputGroup>
         </Box>
         <Box display="flex" alignItems="center" mr="20px">
-          <Icon
-            as={IoHeartSharp}
-            className={styles.navbarIcon}
-            mr={{ base: "8px", md: "20px", lg: "25px" }}
-          />
-          <Icon as={IoNotifications} className={styles.navbarIcon} />
-          <Icon
-            as={FaUser}
-            className={styles.navbarIcon}
-            ml={{ base: "8px", md: "20px", lg: "25px" }}
+          <Link href="/">
+            <Icon as={IoNotifications} className={styles.navbarIcon} />
+          </Link>
+          <Link
+            onClick={onDrawerOpen}
             display={{ base: "none", md: "block" }}
-          />
+            ml={{ base: "8px", md: "20px", lg: "25px" }}
+          >
+            <Icon as={IoCart} className={styles.navbarIcon} />
+          </Link>
+          <Link href="/" mx={{ base: "8px", md: "20px", lg: "25px" }}>
+            <Icon as={IoHeartSharp} className={styles.navbarIcon} />
+          </Link>
+          <Link href="/">
+            <Icon
+              as={FaUser}
+              className={styles.navbarIcon}
+              display={{ base: "none", md: "block" }}
+            />
+          </Link>
         </Box>
         <Box
           className={styles.boxSearch}
@@ -319,7 +340,12 @@ const Navbar = () => {
           </Accordion>
         </VStack>
       </Box>
-      <NavbarBottom />
+      <NavbarBottom onDrawerOpen={onDrawerOpen} />
+      <QuickAdd
+        products={productList}
+        onDrawerClose={onDrawerClose}
+        isDrawerOpen={isDrawerOpen}
+      />
     </>
   );
 };
