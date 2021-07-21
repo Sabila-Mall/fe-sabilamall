@@ -83,7 +83,7 @@ const Navbar = () => {
   const [isSearched, setIsSearched] = useState(false);
   const [isMainMenu, setIsMainMenu] = useState(false);
   const [isCategoryMenu, setIsCategoryMenu] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const handleClickOverlay = () => {
     setIsMainMenu(false);
@@ -94,7 +94,7 @@ const Navbar = () => {
     <>
       <Box
         className={styles.navbarTop}
-        px={{ base: "1.5rem", md: "5px", lg: "35px", xl: "70px" }}
+        px={{ base: ".8rem", md: "5px", lg: "35px", xl: "70px" }}
         h={{ base: "50px", md: "70px" }}
         zIndex={isSearched ? "5" : "10"}
       >
