@@ -22,6 +22,8 @@ const Login = () => {
   const [loginPassword, setLoginPassword] = useState("");
 
   const submitHandler = (event) => {
+    console.log(loginEmail);
+    console.log(loginPassword);
     event.preventDefault();
   };
 
@@ -114,7 +116,6 @@ const Login = () => {
                     isDisabled={
                       loginEmail === "" || loginPassword === "" ? true : false
                     }
-                    onClick={(e) => submitHandler(e)}
                   >
                     <Text color="white" as="b" className="primaryFont">
                       Login

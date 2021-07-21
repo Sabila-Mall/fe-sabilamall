@@ -56,11 +56,12 @@ const ProductReview = () => {
     for (let i = numberOfStars; i < 5; i++) {
       ret.push(<Icon key={i} aria-label={"Star rating"} as={IoStar} />);
     }
+    console.log(ret);
     return ret;
   };
 
   return (
-    <VStack className={"secondaryFont"} alignItems={"flex-start"}>
+    <VStack className={"secondaryFont"} alignItems={"flex-start"} id="review">
       <HStack fontSize={"24px"} as={"b"}>
         <Text className={"primaryFont"}>Penilaian Produk </Text>
         <Text textColor={"orange.300"}>({totalReview} ulasan)</Text>

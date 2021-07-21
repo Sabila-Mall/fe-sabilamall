@@ -71,7 +71,12 @@ const Navbar = () => {
             as={IoMenu}
             className={styles.navbarIcon}
             display={{ base: "block", md: "none" }}
-            onClick={() => setIsMainMenu(!isMainMenu)}
+
+            onClick={() => {
+              setIsMainMenu((prev) => !prev);
+              setIsCategoryMenu(false);
+            }}
+
           />
           <Image
             src="/images/Navbar/logo.svg"
@@ -171,6 +176,7 @@ const Navbar = () => {
         position="fixed"
         zIndex="2"
         bg="gray.500"
+        top="0"
         opacity="50%"
         w={isMainMenu || isSearched ? "100vw" : "0"}
         h="100vh"
