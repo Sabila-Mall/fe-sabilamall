@@ -25,6 +25,7 @@ import {
   IoSearch,
   IoHeartSharp,
   IoNotifications,
+  IoCart,
 } from "react-icons/io5";
 
 import { menuCategory, menuSidebar, icons } from "../constants/navbarConstant";
@@ -94,7 +95,7 @@ const Navbar = () => {
     <>
       <Box
         className={styles.navbarTop}
-        px={{ base: ".8rem", md: "5px", lg: "35px", xl: "70px" }}
+        px={{ base: ".8rem", md: "5px", lg: "15px", xl: "50px" }}
         h={{ base: "50px", md: "70px" }}
         zIndex={isSearched ? "5" : "10"}
       >
@@ -110,12 +111,12 @@ const Navbar = () => {
           />
           <Image
             src="/images/Navbar/logo.svg"
-            ml={{ base: "15px", md: "20px" }}
+            ml={isLoggedIn ? { base: "5px", xl: "20px" } : "20px"}
           />
           <InputGroup
-            ml="30px"
+            ml={isLoggedIn ? { base: "15px", xl: "30px" } : "30px"}
             w="60vw"
-            mr="25px"
+            mr={isLoggedIn ? { base: "15px", xl: "25px" } : "25px"}
             display={{ base: "none", md: "block" }}
           >
             <InputLeftElement
@@ -147,16 +148,30 @@ const Navbar = () => {
         </Box>
         <Box display="flex" alignItems="center" mr={{ md: "5px", lg: "20px" }}>
           <Icon
-            as={IoHeartSharp}
+            as={IoNotifications}
             className={styles.navbarIcon}
-            mr={{ base: "8px", md: "15px", lg: "25px" }}
+            mr={{ base: "12px", md: "0" }}
           />
-          <Icon as={IoNotifications} className={styles.navbarIcon} />
+          <Icon
+            as={IoCart}
+            className={styles.navbarIcon}
+            mx={
+              isLoggedIn
+                ? { base: "8px", md: "10px", xl: "25px" }
+                : { base: "8px", md: "15px", xl: "25px" }
+            }
+            display={{ base: "none", md: "block" }}
+          />
+          <Icon as={IoHeartSharp} className={styles.navbarIcon} />
           <Icon
             as={FaUser}
             className={styles.navbarIcon}
-            ml={{ base: "8px", md: "15px", lg: "25px" }}
-            mr={isLoggedIn ? "1rem" : "0rem"}
+            ml={
+              isLoggedIn
+                ? { base: "8px", md: "10px", xl: "25px" }
+                : { base: "8px", md: "15px", xl: "25px" }
+            }
+            mr="1rem"
             display={{ base: "none", md: "block" }}
           />
           {isLoggedIn && (
