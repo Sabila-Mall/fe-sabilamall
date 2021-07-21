@@ -13,20 +13,24 @@ import { CartPrice } from "./CartPrice";
 
 export const ProductCart = ({ isDiscount, price }) => {
   return (
-    <Box>
+    <Box width="100%" px={{ base: "1rem", md: 0 }}>
       <Flex
         alignItems="start"
         justifyContent={{ base: "center", md: "start" }}
         mb={{ base: "1.75rem", md: "0" }}
+        justifyContent="flex-start"
       >
         <Flex
           flexDirection="column"
           justifyContent="center"
-          alignItems="center"
-          width="fit-content"
+          alignItems="start"
           mr="8px"
         >
-          <Box position="relative" w="100px" h="100px">
+          <Box
+            position="relative"
+            w={{ base: "5em", sm: "8em", md: "6em" }}
+            h={{ base: "5em", sm: "8em", md: "6em" }}
+          >
             <Image
               layout="fill"
               quality={100}
@@ -37,11 +41,11 @@ export const ProductCart = ({ isDiscount, price }) => {
 
         <Flex
           flexDirection="column"
-          w={{ base: "16.125rem", md: "9rem", xl: "100%" }}
+          w={{ base: "70%", md: "9rem", xl: "100%" }}
           fontWeight="500"
         >
           <Text as="h1" isTruncated mb="8px">
-            Nama Produk Croissant Jujubes...
+            Nama Produk Croissant Jujubes asdadasdadadasd
           </Text>
           <VStack spacing="3px" alignItems="start" mb="1rem">
             <Text color="gray.500" fontSize="14px">

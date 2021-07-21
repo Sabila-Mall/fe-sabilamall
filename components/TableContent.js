@@ -28,7 +28,7 @@ export const TableContent = ({ price, isDiscount }) => {
         px={{ md: "1rem", xl: "1.5rem" }}
         pl={{ md: "0.5rem", xl: "1.5rem" }}
       >
-        <Text color="orange.400" fontWeight="500" fontSize="1.2rem">
+        <Text color="orange.400" fontWeight="500" fontSize="1.2rem" mb="1.4rem">
           Rp{idr.format(prices)}
         </Text>
       </Td>

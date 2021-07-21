@@ -20,7 +20,7 @@ export const CartPrice = ({ isDiscount, price }) => {
             </Text>
             <Flex mb="12px" flexDir={{ base: "row", md: "column" }}>
               <Text
-                fontSize="1.1rem"
+                fontSize={{ base: "1rem", md: "1.1rem" }}
                 color="black"
                 mr="10px"
                 fontWeight="500"
@@ -37,7 +37,11 @@ export const CartPrice = ({ isDiscount, price }) => {
                 px="8px"
                 fontWeight="500"
               >
-                <Text as="h1" fontSize="14px" textAlign="center">
+                <Text
+                  as="h1"
+                  fontSize={{ base: "12px", md: "14px" }}
+                  textAlign="center"
+                >
                   Diskon 99%
                 </Text>
               </Box>
