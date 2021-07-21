@@ -13,7 +13,8 @@ import {
   AccordionPanel,
   AccordionButton,
   InputLeftElement,
-  Link, useDisclosure,
+  Link,
+  useDisclosure,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
@@ -26,27 +27,32 @@ import {
   IoCart,
 } from "react-icons/io5";
 
+import { productList } from "../constants/dummyData";
 import { menuCategory, menuSidebar, icons } from "../constants/navbarConstant";
 import styles from "../styles/Navbar.module.scss";
 import QuickAdd from "./QuickAdd";
 
-import { productList } from "../constants/dummyData";
-
-const NavbarBottom = () => (
-  <Box
-    as="nav"
-    className={styles.navbarBottom}
-    zIndex="10"
-    display={{ base: "flex", md: "none" }}
-  >
-    {icons.map((icon) => (
-      <Box className={styles.boxIcon} key={icon.id}>
-        <Icon as={icon.iconElement} className={styles.navbarIcon} />
-        <Text className={styles.boxIconText}>{icon.text}</Text>
-      </Box>
-    ))}
-  </Box>
-);
+const NavbarBottom = ({ onDrawerOpen }) => {
+  return (
+    <Box
+      as="nav"
+      className={styles.navbarBottom}
+      zIndex="10"
+      display={{ base: "flex", md: "none" }}
+    >
+      {icons.map((icon) => (
+        <Box
+          className={styles.boxIcon}
+          key={icon.id}
+          onClick={icon.text === "Keranjang" ? onDrawerOpen : () => {}}
+        >
+          <Icon as={icon.iconElement} className={styles.navbarIcon} />
+          <Text className={styles.boxIconText}>{icon.text}</Text>
+        </Box>
+      ))}
+    </Box>
+  );
+};
 
 const Navbar = () => {
   const [isSearched, setIsSearched] = useState(false);
@@ -80,12 +86,10 @@ const Navbar = () => {
             as={IoMenu}
             className={styles.navbarIcon}
             display={{ base: "block", md: "none" }}
-
             onClick={() => {
               setIsMainMenu((prev) => !prev);
               setIsCategoryMenu(false);
             }}
-
           />
           <Image
             src="/images/Navbar/logo.svg"
@@ -336,8 +340,12 @@ const Navbar = () => {
           </Accordion>
         </VStack>
       </Box>
-      <NavbarBottom />
-      <QuickAdd products={productList} onDrawerClose={onDrawerClose} isDrawerOpen={isDrawerOpen}/>
+      <NavbarBottom onDrawerOpen={onDrawerOpen} />
+      <QuickAdd
+        products={productList}
+        onDrawerClose={onDrawerClose}
+        isDrawerOpen={isDrawerOpen}
+      />
     </>
   );
 };

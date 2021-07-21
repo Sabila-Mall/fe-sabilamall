@@ -5,11 +5,16 @@ import {
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
-  DrawerCloseButton, Button, Text, Flex, Link, useBreakpointValue,
+  DrawerCloseButton,
+  Button,
+  Text,
+  Flex,
+  Link,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import React from "react";
-import QuickAddListItem from "./QuickAddListItem";
 
+import QuickAddListItem from "./QuickAddListItem";
 
 /**
  * Component untuk drawer yang menampilkan isi barang sekarang, perlu ada button yang memanggil component ini
@@ -19,7 +24,6 @@ import QuickAddListItem from "./QuickAddListItem";
  * @param onDrawerClose callback function yang dipanggil untuk close modal [dapatkan dari useDisclosure()]
  */
 const QuickAdd = ({ products, isDrawerOpen, onDrawerClose }) => {
-
   const total = "99.999.999";
   const size = useBreakpointValue({ base: "full", md: "md" });
 
@@ -64,7 +68,13 @@ const QuickAdd = ({ products, isDrawerOpen, onDrawerClose }) => {
                 Rp{total}
               </Text>
             </Flex>
-            <Text fontSize={"14px"} textColor={"gray.400"} className={"secondaryFont"}>
+            <Text
+              fontSize={{ base: "12px", md: "14px" }}
+              textColor={"gray.400"}
+              className={"secondaryFont"}
+              textAlign="center"
+              my="0.5rem"
+            >
               Ongkos kirim akan dihitung saat proses checkout
             </Text>
             <Button
@@ -81,6 +91,7 @@ const QuickAdd = ({ products, isDrawerOpen, onDrawerClose }) => {
               fontWeight={"bold"}
               fontSize={"14px"}
               className={"primaryFont"}
+              mt="0.5rem"
             >
               Lihat detail keranjang belanja
             </Link>
