@@ -815,7 +815,7 @@ const AlamatPenerima = () => {
                   bg="red.500"
                   color="white"
                   _hover={{ bg: "red.600" }}
-                  w={{ base: "100%", lg: "10ch" }}
+                  w={{ base: "100%", lg: "6rem" }}
                   marginBottom="2rem"
                   marginRight={{ base: "0rem", lg: "1rem" }}
                   isDisabled={handleDisable()}
@@ -826,11 +826,11 @@ const AlamatPenerima = () => {
               </Box>
             </Box>
           </Box>
-          <Box w={{ base: "100%", lg: "25%" }}>
+          <Box w={{ base: "100%", lg: "30%" }}>
             <Box
               w="100%"
               border="1px solid"
-              borderColor="gray.500"
+              borderColor="gray.300"
               borderRadius="md"
               paddingX="1.5ch"
               paddingY="1ch"
