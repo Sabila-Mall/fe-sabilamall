@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 
 import styles from "../styles/Layout.module.scss";
-import { BreadCrumb } from "./Breadcrumb";
+import BreadCrumb from "./Breadcrumb";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
 
@@ -16,16 +16,17 @@ export const Layout = ({
   hasBreadCrumb,
   breadCrumbItem,
   hasFooter,
+  sticky,
 }) => {
   return (
     <>
       <Box
-        className={styles.layout}
+        className={sticky ? styles.stickLayout : styles.layout}
         pt={{ base: "70px", md: "90px" }}
         pb={hasNavbar && "65px"}
       >
         {hasNavbar && <Navbar />}
-        <Box mx={["2rem", "3rem", "2rem", "2rem", "5rem", "7.5rem"]}>
+        <Box mx={["1rem", "3rem", "2rem", "2rem", "5rem", "7.5rem"]}>
           {hasBreadCrumb && <BreadCrumb items={breadCrumbItem} />}
           {children}
         </Box>
