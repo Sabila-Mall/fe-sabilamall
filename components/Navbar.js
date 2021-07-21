@@ -104,7 +104,7 @@ const Navbar = () => {
             className={styles.navbarIcon}
             display={{ base: "block", md: "none" }}
             onClick={() => {
-              setIsMainMenu(!isMainMenu);
+              setIsMainMenu((prev) => !prev);
               setIsCategoryMenu(false);
             }}
           />
@@ -224,6 +224,7 @@ const Navbar = () => {
         position="fixed"
         zIndex="2"
         bg="gray.500"
+        top="0"
         opacity="50%"
         w={isMainMenu || isSearched ? "100vw" : "0"}
         h="100vh"

@@ -4,7 +4,7 @@ import { IoIosAddCircle } from "react-icons/io";
 
 const SMCard = ({ width }) => {
   return (
-    <Box w={width} h="15rem" borderRadius="lg">
+    <Box pt="3.5rem" w={width} h="18.5rem" borderRadius="lg" mb="1rem">
       <Center
         bg="gray.50"
         w="100%"
@@ -20,7 +20,7 @@ const SMCard = ({ width }) => {
           d="flex"
           flexDirection="row"
         >
-          <Box marginRight="0.6rem">
+          <Box marginRight={{ base: "0.3rem", sm: "0.6rem" }} ml="0.6rem">
             <Text
               color="red.600"
               className="primaryFont"
@@ -37,7 +37,7 @@ const SMCard = ({ width }) => {
               Rp. 100.000.000
             </Text>
           </Box>
-          <Box marginLeft="0.7rem">
+          <Box marginLeft={{ base: "0.3rem", sm: "0.7rem" }}>
             <Text
               color="red.600"
               className="primaryFont"
@@ -57,12 +57,16 @@ const SMCard = ({ width }) => {
         </Center>
         <Center w="40%" h="2rem">
           <Square
-            size="3rem"
-            marginRight="0.7rem"
+            size={{ base: "2.8rem", sm: "3rem" }}
+            marginRight={{ base: "0.3rem", sm: "0.7rem" }}
             flexDirection="column"
             cursor="pointer"
           >
-            <Icon as={IoIosAddCircle} color="red.600" boxSize="2rem" />
+            <Icon
+              as={IoIosAddCircle}
+              color="red.600"
+              boxSize={{ base: "1.8rem", sm: "2rem" }}
+            />
             <Text
               fontSize="0.75rem"
               className="secondaryFont"
@@ -73,8 +77,8 @@ const SMCard = ({ width }) => {
             </Text>
           </Square>
           <Square
-            size="3rem"
-            marginLeft="0.7rem"
+            size={{ base: "2.8rem", sm: "3rem" }}
+            marginLeft={{ base: "0.3rem", sm: "0.7rem" }}
             flexDirection="column"
             cursor="pointer"
           >
@@ -82,7 +86,7 @@ const SMCard = ({ width }) => {
               as={FaHistory}
               color="red.600"
               marginTop="0.1rem"
-              boxSize="1.8rem"
+              boxSize={{ base: "1.6rem", sm: "1.8rem" }}
               marginBottom="0.1rem"
             />
             <Text
@@ -104,6 +108,7 @@ const SMCard = ({ width }) => {
         borderBottomRightRadius="lg"
         d="flex"
         flexDirection="row"
+        justifyContent="center"
       >
         <Box
           w="40%"
@@ -130,7 +135,7 @@ const SMCard = ({ width }) => {
           </Circle>
         </Box>
         <Center
-          w="60%"
+          w={{ base: "50%", md: "60%" }}
           h="100%"
           borderBottomRightRadius="lg"
           flexDirection="column"
@@ -143,25 +148,51 @@ const SMCard = ({ width }) => {
           <Box
             w="70%"
             d="flex"
-            flexDirection="row"
+            flexDirection="column"
             justifyContent="space-between"
             fontSize="0.8rem"
             fontWeight="500"
             className="secondaryFont"
           >
-            <Box w="60%">
-              <Text isTruncated>1. Siapa</Text>
-              <Text isTruncated>2. Siapa lagi</Text>
-              <Text isTruncated>3. lagi lagi</Text>
-              <Text isTruncated>4. terus</Text>
-              <Text isTruncated>5. lagilagilagilagilagilagi</Text>
+            <Box h="20%" w="100%" d="flex" justifyContent="space-between">
+              <Text w="60%" minW="20px" isTruncated>
+                1. Siapa
+              </Text>
+              <Text w="40%" minW="20px" align="right" isTruncated>
+                1495 poin
+              </Text>
             </Box>
-            <Box>
-              <Text align="right">1495 poin</Text>
-              <Text align="right">397 poin</Text>
-              <Text align="right">376 poin</Text>
-              <Text align="right">289 poin</Text>
-              <Text align="right">123 poin</Text>
+            <Box h="20%" w="100%" d="flex" justifyContent="space-between">
+              <Text w="60%" minW="20px" isTruncated>
+                2. Siapa lagi
+              </Text>
+              <Text w="40%" minW="20px" align="right" isTruncated>
+                397 poin
+              </Text>
+            </Box>
+            <Box h="20%" w="100%" d="flex" justifyContent="space-between">
+              <Text w="60%" minW="20px" isTruncated>
+                3. lagi lagi
+              </Text>
+              <Text w="40%" minW="20px" align="right" isTruncated>
+                376 poin
+              </Text>
+            </Box>
+            <Box h="20%" w="100%" d="flex" justifyContent="space-between">
+              <Text w="60%" minW="20px" isTruncated>
+                4. terus
+              </Text>
+              <Text w="40%" minW="20px" align="right" isTruncated>
+                289 poin
+              </Text>
+            </Box>
+            <Box h="20%" w="100%" d="flex" justifyContent="space-between">
+              <Text w="60%" minW="20px" isTruncated>
+                5. lagilagilagilagilagilagi
+              </Text>
+              <Text w="40%" minW="20px" align="right" isTruncated>
+                123 poin
+              </Text>
             </Box>
           </Box>
         </Center>
