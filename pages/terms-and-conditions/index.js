@@ -23,7 +23,7 @@ const TermsAndConditions = () => {
           maxW="1536px"
           mt="2rem"
           mb="2rem"
-          px="3rem"
+          px={{ base: "1.8rem", md: "3rem" }}
           textAlign="justify"
           className="secondaryFont"
           fontSize="0.75rem"
