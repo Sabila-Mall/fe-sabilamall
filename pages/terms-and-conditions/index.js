@@ -29,7 +29,7 @@ const TermsAndConditions = () => {
           fontSize="0.75rem"
         >
           <Stack direction="column" spacing="24px">
-            <Text className="primaryFont" fontWeight="700" fontSize="1rem">
+            <Text className="primaryFont" fontWeight="700" fontSize="1.75rem">
               Selamat datang di SabilaMall.co.id
             </Text>
             <Box>

@@ -19,14 +19,14 @@ const PrivacyPolicy = () => {
           px={{ base: "1.8rem", md: "3rem" }}
           textAlign="justify"
           className="secondaryFont"
-          fontSize="0.75rem"
+          fontSize="0.8rem"
         >
           <Stack direction="column" spacing="24px">
             <Box>
               <Text
                 className="primaryFont"
                 fontWeight="700"
-                fontSize="1rem"
+                fontSize="1.5rem"
                 mb="0.8rem"
               >
                 Privacy Policy
@@ -49,7 +49,7 @@ const PrivacyPolicy = () => {
               <Text
                 className="primaryFont"
                 fontWeight="700"
-                fontSize="1rem"
+                fontSize="1.5rem"
                 mb="0.8rem"
               >
                 When do we collect information?
@@ -71,7 +71,7 @@ const PrivacyPolicy = () => {
               <Text
                 className="primaryFont"
                 fontWeight="700"
-                fontSize="1rem"
+                fontSize="1.5rem"
                 mb="0.8rem"
               >
                 How do we use your information?
@@ -105,7 +105,7 @@ const PrivacyPolicy = () => {
               <Text
                 className="primaryFont"
                 fontWeight="700"
-                fontSize="1rem"
+                fontSize="1.5rem"
                 mb="0.8rem"
               >
                 How do we protect visitor information?
@@ -133,7 +133,7 @@ const PrivacyPolicy = () => {
               <Text
                 className="primaryFont"
                 fontWeight="700"
-                fontSize="1rem"
+                fontSize="1.5rem"
                 mb="0.8rem"
               >
                 Third Party Disclosure
@@ -159,7 +159,7 @@ const PrivacyPolicy = () => {
               <Text
                 className="primaryFont"
                 fontWeight="700"
-                fontSize="1rem"
+                fontSize="1.5rem"
                 mb="0.8rem"
               >
                 Third Party Links
@@ -178,7 +178,7 @@ const PrivacyPolicy = () => {
               <Text
                 className="primaryFont"
                 fontWeight="700"
-                fontSize="1rem"
+                fontSize="1.5rem"
                 mb="0.8rem"
               >
                 Do we use 'cookies'?
@@ -225,7 +225,7 @@ const PrivacyPolicy = () => {
               <Text
                 className="primaryFont"
                 fontWeight="700"
-                fontSize="1rem"
+                fontSize="1.5rem"
                 mb="0.8rem"
               >
                 Contact Us
@@ -242,7 +242,7 @@ const PrivacyPolicy = () => {
               <Text
                 className="primaryFont"
                 fontWeight="700"
-                fontSize="1rem"
+                fontSize="1.5rem"
                 mb="0.8rem"
               >
                 ABOUT THIS PRIVACY POLICY
@@ -264,7 +264,7 @@ const PrivacyPolicy = () => {
               <Text
                 className="primaryFont"
                 fontWeight="700"
-                fontSize="1rem"
+                fontSize="1.5rem"
                 mb="0.8rem"
               >
                 GENERAL
@@ -288,7 +288,7 @@ const PrivacyPolicy = () => {
               <Text
                 className="primaryFont"
                 fontWeight="700"
-                fontSize="1rem"
+                fontSize="1.5rem"
                 mb="0.8rem"
               >
                 AMENDMENTS TO THIS PRIVACY POLICY
@@ -307,7 +307,7 @@ const PrivacyPolicy = () => {
               <Text
                 className="primaryFont"
                 fontWeight="700"
-                fontSize="1rem"
+                fontSize="1.5rem"
                 mb="0.8rem"
               >
                 HOW DO WE COLLECT INFORMATION?
@@ -417,7 +417,7 @@ const PrivacyPolicy = () => {
               <Text
                 className="primaryFont"
                 fontWeight="700"
-                fontSize="1rem"
+                fontSize="1.5rem"
                 mb="0.8rem"
               >
                 HOW DO WE USE YOUR INFORMATION?
@@ -502,7 +502,7 @@ const PrivacyPolicy = () => {
               <Text
                 className="primaryFont"
                 fontWeight="700"
-                fontSize="1rem"
+                fontSize="1.5rem"
                 mb="0.8rem"
               >
                 HOW DO WE PROTECT YOUR PERSONAL DATA
@@ -536,7 +536,7 @@ const PrivacyPolicy = () => {
               <Text
                 className="primaryFont"
                 fontWeight="700"
-                fontSize="1rem"
+                fontSize="1.5rem"
                 mb="0.8rem"
               >
                 HOW LONG DO WE RETAIN YOUR PERSONAL DATA FOR
@@ -555,7 +555,7 @@ const PrivacyPolicy = () => {
               <Text
                 className="primaryFont"
                 fontWeight="700"
-                fontSize="1rem"
+                fontSize="1.5rem"
                 mb="0.8rem"
               >
                 THIRD PARTY DISCLOSURE
@@ -604,7 +604,7 @@ const PrivacyPolicy = () => {
               <Text
                 className="primaryFont"
                 fontWeight="700"
-                fontSize="1rem"
+                fontSize="1.5rem"
                 mb="0.8rem"
               >
                 TRANSFER OF PERSONAL DATA TO ANOTHER COUNTRY
@@ -631,7 +631,7 @@ const PrivacyPolicy = () => {
               <Text
                 className="primaryFont"
                 fontWeight="700"
-                fontSize="1rem"
+                fontSize="1.5rem"
                 mb="0.8rem"
               >
                 THIRD PARTY LINKS
@@ -693,7 +693,7 @@ const PrivacyPolicy = () => {
               <Text
                 className="primaryFont"
                 fontWeight="700"
-                fontSize="1rem"
+                fontSize="1.5rem"
                 mb="0.8rem"
               >
                 YOUR RIGHTS
