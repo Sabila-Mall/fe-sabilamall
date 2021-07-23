@@ -14,9 +14,13 @@ import {
   AccordionButton,
   Flex,
   InputLeftElement,
+
   Avatar,
+
+  Link,
+  useDisclosure,
+
 } from "@chakra-ui/react";
-import Link from "next/link";
 import React, { useState } from "react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
@@ -28,24 +32,32 @@ import {
   IoCart,
 } from "react-icons/io5";
 
+import { productList } from "../constants/dummyData";
 import { menuCategory, menuSidebar, icons } from "../constants/navbarConstant";
 import styles from "../styles/Navbar.module.scss";
+import QuickAdd from "./QuickAdd";
 
-const NavbarBottom = () => (
-  <Box
-    as="nav"
-    className={styles.navbarBottom}
-    zIndex="10"
-    display={{ base: "flex", md: "none" }}
-  >
-    {icons.map((icon) => (
-      <Box className={styles.boxIcon} key={icon.id}>
-        <Icon as={icon.iconElement} className={styles.navbarIcon} />
-        <Text className={styles.boxIconText}>{icon.text}</Text>
-      </Box>
-    ))}
-  </Box>
-);
+const NavbarBottom = ({ onDrawerOpen }) => {
+  return (
+    <Box
+      as="nav"
+      className={styles.navbarBottom}
+      zIndex="10"
+      display={{ base: "flex", md: "none" }}
+    >
+      {icons.map((icon) => (
+        <Box
+          className={styles.boxIcon}
+          key={icon.id}
+          onClick={icon.text === "Keranjang" ? onDrawerOpen : () => {}}
+        >
+          <Icon as={icon.iconElement} className={styles.navbarIcon} />
+          <Text className={styles.boxIconText}>{icon.text}</Text>
+        </Box>
+      ))}
+    </Box>
+  );
+};
 
 const UserInfo = ({ useBorder }) => (
   <Flex
@@ -85,6 +97,11 @@ const Navbar = () => {
   const [isMainMenu, setIsMainMenu] = useState(false);
   const [isCategoryMenu, setIsCategoryMenu] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+
+  const drawerDisclosure = useDisclosure();
+  const isDrawerOpen = drawerDisclosure.isOpen;
+  const onDrawerOpen = drawerDisclosure.onOpen;
+  const onDrawerClose = drawerDisclosure.onClose;
 
   const handleClickOverlay = () => {
     setIsMainMenu(false);
@@ -146,6 +163,7 @@ const Navbar = () => {
             />
           </InputGroup>
         </Box>
+
         <Box display="flex" alignItems="center" mr={{ md: "5px", lg: "20px" }}>
           <Icon
             as={IoNotifications}
@@ -388,7 +406,12 @@ const Navbar = () => {
           </Accordion>
         </VStack>
       </Box>
-      <NavbarBottom />
+      <NavbarBottom onDrawerOpen={onDrawerOpen} />
+      <QuickAdd
+        products={productList}
+        onDrawerClose={onDrawerClose}
+        isDrawerOpen={isDrawerOpen}
+      />
     </>
   );
 };
