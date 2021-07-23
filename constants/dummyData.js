@@ -36,3 +36,24 @@ for (let i = 0; i <= 17; i++) {
   dataNormal.push({ ...product, id: `dn${i}` });
   dataWishList.push({ ...wishList, id: `dw${i}` });
 }
+
+export const productList = [
+  {
+    "name": "Nama Produk Croissant Jujubes Sweet Sweet Powder Tiramisu Caramels",
+    "image": "/images/QuickAdd/product-image.png",
+    "price": 99999999,
+    "discount": 99,
+  },
+  {
+    "name": "Nama Produk Croissant Jujubes Sweet Sweet Powder Tiramisu Caramels",
+    "image": "/images/QuickAdd/product-image.png",
+    "price": 99999999,
+    "discount": 99,
+  },
+  {
+    "name": "Nama Produk Croissant Jujubes Sweet Sweet Powder Tiramisu Caramels",
+    "image": "/images/QuickAdd/product-image.png",
+    "price": 99999999,
+    "discount": 99,
+  },
+];
