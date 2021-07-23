@@ -50,7 +50,7 @@ const FormField = ({
   placeholder,
   type = "text",
   options,
-  min = 1,
+  min = 0,
   register,
   id,
 }) => {
