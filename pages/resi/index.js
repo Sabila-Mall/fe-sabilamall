@@ -1,5 +1,6 @@
 const { Box, Text, Flex, Button, Divider } = require("@chakra-ui/react");
 const { Layout } = require("../../components/Layout");
+const { IoChevronBackOutline } = require("react-icons/io5");
 
 const resi = () => {
   return (
@@ -12,7 +13,10 @@ const resi = () => {
         alignItems="center"
         boxShadow="0px 4px 10px 0px #00000040"
       >
-        <Text fontWeight="700" color="gray.500">
+        <Box as="span" pt="0.1rem">
+          <IoChevronBackOutline color="gray" size="1.2em" />
+        </Box>
+        <Text pl="0.5rem" fontWeight="700" color="gray.500">
           Informasi Pesanan
         </Text>
       </Box>
