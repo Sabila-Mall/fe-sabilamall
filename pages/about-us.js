@@ -49,14 +49,18 @@ const Card = ({ textHead, textBody, icon }) => (
       />
       <Text
         textAlign={{ base: "center", md: "left" }}
-        fontSize="1.1rem"
+        fontSize={{ base: "1rem", md: "1.1rem" }}
         lineHeight="1.7rem"
       >
         {textHead}
       </Text>
     </Flex>
     <Divider borderColor="gray.300" my=".75rem" />
-    <Text textAlign="center" fontSize=".875rem" lineHeight="1.125rem">
+    <Text
+      textAlign="center"
+      fontSize={{ base: "0.75rem", md: ".875rem" }}
+      lineHeight="1.125rem"
+    >
       {textBody}
     </Text>
   </Flex>
@@ -71,7 +75,7 @@ const About = () => {
         className="secondaryFont"
         pt={{ base: "1.5rem", md: "3rem", lg: "5rem" }}
       >
-        <Flex>
+        <Flex direction={{ base: "column-reverse", md: "row" }}>
           {/* start section kiri mascot */}
           <Box>
             <Box>
@@ -101,10 +105,15 @@ const About = () => {
           {/* end section kiri mascot  */}
 
           {/* mascot */}
-          <Image src="/images/About/mascot.svg" display={display} />
+          <Image
+            width={{ base: "60%", md: "auto" }}
+            mx="auto"
+            mb={{ base: "2rem", lg: 0 }}
+            src="/images/About/mascot.svg"
+          />
         </Flex>
 
-        <Divider borderColor="gray.300" my="4rem" display={display} />
+        <Divider borderColor="gray.300" my="4rem" />
 
         <Box mt="2rem">
           <TextStyled
@@ -170,8 +179,10 @@ const About = () => {
             _hover={{ bg: "red.700" }}
             _active={{ bg: "red.600" }}
             bg="red.600"
-            mt={{ base: ".5rem", md: "0rem" }}
+            mt={{ base: "1.5rem", md: "2rem" }}
             onClick={() => router.push("/contact-us")}
+            fontSize={{ base: "0.9rem", md: "1rem" }}
+            fontWeight="normal"
           >
             Hubungi Kami
           </Button>
