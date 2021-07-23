@@ -1,7 +1,7 @@
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 
-import { Form, SummaryBox } from "../components/ConfirmComponents";
-import { Layout } from "../components/Layout";
+import { Form, SummaryBox } from "../../components/ConfirmComponents";
+import { Layout } from "../../components/Layout";
 
 const TextStyled = ({ text }) => (
   <Text

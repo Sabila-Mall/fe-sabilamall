@@ -60,6 +60,7 @@ const FormField = ({
     inputElement = (
       <Input
         _focus={{ outline: "none" }}
+        _hover={{ cursor: "text" }}
         placeholder={placeholder}
         type={type}
         required={true}
@@ -90,6 +91,7 @@ const FormField = ({
         _focus={{ outline: "none" }}
         required={true}
         id={id}
+        _hover={{ cursor: "pointer" }}
         {...register(id)}
       >
         {options.map(({ text }) => (
