@@ -48,6 +48,35 @@ const resi = () => {
             </Flex>
             <Divider w="full" />
           </Box>
+          <Box>
+            <Text fontWeight="600" mb="1rem">
+              Data Pengirim
+            </Text>
+            <Box mb="1rem">
+              <Text fontWeight="bold" color="gray.600">
+                [Nama Lengkap Pengirim]
+              </Text>
+              <Text>[Nomor HP Pengirim]</Text>
+            </Box>
+            <Box>
+              <Text fontWeight="600" mb="0.5rem">
+                Data Penerima
+              </Text>
+              <Text fontWeight="700" color="gray.600">
+                Hendra Setiawan Indrajaja
+              </Text>
+              <Text mb="0.4rem">0855-5555-5555</Text>
+              <Text
+                fontWeight="500"
+                color="gray.600"
+                fontSize="0.85rem"
+                lineHeight="1.5"
+              >
+                Jl Kb Kacang Grand Indonesia Shopping Town East Mall Lt Ground
+                30, TANGERANG - CILEDUG, BANTEN, 15418
+              </Text>
+            </Box>
+          </Box>
         </Box>
       </Layout>
     </>
