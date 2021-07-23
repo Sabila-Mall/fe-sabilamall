@@ -34,7 +34,7 @@ const StokItem = ({ img, nama, supplier, tag, variant }) => {
         mb="1rem"
         flexDir={{ base: "column", md: "row" }}
       >
-        <Flex w={{ base: "100%", md: "40%" }} padding="0.8rem">
+        <Flex w={{ base: "100%", md: "36%" }} padding="0.8rem">
           <Img src={img} w="6rem" h="6rem" borderRadius="md" />
           <Box className="secondaryFont" marginLeft="0.75rem" w="100%">
             <Text
@@ -192,7 +192,7 @@ const StokItem = ({ img, nama, supplier, tag, variant }) => {
           </Accordion>
         </Flex>
         <Flex
-          w={{ base: "100%", md: "10%" }}
+          w={{ base: "100%", md: "14%" }}
           d="flex"
           justifyContent={{ base: "flex-end", md: "center" }}
           pt={{ base: "0rem", md: "0.6rem" }}
@@ -202,8 +202,12 @@ const StokItem = ({ img, nama, supplier, tag, variant }) => {
           <Button
             colorScheme="orange"
             className="primaryFont"
-            w="7.5ch"
-            mr={{ base: "0.5rem", md: "0rem" }}
+            maxW="12ch"
+            w="100%"
+            minW="8ch"
+            mr="1rem"
+            ml="1rem"
+            mb={{ base: "0.25rem", md: 0 }}
           >
             Beli
           </Button>
