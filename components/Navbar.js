@@ -14,12 +14,9 @@ import {
   AccordionButton,
   Flex,
   InputLeftElement,
-
   Avatar,
-
   Link,
   useDisclosure,
-
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
@@ -165,33 +162,41 @@ const Navbar = () => {
         </Box>
 
         <Box display="flex" alignItems="center" mr={{ md: "5px", lg: "20px" }}>
-          <Icon
-            as={IoNotifications}
-            className={styles.navbarIcon}
-            mr={{ base: "12px", md: "0" }}
-          />
-          <Icon
-            as={IoCart}
-            className={styles.navbarIcon}
-            mx={
-              isLoggedIn
-                ? { base: "8px", md: "10px", xl: "25px" }
-                : { base: "8px", md: "15px", xl: "25px" }
-            }
-            display={{ base: "none", md: "block" }}
-          />
-          <Icon as={IoHeartSharp} className={styles.navbarIcon} />
-          <Icon
-            as={FaUser}
-            className={styles.navbarIcon}
-            ml={
-              isLoggedIn
-                ? { base: "8px", md: "10px", xl: "25px" }
-                : { base: "8px", md: "15px", xl: "25px" }
-            }
-            mr="1rem"
-            display={{ base: "none", md: "block" }}
-          />
+          <Link href="/">
+            <Icon
+              as={IoNotifications}
+              className={styles.navbarIcon}
+              mr={{ base: "12px", md: "0" }}
+            />
+          </Link>
+          <Link href="/">
+            <Icon
+              as={IoCart}
+              className={styles.navbarIcon}
+              mx={
+                isLoggedIn
+                  ? { base: "8px", md: "10px", xl: "25px" }
+                  : { base: "8px", md: "15px", xl: "25px" }
+              }
+              display={{ base: "none", md: "block" }}
+            />
+          </Link>
+          <Link href="/" onClick={onDrawerOpen}>
+            <Icon as={IoHeartSharp} className={styles.navbarIcon} />
+          </Link>
+          <Link href="/">
+            <Icon
+              as={FaUser}
+              className={styles.navbarIcon}
+              ml={
+                isLoggedIn
+                  ? { base: "8px", md: "10px", xl: "25px" }
+                  : { base: "8px", md: "15px", xl: "25px" }
+              }
+              mr="1rem"
+              display={{ base: "none", md: "block" }}
+            />
+          </Link>
           {isLoggedIn && (
             <Box display={{ base: "none", md: "block" }} fontSize="12px">
               <Text fontWeight="bold">Kim Jong Un</Text>
