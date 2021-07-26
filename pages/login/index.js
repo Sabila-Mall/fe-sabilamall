@@ -13,18 +13,45 @@ import {
   Button,
   FormControl,
 } from "@chakra-ui/react";
+import nookies from "nookies";
 import React, { useState } from "react";
 import { BsFillLockFill } from "react-icons/bs";
 import { IoMdMail } from "react-icons/io";
 
+import { useLogin } from "../../api/Auth";
+import { useAuthContext } from "../../contexts/authProvider";
+import { filterObject } from "../../utils/functions";
+
+const USER_FIELDS = [
+  "first_name",
+  "last_name",
+  "email",
+  "member_id",
+  "role_id",
+  "user_level",
+  "username",
+  "smpoint",
+];
+
 const Login = () => {
+  const { setUserData } = useAuthContext();
+
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
   const submitHandler = (event) => {
-    console.log(loginEmail);
-    console.log(loginPassword);
     event.preventDefault();
+
+    useLogin(loginEmail, loginPassword)
+      .then((res) => {
+        const response = res.data.data[0];
+        setUserData(filterObject(response, USER_FIELDS));
+        nookies.set(null, "token", response.token, {
+          maxAge: 30 * 24 * 60 * 60,
+          path: "/",
+        });
+      })
+      .catch((err) => console.error(err));
   };
 
   return (
@@ -107,7 +134,7 @@ const Login = () => {
               </Stack>
 
               <Stack direction="row" w="100%" mt="24px" spacing="16px">
-                <Link href="/" w="100%" h="100%">
+                <Link onClick={(e) => submitHandler(e)} w="100%" h="100%">
                   <Button
                     bgColor="red.500"
                     w="100%"
