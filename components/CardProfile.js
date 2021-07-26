@@ -59,7 +59,7 @@ export const CardProfile = ({ sm }) => {
   const profileMenu = [
     { text: "Akun Saya", icon: FaUser, path: "/profile" },
     { text: "Wishlist", icon: IoHeart, path: "/wishlist" },
-    { text: "Pesanan Saya", icon: VscPackage, path: "#" },
+    { text: "Pesanan Saya", icon: VscPackage, path: "/order-information" },
   ];
 
   return (
