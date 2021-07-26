@@ -16,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+// import nookies from "nookies";
 import React, { useState, useEffect } from "react";
 import { BiShow, BiHide } from "react-icons/bi";
 import { BsFillLockFill } from "react-icons/bs";
@@ -102,10 +103,10 @@ const SignUp = () => {
         const response = res.data;
         if (response.message === "Sign Up successfully!") {
           setUserData(filterObject(response.data[0], USER_FIELDS));
-          nookies.set(null, "token", response.data[0].token, {
-            maxAge: 30 * 24 * 60 * 60,
-            path: "/",
-          });
+          // nookies.set(null, "token", response.data[0].token, {
+          //   maxAge: 30 * 24 * 60 * 60,
+          //   path: "/",
+          // });
           router.push("/");
         } else {
           console.error(response.message);
