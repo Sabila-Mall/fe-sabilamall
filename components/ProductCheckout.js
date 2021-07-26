@@ -1,54 +1,69 @@
 import {
   Box,
-  Button, Divider,
+  Button,
+  Divider,
   Flex,
   HStack,
-  Icon, IconButton,
+  Icon,
+  IconButton,
   Input,
   Select,
   Spacer,
-  Text, useControllableState,
+  Text,
+  toast,
+  useControllableState,
   VStack,
 } from "@chakra-ui/react";
-import { IoRemoveCircleOutline } from "react-icons/io5";
-import { IoIosAddCircleOutline } from "react-icons/io";
+import { useToast } from "@chakra-ui/react";
 import { FaWhatsapp, FaRegHeart } from "react-icons/fa";
+import { IoIosAddCircleOutline } from "react-icons/io";
+import { IoRemoveCircleOutline } from "react-icons/io5";
+
+import styles from "../styles/ProductDetails.module.scss";
 
 const formatPrice = (price) => {
-  return new Intl.NumberFormat(
-    'id-ID',
-    { style: 'decimal', currency: 'IDR' })
-    .format(price);
-}
+  return new Intl.NumberFormat("id-ID", {
+    style: "decimal",
+    currency: "IDR",
+  }).format(price);
+};
 
 const ProductCheckout = () => {
+  const toast = useToast();
   const colorVariance = 99;
   const sizeVariance = 99;
   const remainingStock = 9999;
   const discountedPrice = 999999999999;
   const realPrice = 99999999;
 
-  const [numberOfItem, setNumberOfItem] = useControllableState({ defaultValue: 0 })
+  const [numberOfItem, setNumberOfItem] = useControllableState({
+    defaultValue: 0,
+  });
 
   const handleModifyNumberOfItem = (event) => {
-    if (event === "increase" ) {
+    if (event === "increase") {
       if (remainingStock - numberOfItem === 0) {
-        setNumberOfItem(remainingStock)
+        setNumberOfItem(remainingStock);
       } else {
-        setNumberOfItem(numberOfItem + 1)
+        setNumberOfItem(numberOfItem + 1);
       }
     } else if (event === "decrease") {
       if (numberOfItem > 0) {
-        setNumberOfItem(numberOfItem - 1)
+        setNumberOfItem(numberOfItem - 1);
       } else {
-        setNumberOfItem(0)
+        setNumberOfItem(0);
       }
     }
-  }
+  };
 
   return (
-    <VStack spacing={"12px"} className={"secondaryFont"}>
+    <VStack
+      pt={{ base: "1rem", sm: "inherit" }}
+      spacing={"12px"}
+      className={"secondaryFont"}
+    >
       <VStack
+        w={{ base: "full", lg: "inherit" }}
         spacing={"10px"}
         borderColor={"gray.300"}
         borderWidth={"1px"}
@@ -90,10 +105,12 @@ const ProductCheckout = () => {
         </Box>
 
         <Box width={"100%"}>
-          <Text textColor={"gray.500"} fontSize={"16px"}>Jumlah</Text>
+          <Text textColor={"gray.500"} fontSize={"16px"}>
+            Jumlah
+          </Text>
           <Spacer height={"10px"} />
           <HStack
-            spacing={"38px"}
+            spacing={"1.5rem"}
             flexDirection={"row"}
             justifyContent={"space-between"}
             alignItems={"center"}
@@ -105,30 +122,35 @@ const ProductCheckout = () => {
                 w={"24px"}
                 h={"24px"}
                 color={"gray.400"}
+                _hover={{ cursor: "pointer" }}
                 onClick={() => handleModifyNumberOfItem("decrease")}
               />
               <Input
+                minW="3.5rem"
+                maxW="5rem"
                 placeholder={numberOfItem}
                 textAlign={"center"}
                 borderColor={"gray.200"}
-                textColor={"gray.300"} />
+                textColor={"gray.300"}
+              />
               <IconButton
                 aria-label={"Increase the number of item"}
                 as={IoIosAddCircleOutline}
                 color={"gray.400"}
                 w={"24px"}
                 h={"24px"}
+                _hover={{ cursor: "pointer" }}
                 onClick={() => handleModifyNumberOfItem("increase")}
               />
             </HStack>
-            <HStack fontSize={"14px"}>
+            <HStack marginInlineStart="1rem !important" fontSize={"14px"}>
               <Text textColor={"gray.500"}>Stok:</Text>
               <Text textColor={"orange.300"}>{remainingStock}</Text>
             </HStack>
           </HStack>
         </Box>
 
-        <Divider orientation="horizontal" height={"1px"}/>
+        <Divider orientation="horizontal" height={"1px"} />
 
         <Flex
           flexDirection={"row"}
@@ -136,10 +158,21 @@ const ProductCheckout = () => {
           justifyContent={"space-between"}
           width={"full"}
         >
-          <Text textColor={"gray.500"} fontSize={"16px"}>Subtotal</Text>
+          <Text textColor={"gray.500"} fontSize={"16px"}>
+            Subtotal
+          </Text>
           <VStack alignItems={"flex-end"}>
-            <Text as={"s"} color={"gray.400"} fontSize={"12px"} >Rp{formatPrice(realPrice)}</Text>
-            <Text color={"orange.400"} fontSize={"20px"} fontWeight={"bold"}>Rp{formatPrice(discountedPrice)}</Text>
+            <Text as={"s"} color={"gray.400"} fontSize={"12px"}>
+              Rp{formatPrice(realPrice)}
+            </Text>
+            <Text
+              className={styles.subtotal}
+              color={"orange.400"}
+              fontSize="20px"
+              fontWeight={"bold"}
+            >
+              Rp{formatPrice(discountedPrice)}
+            </Text>
           </VStack>
         </Flex>
 
@@ -150,6 +183,17 @@ const ProductCheckout = () => {
           fontSize={"16px"}
           fontWeight={"bold"}
           className={"primaryFont"}
+          onClick={() =>
+            toast({
+              title: "Berhasil",
+              description:
+                "Produk anda telah ditambahkan ke keranjang belanja.",
+              status: "success",
+              duration: 5000,
+              isClosable: true,
+              variant: "subtle",
+            })
+          }
         >
           Masukan ke Keranjang
         </Button>
@@ -163,7 +207,12 @@ const ProductCheckout = () => {
       >
         <HStack padding={"7px 12px"}>
           <Icon color={"red.500"} as={FaRegHeart} />
-          <Text textColor={"red.500"} fontSize={"14px"} fontWeight={"bold"} className={"primaryFont"}>
+          <Text
+            textColor={"red.500"}
+            fontSize={"14px"}
+            fontWeight={"bold"}
+            className={"primaryFont"}
+          >
             Wishlist
           </Text>
         </HStack>
@@ -174,7 +223,12 @@ const ProductCheckout = () => {
           padding={"7px 12px"}
         >
           <Icon color={"White"} as={FaWhatsapp} />
-          <Text textColor={"white"} fontSize={"14px"} fontWeight={"bold"} className={"primaryFont"}>
+          <Text
+            textColor={"white"}
+            fontSize={"14px"}
+            fontWeight={"bold"}
+            className={"primaryFont"}
+          >
             Chat Admin
           </Text>
         </HStack>

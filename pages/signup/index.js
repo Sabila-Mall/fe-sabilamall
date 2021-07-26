@@ -47,15 +47,6 @@ const SignUp = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    console.log(namaDepan);
-    console.log(namaBelakang);
-    console.log(emailAddress);
-    console.log(password);
-    console.log(province);
-    console.log(city);
-    console.log(alamat);
-    console.log(handphone);
   };
 
   return (

@@ -12,13 +12,6 @@ export const ChangePassword = ({ isMobile }) => {
 
   return (
     <>
-      {/* <Box
-        mt={{ base: "30px", md: "10px" }}
-        px="16px"
-        pt="18px"
-        h="100vh"
-        bg="red"
-      > */}
       <FormControl
         as="form"
         // px="16px"
@@ -28,19 +21,19 @@ export const ChangePassword = ({ isMobile }) => {
         h={isMobile && "100vh"}
         position="relative"
       >
-        <Box px="28px">
+        <Box maxW="500px" px={{ base: "1rem", md: 0 }}>
           <InputBoxAndLabel
             register={register}
             text="Password Lama"
             name={isMobile ? "oldPasswordMobile" : "oldPassword"}
-            mt="2px"
+            mt={isMobile ? "2rem" : "0"}
             type="password"
           />
           <InputBoxAndLabel
             register={register}
             text="Password Baru"
             name={isMobile ? "newPasswordMobile" : "newPassword"}
-            mt={{ base: "50px", md: "25px" }}
+            mt="25px"
             type="password"
           />
           <InputBoxAndLabel

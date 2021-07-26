@@ -3,11 +3,11 @@ import { Box, Button } from "@chakra-ui/react";
 export const ButtonStatusUser = ({ text, mt }) => {
   return (
     <Box
-      minWidth="80px"
-      h="30px"
+      minWidth={{ base: "64px", md: "80px" }}
+      h={{ base: "24px", md: "30px" }}
       borderRadius="30px"
       bg="gray.400"
-      fontSize="14px"
+      fontSize={{ base: "12px", md: "14px" }}
       fontWeight="500"
       lineHeight="21px"
       className="secondaryFont"
@@ -37,4 +37,3 @@ export const ButtonSubmit = ({ text }) => (
     {text}
   </Button>
 );
-

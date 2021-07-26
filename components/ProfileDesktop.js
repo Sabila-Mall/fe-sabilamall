@@ -79,7 +79,7 @@ const ProfileDesktop = ({ section, element }) => {
                 color={section === item.text ? "orange.500" : "black"}
                 onClick={() => router.push(item.path)}
               >
-                <Icon as={item.icon} mr="11px" />
+                {section === item.text && <Icon as={item.icon} mr="11px" />}
                 <Text>{item.text}</Text>
               </Flex>
             ))}
@@ -90,7 +90,6 @@ const ProfileDesktop = ({ section, element }) => {
             fontSize="28px"
             lineHeight="33.6px"
             mt="28px"
-            ml="8px"
           >
             {section}
           </Heading>
