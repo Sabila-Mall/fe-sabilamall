@@ -26,15 +26,15 @@ const USER_FIELDS = [
   "first_name",
   "last_name",
   "email",
-  "member_id",
+  "memberid",
   "role_id",
   "user_level",
-  "username",
+  "user_name",
   "smpoint",
 ];
 
 const Login = () => {
-  const { setUserData } = useAuthContext();
+  const { userData, setUserData } = useAuthContext();
 
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
