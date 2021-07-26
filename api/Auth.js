@@ -28,3 +28,9 @@ export const useRegister = (
     customers_city_id: city_id,
   });
 };
+
+export const useResetPassword = (email) => {
+  return axios.post("https://sabilamall.co.id/api/processforgotpassword", {
+    email: email,
+  });
+};

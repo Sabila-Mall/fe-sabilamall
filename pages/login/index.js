@@ -13,7 +13,7 @@ import {
   Button,
   FormControl,
 } from "@chakra-ui/react";
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import nookies from "nookies";
 import React, { useState } from "react";
 import { BsFillLockFill } from "react-icons/bs";
@@ -25,6 +25,7 @@ import { useAuthContext } from "../../contexts/authProvider";
 import { filterObject } from "../../utils/functions";
 
 const Login = () => {
+  const router = useRouter();
   const { setUserData } = useAuthContext();
 
   const [loginEmail, setLoginEmail] = useState("");

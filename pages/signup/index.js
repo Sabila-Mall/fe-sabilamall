@@ -31,6 +31,7 @@ import { useAuthContext } from "../../contexts/authProvider";
 import { filterObject } from "../../utils/functions";
 
 const SignUp = () => {
+  const router = useRouter();
   const { setUserData } = useAuthContext();
 
   const [provinsi, setProvinsi] = useState([]);

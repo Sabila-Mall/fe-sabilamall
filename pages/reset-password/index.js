@@ -11,14 +11,29 @@ import {
   InputLeftElement,
   Button,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { IoMdMail } from "react-icons/io";
 
+import { useResetPassword } from "../../api/Auth";
+
 const ResetPassword = () => {
+  const router = useRouter();
   const [resetEmail, setResetEmail] = useState("");
 
   const submitHandler = (event) => {
     event.preventDefault();
+    useResetPassword(resetEmail)
+      .then((res) => {
+        if (
+          res.message === "Your password has been sent to your email address."
+        ) {
+          router.push("/");
+        } else {
+          console.error(res.message);
+        }
+      })
+      .catch((err) => console.error(err));
   };
 
   return (
