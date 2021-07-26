@@ -15,16 +15,26 @@ import {
   FormControl,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BiShow, BiHide } from "react-icons/bi";
 import { BsFillLockFill } from "react-icons/bs";
 import { IoMdMail } from "react-icons/io";
 import { IoPeopleSharp, IoPhonePortraitOutline, IoFlag } from "react-icons/io5";
 import { MdLocationOn } from "react-icons/md";
 
+import { useRegister } from "../../api/Auth";
+import { useKota, useProvinsi } from "../../api/Zone";
 import { Layout } from "../../components/Layout";
+import { USER_FIELDS } from "../../constants/authConstants";
+import { useAuthContext } from "../../contexts/authProvider";
+import { filterObject } from "../../utils/functions";
 
 const SignUp = () => {
+  const { setUserData } = useAuthContext();
+
+  const [provinsi, setProvinsi] = useState([]);
+  const [kota, setKota] = useState([]);
+
   const [showPassword, setShowPassword] = useState(false);
 
   const [namaDepan, setNamaDepan] = useState("");
@@ -36,17 +46,71 @@ const SignUp = () => {
   const [alamat, setAlamat] = useState("");
   const [handphone, setHandphone] = useState("");
 
-  let provinces = [
-    "province1",
-    "province2",
-    "province3",
-    "province4",
-    "province5",
-  ];
-  let cities = ["city1", "city2", "city3", "city4", "city5"];
+  const [provinceId, setProvinceId] = useState(null);
+  const [cityId, setCityId] = useState(null);
+
+  useEffect(() => {
+    useProvinsi()
+      .then((res) => {
+        const response = res.data.data;
+        setProvinsi(response);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (province !== "") {
+      const id = provinsi.filter((prov) => prov.zone_name === province)[0]
+        .zone_apicityid;
+      setProvinceId(id);
+      useKota(id)
+        .then((res) => {
+          const response = res.data.data;
+          setKota(response);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [province]);
+
+  useEffect(() => {
+    if (city !== "") {
+      const id = kota.filter((ko) => ko.city_name === city)[0].city_id;
+      setCityId(id);
+    }
+  }, [city]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    useRegister(
+      namaDepan,
+      namaBelakang,
+      emailAddress,
+      password,
+      handphone,
+      alamat,
+      provinceId,
+      cityId,
+    )
+      .then((res) => {
+        const response = res.data;
+        if (response.message === "Sign Up successfully!") {
+          setUserData(filterObject(response.data[0], USER_FIELDS));
+          nookies.set(null, "token", response.data[0].token, {
+            maxAge: 30 * 24 * 60 * 60,
+            path: "/",
+          });
+        } else {
+          console.error(response.message);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   return (
@@ -221,9 +285,12 @@ const SignUp = () => {
                         color={province === "" ? "gray.400" : "black"}
                         borderRadius="0px"
                       >
-                        {provinces.map((province, i) => (
-                          <option key={province}>{province}</option>
-                        ))}
+                        {provinsi !== [] &&
+                          provinsi.map((prov, i) => (
+                            <option key={prov.zone_name}>
+                              {prov.zone_name}
+                            </option>
+                          ))}
                       </Select>
                     </FormControl>
                   </Center>
@@ -265,9 +332,10 @@ const SignUp = () => {
                         color={city === "" ? "gray.400" : "black"}
                         borderRadius="0px"
                       >
-                        {cities.map((city, i) => (
-                          <option key={city}>{city}</option>
-                        ))}
+                        {kota !== [] &&
+                          kota.map((ko, i) => (
+                            <option key={ko.city_name}>{ko.city_name}</option>
+                          ))}
                       </Select>
                     </FormControl>
                   </Center>

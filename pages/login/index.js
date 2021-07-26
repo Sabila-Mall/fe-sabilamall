@@ -19,22 +19,12 @@ import { BsFillLockFill } from "react-icons/bs";
 import { IoMdMail } from "react-icons/io";
 
 import { useLogin } from "../../api/Auth";
+import { USER_FIELDS } from "../../constants/authConstants";
 import { useAuthContext } from "../../contexts/authProvider";
 import { filterObject } from "../../utils/functions";
 
-const USER_FIELDS = [
-  "first_name",
-  "last_name",
-  "email",
-  "memberid",
-  "role_id",
-  "user_level",
-  "user_name",
-  "smpoint",
-];
-
 const Login = () => {
-  const { userData, setUserData } = useAuthContext();
+  const { setUserData } = useAuthContext();
 
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
@@ -44,12 +34,17 @@ const Login = () => {
 
     useLogin(loginEmail, loginPassword)
       .then((res) => {
-        const response = res.data.data[0];
-        setUserData(filterObject(response, USER_FIELDS));
-        nookies.set(null, "token", response.token, {
-          maxAge: 30 * 24 * 60 * 60,
-          path: "/",
-        });
+        const response = res.data;
+        if (response.message === "Data has been returned successfully!") {
+          setUserData(filterObject(response.data[0], USER_FIELDS));
+          nookies.set(null, "token", response.data[0].token, {
+            maxAge: 30 * 24 * 60 * 60,
+            path: "/",
+          });
+          console.log(filterObject(response.data[0], USER_FIELDS));
+        } else {
+          console.error(response.message);
+        }
       })
       .catch((err) => console.error(err));
   };
