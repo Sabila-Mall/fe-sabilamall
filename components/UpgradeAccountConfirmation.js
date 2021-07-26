@@ -7,9 +7,21 @@ import {
     Input,
     Select
 } from "@chakra-ui/react";
+import { useState } from "react";
 import NavbarProfile from "./NavbarProfile";
 
 const KonfirmasiUpgradeAkun = ({ isMobile }) => {
+    const [firstName, setfirstName] = useState("")
+    const [lastName, setlastName] = useState("")
+    const [gender, setgender] = useState("")
+    const [phone, setphone] = useState("")
+
+    const handleSubmit = () => {
+        console.log(firstName);
+        console.log(lastName);
+        console.log(gender);
+        console.log(phone);
+    }
     return (
         <>
             <Box h={{ base: "100vh", md: "fit-content" }} bgColor={{ base: "gray.50", md: "white" }} position="relative">
@@ -94,7 +106,7 @@ const KonfirmasiUpgradeAkun = ({ isMobile }) => {
                         >
                             Nama Awal
                         </Text>
-                        <Input placeholder="Masukkan nama awal penerima" color="#CBD5E0" bgColor="white" />
+                        <Input placeholder="Masukkan nama awal penerima" color="#CBD5E0" bgColor="white" onChange={(e) => { setfirstName(e.target.value) }} />
                     </Box>
                     <Box>
                         <Text
@@ -106,7 +118,7 @@ const KonfirmasiUpgradeAkun = ({ isMobile }) => {
                         >
                             Nama Akhir
                         </Text>
-                        <Input placeholder="Masukkan nama akhir penerima" color="#CBD5E0" bgColor="white" />
+                        <Input placeholder="Masukkan nama akhir penerima" color="#CBD5E0" bgColor="white" onChange={(e) => { setlastName(e.target.value) }} />
                     </Box>
                     <Box>
                         <Text
@@ -118,7 +130,7 @@ const KonfirmasiUpgradeAkun = ({ isMobile }) => {
                         >
                             Jenis Kelamin
                         </Text>
-                        <Select placeholder="Pilih jenis kelamin" color="#CBD5E0" bgColor="white">
+                        <Select placeholder="Pilih jenis kelamin" color="#CBD5E0" bgColor="white" onChange={(e) => { setgender(e.target.value) }}>
                             <option value="laki-laki">Laki-laki</option>
                             <option value="perempuan">Perempuan</option>
                         </Select>
@@ -133,7 +145,7 @@ const KonfirmasiUpgradeAkun = ({ isMobile }) => {
                         >
                             Ponsel
                         </Text>
-                        <Input placeholder="Masukkan nomor ponsel penerima" color="#CBD5E0" bgColor="white" />
+                        <Input placeholder="Masukkan nomor ponsel penerima" type="number" color="#CBD5E0" bgColor="white" onChange={(e) => { setphone(e.target.value) }} />
                     </Box>
                 </Grid>
                 <Button
