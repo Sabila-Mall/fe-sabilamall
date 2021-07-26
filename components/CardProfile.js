@@ -66,7 +66,7 @@ export const CardProfile = ({ sm }) => {
     <Box
       w={{ md: "260px", lg: "270px" }}
       boxShadow=" 0px 2px 4px -1px rgba(45, 55, 72, 0.06), 0px 4px 6px -1px rgba(45, 55, 72, 0.1)"
-      maxHeight="545px"
+      maxHeight="600px"
       pt="20px"
       pb="36px"
       borderRadius="20px"
@@ -94,7 +94,12 @@ export const CardProfile = ({ sm }) => {
         >
           messigoat@biyac.com
         </Text>
-        <ButtonStatusUser text="Reguler" mt="8px" />
+        <Box display="flex" alignItems="center" mt="8px">
+          <Text fontSize="0.9rem" mr="1rem">
+            123456
+          </Text>
+          <ButtonStatusUser text="Reguler" />
+        </Box>
       </Flex>
       <Box px="10px" mt="50px">
         <SMCard sm={sm} />
@@ -119,7 +124,16 @@ export const CardProfile = ({ sm }) => {
             </Text>
           </Flex>
         ))}
-        <StackDivider borderColor="gray.200" />
+        <Text
+          textAlign="center"
+          fontSize="12px"
+          fontFamily="Inter"
+          fontWeight="500"
+          color="gray.400"
+          mt="1.2rem"
+        >
+          Sabila Mall v9.99.99
+        </Text>
       </VStack>
     </Box>
   );

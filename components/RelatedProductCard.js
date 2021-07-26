@@ -1,92 +1,84 @@
-import {
-    Box,
-    Image,
-    Text,
-    Stack,
-    Center,
-    useBoolean
-} from "@chakra-ui/react"
+import { Box, Flex, Text } from "@chakra-ui/layout";
+import { css } from "@emotion/react";
+import { IoHeartOutline } from "react-icons/io5";
 
-import { FiHeart } from 'react-icons/fi'
-import { FaHeart } from 'react-icons/fa'
+const RelatedProductCard = ({ name, isDiscount, discountAmount, price }) => {
+  const productDiscountPrice = (price * (100 - discountAmount)) / 100;
 
-const RelatedProductCard = ({name, price, discount, image}) => {
-    const [liked, setLiked] = useBoolean()
-    
-    const productDiscountPrice = price * (100 - discount) / 100
-
-    const priceWithDot = (price) => {
-        return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
-    }
-
-
-    return (
-        <Center 
-            border="gray.300" 
-            borderWidth="1px" 
-            borderRadius="8px" 
-            w="168px">
-
-            <Box p="8px">
-                <Image src={image} />
-                <Text 
-                    className="secondaryFont" 
-                    fontWeight="medium" 
-                    fontSize="md" 
-                    lineHeight="24px" 
-                    mb={2} maxW="144px">
-                    {name}
+  const priceWithDot = (item) => {
+    return item.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
+  return (
+    <Box
+      w="10.5rem"
+      h="17.25rem"
+      border="solid #CBD5E0 0.5px"
+      borderRadius="8px"
+      css={css`
+        :hover {
+          cursor: pointer;
+        }
+      `}
+    >
+      <Flex
+        w="full"
+        pos="relative"
+        justifyContent="center"
+        flexDirection="column"
+      >
+        <img layout="fill" src="/images/ProductDetail/products.svg" />
+        <Box px="8px">
+          <Text w="full" h="48px" as="h1" fontWeight="500" fontSize="1rem">
+            {name}
+          </Text>
+          <Box pt="0.2rem">
+            {isDiscount && (
+              <>
+                <Flex alignItems="center" fontWeight="500">
+                  <Text
+                    mr="9px"
+                    as="h1"
+                    fontSize="0.825rem"
+                    textDecoration="line-through"
+                    color="gray.500"
+                    lineHeight="15px"
+                  >
+                    Rp {priceWithDot(price)}
+                  </Text>
+                  <Flex
+                    w="32px"
+                    h="22px"
+                    borderRadius="4px"
+                    fontSize="13px"
+                    bg="#FEB2B2"
+                    color="red.700"
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    {discountAmount}%
+                  </Flex>
+                </Flex>
+                <Text as="h1" fontWeight="bold" fontSize="1.1rem">
+                  Rp {priceWithDot(productDiscountPrice)}
                 </Text>
-                <Box as="span" display="flex">
-                    {discount ? 
-                    <Box 
-                        display="flex" 
-                        w="max-content"
-                        align="center">
-
-                        <Center as="del" 
-                            color="gray.500" 
-                            className="secondaryFont" 
-                            fontSize="10px" 
-                            fontWeight="500">
-                            {`Rp ${priceWithDot(price)}`}
-                        </Center>
-                        <Text 
-                            color="red.700" 
-                            className="secondaryFont" 
-                            fontSize="10px" 
-                            bgColor="red.200" 
-                            ml={4} px={1} py={0.5} 
-                            borderRadius="4px">
-                            {discount}%
-                        </Text>
-                    </Box>
-                    
-                    : ""}
-                </Box>
-                <Stack h="21px" mt="4px" mb="8px" 
-                    justify="space-between" 
-                    direction="row" 
-                    align="center">
-                        
-                    <Text 
-                        className="primaryFont" 
-                        fontSize="xl" 
-                        fontWeight="bold">
-                        {`Rp ${priceWithDot(productDiscountPrice)}`}
-                    </Text>
-                    <Box>
-                        {liked?<FaHeart onClick={setLiked.toggle} color="red" />: <FiHeart onClick={setLiked.toggle} />}
-                    </Box>
-
-                </Stack>   
-            </Box>
-            
-            
-            
-        </Center>
-        
-    )
-}
-
+              </>
+            )}
+          </Box>
+        </Box>
+        <Box
+          pos="absolute"
+          right="1rem"
+          bottom="1.5px"
+          css={css`
+            :hover {
+              size: 1.5em;
+            }
+          `}
+        >
+          <IoHeartOutline size="1.3em" />
+        </Box>
+      </Flex>
+    </Box>
+  );
+};
 export default RelatedProductCard;

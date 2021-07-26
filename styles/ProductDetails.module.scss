@@ -1,8 +1,8 @@
 .productDescription {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
 }
 
 .fiveStarWhite,
@@ -15,15 +15,15 @@
 .threeStarOrange,
 .twoStarOrange,
 .oneStarOrange {
-    position: relative;
+  position: relative;
 
-    &::before {
-        position: absolute;
-        line-height: normal;
-        top: 0;
-        left: 8px;
-        z-index: 1;
-    }
+  &::before {
+    position: absolute;
+    line-height: normal;
+    top: 0;
+    left: 8px;
+    z-index: 1;
+  }
 }
 
 .oneStarOrange::before,
@@ -31,7 +31,7 @@
 .threeStarOrange::before,
 .fourStarOrange::before,
 .fiveStarOrange::before {
-    color: #ffa726;
+  color: #ffa726;
 }
 
 .oneStarWhite::before,
@@ -39,30 +39,51 @@
 .threeStarWhite::before,
 .fourStarWhite::before,
 .fiveStarWhite::before {
-    color: #ffffff;
+  color: #ffffff;
 }
 
 .oneStarOrange::before,
 .oneStarWhite::before {
-    content: "1";
+  content: "1";
 }
 
 .twoStarOrange::before,
 .twoStarWhite::before {
-    content: "2";
+  content: "2";
 }
 
 .threeStarOrange::before,
 .threeStarWhite::before {
-    content: "3";
+  content: "3";
 }
 
 .fourStarOrange::before,
 .fourStarWhite::before {
-    content: "4";
+  content: "4";
 }
 
 .fiveStarOrange::before,
 .fiveStarWhite::before {
-    content: "5";
+  content: "5";
+}
+.subtotal {
+  @media screen and (max-width: 325px) {
+    font-size: 1rem !important;
+  }
+}
+
+.slickWidth {
+  width: 20rem;
+  @media screen and (max-width: 325px) {
+    width: 17rem;
+  }
+  @media screen and (min-width: 420px) {
+    width: 22.5rem;
+  }
+  @media screen and (min-width: 1024px) {
+    width: 20rem;
+  }
+  @media screen and (min-width: 1280px) {
+    width: 22.5rem;
+  }
 }

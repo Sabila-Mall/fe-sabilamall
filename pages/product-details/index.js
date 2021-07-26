@@ -1,32 +1,77 @@
-import { Box, 
-  Flex
-} from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 
-import ProductInformation from "../../components/ProductInformation";
-import ProductHeader from "../../components/ProductHeader";
+import BreadCrumb from "../../components/Breadcrumb";
+import { Layout } from "../../components/Layout";
 import ProductCheckout from "../../components/ProductCheckout";
+import ProductHeader from "../../components/ProductHeader";
+import { ProductImages } from "../../components/ProductImages";
+import ProductInformation from "../../components/ProductInformation";
+import ProductReview from "../../components/ProductReview";
 import RelatedProductContainer from "../../components/RelatedProductContainer";
+import { ShareProduct } from "../../components/ShareProduct";
 
 const ProductDetails = () => {
+  const path = [
+    {
+      name: "Kategori",
+      link: "/",
+      isOnPage: false,
+    },
+    {
+      name: "Supplier",
+      link: "/",
+      isOnPage: false,
+    },
+    {
+      name: "Nama Produk",
+      link: "/",
+      isOnPage: true,
+    },
+  ];
   return (
-    <Box mr={{base:"16px", md:"100px"}} ml={{base:"16px", md:"100px"}}>
-      <Flex flexDirection={{base: "column", md: "row"}}>
-
-        <Box w={{ base: "100%", md: "35%" }}>
-
+    <Layout sticky hasNavbar>
+      <Box>
+        <BreadCrumb items={path} />
+        <Flex
+          flexDirection={{ base: "column", lg: "row" }}
+          justifyContent={{ md: "center" }}
+          mt="24px"
+        >
+          <Box
+            w={{ base: "100%", lg: "32%" }}
+            mb={{ base: "0.5rem", lg: "5rem" }}
+          >
+            <Box h="fit-content" position={{ lg: "sticky" }} top="10.5%">
+              <ProductImages />
+              <Box display={{ base: "none", lg: "block" }}>
+                <ShareProduct />
+              </Box>
+            </Box>
+          </Box>
+          <Box w={{ base: "100%", lg: "43%" }} mr={{ lg: "1rem" }}>
+            <ProductHeader preOrder />
+            <Box display={{ base: "none", lg: "block" }}>
+              <ProductInformation />
+            </Box>
+          </Box>
+          <Box w={{ base: "100%", lg: "25%" }}>
+            <ProductCheckout />
+          </Box>
+          <Box
+            display={{ base: "block", lg: "none" }}
+            mb={{ base: "2rem", lg: "0" }}
+          >
+            <ProductInformation />
+            <Box mb="1rem" />
+            <ShareProduct />
+          </Box>
+        </Flex>
+        <Box w={{ lg: "75%" }}>
+          <ProductReview />
         </Box>
-
-        <Box w={{ base: "100%", md: "35%" }}>
-          <ProductHeader />
-          <ProductInformation />
-        </Box>
-
-        <Box w={{ base: "100%", md: "30%" }}>
-          <ProductCheckout />
-        </Box>
-      </Flex>
-      <RelatedProductContainer />
-    </Box>
+        <RelatedProductContainer />
+      </Box>
+    </Layout>
   );
 };
 
