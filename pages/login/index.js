@@ -13,6 +13,7 @@ import {
   Button,
   FormControl,
 } from "@chakra-ui/react";
+import router, { useRouter } from "next/router";
 import nookies from "nookies";
 import React, { useState } from "react";
 import { BsFillLockFill } from "react-icons/bs";
@@ -41,7 +42,7 @@ const Login = () => {
             maxAge: 30 * 24 * 60 * 60,
             path: "/",
           });
-          console.log(filterObject(response.data[0], USER_FIELDS));
+          router.push("/");
         } else {
           console.error(response.message);
         }

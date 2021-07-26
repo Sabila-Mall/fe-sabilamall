@@ -15,6 +15,7 @@ import {
   FormControl,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useState, useEffect } from "react";
 import { BiShow, BiHide } from "react-icons/bi";
 import { BsFillLockFill } from "react-icons/bs";
@@ -104,6 +105,7 @@ const SignUp = () => {
             maxAge: 30 * 24 * 60 * 60,
             path: "/",
           });
+          router.push("/");
         } else {
           console.error(response.message);
         }
