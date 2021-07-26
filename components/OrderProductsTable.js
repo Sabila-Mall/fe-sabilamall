@@ -97,7 +97,7 @@ export function OrderProductsTableMobile({ products }) {
         <Box>
             {products.map((product, index) => {
                 return (
-                    <>
+                    <Box key={index}>
                         <OrderProduct
                             name={product.name}
                             source={product.image}
@@ -161,7 +161,7 @@ export function OrderProductsTableMobile({ products }) {
                             </Text>
                         </Flex>
                         <Divider border="1px solid gray.200" my="16px" />
-                    </>
+                    </Box>
                 )
             })}
         </Box>

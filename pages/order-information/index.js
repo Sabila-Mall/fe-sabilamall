@@ -352,7 +352,7 @@ const OrderInformation = () => {
                                     mt="16px">
                                     {steps.map((step, index) => {
                                         return (
-                                            <Flex>
+                                            <Flex key={index}>
                                                 <Circle
                                                     bg={index === 0 ? "orange.400" : "gray.500"}
                                                     color="white"
