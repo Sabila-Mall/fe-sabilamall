@@ -32,7 +32,7 @@ export default function OrderProductsTable({ products }) {
         </Tr>
         {products.map((product, index) => {
           return (
-            <Tr>
+            <Tr key={index}>
               <Td>
                 <OrderProduct
                   name={product.name}
