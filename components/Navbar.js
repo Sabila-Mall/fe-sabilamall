@@ -12,7 +12,9 @@ import {
   AccordionItem,
   AccordionPanel,
   AccordionButton,
+  Flex,
   InputLeftElement,
+  Avatar,
   Link,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -54,10 +56,44 @@ const NavbarBottom = ({ onDrawerOpen }) => {
   );
 };
 
+const UserInfo = ({ useBorder }) => (
+  <Flex
+    borderBottom={useBorder && "1px solid #e2e8f0"}
+    align="center"
+    pb="1rem"
+    justify="flex-start"
+    w="70vw"
+    mt=".8rem"
+  >
+    <Image w="3.4rem" h="3.4rem" src="/images/navbar/eclipse.svg" />
+    <Box ml=".5rem" fontSize="14px">
+      <Text fontWeight="700">Nama Siapa Hayoo</Text>
+      <Flex>
+        <Text>D0101</Text>
+        <Flex
+          h="22px"
+          px=".5rem"
+          py=".5rem"
+          bg="gray.400"
+          align="center"
+          justify="center"
+          borderRadius="30px"
+          color="white"
+          fontSize="12px"
+          ml="2rem"
+        >
+          Reguler
+        </Flex>
+      </Flex>
+    </Box>
+  </Flex>
+);
+
 const Navbar = () => {
   const [isSearched, setIsSearched] = useState(false);
   const [isMainMenu, setIsMainMenu] = useState(false);
   const [isCategoryMenu, setIsCategoryMenu] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const drawerDisclosure = useDisclosure();
   const isDrawerOpen = drawerDisclosure.isOpen;
@@ -73,15 +109,11 @@ const Navbar = () => {
     <>
       <Box
         className={styles.navbarTop}
-        px={{ md: "40px", lg: "80px", xl: "120px" }}
+        px={{ base: ".8rem", md: "5px", lg: "15px", xl: "50px" }}
         h={{ base: "50px", md: "70px" }}
         zIndex={isSearched ? "5" : "10"}
       >
-        <Box
-          display="flex"
-          alignItems="center"
-          ml={{ base: "15px", md: "20px" }}
-        >
+        <Box display="flex" alignItems="center" ml={{ md: "5px", lg: "20px" }}>
           <Icon
             as={IoMenu}
             className={styles.navbarIcon}
@@ -93,12 +125,12 @@ const Navbar = () => {
           />
           <Image
             src="/images/Navbar/logo.svg"
-            ml={{ base: "15px", md: "20px" }}
+            ml={isLoggedIn ? { base: "5px", xl: "20px" } : "20px"}
           />
           <InputGroup
-            ml="30px"
+            ml={isLoggedIn ? { base: "15px", xl: "30px" } : "30px"}
             w="60vw"
-            mr="25px"
+            mr={isLoggedIn ? { base: "15px", xl: "25px" } : "25px"}
             display={{ base: "none", md: "block" }}
           >
             <InputLeftElement
@@ -128,27 +160,60 @@ const Navbar = () => {
             />
           </InputGroup>
         </Box>
-        <Box display="flex" alignItems="center" mr="20px">
+
+        <Box display="flex" alignItems="center" mr={{ md: "5px", lg: "20px" }}>
           <Link href="/">
-            <Icon as={IoNotifications} className={styles.navbarIcon} />
+            <Icon
+              as={IoNotifications}
+              className={styles.navbarIcon}
+              mr={{ base: "12px", md: "0" }}
+            />
           </Link>
-          <Link
-            onClick={onDrawerOpen}
-            display={{ base: "none", md: "block" }}
-            ml={{ base: "8px", md: "20px", lg: "25px" }}
-          >
-            <Icon as={IoCart} className={styles.navbarIcon} />
+          <Link href="/">
+            <Icon
+              as={IoCart}
+              className={styles.navbarIcon}
+              mx={
+                isLoggedIn
+                  ? { base: "8px", md: "10px", xl: "25px" }
+                  : { base: "8px", md: "15px", xl: "25px" }
+              }
+              display={{ base: "none", md: "block" }}
+            />
           </Link>
-          <Link href="/" mx={{ base: "8px", md: "20px", lg: "25px" }}>
+          <Link href="/" onClick={onDrawerOpen}>
             <Icon as={IoHeartSharp} className={styles.navbarIcon} />
           </Link>
           <Link href="/">
             <Icon
               as={FaUser}
               className={styles.navbarIcon}
+              ml={
+                isLoggedIn
+                  ? { base: "8px", md: "10px", xl: "25px" }
+                  : { base: "8px", md: "15px", xl: "25px" }
+              }
+              mr="1rem"
               display={{ base: "none", md: "block" }}
             />
           </Link>
+          {isLoggedIn && (
+            <Box display={{ base: "none", md: "block" }} fontSize="12px">
+              <Text fontWeight="bold">Kim Jong Un</Text>
+              <Flex w="full" justify="space-between">
+                <Text mr=".7rem">CSUI2021</Text>
+                <Box
+                  bg="gray.400"
+                  color="white"
+                  px=".4rem"
+                  py=".1rem"
+                  borderRadius="30px"
+                >
+                  Reguler
+                </Box>
+              </Flex>
+            </Box>
+          )}
         </Box>
         <Box
           className={styles.boxSearch}
@@ -229,6 +294,7 @@ const Navbar = () => {
           </Heading>
         </Box>
         <VStack spacing={1} px="10px" pt="5px">
+          {isLoggedIn && <UserInfo />}
           {menuSidebar.menu.map((item) => {
             if (item.id === "kb") {
               return (
@@ -308,11 +374,16 @@ const Navbar = () => {
           </Heading>
         </Box>
         <VStack spacing={1} px="10px" pt="5px">
+          {isLoggedIn && <UserInfo useBorder={false} />}
           <Accordion defaultIndex={[0]} borderWidth="0" allowMultiple>
             {menuCategory.menu.map((item) => {
               return (
                 <AccordionItem key={item.id}>
-                  <AccordionButton borderWidth="0" borderColor="transparent">
+                  <AccordionButton
+                    borderWidth="0"
+                    borderColor="transparent"
+                    _focus={{ outline: "none" }}
+                  >
                     <Box className={styles.boxCategoryMenu}>
                       <Heading
                         className={styles.fontSizeSidebar}
