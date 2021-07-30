@@ -11,12 +11,37 @@ const {
   Grid,
   Stack,
   StackDivider,
+  VStack,
 } = require("@chakra-ui/react");
 const { Layout } = require("../../components/Layout");
 const { IoChevronBackOutline, IoCopy } = require("react-icons/io5");
 const { TableContent } = require("../../components/TableContent");
 const { ProductCart } = require("../../components/ProductCart");
-const { Produk, listProduk } = require("../detail-pesanan");
+const { Produk, listProduk, formatNumber } = require("../detail-pesanan");
+
+const d = [
+  {
+    label: "Biaya Pengiriman",
+    number: 9999999,
+  },
+  {
+    label: "Total Diskon Produk",
+    number: 9999999,
+  },
+  {
+    label: "Total Diskon Pengiriman",
+    number: 9999999,
+  },
+  {
+    label: "Total Pesanan",
+    number: 9999999,
+    total: true,
+  },
+  {
+    label: "Metode Pembayaran",
+    desc: "Transfer Bank BNI",
+  },
+];
 
 const resi = () => {
   return (
@@ -133,35 +158,65 @@ const resi = () => {
                 time="23 Jun 2021, 23.55 WIB"
                 desc="Transaksi belum berhasil"
               />
-              <Stack
-                className={styles.secondaryFont}
-                direction={"column"}
-                borderRadius={"0.5rem"}
-                borderWidth={{ base: "0px", md: "1px" }}
-                borderColor="gray.300"
-                padding={{ base: "0rem", md: "1rem" }}
-                spacing={{ base: "1rem", md: "0.875rem" }}
-                divider={<StackDivider borderColor="gray.200" />}
-              >
-                <Box display={{ base: "none", md: "block" }}>
-                  <Grid
-                    gridTemplateColumns={"3fr 1fr 1fr 1fr"}
-                    className={styles.primaryFont}
-                  >
-                    <Text>Produk</Text>
-                    <Text>Harga Satuan</Text>
-                    <Text textAlign={"center"}>Jumlah</Text>
-                    <Text textAlign={"center"}>Subtotal</Text>
-                  </Grid>
-                </Box>
-                {listProduk.map((produk, i) => {
-                  return <Produk produk={produk} key={i} resi={true} />;
-                })}
-              </Stack>
-
-              {/* <Produk produk={listProduk} /> */}
             </Box>
           </Flex>
+          <Stack
+            mt="1rem"
+            mb="1rem"
+            className={styles.secondaryFont}
+            direction={"column"}
+            borderRadius={"0.5rem"}
+            borderWidth={{ base: "0px", md: "1px" }}
+            borderColor="gray.300"
+            padding={{ base: "0rem", md: "1rem" }}
+            spacing={{ base: "1rem", md: "0.875rem" }}
+            divider={<StackDivider borderColor="gray.200" />}
+          >
+            <Box display={{ base: "none", md: "block" }}>
+              <Grid
+                gridTemplateColumns={"3fr 1fr 1fr 1fr"}
+                className={styles.primaryFont}
+              >
+                <Text>Produk</Text>
+                <Text>Harga Satuan</Text>
+                <Text textAlign={"center"}>Jumlah</Text>
+                <Text textAlign={"center"}>Subtotal</Text>
+              </Grid>
+            </Box>
+            {listProduk.map((produk, i) => {
+              return <Produk produk={produk} key={i} resi={true} />;
+            })}
+          </Stack>
+          <Box>
+            <Text fontWeight="700" color="black" mb="0.5rem">
+              Catatan Pesanan
+            </Text>
+            <Box
+              my="1rem"
+              minH="9.75rem"
+              border="1px solid #E2E8F0"
+              borderRadius="8px"
+              p="1rem"
+            >
+              <Text fontSize="14px" color="gray.700" fontWeight="500">
+                Ini catatan pesanan
+              </Text>
+            </Box>
+            <Divider />
+            <VStack mt="1rem" flexDir="column">
+              {d.map((e, i) => {
+                return (
+                  <TextDetail
+                    key={i}
+                    id={i}
+                    label={e.label}
+                    number={e.number ? e.number : false}
+                    desc={e.desc ? e.desc : false}
+                  />
+                );
+              })}
+            </VStack>
+          </Box>
         </Box>
       </Layout>
     </>
@@ -191,6 +246,32 @@ const ProgressCircle = ({ time, desc }) => {
         </Text>
         <Text color="gray.500">{desc}</Text>
       </Flex>
+    </Flex>
+  );
+};
+
+const TextDetail = ({ label, number, desc, id }) => {
+  return (
+    <Flex
+      w="full"
+      alignItems="center"
+      fontWeight="500"
+      color="gray.500"
+      justifyContent="space-between"
+      fontSize={"0.9rem"}
+    >
+      <Text>{label}</Text>
+      {number && (
+        <Text
+          textAlign="right"
+          color={id == 3 && "orange.500"}
+          fontWeight={id == 3 && "700"}
+          fontSize={id == 3 && "1.2rem"}
+        >
+          Rp{formatNumber(number)}
+        </Text>
+      )}
+      {!number && <Text textAlign="right">{desc}</Text>}
     </Flex>
   );
 };
