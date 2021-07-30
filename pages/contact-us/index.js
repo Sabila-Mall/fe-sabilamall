@@ -75,7 +75,7 @@ const contactUs = () => {
                   spacing={{ base: "1rem" }}
                 >
                   <Flex alignItems="center">
-                    <FaPhoneAlt size="2rem" color="orange" />
+                    <FaPhoneAlt color="orange" className={styles.icon} />
                     <Text fontSize={{ base: "14px", xl: "1rem" }} pl="0.64rem">
                       +62 851-5995-4161
                     </Text>
@@ -85,7 +85,7 @@ const contactUs = () => {
                     display={{ base: "none", lg: "block" }}
                   />
                   <Flex alignItems="center">
-                    <IoMail size="2rem" color="orange" />
+                    <IoMail color="orange" className={styles.icon} />
                     <Text fontSize={{ base: "14px", xl: "1rem" }} pl="0.64rem">
                       customer@sabilamall.co.id
                     </Text>
