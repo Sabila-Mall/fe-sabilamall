@@ -1,6 +1,22 @@
-const { Box, Text, Flex, Button, Divider } = require("@chakra-ui/react");
+import styles from "../../styles/Footer.module.scss";
+
+const {
+  Box,
+  Text,
+  Flex,
+  Button,
+  Divider,
+  Image,
+  Table,
+  Grid,
+  Stack,
+  StackDivider,
+} = require("@chakra-ui/react");
 const { Layout } = require("../../components/Layout");
-const { IoChevronBackOutline } = require("react-icons/io5");
+const { IoChevronBackOutline, IoCopy } = require("react-icons/io5");
+const { TableContent } = require("../../components/TableContent");
+const { ProductCart } = require("../../components/ProductCart");
+const { Produk, listProduk } = require("../detail-pesanan");
 
 const resi = () => {
   return (
@@ -22,7 +38,7 @@ const resi = () => {
       </Box>
       <Layout>
         <Box
-          my="-3rem"
+          mt="-3rem"
           boxShadow="0px 4px 10px 0px #00000040"
           borderRadius="1rem"
           p="0.75rem"
@@ -81,6 +97,71 @@ const resi = () => {
               </Text>
             </Box>
           </Box>
+
+          <Flex
+            mt="1rem"
+            justifyContent="space-between"
+            color="gray.600"
+            fontWeight="500"
+          >
+            <Text fontWeight="700" color="black" fontSize="1.1rem">
+              Pengiriman
+            </Text>
+            <Box textAlign="right" fontSize="0.9rem">
+              <Text>JNE Reguler</Text>
+              <Flex alignItems="center">
+                <Text pr="0.5rem">No. Resi: 101010101010</Text>
+                <IoCopy color="#DD6B20" size="1.2em" />
+              </Flex>
+            </Box>
+          </Flex>
+          <Flex mt="1rem" justifyContent="center" w="full">
+            <Box w="90%" maxW="90%">
+              <ProgressCircle
+                time="23 Jun 2021, 23.55 WIB"
+                desc="Transaksi belum berhasil"
+              />
+              <ProgressCircle
+                time="23 Jun 2021, 23.55 WIB"
+                desc="Transaksi belum berhasil"
+              />
+              <ProgressCircle
+                time="23 Jun 2021, 23.55 WIB"
+                desc="Transaksi belum berhasil"
+              />
+              <ProgressCircle
+                time="23 Jun 2021, 23.55 WIB"
+                desc="Transaksi belum berhasil"
+              />
+              <Stack
+                className={styles.secondaryFont}
+                direction={"column"}
+                borderRadius={"0.5rem"}
+                borderWidth={{ base: "0px", md: "1px" }}
+                borderColor="gray.300"
+                padding={{ base: "0rem", md: "1rem" }}
+                spacing={{ base: "1rem", md: "0.875rem" }}
+                divider={<StackDivider borderColor="gray.200" />}
+              >
+                <Box display={{ base: "none", md: "block" }}>
+                  <Grid
+                    gridTemplateColumns={"3fr 1fr 1fr 1fr"}
+                    className={styles.primaryFont}
+                  >
+                    <Text>Produk</Text>
+                    <Text>Harga Satuan</Text>
+                    <Text textAlign={"center"}>Jumlah</Text>
+                    <Text textAlign={"center"}>Subtotal</Text>
+                  </Grid>
+                </Box>
+                {listProduk.map((produk, i) => {
+                  return <Produk produk={produk} key={i} resi={true} />;
+                })}
+              </Stack>
+
+              {/* <Produk produk={listProduk} /> */}
+            </Box>
+          </Flex>
         </Box>
       </Layout>
     </>
@@ -97,6 +178,20 @@ const TextWLabel = ({ title, desc }) => {
         <Text color="black">{desc}</Text>
       </Box>
     </>
+  );
+};
+
+const ProgressCircle = ({ time, desc }) => {
+  return (
+    <Flex alignItems="start">
+      <Image mr="0.5rem" pt="0.2rem" src="/images/Pengiriman/dot.svg" />
+      <Flex flexDir="column">
+        <Text color="gray.400" fontSize="0.875rem" fontWeight="500">
+          {time}
+        </Text>
+        <Text color="gray.500">{desc}</Text>
+      </Flex>
+    </Flex>
   );
 };
 export default resi;

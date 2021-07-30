@@ -90,7 +90,7 @@ const dataPenerima = {
     "Jl Kb Kacang Grand Indonesia Shopping Town East Mall Lt Ground 30, TANGERANG - CILEDUG, BANTEN, 15148",
 };
 
-const listProduk = [
+export const listProduk = [
   {
     gambar: "/images/produk.svg",
     nama: "Nama Produk Croissant",
@@ -216,7 +216,7 @@ function EditableControls() {
   );
 }
 
-const Produk = ({ produk }) => {
+export const Produk = ({ produk, resi }) => {
   const [isSmartphone] = useMediaQuery("(max-width: 48em)");
 
   return (
@@ -253,21 +253,23 @@ const Produk = ({ produk }) => {
             </Text>
           </Box>
         </HStack>
-        <Editable
-          className={styles.secondaryFont}
-          color={"gray.400"}
-          fontSize={"0.75rem"}
-          defaultValue="Tambah catatan"
-          isPreviewFocusable={false}
-        >
-          <HStack spacing={"0.25rem"}>
-            <EditableControls />
-            <Box>
-              <EditablePreview />
-              <EditableInput />
-            </Box>
-          </HStack>
-        </Editable>
+        {!resi && (
+          <Editable
+            className={styles.secondaryFont}
+            color={"gray.400"}
+            fontSize={"0.75rem"}
+            defaultValue="Tambah catatan"
+            isPreviewFocusable={false}
+          >
+            <HStack spacing={"0.25rem"}>
+              <EditableControls />
+              <Box>
+                <EditablePreview />
+                <EditableInput />
+              </Box>
+            </HStack>
+          </Editable>
+        )}
       </Box>
       <Box
         gridArea={"harga"}
@@ -297,6 +299,7 @@ const Produk = ({ produk }) => {
           </Square>
         </Stack>
       </Box>
+
       <HStack
         gridArea={"jumlah"}
         alignSelf={{ base: "self-end", md: "center" }}
