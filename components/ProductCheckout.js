@@ -183,6 +183,7 @@ const ProductCheckout = () => {
           fontSize={"16px"}
           fontWeight={"bold"}
           className={"primaryFont"}
+          _hover={{ bgColor: "red.600" }}
           onClick={() =>
             toast({
               title: "Berhasil",
@@ -195,7 +196,7 @@ const ProductCheckout = () => {
             })
           }
         >
-          Masukan ke Keranjang
+          Masukkan ke Keranjang
         </Button>
       </VStack>
 

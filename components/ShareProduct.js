@@ -20,6 +20,7 @@ export const ShareProduct = () => {
             borderRadius="24px"
             p="0.35rem"
             cursor="pointer"
+            _hover={{ bgColor: "red.500", color: "white" }}
           >
             <IoLogoFacebook size="1.5em" />
           </Box>
@@ -30,6 +31,7 @@ export const ShareProduct = () => {
             borderRadius="24px"
             p="0.35rem"
             cursor="pointer"
+            _hover={{ bgColor: "red.500", color: "white" }}
           >
             <IoLogoTwitter size="1.5em" />
           </Box>
@@ -40,6 +42,7 @@ export const ShareProduct = () => {
             borderRadius="24px"
             p="0.35rem"
             cursor="pointer"
+            _hover={{ bgColor: "red.500", color: "white" }}
           >
             <IoLogoWhatsapp size="1.5em" />
           </Box>
@@ -50,6 +53,7 @@ export const ShareProduct = () => {
             borderRadius="24px"
             p="0.35rem"
             cursor="pointer"
+            _hover={{ bgColor: "red.500", color: "white" }}
           >
             <IoMdLink size="1.5em" />
           </Box>
