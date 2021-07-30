@@ -4,3 +4,10 @@
     align-items: center;
   }
 }
+
+.icon {
+  font-size: 2rem;
+  @media screen and (max-width: 756px) {
+    font-size: 1.5rem;
+  }
+}

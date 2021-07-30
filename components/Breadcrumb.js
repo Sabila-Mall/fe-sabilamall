@@ -13,6 +13,7 @@ const BreadCrumb = ({ items }) => {
       fontWeight={500}
       separator={<IoChevronForwardSharp size="0.75rem" />}
       className={styles.breadcrumb}
+      px={{ base: "1rem", md: 0 }}
     >
       <BreadcrumbItem>
         <BreadcrumbLink href="#">Home</BreadcrumbLink>
