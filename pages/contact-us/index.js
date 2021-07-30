@@ -13,6 +13,7 @@ import {
   Textarea,
   Button,
   Image,
+  Link,
 } from "@chakra-ui/react";
 import { FaPhoneAlt } from "react-icons/fa";
 import { IoLogoFacebook } from "react-icons/io";
@@ -151,10 +152,18 @@ const contactUs = () => {
                   Follow SabilaMall yuk!
                 </Text>
                 <Stack direction="row" spacing={4} justifyContent="center">
-                  <IoLogoFacebook size="2.5rem" color="orange" />
-                  <IoLogoTwitter size="2.5rem" color="orange" />
-                  <IoLogoInstagram size="2.5rem" color="orange" />
-                  <IoLogoLinkedin size="2.5rem" color="orange" />
+                  <Link target="_blank" href="/">
+                    <IoLogoFacebook size="2.5rem" color="orange" />
+                  </Link>
+                  <Link target="_blank" href="/">
+                    <IoLogoTwitter size="2.5rem" color="orange" />
+                  </Link>
+                  <Link target="_blank" href="/">
+                    <IoLogoInstagram size="2.5rem" color="orange" />
+                  </Link>
+                  <Link target="_blank" href="/">
+                    <IoLogoLinkedin size="2.5rem" color="orange" />
+                  </Link>
                 </Stack>
               </Stack>
             </GridItem>
