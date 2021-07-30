@@ -46,21 +46,11 @@ const d = [
 const resi = () => {
   return (
     <>
-      <Box
-        px="0.5rem"
-        w="full"
-        h="3.125rem"
-        display="flex"
-        alignItems="center"
+      <ResiNavbar
+        display={{ base: "flex", lg: "none" }}
+        desc="Informasi Pesanan"
         boxShadow="0px 4px 10px 0px #00000040"
-      >
-        <Box as="span" pt="0.1rem">
-          <IoChevronBackOutline color="gray" size="1.2em" />
-        </Box>
-        <Text pl="0.5rem" fontWeight="700" color="gray.500">
-          Informasi Pesanan
-        </Text>
-      </Box>
+      />
       <Layout>
         <Box
           mt="-3rem"
@@ -68,6 +58,13 @@ const resi = () => {
           borderRadius="1rem"
           p="0.75rem"
         >
+          <ResiNavbar display={{ base: "none", lg: "flex" }} desc="Kembali" />
+          <Divider
+            display={{ base: "none", lg: "block" }}
+            mb="1rem"
+            orientation="horizontal"
+            w="full"
+          />
           <Flex
             flexDir={{ base: "column", lg: "row" }}
             justifyContent={{ lg: "space-between" }}
@@ -308,6 +305,26 @@ const TextDetail = ({ label, number, desc, id }) => {
       )}
       {!number && <Text textAlign="right">{desc}</Text>}
     </Flex>
+  );
+};
+
+const ResiNavbar = ({ display, desc, onClick, boxShadow }) => {
+  return (
+    <Box
+      px="0.5rem"
+      w="full"
+      h="3.125rem"
+      display={display}
+      alignItems="center"
+      boxShadow={boxShadow}
+    >
+      <Box as="span" pt="0.1rem" onClick={onClick}>
+        <IoChevronBackOutline color="gray" size="1.2em" />
+      </Box>
+      <Text pl="0.5rem" fontWeight="700" color="gray.500">
+        {desc}
+      </Text>
+    </Box>
   );
 };
 export default resi;

@@ -309,6 +309,7 @@ export const Produk = ({ produk, resi }) => {
         <Text color={"gray.500"}>{formatNumber(produk.jumlah)}</Text>
       </HStack>
       <HStack
+        fontWeight={resi && 700}
         gridArea={"subtotal"}
         justify={"space-between"}
         justifySelf={{ md: "center" }}

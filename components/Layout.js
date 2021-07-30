@@ -17,6 +17,7 @@ export const Layout = ({
   breadCrumbItem,
   hasFooter,
   sticky,
+  maxWidth,
 }) => {
   return (
     <>
@@ -28,7 +29,7 @@ export const Layout = ({
         {hasNavbar && <Navbar />}
         <Box w="full" d="flex" justifyContent="center">
           <Box
-            maxWidth="1536px"
+            maxWidth={maxWidth ? maxWidth : "1536px"}
             mx={["1.5rem", "3rem", "2rem", "2rem", "5rem", "7.5rem"]}
           >
             {hasBreadCrumb && <BreadCrumb items={breadCrumbItem} />}
