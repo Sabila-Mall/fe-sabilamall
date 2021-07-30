@@ -38,6 +38,7 @@ const contactUs = () => {
       breadCrumbItem={[{ name: "Kontak Kami", link: "#", isOnPage: true }]}
     >
       <Flex
+        px={{ base: "1rem", md: "auto" }}
         className={styles.layout}
         fontWeight="500"
         flexDirection="column"
