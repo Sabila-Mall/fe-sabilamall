@@ -196,9 +196,8 @@ const resi = () => {
             borderColor="gray.300"
             padding={{ base: "0rem", md: "1rem" }}
             spacing={{ base: "1rem", md: "0.875rem" }}
-            divider={<StackDivider borderColor="gray.200" />}
           >
-            <Box display={{ base: "none", md: "block" }}>
+            <Box display={{ base: "none", lg: "block" }}>
               <Grid
                 gridTemplateColumns={"3fr 1fr 1fr 1fr"}
                 className={styles.primaryFont}
@@ -208,9 +207,14 @@ const resi = () => {
                 <Text textAlign={"center"}>Jumlah</Text>
                 <Text textAlign={"center"}>Subtotal</Text>
               </Grid>
+              <Divider my="1rem" borderColor="gray.200" />
             </Box>
             {listProduk.map((produk, i) => {
-              return <Produk produk={produk} key={i} resi={true} />;
+              return (
+                <>
+                  <Produk produk={produk} key={i} resi={true} />
+                </>
+              );
             })}
           </Stack>
           <Box>

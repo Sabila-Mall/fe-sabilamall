@@ -281,7 +281,7 @@ export const Produk = ({ produk, resi }) => {
           align={"flex-end"}
           direction={{ base: "row-reverse", md: "column" }}
         >
-          <Box>
+          <Box textAlign={{ base: "right", lg: "left" }}>
             <Text fontSize={"0.75rem"} as={"s"} color={"gray.400"}>
               Rp{formatNumber(produk.harga)}
             </Text>
