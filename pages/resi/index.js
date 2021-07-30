@@ -68,96 +68,122 @@ const resi = () => {
           borderRadius="1rem"
           p="0.75rem"
         >
-          <Box fontWeight="500">
-            <TextWLabel title="Nomor Pesanan" desc="SMC10101" />
-            <Box maxW="280px">
-              <Flex justifyContent="space-between">
-                <TextWLabel title="Status Pesanan" desc="Terkirim" />
-                <TextWLabel title="Waktu Pemesanan" desc="10 Juli 2021 13:11" />
-              </Flex>
-              <Flex justifyContent="space-between" mb="1rem">
-                <TextWLabel title="Status Pembayaran" desc="Dikonfirmasi" />
-                <TextWLabel
-                  title="Waktu Pembayaran"
-                  desc="10 Juli 2021 13:11"
-                />
-              </Flex>
+          <Flex
+            flexDir={{ base: "column", lg: "row" }}
+            justifyContent={{ lg: "space-between" }}
+            fontWeight="500"
+            w="full"
+          >
+            <Box minW="280px" maxW="280px">
+              <TextWLabel title="Nomor Pesanan" desc="SMC10101" />
+              <Box>
+                <Flex justifyContent="space-between">
+                  <TextWLabel title="Status Pesanan" desc="Terkirim" />
+                  <TextWLabel
+                    title="Waktu Pemesanan"
+                    desc="10 Juli 2021 13:11"
+                  />
+                </Flex>
+                <Flex justifyContent="space-between" mb="1rem">
+                  <TextWLabel title="Status Pembayaran" desc="Dikonfirmasi" />
+                  <TextWLabel
+                    title="Waktu Pembayaran"
+                    desc="10 Juli 2021 13:11"
+                  />
+                </Flex>
+              </Box>
             </Box>
-            <Flex flexWrap="wrap" mb="1rem">
-              <Button colorScheme="orange" w="full" mb="0.5rem">
+            <Flex flexWrap="wrap" mb="1rem" flexDir="column">
+              <Button
+                w={{ base: "full", lg: "11.625rem" }}
+                colorScheme="orange"
+                w="full"
+                mb="0.5rem"
+              >
                 Berikan Penilaian
               </Button>
-              <Button w="full" colorScheme="orange" variant="outline">
+              <Button
+                w={{ base: "full", lg: "11.625rem" }}
+                colorScheme="orange"
+                variant="outline"
+              >
                 Lihat Invoice
               </Button>
             </Flex>
-            <Divider w="full" />
-          </Box>
-          <Box>
-            <Text fontWeight="600" mb="1rem">
-              Data Pengirim
-            </Text>
-            <Box mb="1rem">
-              <Text fontWeight="bold" color="gray.600">
-                [Nama Lengkap Pengirim]
-              </Text>
-              <Text>[Nomor HP Pengirim]</Text>
-            </Box>
-            <Box>
-              <Text fontWeight="600" mb="0.5rem">
-                Data Penerima
-              </Text>
-              <Text fontWeight="700" color="gray.600">
-                Hendra Setiawan Indrajaja
-              </Text>
-              <Text mb="0.4rem">0855-5555-5555</Text>
-              <Text
-                fontWeight="500"
-                color="gray.600"
-                fontSize="0.85rem"
-                lineHeight="1.5"
-              >
-                Jl Kb Kacang Grand Indonesia Shopping Town East Mall Lt Ground
-                30, TANGERANG - CILEDUG, BANTEN, 15418
-              </Text>
-            </Box>
-          </Box>
-
-          <Flex
-            mt="1rem"
-            justifyContent="space-between"
-            color="gray.600"
-            fontWeight="500"
-          >
-            <Text fontWeight="700" color="black" fontSize="1.1rem">
-              Pengiriman
-            </Text>
-            <Box textAlign="right" fontSize="0.9rem">
-              <Text>JNE Reguler</Text>
-              <Flex alignItems="center">
-                <Text pr="0.5rem">No. Resi: 101010101010</Text>
-                <IoCopy color="#DD6B20" size="1.2em" />
-              </Flex>
-            </Box>
           </Flex>
-          <Flex mt="1rem" justifyContent="center" w="full">
-            <Box w="90%" maxW="90%">
-              <ProgressCircle
-                time="23 Jun 2021, 23.55 WIB"
-                desc="Transaksi belum berhasil"
-              />
-              <ProgressCircle
-                time="23 Jun 2021, 23.55 WIB"
-                desc="Transaksi belum berhasil"
-              />
-              <ProgressCircle
-                time="23 Jun 2021, 23.55 WIB"
-                desc="Transaksi belum berhasil"
-              />
-              <ProgressCircle
-                time="23 Jun 2021, 23.55 WIB"
-                desc="Transaksi belum berhasil"
-              />
+          <Divider orientation="horizontal" w="full" />
+          <Flex flexDir={{ base: "column", lg: "row" }}>
+            <Box w={{ base: "full", lg: "40%" }}>
+              <Text fontWeight="600" mb="1rem">
+                Data Pengirim
+              </Text>
+              <Box mb="1rem">
+                <Text fontWeight="bold" color="gray.600">
+                  [Nama Lengkap Pengirim]
+                </Text>
+                <Text>[Nomor HP Pengirim]</Text>
+              </Box>
+              <Box>
+                <Text fontWeight="600" mb="0.5rem">
+                  Data Penerima
+                </Text>
+                <Text fontWeight="700" color="gray.600">
+                  Hendra Setiawan Indrajaja
+                </Text>
+                <Text mb="0.4rem">0855-5555-5555</Text>
+                <Text
+                  fontWeight="500"
+                  color="gray.600"
+                  fontSize="0.85rem"
+                  lineHeight="1.5"
+                >
+                  Jl Kb Kacang Grand Indonesia Shopping Town East Mall Lt Ground
+                  30, TANGERANG - CILEDUG, BANTEN, 15418
+                </Text>
+              </Box>
+            </Box>
+
+            <Box w={{ base: "full", lg: "60%" }}>
+              <Flex
+                mt="1rem"
+                justifyContent="space-between"
+                color="gray.600"
+                fontWeight="500"
+              >
+                <Text fontWeight="700" color="black" fontSize="1.1rem">
+                  Pengiriman
+                </Text>
+                <Box textAlign="right" fontSize="0.9rem">
+                  <Text>JNE Reguler</Text>
+                  <Flex alignItems="center">
+                    <Text pr="0.5rem">No. Resi: 101010101010</Text>
+                    <IoCopy color="#DD6B20" size="1.2em" />
+                  </Flex>
+                </Box>
+              </Flex>
+              <Flex mt="1rem" justifyContent="center" w="full">
+                <Box
+                  w={{ base: "90%", lg: "full" }}
+                  maxW={{ base: "90%", lg: "full" }}
+                >
+                  <ProgressCircle
+                    time="23 Jun 2021, 23.55 WIB"
+                    desc="Transaksi belum berhasil"
+                  />
+                  <ProgressCircle
+                    time="23 Jun 2021, 23.55 WIB"
+                    desc="Transaksi belum berhasil"
+                  />
+                  <ProgressCircle
+                    time="23 Jun 2021, 23.55 WIB"
+                    desc="Transaksi belum berhasil"
+                  />
+                  <ProgressCircle
+                    time="23 Jun 2021, 23.55 WIB"
+                    desc="Transaksi belum berhasil"
+                  />
+                </Box>
+              </Flex>
             </Box>
           </Flex>
           <Stack
@@ -240,11 +266,16 @@ const ProgressCircle = ({ time, desc }) => {
   return (
     <Flex alignItems="start">
       <Image mr="0.5rem" pt="0.2rem" src="/images/Pengiriman/dot.svg" />
-      <Flex flexDir="column">
+      <Flex
+        alignItems={{ lg: "center" }}
+        flexDir={{ base: "column", lg: "row" }}
+      >
         <Text color="gray.400" fontSize="0.875rem" fontWeight="500">
           {time}
         </Text>
-        <Text color="gray.500">{desc}</Text>
+        <Text pl={{ base: 0, lg: "1rem" }} color="gray.500">
+          {desc}
+        </Text>
       </Flex>
     </Flex>
   );
