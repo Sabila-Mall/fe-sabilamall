@@ -39,21 +39,67 @@ for (let i = 0; i <= 17; i++) {
 
 export const productList = [
   {
-    "name": "Nama Produk Croissant Jujubes Sweet Sweet Powder Tiramisu Caramels",
-    "image": "/images/QuickAdd/product-image.png",
-    "price": 99999999,
-    "discount": 99,
+    name: "Nama Produk Croissant Jujubes Sweet Sweet Powder Tiramisu Caramels",
+    image: "/images/QuickAdd/product-image.png",
+    price: 99999999,
+    discount: 99,
   },
   {
-    "name": "Nama Produk Croissant Jujubes Sweet Sweet Powder Tiramisu Caramels",
-    "image": "/images/QuickAdd/product-image.png",
-    "price": 99999999,
-    "discount": 99,
+    name: "Nama Produk Croissant Jujubes Sweet Sweet Powder Tiramisu Caramels",
+    image: "/images/QuickAdd/product-image.png",
+    price: 99999999,
+    discount: 99,
   },
   {
-    "name": "Nama Produk Croissant Jujubes Sweet Sweet Powder Tiramisu Caramels",
-    "image": "/images/QuickAdd/product-image.png",
-    "price": 99999999,
-    "discount": 99,
+    name: "Nama Produk Croissant Jujubes Sweet Sweet Powder Tiramisu Caramels",
+    image: "/images/QuickAdd/product-image.png",
+    price: 99999999,
+    discount: 99,
   },
+];
+
+export const dummyDataPDF = [
+  {
+    id: "pou1",
+    name: "Lamborghini",
+    detail: "Warna merah, ada 2 pintu, Xl",
+    berat: "220kg",
+    hargaSatuan: "Rp12.000.000.000",
+    jumlah: 2,
+    subTotal: "Rp12.000.000.000.000",
+  },
+  {
+    id: "pou2",
+    name: "Lamborghini",
+    detail: "Warna merah, ada 2 pintu, Xl",
+    berat: "220kg",
+    hargaSatuan: "Rp12.000.000.000",
+    jumlah: 2,
+    subTotal: "Rp12.000.000.000.000",
+  },
+  {
+    id: "pou3",
+    name: "Lamborghini",
+    detail: "Warna merah, ada 2 pintu, Xl",
+    berat: "220kg",
+    hargaSatuan: "Rp12.000.000.000",
+    jumlah: 2,
+    subTotal: "Rp12.000.000.000.000",
+  },
+  {
+    id: "pou4",
+    name: "Lamborghini",
+    detail: "Warna merah, ada 2 pintu, Xl",
+    berat: "220kg",
+    hargaSatuan: "Rp12.000.000.000",
+    jumlah: 2,
+    subTotal: "Rp12.000.000.000.000",
+  },
+];
+
+export const detailPricePDF = [
+  { id: "pr12", name: "Subtotal Produk", price: "Rp999.999.999" },
+  { id: "pr14", name: "Biaya Pengiriman", price: "Rp123.456.789" },
+  { id: "pr15", name: "Biaya Tambahan", price: "Rp0" },
+  { id: "pr16", name: "Total Biaya", price: "Rp999.999.999" },
 ];
