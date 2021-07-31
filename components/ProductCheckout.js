@@ -121,7 +121,8 @@ const ProductCheckout = () => {
                 as={IoRemoveCircleOutline}
                 w={"24px"}
                 h={"24px"}
-                color={"gray.400"}
+                bgColor="transparent"
+                color={numberOfItem === 0 ? "gray.200" : "gray.400"}
                 _hover={{ cursor: "pointer" }}
                 onClick={() => handleModifyNumberOfItem("decrease")}
               />
@@ -138,6 +139,7 @@ const ProductCheckout = () => {
                 as={IoIosAddCircleOutline}
                 color={"gray.400"}
                 w={"24px"}
+                bgColor="transparent"
                 h={"24px"}
                 _hover={{ cursor: "pointer" }}
                 onClick={() => handleModifyNumberOfItem("increase")}
