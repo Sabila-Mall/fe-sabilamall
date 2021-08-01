@@ -6,7 +6,7 @@ import {
   InputLeftAddon,
   NumberInput,
   NumberInputField,
-  Select, SimpleGrid, Square,
+  Select, SimpleGrid,
   Stack, StackDivider,
   Tab,
   TabList, TabPanel, TabPanels,
@@ -108,7 +108,7 @@ const Nominal = ({ nominal, setNominal }) => {
   return (
     <VStack spacing={"0.5rem"} w={"full"} align={"start"}>
       <Text>Nominal</Text>
-      <Text>Minimal Rp10.000</Text>
+      <Text color={"gray.500"}>Minimal Rp10.000</Text>
       <InputGroup>
         <InputLeftAddon children={"Rp"} />
         <NumberInput
@@ -196,55 +196,67 @@ const Entry = ({ data }) => {
 
 const SidePanel = ({ userData }) => {
   return (
-    <VStack spacing={"3rem"} borderRadius={"1.25rem"} background={"green"} py={"1.125rem"}>
+    <VStack spacing={"3rem"} borderRadius={"1.25rem"} background={"white"}
+            py={"1.125rem"} className={"secondaryFont"} boxShadow="md"
+    >
       <VStack p={"1.125rem"}>
         <Avatar size={"xl"}>
           <AvatarBadge boxSize="1.25em" bg="green.500" />
         </Avatar>
-        <Text>{userData.nama}</Text>
-        <Text>{userData.email}</Text>
-        <HStack>
+        <Text className={"primaryFont"} fontWeight={"bold"} fontSize={"1.125rem"}>
+          {userData.nama}
+        </Text>
+        <Text fontSize={"0.875rem"}>{userData.email}</Text>
+        <HStack fontSize={"0.75rem"}>
           <Text>{userData.memberId}</Text>
-          <Square bg={"gray.40"} borderRadius={"1.875rem"}>{userData.tipe}</Square>
+          <Box bg={"gray.400"} borderRadius={"1.875rem"} size="40px"
+               px={"0.5rem"} py={"0.125rem"} color={"white"}
+          >
+            {userData.tipe}
+          </Box>
         </HStack>
       </VStack>
 
-      <SimpleGrid columns={2} px={"2rem"}>
-        <VStack borderRadius={"0.5rem"}>
-          <Center bg={"gray.100"} color={"orange.500"}>SM Pay</Center>
-          <Center bg={"gray.50"}>Rp{userData.SMPay}</Center>
+      <SimpleGrid columns={2} px={"1rem"} spacing={"0.75rem"}>
+        <VStack borderRadius={"0.5rem"} boxShadow={"base"}>
+          <Center bg={"gray.100"} color={"orange.500"} px={"2rem"} py={"0.5rem"} borderTopRadius={"0.5rem"}>
+            SM Pay
+          </Center>
+          <Center bg={"gray.50"} paddingBottom={"0.375rem"}>Rp{userData.SMPay}</Center>
         </VStack>
 
-        <VStack>
-          <Square bg={"gray.100"} color={"orange.500"}>SM Point</Square>
-          <Text bg={"gray.50"}>{userData.SMPoint}</Text>
+        <VStack borderRadius={"0.5rem"} boxShadow={"base"}>
+          <Center bg={"gray.100"} color={"orange.500"} px={"2rem"} py={"0.5rem"} borderTopRadius={"0.5rem"}>
+            SM Point
+          </Center>
+          <Center bg={"gray.50"} paddingBottom={"0.375rem"}>{userData.SMPoint}</Center>
         </VStack>
       </SimpleGrid>
 
       <Box alignSelf={"stretch"}>
-        <HStack py={"0.5rem"} borderColor={"gray.200"} borderTopWidth={"1px"} borderBottomWidth={"1px"}
+        <HStack py={"1rem"} borderColor={"gray.200"} borderTopWidth={"1px"} borderBottomWidth={"1px"}
                 paddingLeft={"1rem"}>
-          <Icon as={FaUser} />
+          <Icon as={FaUser} boxSize={"1.5rem"}/>
           <Text>Akun Saya</Text>
         </HStack>
 
-        <HStack py={"0.5rem"} borderTopWidth={"1px"} borderBottomWidth={"1px"} paddingLeft={"1rem"}>
-          <Icon as={IoHeart} />
+        <HStack py={"1rem"} borderTopWidth={"1px"} borderBottomWidth={"1px"} paddingLeft={"1rem"}>
+          <Icon as={IoHeart} boxSize={"1.5rem"}/>
           <Text>Wishlist</Text>
         </HStack>
 
-        <HStack py={"0.5rem"} borderTopWidth={"1px"} borderBottomWidth={"1px"} paddingLeft={"1rem"}>
-          <Icon as={VscPackage} />
+        <HStack py={"1rem"} borderTopWidth={"1px"} borderBottomWidth={"1px"} paddingLeft={"1rem"}>
+          <Icon as={VscPackage} boxSize={"1.5rem"}/>
           <Text>Pesanan saya</Text>
         </HStack>
 
-        <HStack py={"0.5rem"} borderTopWidth={"1px"} borderBottomWidth={"1px"} paddingLeft={"1rem"}>
-          <Icon as={IoWalletOutline} />
+        <HStack py={"1rem"} borderTopWidth={"1px"} borderBottomWidth={"1px"} paddingLeft={"1rem"} color={"orange.500"}>
+          <Icon as={IoWalletOutline} boxSize={"1.5rem"}/>
           <Text>SM Pay</Text>
         </HStack>
       </Box>
 
-      <Text>Sabilla Mall v{VERSI}</Text>
+      <Text color={"gray.400"} fontSize={"0.75rem"}>Sabilla Mall v{VERSI}</Text>
     </VStack>
   );
 };
@@ -261,7 +273,10 @@ const TopUp = () => {
       >
         <SidePanel userData={userData} />
 
-        <VStack background={"white"} px={"4rem"} py={"2rem"} borderRadius={"1.25rem"}>
+        <VStack
+          background={"white"} px={"4rem"} py={"2rem"} borderRadius={"1.25rem"}
+          className={"secondaryFont"} boxShadow="md" minW={"65%"} align={"start"}>
+
           <Tabs colorScheme={"orange"}>
             <TabList>
               <Tab>Top Up</Tab>
@@ -279,22 +294,22 @@ const TopUp = () => {
                     <CloseButton position="absolute" right="8px" top="8px" />
                   </Alert>
                 }
-                <Heading>Top Up</Heading>
+                <Heading className={"primaryFont"}>Top Up</Heading>
                 <Nominal nominal={nominal} setNominal={setNominal} />
                 <BankTujuan />
                 <TanggalTransfer />
                 <NamaBankPengirim />
                 <NamaPemilikRekening />
                 <Konfirmasi />
-                <HStack mt={"1.125rem"}>
+                <HStack mt={"1.125rem"} alignSelf={"center"}>
                   <Text>Ingin upgrade akun untuk berjualan?</Text>
-                  <Button variant={"outline"} color={"red.600"}>
+                  <Button variant={"outline"} color={"red.600"} className={"primaryFont"} borderColor={"red.600"}>
                     Upgrade Akun
                   </Button>
                 </HStack>
               </TabPanel>
-              <TabPanel>
-                <Heading>Riwayat</Heading>
+              <TabPanel as={VStack} align={"start"} alignSelf={"stretch"}>
+                <Heading className={"primaryFont"}>Riwayat</Heading>
                 <VStack
                   align={"start"} mt={"2rem"} spacing={"1.5rem"}
                   divider={<StackDivider borderColor={"gray.200"} />}
@@ -309,33 +324,33 @@ const TopUp = () => {
                           alt="Riwayat kosong logo"
                         />
                       </VStack> :
-                      listRiwayat.map((topUp) =>
-                      <Entry data={topUp} />,
+                      listRiwayat.map((topUp, index) =>
+                      <Entry data={topUp} key={index}/>,
                     )
                   }
                 </VStack>
-                <HStack>
+                <HStack mt={"1.125rem"} alignSelf={"center"}>
                   <Text>Ingin upgrade akun untuk berjualan?</Text>
-                  <Button variant={"outline"} color={"red.600"}>
+                  <Button variant={"outline"} color={"red.600"} className={"primaryFont"} borderColor={"red.600"}>
                     Upgrade Akun
                   </Button>
                 </HStack>
               </TabPanel>
               <TabPanel>
-                <Heading>Daftar Top Up</Heading>
+                <Heading className={"primaryFont"}>Daftar Top Up</Heading>
                 <VStack
                   align={"start"} mt={"2rem"} spacing={"1.5rem"}
                   divider={<StackDivider borderColor={"gray.200"} />}
                 >
                   {
-                    listTopUp.map((topUp) =>
-                      <Entry data={topUp} />,
+                    listTopUp.map((topUp, index) =>
+                      <Entry data={topUp} key={index}/>,
                     )
                   }
                 </VStack>
-                <HStack mt={"1.125rem"}>
+                <HStack mt={"1.125rem"} alignSelf={"center"}>
                   <Text>Ingin upgrade akun untuk berjualan?</Text>
-                  <Button variant={"outline"} color={"red.600"}>
+                  <Button variant={"outline"} color={"red.600"} className={"primaryFont"} borderColor={"red.600"}>
                     Upgrade Akun
                   </Button>
                 </HStack>
