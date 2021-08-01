@@ -53,13 +53,13 @@ export const SMCard = ({ sm, w }) => (
   </Flex>
 );
 
-export const CardProfile = ({ sm }) => {
+export const CardProfile = ({ sm, cardProfileText }) => {
   const router = useRouter();
 
   const profileMenu = [
     { text: "Akun Saya", icon: FaUser, path: "/profile" },
     { text: "Wishlist", icon: IoHeart, path: "/wishlist" },
-    { text: "Pesanan Saya", icon: VscPackage, path: "/order-information" },
+    { text: "Pesanan Saya", icon: VscPackage, path: "/pesanan-saya" },
   ];
 
   return (
@@ -112,11 +112,23 @@ export const CardProfile = ({ sm }) => {
       >
         <StackDivider borderColor="gray.200" />
         {profileMenu.map((menu) => (
-          <Flex key={menu.text} fontSize="16px" align="center" pl="16px">
-            <Icon as={menu.icon} color="black" fontSize="20px" mr="10px" />
+          <Flex
+            key={menu.text}
+            fontSize="16px"
+            align="center"
+            pl="16px"
+            cursor="pointer"
+          >
+            <Icon
+              as={menu.icon}
+              color={cardProfileText === menu.text ? "orange.500" : "black"}
+              fontSize="20px"
+              mr="10px"
+            />
             <Text
               onClick={() => router.push(menu.path)}
               className="secondaryFont"
+              color={cardProfileText === menu.text ? "orange.500" : "black"}
               fontWeight="500"
               lineHeight="24px"
             >
