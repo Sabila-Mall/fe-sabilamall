@@ -59,7 +59,7 @@ const resi = () => {
         boxShadow="0px 4px 10px 0px #00000040"
       />
       <Layout>
-        <HStack mt={{ base: "-3rem", lg: "0" }} alignItems="start">
+        <HStack h="full" mt={{ base: "-3rem", lg: "0" }} alignItems="start">
           <Box d={{ base: "none", lg: "block" }}>
             <CardProfile sm={sm} />
           </Box>
@@ -171,7 +171,7 @@ const resi = () => {
                     </Flex>
                   </Box>
                 </Flex>
-                <Flex mt="1rem" justifyContent="center" w="full">
+                <Flex mt="1rem" h="auto" justifyContent="center" w="full">
                   <Box
                     w={{ base: "90%", lg: "full" }}
                     maxW={{ base: "90%", lg: "full" }}
@@ -277,21 +277,34 @@ const TextWLabel = ({ title, desc }) => {
   );
 };
 
-const ProgressCircle = ({ time, desc }) => {
+const ProgressCircle = ({ time, desc, id }) => {
   return (
-    <Flex alignItems="start">
-      <Image mr="0.5rem" pt="0.2rem" src="/images/Pengiriman/dot.svg" />
+    <Flex w="full" minH="5rem" maxH="7rem" mt="-0.2rem" alignItems="flex-start">
       <Flex
-        alignItems={{ lg: "center" }}
+        mr="0.5rem"
+        justifyContent="center"
+        direction="column"
+        alignItems="stretch"
+        position="relative"
+      >
+        <Image pt="0.2rem" src="/images/Pengiriman/dot.svg" />
+        <Box mt="-0.2rem" bgColor="#CBD5E0" w="3px" as="span" />
+      </Flex>
+      <HStack
+        w="full"
+        alignItems={{ lg: "flex-start" }}
+        spacing={{ base: 0, lg: "1rem" }}
         flexDir={{ base: "column", lg: "row" }}
       >
         <Text color="gray.400" fontSize="0.875rem" fontWeight="500">
           {time}
         </Text>
-        <Text pl={{ base: 0, lg: "1rem" }} color="gray.500">
-          {desc}
-        </Text>
-      </Flex>
+        <Box maxW={{ lg: "60%" }}>
+          <Text wordBreak="break-word" color="gray.500">
+            {desc}
+          </Text>
+        </Box>
+      </HStack>
     </Flex>
   );
 };
@@ -325,6 +338,7 @@ const TextDetail = ({ label, number, desc, id }) => {
 const ResiNavbar = ({ display, desc, onClick, boxShadow }) => {
   return (
     <Box
+      cursor="pointer"
       px="0.5rem"
       w="full"
       h="3.125rem"
