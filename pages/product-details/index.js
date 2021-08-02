@@ -41,7 +41,7 @@ const ProductDetails = () => {
             w={{ base: "100%", lg: "32%" }}
             mb={{ base: "0.5rem", lg: "5rem" }}
           >
-            <Box h="fit-content" position={{ lg: "sticky" }} top="10.5%">
+            <Box h="fit-content" position={{ lg: "sticky" }} top="12.5%">
               <ProductImages />
               <Box display={{ base: "none", lg: "block" }}>
                 <ShareProduct />
