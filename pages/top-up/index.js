@@ -1,25 +1,25 @@
 import {
   Alert, AlertDescription, AlertIcon,
-  Avatar, AvatarBadge, Center, CloseButton,
-  Flex,
+  Avatar, AvatarBadge, Center, Collapse,
   Heading, Icon, Image,
-  InputLeftAddon,
+  InputLeftAddon, Link,
   NumberInput,
   NumberInputField,
-  Select, SimpleGrid,
-  Stack, StackDivider,
+  Select, SimpleGrid, StackDivider,
   Tab,
   TabList, TabPanel, TabPanels,
-  Tabs, Text,
+  Tabs, Text, useMediaQuery, Wrap, WrapItem,
 } from "@chakra-ui/react";
 import { Input, InputGroup } from "@chakra-ui/input";
 import { Box, HStack, VStack } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/button";
 import { useState } from "react";
-import { IoHeart, IoWalletOutline } from "react-icons/io5";
+import { IoHeart, IoWalletOutline, IoCamera } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 import { VscPackage } from "react-icons/vsc";
 import Navbar from "../../components/Navbar";
+import { formatNumber } from "../../utils/functions";
+import Entry from "../../components/Entry";
 
 // Dummy data
 const listBankTujuan = [
@@ -107,8 +107,8 @@ const VERSI = "9.99.99";
 const Nominal = ({ nominal, setNominal }) => {
   return (
     <VStack spacing={"0.5rem"} w={"full"} align={"start"}>
-      <Text>Nominal</Text>
-      <Text color={"gray.500"}>Minimal Rp10.000</Text>
+      <Text fontSize={"1rem"}>Nominal</Text>
+      <Text color={"gray.500"} fontSize={"0.75rem"}>Minimal Rp10.000</Text>
       <InputGroup>
         <InputLeftAddon children={"Rp"} />
         <NumberInput
@@ -118,13 +118,33 @@ const Nominal = ({ nominal, setNominal }) => {
           <NumberInputField />
         </NumberInput>
       </InputGroup>
-      <HStack>
-        <Button onClick={() => setNominal(20000)}>Rp20.000</Button>
-        <Button onClick={() => setNominal(50000)}>Rp50.000</Button>
-        <Button onClick={() => setNominal(100000)}>Rp100.000</Button>
-        <Button onClick={() => setNominal(500000)}>Rp500.000</Button>
-        <Button onClick={() => setNominal(1000000)}>Rp1.000.000</Button>
-      </HStack>
+      <Wrap>
+        <WrapItem>
+          <Button onClick={() => setNominal(20000)} variant={"outline"} fontSize={"0.75rem"}>
+            Rp20.000
+          </Button>
+        </WrapItem>
+        <WrapItem>
+          <Button onClick={() => setNominal(50000)} variant={"outline"} fontSize={"0.75rem"}>
+            Rp50.000
+          </Button>
+        </WrapItem>
+        <WrapItem>
+          <Button onClick={() => setNominal(100000)} variant={"outline"} fontSize={"0.75rem"}>
+            Rp100.000
+          </Button>
+        </WrapItem>
+        <WrapItem>
+          <Button onClick={() => setNominal(500000)} variant={"outline"} fontSize={"0.75rem"}>
+            Rp500.000
+          </Button>
+        </WrapItem>
+        <WrapItem>
+          <Button onClick={() => setNominal(1000000)} variant={"outline"} fontSize={"0.75rem"}>
+            Rp1.000.000
+          </Button>
+        </WrapItem>
+      </Wrap>
     </VStack>
   );
 };
@@ -157,7 +177,7 @@ const NamaBankPengirim = () => {
   return (
     <VStack spacing={"0.5rem"} w={"full"} align={"start"}>
       <Text>Nama Bank Pengirim</Text>
-      <Input placeholder={"Masukan Nama Bank Pengirim"}/>
+      <Input placeholder={"Masukan Nama Bank Pengirim"} />
     </VStack>
   );
 };
@@ -173,24 +193,9 @@ const NamaPemilikRekening = () => {
 
 const Konfirmasi = () => {
   return (
-    <Button background={"orange.500"} color={"white"}>Konfirmasi</Button>
-  );
-};
-
-const Entry = ({ data }) => {
-  return (
-    <Flex justify={"space-between"}>
-      <Box>
-        <Text>{data.nama}</Text>
-        <Text>{data.tanggal}</Text>
-        <Text>kode: {data.kode}</Text>
-      </Box>
-
-      <Box>
-        <Text>+Rp{data.harga}</Text>
-        <Text>{data.status}</Text>
-      </Box>
-    </Flex>
+    <Button background={"orange.500"} color={"white"} w={{ base: "full", lg: "inherit" }}>
+      Konfirmasi
+    </Button>
   );
 };
 
@@ -201,7 +206,9 @@ const SidePanel = ({ userData }) => {
     >
       <VStack p={"1.125rem"}>
         <Avatar size={"xl"}>
-          <AvatarBadge boxSize="1.25em" bg="green.500" />
+          <AvatarBadge borderColor={"transparent"} boxSize="1.25em" color={"gray.500"}>
+            <IoCamera />
+          </AvatarBadge>
         </Avatar>
         <Text className={"primaryFont"} fontWeight={"bold"} fontSize={"1.125rem"}>
           {userData.nama}
@@ -220,40 +227,47 @@ const SidePanel = ({ userData }) => {
       <SimpleGrid columns={2} px={"1rem"} spacing={"0.75rem"}>
         <VStack borderRadius={"0.5rem"} boxShadow={"base"}>
           <Center bg={"gray.100"} color={"orange.500"} px={"2rem"} py={"0.5rem"} borderTopRadius={"0.5rem"}>
-            SM Pay
+            <Text>SM Pay</Text>
           </Center>
-          <Center bg={"gray.50"} paddingBottom={"0.375rem"}>Rp{userData.SMPay}</Center>
+          <Center bg={"gray.50"} paddingBottom={"0.375rem"}>Rp{formatNumber(userData.SMPay)}</Center>
         </VStack>
 
         <VStack borderRadius={"0.5rem"} boxShadow={"base"}>
           <Center bg={"gray.100"} color={"orange.500"} px={"2rem"} py={"0.5rem"} borderTopRadius={"0.5rem"}>
-            SM Point
+            <Text>SM Pay</Text>
           </Center>
           <Center bg={"gray.50"} paddingBottom={"0.375rem"}>{userData.SMPoint}</Center>
         </VStack>
       </SimpleGrid>
 
       <Box alignSelf={"stretch"}>
-        <HStack py={"1rem"} borderColor={"gray.200"} borderTopWidth={"1px"} borderBottomWidth={"1px"}
-                paddingLeft={"1rem"}>
-          <Icon as={FaUser} boxSize={"1.5rem"}/>
-          <Text>Akun Saya</Text>
-        </HStack>
+        <Link href={""}>
+          <HStack py={"1rem"} borderColor={"gray.200"} borderTopWidth={"1px"} borderBottomWidth={"1px"}
+                  paddingLeft={"1rem"}>
+            <Icon as={FaUser} boxSize={"1.5rem"} />
+            <Text>Akun Saya</Text>
+          </HStack></Link>
 
-        <HStack py={"1rem"} borderTopWidth={"1px"} borderBottomWidth={"1px"} paddingLeft={"1rem"}>
-          <Icon as={IoHeart} boxSize={"1.5rem"}/>
-          <Text>Wishlist</Text>
-        </HStack>
+        <Link href={""}>
+          <HStack py={"1rem"} borderTopWidth={"1px"} borderBottomWidth={"1px"} paddingLeft={"1rem"}>
+            <Icon as={IoHeart} boxSize={"1.5rem"} />
+            <Text>Wishlist</Text>
+          </HStack></Link>
 
-        <HStack py={"1rem"} borderTopWidth={"1px"} borderBottomWidth={"1px"} paddingLeft={"1rem"}>
-          <Icon as={VscPackage} boxSize={"1.5rem"}/>
-          <Text>Pesanan saya</Text>
-        </HStack>
+        <Link href={""}>
+          <HStack py={"1rem"} borderTopWidth={"1px"} borderBottomWidth={"1px"} paddingLeft={"1rem"}>
+            <Icon as={VscPackage} boxSize={"1.5rem"} />
+            <Text>Pesanan saya</Text>
+          </HStack>
+        </Link>
 
-        <HStack py={"1rem"} borderTopWidth={"1px"} borderBottomWidth={"1px"} paddingLeft={"1rem"} color={"orange.500"}>
-          <Icon as={IoWalletOutline} boxSize={"1.5rem"}/>
-          <Text>SM Pay</Text>
-        </HStack>
+        <Link href={""}>
+          <HStack py={"1rem"} borderTopWidth={"1px"} borderBottomWidth={"1px"} paddingLeft={"1rem"}
+                  color={"orange.500"}>
+            <Icon as={IoWalletOutline} boxSize={"1.5rem"} />
+            <Text>SM Pay</Text>
+          </HStack><
+        /Link>
       </Box>
 
       <Text color={"gray.400"} fontSize={"0.75rem"}>Sabilla Mall v{VERSI}</Text>
@@ -261,23 +275,45 @@ const SidePanel = ({ userData }) => {
   );
 };
 
-const TopUp = () => {
-  const [nominal, setNominal] = useState(10000);
+const SmartPhoneTopUp = ({ nominal, setNominal }) => {
+  return (
+    <>
+      <Navbar />
+      <VStack spacing={"1.5rem"} px={"1rem"} py={{ base: "3rem", md: "4rem" }}>
+        <Collapse in={nominal < 10000} animateOpacity>
+          <Alert status="error">
+            <AlertIcon />
+            <AlertDescription>Nominal Top Up Minimal Rp10.000</AlertDescription>
+          </Alert>
+        </Collapse>
+        <Nominal nominal={nominal} setNominal={setNominal} mt={"5rem"} />
+        <BankTujuan />
+        <TanggalTransfer />
+        <NamaBankPengirim />
+        <NamaPemilikRekening />
+        <Konfirmasi />
+      </VStack>
+    </>
+  );
+};
+
+const DesktopTopUp = ({ nominal, setNominal }) => {
 
   return (
     <>
       <Navbar />
-      <Stack
-        direction={"row"} background={"gray.50"} mt={"7.5rem"} ml={"7.5rem"}
-        spacing={"1rem"} align={"start"}
+      <HStack
+        background={"gray.50"} align={"start"} spacing={"1rem"}
+        mt={"7.5rem"} ml={{ lg: "4rem", xl: "7.5rem" }}
+        paddingBottom={"4rem"}
       >
         <SidePanel userData={userData} />
 
         <VStack
-          background={"white"} px={"4rem"} py={"2rem"} borderRadius={"1.25rem"}
-          className={"secondaryFont"} boxShadow="md" minW={"65%"} align={"start"}>
+          background={"white"} px={"2rem"} py={"2rem"} borderRadius={"1.25rem"}
+          className={"secondaryFont"} boxShadow="md" minW={{ xl: "65%" }} align={"start"}>
 
-          <Tabs colorScheme={"orange"}>
+          <Tabs colorScheme={"orange"} w={{ lg: "full" }}>
             <TabList>
               <Tab>Top Up</Tab>
               <Tab>Riwayat</Tab>
@@ -285,33 +321,28 @@ const TopUp = () => {
             </TabList>
 
             <TabPanels>
-              <TabPanel as={VStack} spacing={"3rem"} align={"start"}>
-                {
-                  nominal < 10000 &&
+              <TabPanel>
+                <Collapse in={nominal < 10000} animateOpacity>
                   <Alert status="error">
                     <AlertIcon />
                     <AlertDescription>Nominal Top Up Minimal Rp10.000</AlertDescription>
-                    <CloseButton position="absolute" right="8px" top="8px" />
                   </Alert>
-                }
-                <Heading className={"primaryFont"}>Top Up</Heading>
-                <Nominal nominal={nominal} setNominal={setNominal} />
-                <BankTujuan />
-                <TanggalTransfer />
-                <NamaBankPengirim />
-                <NamaPemilikRekening />
-                <Konfirmasi />
-                <HStack mt={"1.125rem"} alignSelf={"center"}>
-                  <Text>Ingin upgrade akun untuk berjualan?</Text>
-                  <Button variant={"outline"} color={"red.600"} className={"primaryFont"} borderColor={"red.600"}>
-                    Upgrade Akun
-                  </Button>
-                </HStack>
+                </Collapse>
+                <Heading className={"primaryFont"} my={"1rem"}>Top Up</Heading>
+                <VStack align={"start"} spacing={"3rem"}>
+                  <Nominal nominal={nominal} setNominal={setNominal} />
+                  <BankTujuan />
+                  <TanggalTransfer />
+                  <NamaBankPengirim />
+                  <NamaPemilikRekening />
+                  <Konfirmasi />
+                </VStack>
               </TabPanel>
-              <TabPanel as={VStack} align={"start"} alignSelf={"stretch"}>
+
+              <TabPanel align={"start"} alignSelf={"stretch"}>
                 <Heading className={"primaryFont"}>Riwayat</Heading>
                 <VStack
-                  align={"start"} mt={"2rem"} spacing={"1.5rem"}
+                  align={"space-between"} mt={"2rem"} spacing={"1.5rem"}
                   divider={<StackDivider borderColor={"gray.200"} />}
                 >
                   {
@@ -320,46 +351,60 @@ const TopUp = () => {
                         <Text>Belum ada riwayat transaksi</Text>
                         <Image
                           objectFit="cover"
-                          src="https://bit.ly/dan-abramov"
+                          src="images/emptyMascot.png"
                           alt="Riwayat kosong logo"
                         />
                       </VStack> :
                       listRiwayat.map((topUp, index) =>
-                      <Entry data={topUp} key={index}/>,
-                    )
+                        <Entry data={topUp} key={index} />,
+                      )
                   }
                 </VStack>
-                <HStack mt={"1.125rem"} alignSelf={"center"}>
-                  <Text>Ingin upgrade akun untuk berjualan?</Text>
-                  <Button variant={"outline"} color={"red.600"} className={"primaryFont"} borderColor={"red.600"}>
-                    Upgrade Akun
-                  </Button>
-                </HStack>
               </TabPanel>
+
               <TabPanel>
                 <Heading className={"primaryFont"}>Daftar Top Up</Heading>
                 <VStack
-                  align={"start"} mt={"2rem"} spacing={"1.5rem"}
+                  align={"space-between"} mt={"2rem"} spacing={"1.5rem"}
                   divider={<StackDivider borderColor={"gray.200"} />}
                 >
                   {
-                    listTopUp.map((topUp, index) =>
-                      <Entry data={topUp} key={index}/>,
-                    )
+                    !listTopUp.length ?
+                      <VStack>
+                        <Text>Belum ada riwayat top-up</Text>
+                        <Image
+                          objectFit="cover"
+                          src="images/emptyMascot.png"
+                          alt="Riwayat kosong logo"
+                        />
+                      </VStack> :
+                      listTopUp.map((topUp, index) =>
+                        <Entry data={topUp} key={index} />,
+                      )
                   }
                 </VStack>
-                <HStack mt={"1.125rem"} alignSelf={"center"}>
-                  <Text>Ingin upgrade akun untuk berjualan?</Text>
-                  <Button variant={"outline"} color={"red.600"} className={"primaryFont"} borderColor={"red.600"}>
-                    Upgrade Akun
-                  </Button>
-                </HStack>
               </TabPanel>
             </TabPanels>
           </Tabs>
+          <HStack mt={"1.125rem"} alignSelf={"center"}>
+            <Text>Ingin upgrade akun untuk berjualan?</Text>
+            <Button variant={"outline"} color={"red.600"} className={"primaryFont"} borderColor={"red.600"}>
+              Upgrade Akun
+            </Button>
+          </HStack>
         </VStack>
-      </Stack>
+      </HStack>
     </>
+  );
+};
+
+const TopUp = () => {
+  const [nominal, setNominal] = useState(10000);
+  const [isSmartphone] = useMediaQuery("(max-width: 48em)");
+
+  return (
+    isSmartphone ? <SmartPhoneTopUp nominal={nominal} setNominal={setNominal} />
+      : <DesktopTopUp nominal={nominal} setNominal={setNominal} />
   );
 };
 
