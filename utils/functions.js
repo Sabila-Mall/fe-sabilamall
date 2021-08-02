@@ -31,3 +31,7 @@ export const copyToClipboard = (text, onSuccess, onFail) => {
     .then(onSuccess ? onSuccess : () => {})
     .catch(() => console.error("Unable to copy", err));
 };
+
+export const formatNumber = (number) => {
+  return number.toLocaleString("id-ID");
+};
