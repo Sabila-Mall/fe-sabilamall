@@ -9,7 +9,7 @@ const ProductHeader = (libur, preOrder) => {
   const discount = 99;
   const rating = (5.0).toFixed(1);
   return (
-    <Box ml="0.5rem">
+    <Box>
       <Text
         fontSize={{ base: "18px", md: "24px" }}
         fontWeight="500"
@@ -22,6 +22,7 @@ const ProductHeader = (libur, preOrder) => {
         divider={
           <StackDivider borderColor={{ base: "white", md: "gray.200" }} />
         }
+        flexWrap="wrap"
         alignItems="center"
         direction="row"
         spacing="8px"

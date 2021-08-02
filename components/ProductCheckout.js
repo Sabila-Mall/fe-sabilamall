@@ -58,6 +58,8 @@ const ProductCheckout = () => {
 
   return (
     <VStack
+      maxW={{ "2xl": "300px" }}
+      pl={{ "2xl": "2rem" }}
       pt={{ base: "1rem", sm: "inherit" }}
       spacing={"12px"}
       className={"secondaryFont"}

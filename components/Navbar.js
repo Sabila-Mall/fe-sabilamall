@@ -111,7 +111,7 @@ const Navbar = () => {
         className={styles.navbarTop}
         px={{ base: ".8rem", md: "5px", lg: "15px", xl: "50px" }}
         h={{ base: "50px", md: "70px" }}
-        zIndex={isSearched ? "5" : "10"}
+        zIndex={isSearched ? "5" : "30"}
       >
         <Box display="flex" alignItems="center" ml={{ md: "5px", lg: "20px" }}>
           <Icon
@@ -270,7 +270,7 @@ const Navbar = () => {
       ></Box>
       <Box
         w={isMainMenu ? "85vw" : "0"}
-        zIndex="3"
+        zIndex="40"
         className={styles.sidebarMenu}
       >
         <Box className={styles.headerSidebar}>

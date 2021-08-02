@@ -2,6 +2,7 @@ import { Box, Flex } from "@chakra-ui/react";
 
 import BreadCrumb from "../../components/Breadcrumb";
 import { Layout } from "../../components/Layout";
+import Navbar from "../../components/Navbar";
 import ProductCheckout from "../../components/ProductCheckout";
 import ProductHeader from "../../components/ProductHeader";
 import { ProductImages } from "../../components/ProductImages";
@@ -29,16 +30,28 @@ const ProductDetails = () => {
     },
   ];
   return (
-    <Layout sticky hasNavbar>
-      <Box>
-        <BreadCrumb items={path} />
+    <>
+      <Navbar />
+
+      <Box
+        mt={{ base: "4.5rem", lg: "2.5rem" }}
+        mx={["1.5rem", "3rem", "2rem", "2rem", "5rem", "7.5rem"]}
+      >
+        <Flex
+          display={{ base: "none", md: "block" }}
+          mt="5.5rem"
+          justifyContent="center"
+          w={{ base: "100%", md: "58%", lg: "38%", xl: "32%" }}
+        >
+          <BreadCrumb items={path} />
+        </Flex>
         <Flex
           flexDirection={{ base: "column", lg: "row" }}
           justifyContent={{ md: "center" }}
-          mt="24px"
+          mt="2rem"
         >
           <Box
-            w={{ base: "100%", lg: "32%" }}
+            w={{ base: "100%", lg: "32%", "2xl": "25%" }}
             mb={{ base: "0.5rem", lg: "5rem" }}
           >
             <Box h="fit-content" position={{ lg: "sticky" }} top="12.5%">
@@ -48,7 +61,10 @@ const ProductDetails = () => {
               </Box>
             </Box>
           </Box>
-          <Box w={{ base: "100%", lg: "43%" }} mr={{ lg: "1rem" }}>
+          <Box
+            w={{ base: "100%", lg: "43%" }}
+            px={{ lg: "1rem", xl: "0.5rem", "2xl": "2rem" }}
+          >
             <ProductHeader preOrder />
             <Box display={{ base: "none", lg: "block" }}>
               <ProductInformation />
@@ -71,7 +87,7 @@ const ProductDetails = () => {
         </Box>
         <RelatedProductContainer />
       </Box>
-    </Layout>
+    </>
   );
 };
 
