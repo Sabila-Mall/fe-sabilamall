@@ -24,8 +24,8 @@ import { IoMdMail } from "react-icons/io";
 import { IoPeopleSharp, IoPhonePortraitOutline, IoFlag } from "react-icons/io5";
 import { MdLocationOn } from "react-icons/md";
 
-import { useRegister } from "../../api/Auth";
-import { useKota, useProvinsi } from "../../api/Zone";
+import { apiRegister } from "../../api/Auth";
+import { apiKota, apiProvinsi } from "../../api/Zone";
 import { Layout } from "../../components/Layout";
 import { USER_FIELDS } from "../../constants/authConstants";
 import { useAuthContext } from "../../contexts/authProvider";
@@ -53,7 +53,7 @@ const SignUp = () => {
   const [cityId, setCityId] = useState(null);
 
   useEffect(() => {
-    useProvinsi()
+    apiProvinsi()
       .then((res) => {
         const response = res.data.data;
         setProvinsi(response);
@@ -68,7 +68,7 @@ const SignUp = () => {
       const id = provinsi.filter((prov) => prov.zone_name === province)[0]
         .zone_apicityid;
       setProvinceId(id);
-      useKota(id)
+      apiKota(id)
         .then((res) => {
           const response = res.data.data;
           setKota(response);
@@ -89,7 +89,7 @@ const SignUp = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    useRegister(
+    apiRegister(
       namaDepan,
       namaBelakang,
       emailAddress,

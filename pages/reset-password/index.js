@@ -15,7 +15,7 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { IoMdMail } from "react-icons/io";
 
-import { useResetPassword } from "../../api/Auth";
+import { apiResetPassword } from "../../api/Auth";
 
 const ResetPassword = () => {
   const router = useRouter();
@@ -23,7 +23,7 @@ const ResetPassword = () => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    useResetPassword(resetEmail)
+    apiResetPassword(resetEmail)
       .then((res) => {
         if (
           res.message === "Your password has been sent to your email address."

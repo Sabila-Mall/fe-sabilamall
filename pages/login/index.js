@@ -19,7 +19,7 @@ import React, { useState } from "react";
 import { BsFillLockFill } from "react-icons/bs";
 import { IoMdMail } from "react-icons/io";
 
-import { useLogin } from "../../api/Auth";
+import { apiLogin } from "../../api/Auth";
 import { USER_FIELDS } from "../../constants/authConstants";
 import { useAuthContext } from "../../contexts/authProvider";
 import { filterObject } from "../../utils/functions";
@@ -34,7 +34,7 @@ const Login = () => {
   const submitHandler = (event) => {
     event.preventDefault();
 
-    useLogin(loginEmail, loginPassword)
+    apiLogin(loginEmail, loginPassword)
       .then((res) => {
         const response = res.data;
         if (response.message === "Data has been returned successfully!") {

@@ -1,13 +1,13 @@
 import axios from "axios";
 
-export const useLogin = (email, password) => {
+export const apiLogin = (email, password) => {
   return axios.post("https://api.sabilamall.co.id/api/user/proses_login", {
     email: email,
     password: password,
   });
 };
 
-export const useRegister = (
+export const apiRegister = (
   first_name,
   last_name,
   email,
@@ -29,7 +29,7 @@ export const useRegister = (
   });
 };
 
-export const useResetPassword = (email) => {
+export const apiResetPassword = (email) => {
   return axios.post("https://sabilamall.co.id/api/processforgotpassword", {
     email: email,
   });
