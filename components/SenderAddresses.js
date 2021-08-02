@@ -21,7 +21,7 @@ import {
 import { useState } from "react";
 import { IoIosAddCircle } from "react-icons/io";
 
-import AddressBox from "./AddressBox";
+import { AddressBoxSender } from "./AddressBox";
 
 const SenderAddresses = ({ isMobile }) => {
   let addresses = [
@@ -101,7 +101,7 @@ const SenderAddresses = ({ isMobile }) => {
 
         return (
           <Box key={phoneNumber}>
-            <AddressBox
+            <AddressBoxSender
               name={name}
               phoneNumber={phoneNumber}
               editAddress={onOpen}
