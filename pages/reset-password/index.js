@@ -56,9 +56,8 @@ const ResetPassword = () => {
           isClosable: true,
           position: "top",
         });
-      }
-        console.error(err))
-      };
+        console.error(err);
+      });
   };
 
   return (
