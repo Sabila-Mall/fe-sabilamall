@@ -19,14 +19,15 @@ import React, { useState } from "react";
 import { BsFillLockFill } from "react-icons/bs";
 import { IoMdMail } from "react-icons/io";
 
-import { apiLogin } from "../../api/Auth";
+import { apiLogin, saveUserIdToCookies } from "../../api/Auth";
 import { USER_FIELDS } from "../../constants/authConstants";
 import { useAuthContext } from "../../contexts/authProvider";
+import { isRequestSuccess } from "../../utils/api";
 import { filterObject } from "../../utils/functions";
 
 const Login = () => {
   const router = useRouter();
-  const { setUserData } = useAuthContext();
+  const { setUserData, setIsLoggedIn } = useAuthContext();
 
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
@@ -37,12 +38,10 @@ const Login = () => {
     apiLogin(loginEmail, loginPassword)
       .then((res) => {
         const response = res.data;
-        if (response.message === "Data has been returned successfully!") {
+        if (isRequestSuccess(response)) {
           setUserData(filterObject(response.data[0], USER_FIELDS));
-          nookies.set(null, "token", response.data[0].token, {
-            maxAge: 30 * 24 * 60 * 60,
-            path: "/",
-          });
+          saveUserIdToCookies(saveUserIdToCookies(response.data[0].id));
+          setIsLoggedIn(true);
           router.push("/");
         } else {
           console.error(response.message);

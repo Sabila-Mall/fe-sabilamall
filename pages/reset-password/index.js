@@ -10,30 +10,55 @@ import {
   FormControl,
   InputLeftElement,
   Button,
+  toast,
+  useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { IoMdMail } from "react-icons/io";
 
 import { apiResetPassword } from "../../api/Auth";
+import { isRequestSuccess } from "../../utils/api";
 
 const ResetPassword = () => {
   const router = useRouter();
   const [resetEmail, setResetEmail] = useState("");
+  const toast = useToast();
 
   const submitHandler = (event) => {
     event.preventDefault();
     apiResetPassword(resetEmail)
       .then((res) => {
-        if (
-          res.message === "Your password has been sent to your email address."
-        ) {
-          router.push("/");
+        const response = res.data;
+        if (isRequestSuccess(response)) {
+          toast({
+            title: "Email Reset Password Berhasil Terkirim",
+            status: "success",
+            duration: 9000,
+            isClosable: true,
+            position: "top",
+          });
         } else {
-          console.error(res.message);
+          toast({
+            title: response.message,
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+            position: "top",
+          });
         }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        toast({
+          title: "Gagal mengirimkan email",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+          position: "top",
+        });
+      }
+        console.error(err))
+      };
   };
 
   return (

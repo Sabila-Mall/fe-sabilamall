@@ -16,7 +16,6 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-// import nookies from "nookies";
 import React, { useState, useEffect } from "react";
 import { BiShow, BiHide } from "react-icons/bi";
 import { BsFillLockFill } from "react-icons/bs";
@@ -24,16 +23,20 @@ import { IoMdMail } from "react-icons/io";
 import { IoPeopleSharp, IoPhonePortraitOutline, IoFlag } from "react-icons/io5";
 import { MdLocationOn } from "react-icons/md";
 
-import { apiRegister } from "../../api/Auth";
+import { apiRegister, saveUserIdToCookies } from "../../api/Auth";
 import { apiKota, apiProvinsi } from "../../api/Zone";
 import { Layout } from "../../components/Layout";
-import { USER_FIELDS } from "../../constants/authConstants";
+import {
+  AUTH_RESPONSE_STATUS,
+  USER_FIELDS,
+} from "../../constants/authConstants";
 import { useAuthContext } from "../../contexts/authProvider";
+import { isRequestSuccess } from "../../utils/api";
 import { filterObject } from "../../utils/functions";
 
 const SignUp = () => {
   const router = useRouter();
-  const { setUserData } = useAuthContext();
+  const { setUserData, setIsLoggedIn } = useAuthContext();
 
   const [provinsi, setProvinsi] = useState([]);
   const [kota, setKota] = useState([]);
@@ -51,6 +54,8 @@ const SignUp = () => {
 
   const [provinceId, setProvinceId] = useState(null);
   const [cityId, setCityId] = useState(null);
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     apiProvinsi()
@@ -88,7 +93,7 @@ const SignUp = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    setLoading(true);
     apiRegister(
       namaDepan,
       namaBelakang,
@@ -101,18 +106,18 @@ const SignUp = () => {
     )
       .then((res) => {
         const response = res.data;
-        if (response.message === "Sign Up successfully!") {
+        if (isRequestSuccess(response)) {
           setUserData(filterObject(response.data[0], USER_FIELDS));
-          // nookies.set(null, "token", response.data[0].token, {
-          //   maxAge: 30 * 24 * 60 * 60,
-          //   path: "/",
-          // });
+          saveUserIdToCookies(response.data[0].id);
+          setIsLoggedIn(true);
           router.push("/");
         } else {
+          setLoading(false);
           console.error(response.message);
         }
       })
       .catch((err) => {
+        setLoading(false);
         console.error(err);
       });
   };
@@ -248,6 +253,7 @@ const SignUp = () => {
                         as={showPassword ? BiShow : BiHide}
                         color="gray.500"
                         boxSize="1.2em"
+                        _hover={{ cursor: "pointer" }}
                       />
                     }
                   />
@@ -291,7 +297,10 @@ const SignUp = () => {
                       >
                         {provinsi !== [] &&
                           provinsi.map((prov, i) => (
-                            <option key={prov.zone_name}>
+                            <option
+                              key={prov.zone_name}
+                              style={{ color: "black" }}
+                            >
                               {prov.zone_name}
                             </option>
                           ))}
@@ -338,7 +347,12 @@ const SignUp = () => {
                       >
                         {kota !== [] &&
                           kota.map((ko, i) => (
-                            <option key={ko.city_name}>{ko.city_name}</option>
+                            <option
+                              key={ko.city_name}
+                              style={{ color: "black" }}
+                            >
+                              {ko.city_name}
+                            </option>
                           ))}
                       </Select>
                     </FormControl>
@@ -384,6 +398,7 @@ const SignUp = () => {
                     placeholder="No. Telepon / Handphone"
                     size="md"
                     fontSize="sm"
+                    type="tel"
                     onChange={(e) => setHandphone(e.target.value)}
                   />
                 </InputGroup>
@@ -416,6 +431,7 @@ const SignUp = () => {
                     : true
                 }
                 onClick={(e) => handleSubmit(e)}
+                isLoading={loading}
               >
                 Register
               </Button>

@@ -1,4 +1,5 @@
 import axios from "axios";
+import nookies from "nookies";
 
 export const apiLogin = (email, password) => {
   return axios.post("https://api.sabilamall.co.id/api/user/proses_login", {
@@ -32,5 +33,18 @@ export const apiRegister = (
 export const apiResetPassword = (email) => {
   return axios.post("https://sabilamall.co.id/api/processforgotpassword", {
     email: email,
+  });
+};
+
+export const apiGetUserProfile = (id) => {
+  return axios.post("https://api.sabilamall.co.id/api/user/get_profile", {
+    user_id: id,
+  });
+};
+
+export const saveUserIdToCookies = (userId) => {
+  nookies.set(null, "user_id", userId, {
+    maxAge: 30 * 24 * 60 * 60,
+    path: "/",
   });
 };

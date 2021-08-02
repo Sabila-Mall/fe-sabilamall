@@ -1,4 +1,5 @@
 export const USER_FIELDS = [
+  "id",
   "first_name",
   "last_name",
   "email",
@@ -8,3 +9,8 @@ export const USER_FIELDS = [
   "user_name",
   "smpoint",
 ];
+
+export const AUTH_RESPONSE_STATUS = {
+  OK: "1",
+  FAILED: "0",
+};
