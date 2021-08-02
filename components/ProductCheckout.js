@@ -123,7 +123,8 @@ const ProductCheckout = () => {
                 as={IoRemoveCircleOutline}
                 w={"24px"}
                 h={"24px"}
-                color={"gray.400"}
+                bgColor="transparent"
+                color={numberOfItem === 0 ? "gray.200" : "gray.400"}
                 _hover={{ cursor: "pointer" }}
                 onClick={() => handleModifyNumberOfItem("decrease")}
               />
@@ -140,6 +141,7 @@ const ProductCheckout = () => {
                 as={IoIosAddCircleOutline}
                 color={"gray.400"}
                 w={"24px"}
+                bgColor="transparent"
                 h={"24px"}
                 _hover={{ cursor: "pointer" }}
                 onClick={() => handleModifyNumberOfItem("increase")}
@@ -185,6 +187,7 @@ const ProductCheckout = () => {
           fontSize={"16px"}
           fontWeight={"bold"}
           className={"primaryFont"}
+          _hover={{ bgColor: "red.600" }}
           onClick={() =>
             toast({
               title: "Berhasil",
@@ -197,7 +200,7 @@ const ProductCheckout = () => {
             })
           }
         >
-          Masukan ke Keranjang
+          Masukkan ke Keranjang
         </Button>
       </VStack>
 

@@ -7,17 +7,18 @@ import {
   Tab,
   TabPanel,
   Stack,
-  Link,
   Button,
   Heading,
   HStack,
   Progress,
   Center,
   useBoolean,
+  color,
 } from "@chakra-ui/react";
 import { css } from "@emotion/react";
 import dynamic from "next/dynamic";
 import { GoStar } from "react-icons/go";
+import Link from 'next/link'
 
 import styles from "../styles/ProductDetails.module.scss";
 
@@ -26,7 +27,7 @@ const StarRatings = dynamic(() => import("react-star-ratings"), {
 });
 
 const ProductInformation = () => {
-  const [description, setDescription] = useBoolean(true);
+  const [description, setDescription] = useBoolean(false);
 
   let productRating = 4.3;
   const productDescription =
@@ -74,10 +75,9 @@ const ProductInformation = () => {
 
   const showDescription = () => {
     const descriptionText = document.getElementById("descriptionText");
-    const toggleButton = document.getElementById("seeMoreButton");
+    setDescription.toggle()
 
-    descriptionText.classList.remove(styles.productDescription);
-    toggleButton.style.display = "none";
+    descriptionText.classList.toggle(styles.productDescription);
   };
 
   return (
@@ -86,6 +86,7 @@ const ProductInformation = () => {
         <TabList borderTop="2px" borderTopColor="gray.200">
           <Tab
             _selected={{ color: "orange.500", borderBottomColor: "orange.400" }}
+            _hover={{ color: "orange.400", borderBottomColor: "orange.300" }}
             _focus={{ boxShadow: "none" }}
             className="secondaryFont"
             fontWeight="500"
@@ -95,6 +96,7 @@ const ProductInformation = () => {
           </Tab>
           <Tab
             _selected={{ color: "orange.500", borderBottomColor: "orange.400" }}
+            _hover={{ color: "orange.400", borderBottomColor: "orange.300" }}
             _focus={{ boxShadow: "none" }}
             className="secondaryFont"
             fontWeight="500"
@@ -114,7 +116,9 @@ const ProductInformation = () => {
                 borderBottomColor: "orange.400",
               }}
               _focus={{ boxShadow: "none" }}
-              _hover={{ textDecoration: "none" }}
+              p="12px 20px"
+              borderRadius="0"
+              _hover={{ boxShadow: "none", color: "orange.400", borderBottom: "2px solid #F6AD55", transform: "translateY(2px)" }}
               className="secondaryFont"
               fontWeight="500"
               bg="white"
@@ -232,7 +236,7 @@ const ProductInformation = () => {
                 _hover={{ bg: "transparent", color: "orange.500" }}
                 _focus={{ boxShadow: "none" }}
               >
-                Lihat selengkapnya
+                {description ? "Lebih Sedikit" : "Lihat selengkapnya"}
               </Button>
             </Box>
           </TabPanel>
@@ -269,7 +273,8 @@ const ProductInformation = () => {
                   className="secondaryFont"
                   fontWeight="500"
                 >
-                  {ratingAmount} penilaian
+                  {`${ratingAmount} penilaian`}
+
                 </Text>
               </Center>
               <Stack w="60%" spacing="4px" ml="4px">
