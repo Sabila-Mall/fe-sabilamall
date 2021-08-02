@@ -4,7 +4,7 @@ import { IoLogoTwitter, IoLogoWhatsapp } from "react-icons/io5";
 
 const d = [
   {
-    link: "https://google.com",
+    link: "https://www.facebook.com/sabilamall.id/",
     logo: <IoLogoFacebook size="1.5em" />,
   },
   {

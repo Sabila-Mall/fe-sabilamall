@@ -269,8 +269,7 @@ const ProductInformation = () => {
                   className="secondaryFont"
                   fontWeight="500"
                 >
-                  {ratingAmount}
-                  penilaian
+                  {ratingAmount} penilaian
                 </Text>
               </Center>
               <Stack w="60%" spacing="4px" ml="4px">
