@@ -48,3 +48,10 @@ export const saveUserIdToCookies = (userId) => {
     path: "/",
   });
 };
+
+export const saveTokenToCookies = (token) => {
+  nookies.set(null, "token", token, {
+    maxAge: 30 * 24 * 60 * 60,
+    path: "/",
+  });
+};
