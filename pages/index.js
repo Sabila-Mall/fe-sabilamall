@@ -30,10 +30,12 @@ import {
   dataFlashSale,
   dataDiscount,
 } from "../constants/dummyData";
+import { useAuthContext } from "../contexts/authProvider";
 
 const Home = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-
+  const { userData, isLoggedIn } = useAuthContext();
+  console.log(userData);
+  console.log(isLoggedIn);
   const category = [
     ["images/fashionMuslim.svg", "Fashion Muslim"],
     [FaBaby, "Fashion Bayi"],
@@ -68,7 +70,7 @@ const Home = () => {
   const [inFlashSale, setInFlashSale] = useState(false);
   const [scrollVisible, setScrollVisible] = useState(false);
 
-  function logit() {
+  function scrollLogger() {
     // const flashSaleData = flashSaleRef.current.getBoundingClientRect();
     const scrollData = scrollRef.current.getBoundingClientRect();
 
@@ -90,11 +92,11 @@ const Home = () => {
 
   useEffect(() => {
     const watchScroll = () => {
-      window.addEventListener("scroll", logit);
+      window.addEventListener("scroll", scrollLogger);
     };
     watchScroll();
     return () => {
-      window.removeEventListener("scroll", logit);
+      window.removeEventListener("scroll", scrollLogger);
     };
   });
 

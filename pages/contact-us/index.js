@@ -13,6 +13,7 @@ import {
   Textarea,
   Button,
   Image,
+  Link,
 } from "@chakra-ui/react";
 import { FaPhoneAlt } from "react-icons/fa";
 import { IoLogoFacebook } from "react-icons/io";
@@ -37,6 +38,7 @@ const contactUs = () => {
       breadCrumbItem={[{ name: "Kontak Kami", link: "#", isOnPage: true }]}
     >
       <Flex
+        px={{ base: "1rem", md: "auto" }}
         className={styles.layout}
         fontWeight="500"
         flexDirection="column"
@@ -73,7 +75,7 @@ const contactUs = () => {
                   spacing={{ base: "1rem" }}
                 >
                   <Flex alignItems="center">
-                    <FaPhoneAlt size="2rem" color="orange" />
+                    <FaPhoneAlt color="orange" className={styles.icon} />
                     <Text fontSize={{ base: "14px", xl: "1rem" }} pl="0.64rem">
                       +62 851-5995-4161
                     </Text>
@@ -83,7 +85,7 @@ const contactUs = () => {
                     display={{ base: "none", lg: "block" }}
                   />
                   <Flex alignItems="center">
-                    <IoMail size="2rem" color="orange" />
+                    <IoMail color="orange" className={styles.icon} />
                     <Text fontSize={{ base: "14px", xl: "1rem" }} pl="0.64rem">
                       customer@sabilamall.co.id
                     </Text>
@@ -151,10 +153,18 @@ const contactUs = () => {
                   Follow SabilaMall yuk!
                 </Text>
                 <Stack direction="row" spacing={4} justifyContent="center">
-                  <IoLogoFacebook size="2.5rem" color="orange" />
-                  <IoLogoTwitter size="2.5rem" color="orange" />
-                  <IoLogoInstagram size="2.5rem" color="orange" />
-                  <IoLogoLinkedin size="2.5rem" color="orange" />
+                  <Link target="_blank" href="/">
+                    <IoLogoFacebook size="2.5rem" color="orange" />
+                  </Link>
+                  <Link target="_blank" href="/">
+                    <IoLogoTwitter size="2.5rem" color="orange" />
+                  </Link>
+                  <Link target="_blank" href="/">
+                    <IoLogoInstagram size="2.5rem" color="orange" />
+                  </Link>
+                  <Link target="_blank" href="/">
+                    <IoLogoLinkedin size="2.5rem" color="orange" />
+                  </Link>
                 </Stack>
               </Stack>
             </GridItem>
