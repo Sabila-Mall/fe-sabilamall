@@ -23,8 +23,10 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { FaPen } from "react-icons/fa";
+import InputBoxAndLabel from "./InputBoxAndLabel";
 
 import DeleteIcon from "./deleteIcon";
+import { useForm } from "react-hook-form";
 
 const AddressBoxReceiver = ({
   name,
@@ -39,7 +41,6 @@ const AddressBoxReceiver = ({
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isMobile] = useMediaQuery("(max-width: 48rem)")
-  const [receiverName, setreceiverName] = useState(name)
 
   return (
     <Box position="relative" p="16px" pb="0">
@@ -282,6 +283,17 @@ const AddressBoxSender = ({
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isMobile] = useMediaQuery("(max-width: 48rem)")
+  const { register, handleSubmit } = useForm();
+  const [senderName, setsenderName] = useState(name)
+  const [senderPhoneNumber, setsenderPhoneNumber] = useState(phoneNumber)
+
+  const onSubmit = data => {
+    setsenderName(data.name)
+    setsenderPhoneNumber(data.phoneNumber)
+  }
+
+
+
   return (
     <Box position="relative" p="16px" pb="0">
       <Flex lineHeight="150%" className="secondaryFont" fontSize="12px">
@@ -290,12 +302,12 @@ const AddressBoxSender = ({
           textAlign="right"
           display={{ base: "none", md: "block" }}
         >
-          <Text>{name ? "Nama Lengkap" : ""}</Text>
-          <Text>{phoneNumber ? "Telepon" : ""}</Text>
+          <Text>{senderName ? "Nama Lengkap" : ""}</Text>
+          <Text>{senderPhoneNumber ? "Telepon" : ""}</Text>
         </Box>
         <Box ml={{ base: "0", md: "16px" }} maxW={{ base: "60%", md: "40%" }}>
-          <Text fontWeight="bold">{name}</Text>
-          <Text>{phoneNumber}</Text>
+          <Text fontWeight="bold">{senderName}</Text>
+          <Text>{senderPhoneNumber}</Text>
         </Box>
       </Flex>
       <Divider mt="1rem" mb="0" />
@@ -322,20 +334,22 @@ const AddressBoxSender = ({
         isOpen={isOpen}
         onClose={onClose}
         pos="relative"
-        size={isMobile ? "6xl" : "md"}
+        size={isMobile ? "6xl" : "lg"}
       >
         {isMobile ? <></> : <ModalOverlay />}
         <ModalContent
+          p={isMobile ? "" : "50px"}
           pos="absolute"
           h={isMobile ? "calc(100% - 50px)" : "auto"}
           mt="50px"
+          top={isMobile ? "" : "calc(50% - 15rem)"}
           borderRadius={isMobile ? "0" : "20px"}
           bgColor={isMobile ? "#F7FAFC" : "white"}
         >
           {isMobile ? (
             <></>
           ) : (
-            <ModalHeader>Ubah Alamat Pengirim</ModalHeader>
+            <ModalHeader fontWeight="700">Ubah Identitas Pengirim</ModalHeader>
           )}
           <ModalCloseButton
             pos="absolute"
@@ -347,43 +361,42 @@ const AddressBoxSender = ({
             visibility={isMobile ? "hidden" : "visible"}
             _hover={{ bg: "red.700" }}
           />
-          <ModalBody pb={6}>
-            <FormControl>
-              <FormLabel>Nama Lengkap</FormLabel>
-              <Input
-                value={name}
-                onChange={(e) => settempName(e.target.value)}
-                isRequired={true}
+          <ModalBody m="12px">
+            <FormControl as="form" onSubmit={handleSubmit(onSubmit)}>
+              <InputBoxAndLabel
+                register={register}
+                text="Nama Lengkap"
+                name="name"
+                defaultValue={senderName}
               />
-
-              <FormLabel mt={4}>Nomor Telepon</FormLabel>
-              <Input
-                value={phoneNumber}
+              <InputBoxAndLabel
+                register={register}
+                text="Nomor Telepon"
+                name="phoneNumber"
                 type="number"
-                onChange={(e) => settempPhoneNumber(e.target.value)}
-                isRequired={true}
+                mt={4}
+                defaultValue={senderPhoneNumber}
               />
+              <Flex justify={isMobile ? "center" : "flex-end"}>
+                <Button
+                  colorScheme="orange"
+                  borderRadius="20px"
+                  p="16px 64px"
+                  mt={isMobile ? "" : "1rem"}
+                  type="submit"
+                  fontWeight="700"
+                  className="primaryFont"
+                  fontSize="14px"
+                  w={{ base: "100%", md: "50%" }}
+                >
+                  Update
+                </Button>
+              </Flex>
             </FormControl>
           </ModalBody>
-
-          <ModalFooter>
-            <Button
-              colorScheme="orange"
-              borderRadius="20px"
-              p="15px 64px"
-              mr={3}
-              onClick={() => handleSubmit()}
-              fontWeight="700"
-              className="primaryFont"
-              fontSize="14px"
-              w={{ base: "100%", md: "50%" }}
-            >
-              Update
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
-    </Box>
+    </Box >
   );
 };
 
