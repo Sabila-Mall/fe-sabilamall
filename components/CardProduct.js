@@ -31,18 +31,18 @@ const numberWithDot = (x) => {
 };
 
 const CardProduct = ({
-  imageUrl,
-  productName,
+  image_path,
+  name,
   endTime,
   discount,
-  realPrice,
+  price,
   responsive,
 }) => {
   const [selected, setSelected] = useState(false);
   const [imageHeight, setImageHeight] = useState(144);
-  const realPriceString = numberWithDot(realPrice);
+  const realPriceString = numberWithDot(price.replace(/\.(.*?[0]{1,2})/g, ""));
   const priceAfterDiscount = discount
-    ? numberWithDot(realPrice - (realPrice * discount) / 100)
+    ? numberWithDot(price - (price * discount) / 100)
     : null;
 
   const timeLeft = endTime && calculateTimeLeft(endTime);
@@ -94,12 +94,12 @@ const CardProduct = ({
           display="flex"
           justifyContent="center"
           w="100%"
-          bgImage={`url(${imageUrl})`}
+          bgImage={`url(${image_path})`}
           bgPosition="center"
           bgRepeat="no-repeat"
           bgSize="cover"
         ></Box>
-        <Box padding="2">
+        <Box padding="2" w="100%">
           {endTime && timeLeft && (
             <Box
               px="4px"
@@ -128,7 +128,7 @@ const CardProduct = ({
           )}
           <Box className={styles.productName} mb="8px">
             <Text fontSize="16px" fontWeight="500" lineHeight="24px">
-              {productName.toUpperCase()}
+              {name.toUpperCase()}
             </Text>
           </Box>
           {discount && (
