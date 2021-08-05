@@ -7,13 +7,15 @@ import CardProduct from "../../components/CardProduct";
 import CardWishlist from "../../components/CardWishlist";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
-import { dataWishList } from "../../constants/dummyData";
+import { useAuthContext } from "../../contexts/authProvider";
 
 const Wishlist = () => {
   const [userId, setUserId] = useState(6089);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-  const [deletedWishlistItems, setDeletedWishlistItem] = useState([]);
+
+  const temp = useAuthContext();
+  console.log(temp);
 
   useEffect(() => {
     // const getDataWishlist = () => {
