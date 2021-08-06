@@ -11,7 +11,6 @@ import {
   Divider,
   Icon,
   Circle,
-  useMediaQuery,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { IoCopy } from "react-icons/io5";
@@ -22,9 +21,11 @@ import OrderProductsTable, {
   OrderProductsTableMobile,
 } from "../../components/OrderProductsTable";
 import ScrollButton from "../../components/ScrollButton";
+import { useWindowSize } from "../../hooks/useWindowSize";
 
 const OrderInformation = () => {
-  const [isMobile] = useMediaQuery("(max-width: 48em)");
+  const { width } = useWindowSize();
+  const isMobile = width < 768;
   const sm = [
     { text: "SM Pay", value: "1000.000" },
     { text: "SM Point", value: 5 },
