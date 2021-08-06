@@ -25,6 +25,7 @@ const ProductHeader = (libur, preOrder) => {
         flexWrap="wrap"
         alignItems="center"
         direction="row"
+        lineHeight="1.5rem"
         spacing="8px"
         className="secondaryFont"
         fontSize="0.875rem"
@@ -62,7 +63,7 @@ const ProductHeader = (libur, preOrder) => {
           <Flex alignItems="center">
             <IoTimeOutline size="1.4em" color="#ECC94B" as="span" />
             <Text color="yellow.400" pl="0.5rem">
-              Toko Libur
+              Pre Order
             </Text>
           </Flex>
         )}

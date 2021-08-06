@@ -162,7 +162,7 @@ const ProductCheckout = () => {
           justifyContent={"space-between"}
           width={"full"}
         >
-          <Text textColor={"gray.500"} fontSize={"16px"}>
+          <Text textColor={"gray.500"} fontSize={"16px"} mr="0.5rem">
             Subtotal
           </Text>
           <VStack alignItems={"flex-end"}>

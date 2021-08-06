@@ -17,8 +17,8 @@ import {
 } from "@chakra-ui/react";
 import { css } from "@emotion/react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { GoStar } from "react-icons/go";
-import Link from 'next/link'
 
 import styles from "../styles/ProductDetails.module.scss";
 
@@ -75,14 +75,14 @@ const ProductInformation = () => {
 
   const showDescription = () => {
     const descriptionText = document.getElementById("descriptionText");
-    setDescription.toggle()
+    setDescription.toggle();
 
     descriptionText.classList.toggle(styles.productDescription);
   };
 
   return (
     <Box mt="16px" ml={{ lg: "0.5rem", xl: "0" }}>
-      <Tabs w={{ lg: "95%", xl: "100%" }}>
+      <Tabs>
         <TabList borderTop="2px" borderTopColor="gray.200">
           <Tab
             _selected={{ color: "orange.500", borderBottomColor: "orange.400" }}
@@ -118,7 +118,12 @@ const ProductInformation = () => {
               _focus={{ boxShadow: "none" }}
               p="12px 20px"
               borderRadius="0"
-              _hover={{ boxShadow: "none", color: "orange.400", borderBottom: "2px solid #F6AD55", transform: "translateY(2px)" }}
+              _hover={{
+                boxShadow: "none",
+                color: "orange.400",
+                borderBottom: "2px solid #F6AD55",
+                transform: "translateY(2px)",
+              }}
               className="secondaryFont"
               fontWeight="500"
               bg="white"
@@ -274,7 +279,6 @@ const ProductInformation = () => {
                   fontWeight="500"
                 >
                   {`${ratingAmount} penilaian`}
-
                 </Text>
               </Center>
               <Stack w="60%" spacing="4px" ml="4px">
