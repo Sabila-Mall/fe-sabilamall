@@ -27,7 +27,7 @@ import { useWindowSize } from "../hooks/useWindowSize";
 import styles from "../styles/Product.module.scss";
 import CardProduct from "./CardProduct";
 
-const px = [".7rem", "3rem", "2rem", "2rem", "5rem", "7.5rem"];
+const px = { base: "1rem", md: "1.5rem", lg: "3rem", xl: "50px" };
 
 const MenuSorting = () => (
   <Menu display={{ base: "none", md: "block" }}>
@@ -190,68 +190,67 @@ const LayoutProductList = ({ data, endTime, flashSaleRef }) => {
         overflowX="hidden"
         position="relative"
         ref={flashSaleRef}
+        px={px}
       >
-        <Box px={px}>
-          <Box
-            className={styles.secondaryFont}
-            mb="32px"
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-            pr={{ lg: "40px" }}
+        <Box
+          className={styles.secondaryFont}
+          mb="32px"
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          pr={{ lg: "40px" }}
+        >
+          <Heading
+            className={styles.primaryFont}
+            color={"black"}
+            fontWeight={700}
+            fontSize={{ base: "16px", md: "20px", lg: "24px" }}
+            lineHeight={{ base: "20.8px", md: "26px", lg: "31.2px" }}
+            // px={px}
           >
-            <Heading
-              className={styles.primaryFont}
-              color={"black"}
-              fontWeight={700}
-              fontSize={{ base: "16px", md: "20px", lg: "24px" }}
-              lineHeight={{ base: "20.8px", md: "26px", lg: "31.2px" }}
-              // px={px}
-            >
-              Semua Produk
-            </Heading>
+            Semua Produk
+          </Heading>
 
-            <Icon
-              onClick={() => setShowOverlay(!showOverlay)}
-              as={IoFilterOutline}
-              fontSize="24px"
-              display={{ base: "block", md: "none", lg: "none" }}
-            />
+          <Icon
+            onClick={() => setShowOverlay(!showOverlay)}
+            as={IoFilterOutline}
+            fontSize="24px"
+            display={{ base: "block", md: "none", lg: "none" }}
+          />
 
-            <MenuSorting />
-          </Box>
-          <Grid
-            w="100%"
-            position="relative"
-            templateColumns={[
-              "repeat(2,1fr)",
-              "repeat(3,1fr)",
-              "repeat(4,1fr)",
-              "repeat(5,1fr)",
-              "repeat(7,1fr)",
-              "repeat(8, 1fr)",
-            ]}
-            columnGap={2}
-            rowGap={4}
-          >
-            {data.map((item, index) => (
-              <Box key={item.id}>
-                <CardProduct {...item} responsive={true} />
-              </Box>
-            ))}
-          </Grid>
-          <Flex justify="center" mt="1rem">
-            <Button
-              bg="white"
-              border="2.5px solid #E53E3E"
-              borderRadius="29px"
-              color="red.500"
-              _focus={{ outline: "none" }}
-            >
-              Lihat Lebih Banyak <Icon as={IoArrowDown} ml=".5rem" />
-            </Button>
-          </Flex>
+          <MenuSorting />
         </Box>
+        <Grid
+          w="100%"
+          position="relative"
+          templateColumns={[
+            "repeat(2,1fr)",
+            "repeat(3,1fr)",
+            "repeat(4,1fr)",
+            "repeat(5,1fr)",
+            "repeat(7,1fr)",
+            "repeat(8, 1fr)",
+          ]}
+          columnGap={2}
+          rowGap={4}
+        >
+          {data.map((item, index) => (
+            <Box key={item.id}>
+              <CardProduct {...item} responsive={true} />
+            </Box>
+          ))}
+        </Grid>
+        <Flex justify="center" mt="1rem">
+          <Button
+            bg="white"
+            border="2.5px solid #E53E3E"
+            borderRadius="29px"
+            color="red.500"
+            _focus={{ outline: "none" }}
+          >
+            Lihat Lebih Banyak <Icon as={IoArrowDown} ml=".5rem" />
+          </Button>
+        </Flex>
       </Box>
       <Box
         w="100vw"

@@ -1,4 +1,4 @@
-import { Box, Text, Input, Button, FormControl, Flex } from "@chakra-ui/react";
+import { Box, FormControl, Flex } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 
 import { ButtonSubmit } from "./ButtonProfile";
@@ -53,6 +53,16 @@ const MyProfile = () => {
           register={register}
           name="phone"
           text="Nomor Telepon"
+          w="100%"
+          type="number"
+        />
+      </Box>
+      <Box mt="20px">
+        <InputBoxAndLabel
+          register={register}
+          required={false}
+          name="ktp"
+          text="Nomor KTP"
           w="100%"
           type="number"
         />
