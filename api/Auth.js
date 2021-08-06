@@ -31,9 +31,12 @@ export const apiRegister = (
 };
 
 export const apiResetPassword = (email) => {
-  return axios.post("https://sabilamall.co.id/api/processforgotpassword", {
-    email: email,
-  });
+  return axios.post(
+    "https://apiweb.sabilamall.co.id/user/process_forgot_password",
+    {
+      email: email,
+    },
+  );
 };
 
 export const apiGetUserProfile = (id) => {
