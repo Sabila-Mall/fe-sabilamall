@@ -2,6 +2,7 @@ import { Box, Flex, Text, Button, Grid, Input, Select } from "@chakra-ui/react";
 
 import ProfileDesktop from "../../components/ProfileDesktop";
 import KonfirmasiUpgradeAkun from "../../components/UpgradeAccountConfirmation";
+import { useWindowSize } from "../../hooks/useWindowSize";
 
 const KonfirmasiUpgradeAkunPage = () => {
   const { width } = useWindowSize();
