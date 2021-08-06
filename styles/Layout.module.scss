@@ -17,11 +17,6 @@
   }
 }
 
-.layout {
-  @include layout-style();
-  overflow: hidden;
-}
-
 .sticklayout {
   @include layout-style();
 }
