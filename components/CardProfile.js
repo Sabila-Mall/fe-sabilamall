@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import { useRef } from "react";
 import { FaUser } from "react-icons/fa";
 import { IoHeart } from "react-icons/io5";
+import { IoWalletOutline } from "react-icons/io5";
 import { VscPackage } from "react-icons/vsc";
 
 import { ButtonStatusUser } from "./ButtonProfile";
@@ -60,6 +61,7 @@ export const CardProfile = ({ sm, cardProfileText }) => {
     { text: "Akun Saya", icon: FaUser, path: "/profile" },
     { text: "Wishlist", icon: IoHeart, path: "/wishlist" },
     { text: "Pesanan Saya", icon: VscPackage, path: "/profile/pesanan-saya" },
+    { text: "SM Pay", icon: IoWalletOutline, path: "/top-up" },
   ];
 
   return (

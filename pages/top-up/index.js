@@ -1,105 +1,130 @@
-import {
-  Alert, AlertDescription, AlertIcon,
-  Avatar, AvatarBadge, Center, Collapse,
-  Heading, Icon, Image,
-  InputLeftAddon, Link,
-  NumberInput,
-  NumberInputField,
-  Select, SimpleGrid, StackDivider,
-  Tab,
-  TabList, TabPanel, TabPanels,
-  Tabs, Text, useMediaQuery, Wrap, WrapItem,
-} from "@chakra-ui/react";
+import { Button } from "@chakra-ui/button";
 import { Input, InputGroup } from "@chakra-ui/input";
 import { Box, HStack, VStack } from "@chakra-ui/layout";
-import { Button } from "@chakra-ui/button";
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  Avatar,
+  AvatarBadge,
+  Center,
+  Collapse,
+  Heading,
+  Icon,
+  Image,
+  InputLeftAddon,
+  Link,
+  NumberInput,
+  NumberInputField,
+  Select,
+  SimpleGrid,
+  StackDivider,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  Text,
+  useMediaQuery,
+  Wrap,
+  WrapItem,
+} from "@chakra-ui/react";
 import { useState } from "react";
-import { IoHeart, IoWalletOutline, IoCamera } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
+import { IoHeart, IoWalletOutline, IoCamera } from "react-icons/io5";
 import { VscPackage } from "react-icons/vsc";
-import Navbar from "../../components/Navbar";
-import { formatNumber } from "../../utils/functions";
+
+import { CardProfile } from "../../components/CardProfile";
 import Entry from "../../components/Entry";
+import { Layout } from "../../components/Layout";
+import Navbar from "../../components/Navbar";
+import { useWindowSize } from "../../hooks/useWindowSize";
+import { formatNumber } from "../../utils/functions";
+
+const sm = [
+  { text: "SM Pay", value: "1000.000" },
+  { text: "SM Point", value: 5 },
+];
 
 // Dummy data
 const listBankTujuan = [
   {
-    "id": "bca",
-    "nama": "BCA",
+    id: "bca",
+    nama: "BCA",
   },
   {
-    "id": "bni",
-    "nama": "BNI",
+    id: "bni",
+    nama: "BNI",
   },
   {
-    "id": "jenius",
-    "nama": "JENIUS",
+    id: "jenius",
+    nama: "JENIUS",
   },
   {
-    "id": "bri",
-    "nama": "BRi",
+    id: "bri",
+    nama: "BRi",
   },
   {
-    "id": "btpn",
-    "nama": "BTPN",
+    id: "btpn",
+    nama: "BTPN",
   },
 ];
 
 const listTopUp = [
   {
-    "nama": "Bank BNI",
-    "tanggal": "31-01-2099 13:31",
-    "kode": "1234",
-    "harga": 9999999,
-    "status": "tidak masalah",
+    nama: "Bank BNI",
+    tanggal: "31-01-2099 13:31",
+    kode: "1234",
+    harga: 9999999,
+    status: "tidak masalah",
   },
   {
-    "nama": "Bank Mandiri",
-    "tanggal": "31-01-2099 13:31",
-    "kode": "1234",
-    "harga": 9999999,
-    "status": "tidak masalah",
+    nama: "Bank Mandiri",
+    tanggal: "31-01-2099 13:31",
+    kode: "1234",
+    harga: 9999999,
+    status: "tidak masalah",
   },
   {
-    "nama": "Bank BNI",
-    "tanggal": "31-01-2099 13:31",
-    "kode": "1234",
-    "harga": 9999999,
-    "status": "tidak masalah",
+    nama: "Bank BNI",
+    tanggal: "31-01-2099 13:31",
+    kode: "1234",
+    harga: 9999999,
+    status: "tidak masalah",
   },
 ];
 
 const listRiwayat = [
   {
-    "nama": "Top Up",
-    "tanggal": "31-01-2099 13:31",
-    "kode": "1234",
-    "harga": 9999999,
-    "status": "tidak masalah",
+    nama: "Top Up",
+    tanggal: "31-01-2099 13:31",
+    kode: "1234",
+    harga: 9999999,
+    status: "tidak masalah",
   },
   {
-    "nama": "Belanja",
-    "tanggal": "31-01-2099 13:31",
-    "kode": "1234",
-    "harga": 9999999,
-    "status": "tidak masalah",
+    nama: "Belanja",
+    tanggal: "31-01-2099 13:31",
+    kode: "1234",
+    harga: 9999999,
+    status: "tidak masalah",
   },
   {
-    "nama": "[Nama Transaksi]",
-    "tanggal": "31-01-2099 13:31",
-    "kode": "1234",
-    "harga": 9999999,
-    "status": "tidak masalah",
+    nama: "[Nama Transaksi]",
+    tanggal: "31-01-2099 13:31",
+    kode: "1234",
+    harga: 9999999,
+    status: "tidak masalah",
   },
 ];
 
 const userData = {
-  "nama": "Litha Cantik",
-  "email": "zulmusuydu@biyac.com",
-  "memberId": "1234567",
-  "tipe": "Reguler",
-  "SMPay": 100000000,
-  "SMPoint": 5,
+  nama: "Litha Cantik",
+  email: "zulmusuydu@biyac.com",
+  memberId: "1234567",
+  tipe: "Reguler",
+  SMPay: 100000000,
+  SMPoint: 5,
 };
 
 const VERSI = "9.99.99";
@@ -108,11 +133,16 @@ const Nominal = ({ nominal, setNominal }) => {
   return (
     <VStack spacing={"0.5rem"} w={"full"} align={"start"}>
       <Text fontSize={"1rem"}>Nominal</Text>
-      <Text color={"gray.500"} fontSize={"0.75rem"}>Minimal Rp10.000</Text>
+      <Text color={"gray.500"} fontSize={"0.75rem"}>
+        Minimal Rp10.000
+      </Text>
       <InputGroup>
         <InputLeftAddon children={"Rp"} />
         <NumberInput
-          value={nominal} min={10000} keepWithinRange={false} clampValueOnBlur={false}
+          value={nominal}
+          min={10000}
+          keepWithinRange={false}
+          clampValueOnBlur={false}
           onChange={(value) => setNominal(value)}
         >
           <NumberInputField />
@@ -120,27 +150,47 @@ const Nominal = ({ nominal, setNominal }) => {
       </InputGroup>
       <Wrap>
         <WrapItem>
-          <Button onClick={() => setNominal(20000)} variant={"outline"} fontSize={"0.75rem"}>
+          <Button
+            onClick={() => setNominal(20000)}
+            variant={"outline"}
+            fontSize={"0.75rem"}
+          >
             Rp20.000
           </Button>
         </WrapItem>
         <WrapItem>
-          <Button onClick={() => setNominal(50000)} variant={"outline"} fontSize={"0.75rem"}>
+          <Button
+            onClick={() => setNominal(50000)}
+            variant={"outline"}
+            fontSize={"0.75rem"}
+          >
             Rp50.000
           </Button>
         </WrapItem>
         <WrapItem>
-          <Button onClick={() => setNominal(100000)} variant={"outline"} fontSize={"0.75rem"}>
+          <Button
+            onClick={() => setNominal(100000)}
+            variant={"outline"}
+            fontSize={"0.75rem"}
+          >
             Rp100.000
           </Button>
         </WrapItem>
         <WrapItem>
-          <Button onClick={() => setNominal(500000)} variant={"outline"} fontSize={"0.75rem"}>
+          <Button
+            onClick={() => setNominal(500000)}
+            variant={"outline"}
+            fontSize={"0.75rem"}
+          >
             Rp500.000
           </Button>
         </WrapItem>
         <WrapItem>
-          <Button onClick={() => setNominal(1000000)} variant={"outline"} fontSize={"0.75rem"}>
+          <Button
+            onClick={() => setNominal(1000000)}
+            variant={"outline"}
+            fontSize={"0.75rem"}
+          >
             Rp1.000.000
           </Button>
         </WrapItem>
@@ -154,11 +204,11 @@ const BankTujuan = () => {
     <VStack spacing={"0.5rem"} w={"full"} align={"start"}>
       <Text>Bank Tujuan</Text>
       <Select>
-        {
-          listBankTujuan.map((each, index) =>
-            <option key={index} id={each.id}>{each.nama}</option>,
-          )
-        }
+        {listBankTujuan.map((each, index) => (
+          <option key={index} id={each.id}>
+            {each.nama}
+          </option>
+        ))}
       </Select>
     </VStack>
   );
@@ -193,7 +243,11 @@ const NamaPemilikRekening = () => {
 
 const Konfirmasi = () => {
   return (
-    <Button background={"orange.500"} color={"white"} w={{ base: "full", lg: "inherit" }}>
+    <Button
+      background={"orange.500"}
+      color={"white"}
+      w={{ base: "full", lg: "inherit" }}
+    >
       Konfirmasi
     </Button>
   );
@@ -201,23 +255,41 @@ const Konfirmasi = () => {
 
 const SidePanel = ({ userData }) => {
   return (
-    <VStack spacing={"3rem"} borderRadius={"1.25rem"} background={"white"}
-            py={"1.125rem"} className={"secondaryFont"} boxShadow="md"
+    <VStack
+      spacing={"3rem"}
+      borderRadius={"1.25rem"}
+      background={"white"}
+      py={"1.125rem"}
+      className={"secondaryFont"}
+      boxShadow="md"
     >
       <VStack p={"1.125rem"}>
         <Avatar size={"xl"}>
-          <AvatarBadge borderColor={"transparent"} boxSize="1.25em" color={"gray.500"}>
+          <AvatarBadge
+            borderColor={"transparent"}
+            boxSize="1.25em"
+            color={"gray.500"}
+          >
             <IoCamera />
           </AvatarBadge>
         </Avatar>
-        <Text className={"primaryFont"} fontWeight={"bold"} fontSize={"1.125rem"}>
+        <Text
+          className={"primaryFont"}
+          fontWeight={"bold"}
+          fontSize={"1.125rem"}
+        >
           {userData.nama}
         </Text>
         <Text fontSize={"0.875rem"}>{userData.email}</Text>
         <HStack fontSize={"0.75rem"}>
           <Text>{userData.memberId}</Text>
-          <Box bg={"gray.400"} borderRadius={"1.875rem"} size="40px"
-               px={"0.5rem"} py={"0.125rem"} color={"white"}
+          <Box
+            bg={"gray.400"}
+            borderRadius={"1.875rem"}
+            size="40px"
+            px={"0.5rem"}
+            py={"0.125rem"}
+            color={"white"}
           >
             {userData.tipe}
           </Box>
@@ -226,51 +298,91 @@ const SidePanel = ({ userData }) => {
 
       <SimpleGrid columns={2} px={"1rem"} spacing={"0.75rem"}>
         <VStack borderRadius={"0.5rem"} boxShadow={"base"}>
-          <Center bg={"gray.100"} color={"orange.500"} px={"2rem"} py={"0.5rem"} borderTopRadius={"0.5rem"}>
+          <Center
+            bg={"gray.100"}
+            color={"orange.500"}
+            px={"2rem"}
+            py={"0.5rem"}
+            borderTopRadius={"0.5rem"}
+          >
             <Text>SM Pay</Text>
           </Center>
-          <Center bg={"gray.50"} paddingBottom={"0.375rem"}>Rp{formatNumber(userData.SMPay)}</Center>
+          <Center bg={"gray.50"} paddingBottom={"0.375rem"}>
+            Rp{formatNumber(userData.SMPay)}
+          </Center>
         </VStack>
 
         <VStack borderRadius={"0.5rem"} boxShadow={"base"}>
-          <Center bg={"gray.100"} color={"orange.500"} px={"2rem"} py={"0.5rem"} borderTopRadius={"0.5rem"}>
+          <Center
+            bg={"gray.100"}
+            color={"orange.500"}
+            px={"2rem"}
+            py={"0.5rem"}
+            borderTopRadius={"0.5rem"}
+          >
             <Text>SM Pay</Text>
           </Center>
-          <Center bg={"gray.50"} paddingBottom={"0.375rem"}>{userData.SMPoint}</Center>
+          <Center bg={"gray.50"} paddingBottom={"0.375rem"}>
+            {userData.SMPoint}
+          </Center>
         </VStack>
       </SimpleGrid>
 
       <Box alignSelf={"stretch"}>
         <Link href={""}>
-          <HStack py={"1rem"} borderColor={"gray.200"} borderTopWidth={"1px"} borderBottomWidth={"1px"}
-                  paddingLeft={"1rem"}>
+          <HStack
+            py={"1rem"}
+            borderColor={"gray.200"}
+            borderTopWidth={"1px"}
+            borderBottomWidth={"1px"}
+            paddingLeft={"1rem"}
+          >
             <Icon as={FaUser} boxSize={"1.5rem"} />
             <Text>Akun Saya</Text>
-          </HStack></Link>
+          </HStack>
+        </Link>
 
         <Link href={""}>
-          <HStack py={"1rem"} borderTopWidth={"1px"} borderBottomWidth={"1px"} paddingLeft={"1rem"}>
+          <HStack
+            py={"1rem"}
+            borderTopWidth={"1px"}
+            borderBottomWidth={"1px"}
+            paddingLeft={"1rem"}
+          >
             <Icon as={IoHeart} boxSize={"1.5rem"} />
             <Text>Wishlist</Text>
-          </HStack></Link>
+          </HStack>
+        </Link>
 
         <Link href={""}>
-          <HStack py={"1rem"} borderTopWidth={"1px"} borderBottomWidth={"1px"} paddingLeft={"1rem"}>
+          <HStack
+            py={"1rem"}
+            borderTopWidth={"1px"}
+            borderBottomWidth={"1px"}
+            paddingLeft={"1rem"}
+          >
             <Icon as={VscPackage} boxSize={"1.5rem"} />
             <Text>Pesanan saya</Text>
           </HStack>
         </Link>
 
         <Link href={""}>
-          <HStack py={"1rem"} borderTopWidth={"1px"} borderBottomWidth={"1px"} paddingLeft={"1rem"}
-                  color={"orange.500"}>
+          <HStack
+            py={"1rem"}
+            borderTopWidth={"1px"}
+            borderBottomWidth={"1px"}
+            paddingLeft={"1rem"}
+            color={"orange.500"}
+          >
             <Icon as={IoWalletOutline} boxSize={"1.5rem"} />
             <Text>SM Pay</Text>
-          </HStack><
-        /Link>
+          </HStack>
+        </Link>
       </Box>
 
-      <Text color={"gray.400"} fontSize={"0.75rem"}>Sabilla Mall v{VERSI}</Text>
+      <Text color={"gray.400"} fontSize={"0.75rem"}>
+        Sabilla Mall v{VERSI}
+      </Text>
     </VStack>
   );
 };
@@ -298,55 +410,70 @@ const SmartPhoneTopUp = ({ nominal, setNominal }) => {
 };
 
 const DesktopTopUp = ({ nominal, setNominal }) => {
-
   return (
-    <>
-      <Navbar />
-      <HStack
-        background={"gray.50"} align={"start"} spacing={"1rem"}
-        mt={"7.5rem"} ml={{ lg: "4rem", xl: "7.5rem" }}
-        paddingBottom={"4rem"}
-      >
-        <SidePanel userData={userData} />
+    <Box bg="gray.50">
+      <Layout hasNavbar={true}>
+        <HStack
+          background={"gray.50"}
+          align={"start"}
+          spacing={"1rem"}
+          mt={"7.5rem"}
+          paddingBottom={"4rem"}
+          w="full"
+          px={{ base: "1rem", md: "1.5rem", lg: "3rem", xl: "50px" }}
+        >
+          <CardProfile sm={sm} cardProfileText="SM Pay" />
 
-        <VStack
-          background={"white"} px={"2rem"} py={"2rem"} borderRadius={"1.25rem"}
-          className={"secondaryFont"} boxShadow="md" minW={{ xl: "65%" }} align={"start"}>
+          <VStack
+            background={"white"}
+            px={"2rem"}
+            py={"2rem"}
+            borderRadius={"1.25rem"}
+            className={"secondaryFont"}
+            boxShadow="md"
+            minW={{ xl: "65%" }}
+            align={"start"}
+            w="full"
+          >
+            <Tabs colorScheme={"orange"} w={{ lg: "full" }}>
+              <TabList>
+                <Tab>Top Up</Tab>
+                <Tab>Riwayat</Tab>
+                <Tab>Daftar Top Up</Tab>
+              </TabList>
 
-          <Tabs colorScheme={"orange"} w={{ lg: "full" }}>
-            <TabList>
-              <Tab>Top Up</Tab>
-              <Tab>Riwayat</Tab>
-              <Tab>Daftar Top Up</Tab>
-            </TabList>
+              <TabPanels>
+                <TabPanel>
+                  <Collapse in={nominal < 10000} animateOpacity>
+                    <Alert status="error">
+                      <AlertIcon />
+                      <AlertDescription>
+                        Nominal Top Up Minimal Rp10.000
+                      </AlertDescription>
+                    </Alert>
+                  </Collapse>
+                  <Heading className={"primaryFont"} my={"1rem"}>
+                    Top Up
+                  </Heading>
+                  <VStack align={"start"} spacing={"3rem"}>
+                    <Nominal nominal={nominal} setNominal={setNominal} />
+                    <BankTujuan />
+                    <TanggalTransfer />
+                    <NamaBankPengirim />
+                    <NamaPemilikRekening />
+                    <Konfirmasi />
+                  </VStack>
+                </TabPanel>
 
-            <TabPanels>
-              <TabPanel>
-                <Collapse in={nominal < 10000} animateOpacity>
-                  <Alert status="error">
-                    <AlertIcon />
-                    <AlertDescription>Nominal Top Up Minimal Rp10.000</AlertDescription>
-                  </Alert>
-                </Collapse>
-                <Heading className={"primaryFont"} my={"1rem"}>Top Up</Heading>
-                <VStack align={"start"} spacing={"3rem"}>
-                  <Nominal nominal={nominal} setNominal={setNominal} />
-                  <BankTujuan />
-                  <TanggalTransfer />
-                  <NamaBankPengirim />
-                  <NamaPemilikRekening />
-                  <Konfirmasi />
-                </VStack>
-              </TabPanel>
-
-              <TabPanel align={"start"} alignSelf={"stretch"}>
-                <Heading className={"primaryFont"}>Riwayat</Heading>
-                <VStack
-                  align={"space-between"} mt={"2rem"} spacing={"1.5rem"}
-                  divider={<StackDivider borderColor={"gray.200"} />}
-                >
-                  {
-                    !listRiwayat.length ?
+                <TabPanel align={"start"} alignSelf={"stretch"}>
+                  <Heading className={"primaryFont"}>Riwayat</Heading>
+                  <VStack
+                    align={"space-between"}
+                    mt={"2rem"}
+                    spacing={"1.5rem"}
+                    divider={<StackDivider borderColor={"gray.200"} />}
+                  >
+                    {!listRiwayat.length ? (
                       <VStack>
                         <Text>Belum ada riwayat transaksi</Text>
                         <Image
@@ -354,22 +481,24 @@ const DesktopTopUp = ({ nominal, setNominal }) => {
                           src="images/emptyMascot.png"
                           alt="Riwayat kosong logo"
                         />
-                      </VStack> :
-                      listRiwayat.map((topUp, index) =>
-                        <Entry data={topUp} key={index} />,
-                      )
-                  }
-                </VStack>
-              </TabPanel>
+                      </VStack>
+                    ) : (
+                      listRiwayat.map((topUp, index) => (
+                        <Entry data={topUp} key={index} />
+                      ))
+                    )}
+                  </VStack>
+                </TabPanel>
 
-              <TabPanel>
-                <Heading className={"primaryFont"}>Daftar Top Up</Heading>
-                <VStack
-                  align={"space-between"} mt={"2rem"} spacing={"1.5rem"}
-                  divider={<StackDivider borderColor={"gray.200"} />}
-                >
-                  {
-                    !listTopUp.length ?
+                <TabPanel>
+                  <Heading className={"primaryFont"}>Daftar Top Up</Heading>
+                  <VStack
+                    align={"space-between"}
+                    mt={"2rem"}
+                    spacing={"1.5rem"}
+                    divider={<StackDivider borderColor={"gray.200"} />}
+                  >
+                    {!listTopUp.length ? (
                       <VStack>
                         <Text>Belum ada riwayat top-up</Text>
                         <Image
@@ -377,34 +506,42 @@ const DesktopTopUp = ({ nominal, setNominal }) => {
                           src="images/emptyMascot.png"
                           alt="Riwayat kosong logo"
                         />
-                      </VStack> :
-                      listTopUp.map((topUp, index) =>
-                        <Entry data={topUp} key={index} />,
-                      )
-                  }
-                </VStack>
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-          <HStack mt={"1.125rem"} alignSelf={"center"}>
-            <Text>Ingin upgrade akun untuk berjualan?</Text>
-            <Button variant={"outline"} color={"red.600"} className={"primaryFont"} borderColor={"red.600"}>
-              Upgrade Akun
-            </Button>
-          </HStack>
-        </VStack>
-      </HStack>
-    </>
+                      </VStack>
+                    ) : (
+                      listTopUp.map((topUp, index) => (
+                        <Entry data={topUp} key={index} />
+                      ))
+                    )}
+                  </VStack>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+            <HStack mt={"1.125rem"} alignSelf={"center"}>
+              <Text>Ingin upgrade akun untuk berjualan?</Text>
+              <Button
+                variant={"outline"}
+                color={"red.600"}
+                className={"primaryFont"}
+                borderColor={"red.600"}
+              >
+                Upgrade Akun
+              </Button>
+            </HStack>
+          </VStack>
+        </HStack>
+      </Layout>
+    </Box>
   );
 };
 
 const TopUp = () => {
   const [nominal, setNominal] = useState(10000);
-  const [isSmartphone] = useMediaQuery("(max-width: 48em)");
+  const { width } = useWindowSize();
 
-  return (
-    isSmartphone ? <SmartPhoneTopUp nominal={nominal} setNominal={setNominal} />
-      : <DesktopTopUp nominal={nominal} setNominal={setNominal} />
+  return width < 768 ? (
+    <SmartPhoneTopUp nominal={nominal} setNominal={setNominal} />
+  ) : (
+    <DesktopTopUp nominal={nominal} setNominal={setNominal} />
   );
 };
 
