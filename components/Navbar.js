@@ -11,7 +11,7 @@ import {
   useDisclosure,
   Grid,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BsChevronLeft } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
 import {
@@ -165,14 +165,28 @@ const Navbar = () => {
   const onDrawerOpen = drawerDisclosure.onOpen;
   const onDrawerClose = drawerDisclosure.onClose;
 
+  const navbarEl = useRef(null);
+
   const handleClickOverlay = () => {
     setIsMainMenu(false);
     setIsCategoryMenu(false);
   };
 
+  useEffect(() => {
+    navbarEl.current.style.width = document.body.clientWidth + "px";
+    const setNavbarWidth = () => {
+      navbarEl.current.style.width = document.body.clientWidth + "px";
+    };
+    window.addEventListener("resize", setNavbarWidth);
+    return () => {
+      window.removeEventListener("resize", setNavbarWidth);
+    };
+  }, []);
+
   return (
     <>
       <Box
+        ref={navbarEl}
         className={styles.navbarTop}
         px={{ base: "1rem", md: "1.5rem", lg: "3rem", xl: "50px" }}
         h={{ base: "50px", md: "70px" }}
