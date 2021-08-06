@@ -41,6 +41,76 @@ const AddressBoxReceiver = ({
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isMobile] = useMediaQuery("(max-width: 48rem)")
+  const { register, handleSubmit } = useForm();
+  const [receiverName, setreceiverName] = useState(name)
+  const [receiverPhoneNumber, setreceiverPhoneNumber] = useState(phoneNumber)
+  const [receiverAddress, setreceiverAddress] = useState(address)
+  const [receiverCity, setreceiverCity] = useState(city)
+  const [receiverDistrict, setreceiverDistrict] = useState(district)
+  const [receiverProvince, setreceiverProvince] = useState(province)
+  const [receiverPostalCode, setreceiverPostalCode] = useState(postalCode)
+
+  const onSubmit = data => {
+    setreceiverName(data.name)
+    setreceiverPhoneNumber(data.phoneNumber)
+    setreceiverAddress(data.address)
+    setreceiverCity(data.city)
+    setreceiverDistrict(data.district)
+    setreceiverProvince(data.province)
+    setreceiverPostalCode(data.postalCode)
+  }
+
+  const provinceOptions = [{
+    value: "option1",
+    text: "option1"
+  },
+  {
+    value: "option2",
+    text: "option2"
+  },
+  {
+    value: "option3",
+    text: "option3"
+  }]
+
+  const cityOptions = [{
+    value: "option1",
+    text: "option1"
+  },
+  {
+    value: "option2",
+    text: "option2"
+  },
+  {
+    value: "option3",
+    text: "option3"
+  }]
+
+  const districtOptions = [{
+    value: "option1",
+    text: "option1"
+  },
+  {
+    value: "option2",
+    text: "option2"
+  },
+  {
+    value: "option3",
+    text: "option3"
+  }]
+
+  const postalCodeOptions = [{
+    value: "option1",
+    text: "option1"
+  },
+  {
+    value: "option2",
+    text: "option2"
+  },
+  {
+    value: "option3",
+    text: "option3"
+  }]
 
   return (
     <Box position="relative" p="16px" pb="0">
@@ -50,23 +120,23 @@ const AddressBoxReceiver = ({
           textAlign="right"
           display={{ base: "none", md: "block" }}
         >
-          <Text>{name ? "Nama Lengkap" : ""}</Text>
-          <Text>{phoneNumber ? "Telepon" : ""}</Text>
-          <Text>{address ? "Alamat" : ""}</Text>
+          <Text>{receiverName ? "Nama Lengkap" : ""}</Text>
+          <Text>{receiverPhoneNumber ? "Telepon" : ""}</Text>
+          <Text>{receiverAddress ? "Alamat" : ""}</Text>
         </Box>
         <Box ml={{ base: "0", md: "16px" }} maxW={{ base: "60%", md: "40%" }}>
-          <Text fontWeight="bold">{name}</Text>
-          <Text>{phoneNumber}</Text>
-          <Text>{address}</Text>
+          <Text fontWeight="bold">{receiverName}</Text>
+          <Text>{receiverPhoneNumber}</Text>
+          <Text>{receiverAddress}</Text>
           <Text>
-            {(city ? city : "") +
-              (city && province ? ", " : "") +
-              (province ? province : "")}
+            {(receiverCity ? receiverCity : "") +
+              (receiverCity && receiverProvince ? ", " : "") +
+              (receiverProvince ? receiverProvince : "")}
           </Text>
           <Text>
-            {(district ? district : "") +
-              (district && postalCode ? ", " : "") +
-              (postalCode ? postalCode : "")}
+            {(receiverDistrict ? receiverDistrict : "") +
+              (receiverDistrict && receiverPostalCode ? ", " : "") +
+              (receiverPostalCode ? receiverPostalCode : "")}
           </Text>
         </Box>
       </Flex>
@@ -100,7 +170,8 @@ const AddressBoxReceiver = ({
           borderRadius={isMobile ? "0" : "20px"}
           bgColor={isMobile ? "#F7FAFC" : "white"}
           h={isMobile ? "calc(100% + 50px)" : "auto"}
-          mt="50px"
+          mt={isMobile ? "50px" : ""}
+          top={isMobile ? "" : "20%"}
         >
           {isMobile ? (
             <></>
@@ -128,8 +199,8 @@ const AddressBoxReceiver = ({
             h="48px"
             visibility={isMobile ? "hidden" : "visible"}
           />
-          <ModalBody m="12px 12px 0px 12px">
-            <FormControl>
+          <ModalBody m="12px">
+            <FormControl as="form" onSubmit={handleSubmit(onSubmit)}>
               <Grid
                 templateColumns={{
                   base: "repeat(1, 1fr)",
@@ -138,137 +209,107 @@ const AddressBoxReceiver = ({
                 gap={isMobile ? "16px" : "24px"}
               >
                 <GridItem colSpan={isMobile ? 2 : 1}>
-                  <FormLabel
-                    fontWeight="bold"
-                    fontSize="16px"
-                    className="primaryFont"
-                  >
-                    Nama Lengkap
-                  </FormLabel>
-                  <Input
-                    defaultValue={name}
-                    onChange={(e) => setreceiverName(e.target.value)}
-                    isRequired={true}
+                  <InputBoxAndLabel
+                    register={register}
+                    text="Nama Lengkap"
+                    name="name"
+                    defaultValue={receiverName}
                   />
                 </GridItem>
                 <GridItem colSpan={isMobile ? 2 : 1}>
-                  <FormLabel
-                    fontWeight="bold"
-                    fontSize="16px"
-                    className="primaryFont"
-                  >
-                    Nomor Telepon
-                  </FormLabel>
-                  <Input
-                    value={phoneNumber}
-                    onChange={(e) => settempPhoneNumber(e.target.value)}
-                    type="number"
-                    isRequired={true}
+                  <InputBoxAndLabel
+                    register={register}
+                    text="Nomor Telepon"
+                    name="phoneNumber"
+                    type="tel"
+                    defaultValue={receiverPhoneNumber}
                   />
                 </GridItem>
                 <GridItem colSpan={2}>
-                  <FormLabel
+                  <InputBoxAndLabel
+                    register={register}
+                    type="textarea"
                     mt={4}
-                    fontWeight="bold"
-                    fontSize="16px"
-                    className="primaryFont"
-                  >
-                    Alamat Lengkap
-                  </FormLabel>
-                  <Textarea
-                    value={address}
-                    onChange={(e) => settempFullAddress(e.target.value)}
-                    isRequired={true}
+                    text="Alamat Lengkap"
+                    name="address"
+                    defaultValue={receiverAddress}
                   />
                 </GridItem>
                 <GridItem colSpan={isMobile ? 2 : 1}>
-                  <FormLabel>Provinsi</FormLabel>
-                  <Select
-                    placeholder="Select option"
-                    onChange={(e) => settempProvince(e.target.value)}
-                  >
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
-                  </Select>
+                  <InputBoxAndLabel
+                    register={register}
+                    type="select"
+                    text="Provinsi"
+                    options={provinceOptions}
+                    name="province"
+                  />
                 </GridItem>
                 <GridItem colSpan={isMobile ? 2 : 1}>
-                  <FormLabel>Kota/Kabupaten</FormLabel>
-                  <Select
-                    placeholder="Select option"
-                    onChange={(e) => settempCity(e.target.value)}
-                  >
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
-                  </Select>
+                  <InputBoxAndLabel
+                    register={register}
+                    type="select"
+                    text="Kota/Kabupaten"
+                    options={cityOptions}
+                    name="city"
+                  />
                 </GridItem>
                 <GridItem colSpan={isMobile ? 2 : 1}>
-                  <FormLabel>Kecamatan</FormLabel>
-                  <Select
-                    placeholder="Select option"
-                    onChange={(e) => settempDistrict(e.target.value)}
-                  >
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
-                  </Select>
+                  <InputBoxAndLabel
+                    register={register}
+                    type="select"
+                    text="Kecamatan"
+                    options={districtOptions}
+                    name="district"
+                  />
                 </GridItem>
                 <GridItem colSpan={isMobile ? 2 : 1}>
-                  <FormLabel>Kode Pos</FormLabel>
-                  <Select
-                    placeholder="Select option"
-                    onChange={(e) => settempPostalCode(e.target.value)}
-                  >
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
-                  </Select>
+                  <InputBoxAndLabel
+                    register={register}
+                    type="select"
+                    text="Kode Pos"
+                    options={postalCodeOptions}
+                    name="postalCode"
+                  />
                 </GridItem>
               </Grid>
-            </FormControl>
-          </ModalBody>
+              <Flex
+                w="100%"
+                justifyContent="flex-end"
+                flexDir={isMobile ? "column" : "row"}
+              >
+                {isMobile ? (
+                  <Button
+                    border="1px solid #C53030"
+                    borderRadius="20px"
+                    p="15px 64px"
+                    color="red.600"
+                    fontWeight="700"
+                    className="primaryFont"
+                    fontSize="14px"
+                    w={{ base: "100%", md: "25%" }}
+                  >
+                    Hapus
+                  </Button>
+                ) : (
+                  <></>
+                )}
 
-          <ModalFooter bgColor={isMobile ? "#F7FAFC" : "white"}>
-            <Flex
-              w="100%"
-              justifyContent="flex-end"
-              flexDir={isMobile ? "column" : "row"}
-            >
-              {isMobile ? (
                 <Button
-                  border="1px solid #C53030"
+                  colorScheme="orange"
                   borderRadius="20px"
                   p="15px 64px"
-                  color="red.600"
+                  mt="36px"
+                  type="submit"
                   fontWeight="700"
                   className="primaryFont"
                   fontSize="14px"
                   w={{ base: "100%", md: "25%" }}
                 >
-                  Hapus
+                  Update
                 </Button>
-              ) : (
-                <></>
-              )}
-
-              <Button
-                colorScheme="orange"
-                borderRadius="20px"
-                p="15px 64px"
-                mt="36px"
-                onClick={() => {
-                  handleSubmit();
-                }}
-                fontWeight="700"
-                className="primaryFont"
-                fontSize="14px"
-                w={{ base: "100%", md: "25%" }}
-              >
-                Update
-              </Button>
-            </Flex>
-          </ModalFooter>
+              </Flex>
+            </FormControl>
+          </ModalBody>
         </ModalContent>
       </Modal>
     </Box>
@@ -373,7 +414,7 @@ const AddressBoxSender = ({
                 register={register}
                 text="Nomor Telepon"
                 name="phoneNumber"
-                type="number"
+                type="tel"
                 mt={4}
                 defaultValue={senderPhoneNumber}
               />

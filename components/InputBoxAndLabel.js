@@ -1,4 +1,4 @@
-import { Box, Text, Input, Select } from "@chakra-ui/react";
+import { Box, Text, Input, Select, Textarea } from "@chakra-ui/react";
 
 // options wajib diisi kalau type-nya select
 // contohnya ada di file MyProfile.js
@@ -19,15 +19,17 @@ const InputBoxAndLabel = ({ register, text, name, mt, w, type, options, defaultV
       </Box>
     </Text>
     {type !== "select" && (
-      <Input
-        {...register(name, { required: true })}
-        type={type}
-        id={name}
-        placeholder={text}
-        _focus={{ outline: "none" }}
-        autoComplete="on"
-        defaultValue={defaultValue}
-      />
+      type !== "textarea" && (
+        <Input
+          {...register(name, { required: true })}
+          type={type}
+          id={name}
+          placeholder={text}
+          _focus={{ outline: "none" }}
+          autoComplete="on"
+          defaultValue={defaultValue}
+        />
+      )
     )}
     {type === "select" && (
       <Select
@@ -44,6 +46,16 @@ const InputBoxAndLabel = ({ register, text, name, mt, w, type, options, defaultV
           </option>
         ))}
       </Select>
+    )}
+    {type === "textarea" && (
+      <Textarea
+        {...register(name, { required: true })}
+        id={name}
+        placeholder={text}
+        _focus={{ outline: "none" }}
+        autoComplete="on"
+        defaultValue={defaultValue}
+      />
     )}
   </Box>
 );
