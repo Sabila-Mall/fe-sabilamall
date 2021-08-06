@@ -2,6 +2,8 @@ import { Box, Image, Text, Icon } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { IoHeartOutline, IoTimeSharp, IoHeart } from "react-icons/io5";
 
+import { addWishlist, deleteWishlist } from "../api/wishlist";
+import { useAuthContext } from "../contexts/authProvider";
 import styles from "../styles/Product.module.scss";
 
 // import { BsFilter } from "react-icons/bs";
@@ -35,25 +37,43 @@ const CardProduct = ({
   name,
   endTime,
   discount,
+  products_id: liked_products_id,
   price,
   responsive,
+  isWishlist = false,
 }) => {
-  const [selected, setSelected] = useState(false);
   const [imageHeight, setImageHeight] = useState(144);
   const realPriceString = numberWithDot(price.replace(/\.(.*?[0]{1,2})/g, ""));
   const priceAfterDiscount = discount
     ? numberWithDot(price - (price * discount) / 100)
     : null;
-
   const timeLeft = endTime && calculateTimeLeft(endTime);
 
-  useEffect(() => {
-    return () => {
-      if (selected) {
-        console.log("send DELETE request ke backend");
-      }
-    };
-  }, []);
+  const [liked, setLiked] = useState(isWishlist);
+
+  const { userData } = useAuthContext();
+  const liked_customers_id = userData?.id || 6089;
+
+  const handleClickWishlist = () => {
+    setLiked((prev) => !prev);
+    if (liked) {
+      deleteWishlist({ liked_products_id, liked_customers_id }).then((res) => {
+        console.info("deleted");
+      });
+    } else {
+      addWishlist({ liked_products_id, liked_customers_id }).then((res) => {
+        console.info("added");
+      });
+    }
+  };
+
+  // useEffect(() => {
+  //   return () => {
+  //     if (liked) {
+  //       console.log("send DELETE request ke backend");
+  //     }
+  //   };
+  // }, []);
 
   useEffect(() => {
     function handleResize() {
@@ -167,9 +187,12 @@ const CardProduct = ({
           >
             <Text>Rp {priceAfterDiscount ?? realPriceString}</Text>
             <Icon
-              onClick={() => setSelected((prev) => !prev)}
-              as={selected ? IoHeart : IoHeartOutline}
-              color={selected ? "red.500" : "black"}
+              onClick={() => {
+                handleClickWishlist();
+                // setLiked((prev) => !prev)
+              }}
+              as={liked ? IoHeart : IoHeartOutline}
+              color={liked ? "red.500" : "black"}
             ></Icon>
           </Box>
         </Box>

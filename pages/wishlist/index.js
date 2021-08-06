@@ -10,12 +10,11 @@ import Navbar from "../../components/Navbar";
 import { useAuthContext } from "../../contexts/authProvider";
 
 const Wishlist = () => {
-  const [userId, setUserId] = useState(6089);
+  const { userData } = useAuthContext();
+  const userId = userData?.id || 6089;
+
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-
-  const temp = useAuthContext();
-  console.log(temp);
 
   useEffect(() => {
     // const getDataWishlist = () => {
@@ -61,7 +60,9 @@ const Wishlist = () => {
                   gap={6}
                 >
                   {data.map((item) => {
-                    return <CardProduct {...item} key={item.id} />;
+                    return (
+                      <CardProduct {...item} key={item.id} isWishlist={true} />
+                    );
                   })}
                 </Grid>
               </Box>

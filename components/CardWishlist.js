@@ -134,7 +134,6 @@ const CardWishlist = ({
               onClick={() => {
                 handleClickWishlist();
                 // setRemoved((prev) => !prev);
-                // removed.current = !removed.current;
               }}
             />
           </Box>
