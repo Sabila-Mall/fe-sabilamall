@@ -173,9 +173,11 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    navbarEl.current.style.width = document.body.clientWidth + "px";
-    const setNavbarWidth = () => {
+    if (navbarEl.current)
       navbarEl.current.style.width = document.body.clientWidth + "px";
+    const setNavbarWidth = () => {
+      if (navbarEl.current)
+        navbarEl.current.style.width = document.body.clientWidth + "px";
     };
     window.addEventListener("resize", setNavbarWidth);
     return () => {
