@@ -4,7 +4,16 @@ import { Box, Text, Input, Select } from "@chakra-ui/react";
 // contohnya ada di file MyProfile.js
 // register itu fungsi dari react-hook-form
 
-const InputBoxAndLabel = ({ register, text, name, mt, w, type, options }) => (
+const InputBoxAndLabel = ({
+  register,
+  text,
+  name,
+  mt,
+  w,
+  type,
+  options,
+  required = true,
+}) => (
   <Box mt={mt} key={text} w={w}>
     <Text
       className="primaryFont"
@@ -14,9 +23,11 @@ const InputBoxAndLabel = ({ register, text, name, mt, w, type, options }) => (
       mb="8px"
     >
       {text}{" "}
-      <Box as="span" color="red.500">
-        *
-      </Box>
+      {required && (
+        <Box as="span" color="red.500">
+          *
+        </Box>
+      )}
     </Text>
     {type !== "select" && (
       <Input
