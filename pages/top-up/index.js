@@ -25,7 +25,6 @@ import {
   TabPanels,
   Tabs,
   Text,
-  useMediaQuery,
   Wrap,
   WrapItem,
 } from "@chakra-ui/react";
