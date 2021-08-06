@@ -80,7 +80,7 @@ const OrderInformation = () => {
 
   const steps = [
     {
-      title: "Transaksi selesai.",
+      title: "Transaksi selesai.Transaksi selesai.Transaksi selesai.Transaksi selesai.Transaksi selesai.Transaksi selesai.Transaksi selesai.",
       timestamp: "32 Jun 2021, 23:55 WIB ",
     },
     {
@@ -425,6 +425,7 @@ const OrderInformation = () => {
                         ></Circle>
                         <Text
                           color="gray.400"
+                          minW="fit-content"
                           fontSize={{ base: "0.8rem", md: "0.875rem" }}
                         >
                           {step.timestamp}
