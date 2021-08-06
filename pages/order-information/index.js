@@ -80,7 +80,8 @@ const OrderInformation = () => {
 
   const steps = [
     {
-      title: "Transaksi selesai.Transaksi selesai.Transaksi selesai.Transaksi selesai.Transaksi selesai.Transaksi selesai.Transaksi selesai.",
+      title:
+        "Transaksi selesai.Transaksi selesai.Transaksi selesai.Transaksi selesai.Transaksi selesai.Transaksi selesai.Transaksi selesai.",
       timestamp: "32 Jun 2021, 23:55 WIB ",
     },
     {
@@ -324,13 +325,9 @@ const OrderInformation = () => {
               </VStack>
             </Flex>
 
-            <Divider border="1px solid gray.200" />
+            <Divider />
 
-            <Grid
-              templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }}
-              gap="16px"
-              pb="1rem"
-            >
+            <VStack spacing="16px" pb="1rem">
               <Box className="primaryFont" fontSize="1rem">
                 <Text color="black" fontWeight="700">
                   Data Pengirim
@@ -362,6 +359,7 @@ const OrderInformation = () => {
                   30, TANGERANG - CILEDUG, BANTEN, 15148
                 </Text>
               </Box>
+              <Divider />
               <Box pos="relative" mt={{ base: "24px", md: "" }}>
                 <Flex>
                   <Box>
@@ -442,7 +440,7 @@ const OrderInformation = () => {
                   })}
                 </Stack>
               </Box>
-            </Grid>
+            </VStack>
             {isMobile ? (
               <OrderProductsTableMobile products={orderProducts} />
             ) : (
