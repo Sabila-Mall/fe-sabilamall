@@ -7,7 +7,7 @@ import { VscPackage } from "react-icons/vsc";
 import { CardProfile } from "./CardProfile";
 import Navbar from "./Navbar";
 
-const ProfileDesktop = ({ section, element }) => {
+const ProfileDesktop = ({ section, element, cardProfileText }) => {
   const router = useRouter();
 
   const sm = [
@@ -16,7 +16,7 @@ const ProfileDesktop = ({ section, element }) => {
   ];
 
   const menu = [
-    { text: "Profile Saya", path: "/profile", icon: FaUser },
+    { text: "Profil Saya", path: "/profile", icon: FaUser },
     {
       text: "Data Pengiriman",
       path: "/profile/alamat-pengiriman",
@@ -37,7 +37,8 @@ const ProfileDesktop = ({ section, element }) => {
         pt="120px"
         pb="30px"
         bg="gray.50"
-        px={{ base: "50px", md: "10px", lg: "80px", xl: "120px" }}
+        // px={{ base: "50px", md: "10px", lg: "80px", xl: "120px" }}
+        px={{ base: "1rem", md: "1.5rem", lg: "3rem", xl: "50px" }}
       >
         <Box
           display={{ base: "none", md: "block" }}
@@ -49,13 +50,14 @@ const ProfileDesktop = ({ section, element }) => {
           <Navbar />
         </Box>
         <Flex>
-          <CardProfile sm={sm} />
+          <CardProfile sm={sm} cardProfileText={cardProfileText} />
         </Flex>
         <Box
           border="1px solid #E2E8F0"
           borderRadius="20px"
           p="32px"
-          w="62vw"
+          // w="62vw"
+          w="100%"
           ml="15px"
           boxShadow="0px 2px 4px -1px rgba(45, 55, 72, 0.06), 0px 4px 6px -1px rgba(45, 55, 72, 0.1)"
           bg="white"

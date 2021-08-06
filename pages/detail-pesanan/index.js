@@ -32,7 +32,6 @@ import {
   StackDivider,
   Textarea,
   useEditableControls,
-  useMediaQuery,
   VStack,
 } from "@chakra-ui/react";
 import { useState } from "react";
@@ -40,6 +39,7 @@ import { IoCreateOutline, IoChevronForward } from "react-icons/io5";
 
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
+import { useWindowSize } from "../../hooks/useWindowSize";
 import styles from "../../styles/Footer.module.scss";
 
 // Helper function
@@ -216,8 +216,9 @@ function EditableControls() {
   );
 }
 
-export const Produk = ({ produk, resi }) => {
-  const [isSmartphone] = useMediaQuery("(max-width: 48em)");
+const Produk = ({ produk }) => {
+  const { width } = useWindowSize();
+  const isSmartphone = width < 768;
 
   return (
     <Grid
@@ -324,7 +325,8 @@ export const Produk = ({ produk, resi }) => {
 };
 
 const RingkasanPesanan = () => {
-  const [isSmartphone] = useMediaQuery("(max-width: 48em)");
+  const { width } = useWindowSize();
+  const isSmartphone = width < 768;
 
   return (
     <Box>
@@ -748,8 +750,9 @@ const Summary = ({ data }) => {
 };
 
 const DetailPesanan = () => {
-  const [isSmartphone] = useMediaQuery("(max-width: 48em)");
-  const [isTablet] = useMediaQuery("(max-width: 62em)");
+  const { width } = useWindowSize();
+  const isSmartphone = width < 768;
+  const isTablet = width < 1024;
 
   return (
     <>

@@ -32,7 +32,7 @@
 .navbarTop {
   position: fixed;
   background-color: white;
-  min-width: 100vw;
+  width: 100vw;
   box-sizing: border-box;
   overflow: hidden;
   align-items: center;
@@ -91,9 +91,9 @@
 
 .boxSearch {
   position: absolute;
-  height: 100%;
-  right: 0;
   top: 0;
+  right: 0;
+  height: 100%;
   align-items: center;
   padding: 0 20px 0 20px;
   transition: width 0.8s, background-color 0.8s;

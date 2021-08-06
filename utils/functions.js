@@ -31,3 +31,24 @@ export const copyToClipboard = (text, onSuccess, onFail) => {
     .then(onSuccess ? onSuccess : () => {})
     .catch(() => console.error("Unable to copy", err));
 };
+
+export const formatNumber = (number) => {
+  return number.toLocaleString("id-ID");
+};
+
+/**
+ * Filter an object based on the allowed keys
+ * @param {object} obj
+ * @param {array} allowed
+ * @returns filtered object
+ */
+export const filterObject = (rawObj, allowed) => {
+  const filtered = Object.keys(rawObj)
+    .filter((key) => allowed.includes(key))
+    .reduce((obj, key) => {
+      obj[key] = rawObj[key];
+      return obj;
+    }, {});
+
+  return filtered;
+};
