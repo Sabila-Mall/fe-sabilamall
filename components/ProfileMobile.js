@@ -139,6 +139,7 @@ const ProfileMobile = ({ sm }) => {
                 <VStack
                   divider={<StackDivider borderColor="gray.200" />}
                   align="stretch"
+                  key="Upgrade Akun"
                 >
                   <Box key={menu.text}>
                     <Text
