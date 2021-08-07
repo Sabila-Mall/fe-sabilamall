@@ -35,19 +35,6 @@ const CardWishlist = ({
     }
   };
 
-  // useEffect(() => {
-  //   return () => {
-  //     if (removed) {
-  //       deleteWishlist({ liked_products_id, liked_customers_id }).then(
-  //         (res) => {
-  //           console.info("Successed");
-  //           console.log(removed, "IN");
-  //         },
-  //       );
-  //     }
-  //   };
-  // }, []);
-
   return (
     <Box
       w="100%"

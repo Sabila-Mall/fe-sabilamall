@@ -63,14 +63,6 @@ const CardProduct = ({
     }
   };
 
-  // useEffect(() => {
-  //   return () => {
-  //     if (liked) {
-  //       console.log("send DELETE request ke backend");
-  //     }
-  //   };
-  // }, []);
-
   useEffect(() => {
     function handleResize() {
       let width = responsive
