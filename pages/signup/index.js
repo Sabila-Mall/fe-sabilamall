@@ -15,16 +15,36 @@ import {
   FormControl,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useRouter } from "next/router";
+import React, { useState, useEffect } from "react";
 import { BiShow, BiHide } from "react-icons/bi";
 import { BsFillLockFill } from "react-icons/bs";
 import { IoMdMail } from "react-icons/io";
 import { IoPeopleSharp, IoPhonePortraitOutline, IoFlag } from "react-icons/io5";
 import { MdLocationOn } from "react-icons/md";
 
+import {
+  apiRegister,
+  saveTokenToCookies,
+  saveUserIdToCookies,
+} from "../../api/Auth";
+import { apiKota, apiProvinsi } from "../../api/Zone";
 import { Layout } from "../../components/Layout";
+import {
+  AUTH_RESPONSE_STATUS,
+  USER_FIELDS,
+} from "../../constants/authConstants";
+import { useAuthContext } from "../../contexts/authProvider";
+import { isRequestSuccess } from "../../utils/api";
+import { filterObject } from "../../utils/functions";
 
 const SignUp = () => {
+  const router = useRouter();
+  const { setUserData, setIsLoggedIn } = useAuthContext();
+
+  const [provinsi, setProvinsi] = useState([]);
+  const [kota, setKota] = useState([]);
+
   const [showPassword, setShowPassword] = useState(false);
 
   const [namaDepan, setNamaDepan] = useState("");
@@ -36,17 +56,75 @@ const SignUp = () => {
   const [alamat, setAlamat] = useState("");
   const [handphone, setHandphone] = useState("");
 
-  let provinces = [
-    "province1",
-    "province2",
-    "province3",
-    "province4",
-    "province5",
-  ];
-  let cities = ["city1", "city2", "city3", "city4", "city5"];
+  const [provinceId, setProvinceId] = useState(null);
+  const [cityId, setCityId] = useState(null);
+
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    apiProvinsi()
+      .then((res) => {
+        const response = res.data.data;
+        setProvinsi(response);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (province !== "") {
+      const id = provinsi.filter((prov) => prov.zone_name === province)[0]
+        .zone_apicityid;
+      setProvinceId(id);
+      apiKota(id)
+        .then((res) => {
+          const response = res.data.data;
+          setKota(response);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [province]);
+
+  useEffect(() => {
+    if (city !== "") {
+      const id = kota.filter((ko) => ko.city_name === city)[0].city_id;
+      setCityId(id);
+    }
+  }, [city]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
+    apiRegister(
+      namaDepan,
+      namaBelakang,
+      emailAddress,
+      password,
+      handphone,
+      alamat,
+      provinceId,
+      cityId,
+    )
+      .then((res) => {
+        const response = res.data;
+        if (isRequestSuccess(response)) {
+          setUserData(filterObject(response.data[0], USER_FIELDS));
+          saveUserIdToCookies(response.data[0].id);
+          // saveTokenToCookies(respose.data[0].token);
+          setIsLoggedIn(true);
+          router.push("/");
+        } else {
+          setLoading(false);
+          console.error(response.message);
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.error(err);
+      });
   };
 
   return (
@@ -180,6 +258,7 @@ const SignUp = () => {
                         as={showPassword ? BiShow : BiHide}
                         color="gray.500"
                         boxSize="1.2em"
+                        _hover={{ cursor: "pointer" }}
                       />
                     }
                   />
@@ -221,9 +300,15 @@ const SignUp = () => {
                         color={province === "" ? "gray.400" : "black"}
                         borderRadius="0px"
                       >
-                        {provinces.map((province, i) => (
-                          <option key={province}>{province}</option>
-                        ))}
+                        {provinsi !== [] &&
+                          provinsi.map((prov, i) => (
+                            <option
+                              key={prov.zone_name}
+                              style={{ color: "black" }}
+                            >
+                              {prov.zone_name}
+                            </option>
+                          ))}
                       </Select>
                     </FormControl>
                   </Center>
@@ -265,9 +350,15 @@ const SignUp = () => {
                         color={city === "" ? "gray.400" : "black"}
                         borderRadius="0px"
                       >
-                        {cities.map((city, i) => (
-                          <option key={city}>{city}</option>
-                        ))}
+                        {kota !== [] &&
+                          kota.map((ko, i) => (
+                            <option
+                              key={ko.city_name}
+                              style={{ color: "black" }}
+                            >
+                              {ko.city_name}
+                            </option>
+                          ))}
                       </Select>
                     </FormControl>
                   </Center>
@@ -312,6 +403,7 @@ const SignUp = () => {
                     placeholder="No. Telepon / Handphone"
                     size="md"
                     fontSize="sm"
+                    type="tel"
                     onChange={(e) => setHandphone(e.target.value)}
                   />
                 </InputGroup>
@@ -344,6 +436,7 @@ const SignUp = () => {
                     : true
                 }
                 onClick={(e) => handleSubmit(e)}
+                isLoading={loading}
               >
                 Register
               </Button>

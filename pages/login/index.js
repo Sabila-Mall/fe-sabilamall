@@ -13,18 +13,45 @@ import {
   Button,
   FormControl,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { BsFillLockFill } from "react-icons/bs";
 import { IoMdMail } from "react-icons/io";
 
+import {
+  apiLogin,
+  saveTokenToCookies,
+  saveUserIdToCookies,
+} from "../../api/Auth";
+import { USER_FIELDS } from "../../constants/authConstants";
+import { useAuthContext } from "../../contexts/authProvider";
+import { isRequestSuccess } from "../../utils/api";
+import { filterObject } from "../../utils/functions";
+
 const Login = () => {
+  const router = useRouter();
+  const { setUserData, setIsLoggedIn } = useAuthContext();
+
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
   const submitHandler = (event) => {
-    console.log(loginEmail);
-    console.log(loginPassword);
     event.preventDefault();
+
+    apiLogin(loginEmail, loginPassword)
+      .then((res) => {
+        const response = res.data;
+        if (isRequestSuccess(response)) {
+          setUserData(filterObject(response.data[0], USER_FIELDS));
+          saveUserIdToCookies(response.data[0].id);
+          saveTokenToCookies(response.data[0].token);
+          setIsLoggedIn(true);
+          router.push("/");
+        } else {
+          console.error(response.message);
+        }
+      })
+      .catch((err) => console.error(err));
   };
 
   return (
@@ -107,7 +134,7 @@ const Login = () => {
               </Stack>
 
               <Stack direction="row" w="100%" mt="24px" spacing="16px">
-                <Link href="/" w="100%" h="100%">
+                <Link onClick={(e) => submitHandler(e)} w="100%" h="100%">
                   <Button
                     bgColor="red.500"
                     w="100%"

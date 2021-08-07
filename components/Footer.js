@@ -63,7 +63,8 @@ const DesktopFooter = () => {
         <VStack
           flex="1"
           mx="auto"
-          alignItems={{ base: "flex-start", md: "center" }}
+          alignItems={{ base: "flex-start" }}
+          paddingLeft={{ md: "3rem" }}
         >
           <Box pb={{ base: 5, md: 10 }}>
             <Heading fontSize="18px" className={styles.primaryFont} pb={2}>
