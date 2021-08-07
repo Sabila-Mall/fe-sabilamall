@@ -326,6 +326,8 @@ const OrderInformation = () => {
               </VStack>
             </Flex>
 
+            <Divider />
+
             <VStack spacing="16px" pb="1rem" align="flex-start">
               <Box className="primaryFont" fontSize="1rem">
                 <Text color="black" fontWeight="700">
