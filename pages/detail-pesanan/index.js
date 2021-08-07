@@ -228,7 +228,7 @@ const InputAddNote = () => {
   );
 };
 
-const Produk = ({ produk, resi }) => {
+export const Produk = ({ produk, resi }) => {
   const { width } = useWindowSize();
   const isSmartphone = width < 768;
   const editNoteEl = useRef(null);
