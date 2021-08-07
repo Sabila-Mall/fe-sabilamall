@@ -102,7 +102,6 @@ const SenderAddresses = ({ isMobile, addresses }) => {
           p={isMobile ? "" : "50px"}
           pos="absolute"
           h={isMobile ? "calc(100% - 50px)" : "auto"}
-          mt="50px"
           top={isMobile ? "" : "calc(50% - 15rem)"}
           borderRadius={isMobile ? "0" : "20px"}
           bgColor={isMobile ? "#F7FAFC" : "white"}
@@ -124,7 +123,7 @@ const SenderAddresses = ({ isMobile, addresses }) => {
             visibility={isMobile ? "hidden" : "visible"}
             _hover={{ bg: "red.700" }}
           />
-          <ModalBody m="12px">
+          <ModalBody m={{ md: "12px" }}>
             <FormControl as="form" onSubmit={handleSubmit(onSubmit)}>
               <InputBoxAndLabel
                 register={register}
@@ -138,12 +137,17 @@ const SenderAddresses = ({ isMobile, addresses }) => {
                 type="number"
                 mt={4}
               />
-              <Flex justify={isMobile ? "center" : "flex-end"}>
+              <Flex
+                justify={isMobile ? "center" : "flex-end"}
+                position={isMobile ? "absolute" : "relative"}
+                bottom={isMobile ? "1rem" : "auto"}
+                w="full"
+              >
                 <Button
                   colorScheme="orange"
                   borderRadius="20px"
                   p="16px 64px"
-                  mt={isMobile ? "" : "1rem"}
+                  mt="1rem"
                   type="submit"
                   fontWeight="700"
                   className="primaryFont"
@@ -166,6 +170,7 @@ const SenderAddresses = ({ isMobile, addresses }) => {
           p="11px 38px"
           borderRadius="20px"
           mb="48px"
+          onClick={onOpen}
         >
           <Flex alignItems="center">
             <IoIosAddCircle fontSize="16px" />
@@ -174,7 +179,6 @@ const SenderAddresses = ({ isMobile, addresses }) => {
               fontWeight="700"
               fontSize="0.8rem"
               lineHeight="13px"
-              onClick={onOpen}
               ml="0.25rem"
             >
               Tambah

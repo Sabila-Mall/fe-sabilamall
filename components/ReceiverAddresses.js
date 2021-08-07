@@ -177,6 +177,7 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
             p="11px 38px"
             borderRadius="20px"
             mb="48px"
+            onClick={onOpen}
           >
             <Flex alignItems="center">
               <IoIosAddCircle fontSize="1rem" />
@@ -195,14 +196,15 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
           <></>
         )}
       </Stack>
-      <Modal isOpen={isOpen} onClose={onClose} size={isMobile ? "6xl" : "5xl"}>
+      <Modal isOpen={isOpen} onClose={onClose} size={isMobile ? "5xl" : "5xl"}>
         {isMobile ? <></> : <ModalOverlay />}
         <ModalContent
           borderRadius={isMobile ? "0" : "20px"}
-          bgColor={isMobile ? "#F7FAFC" : "white"}
-          h={isMobile ? "calc(100% + 50px)" : "auto"}
+          bgColor={isMobile ? "gray.50" : "white"}
+          h={isMobile ? "fit-content" : "auto"}
           mt={isMobile ? "50px" : ""}
           top={isMobile ? "" : "20%"}
+          mb="0"
         >
           {isMobile ? (
             <></>
@@ -230,7 +232,7 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
             h="48px"
             visibility={isMobile ? "hidden" : "visible"}
           />
-          <ModalBody m="12px">
+          <ModalBody m={{ md: "12px" }}>
             <FormControl as="form" onSubmit={handleSubmit(onSubmit)}>
               <Grid
                 templateColumns={{
@@ -315,6 +317,7 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
                     className="primaryFont"
                     fontSize="14px"
                     w={{ base: "100%", md: "25%" }}
+                    mt="2rem"
                   >
                     Hapus
                   </Button>
@@ -326,7 +329,7 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
                   colorScheme="orange"
                   borderRadius="20px"
                   p="15px 64px"
-                  mt="36px"
+                  mt=".5rem"
                   type="submit"
                   fontWeight="700"
                   className="primaryFont"
