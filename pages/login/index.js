@@ -14,12 +14,15 @@ import {
   FormControl,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import nookies from "nookies";
 import React, { useState } from "react";
 import { BsFillLockFill } from "react-icons/bs";
 import { IoMdMail } from "react-icons/io";
 
-import { apiLogin, saveUserIdToCookies } from "../../api/Auth";
+import {
+  apiLogin,
+  saveTokenToCookies,
+  saveUserIdToCookies,
+} from "../../api/Auth";
 import { USER_FIELDS } from "../../constants/authConstants";
 import { useAuthContext } from "../../contexts/authProvider";
 import { isRequestSuccess } from "../../utils/api";
@@ -40,7 +43,8 @@ const Login = () => {
         const response = res.data;
         if (isRequestSuccess(response)) {
           setUserData(filterObject(response.data[0], USER_FIELDS));
-          saveUserIdToCookies(saveUserIdToCookies(response.data[0].id));
+          saveUserIdToCookies(response.data[0].id);
+          saveTokenToCookies(response.data[0].token);
           setIsLoggedIn(true);
           router.push("/");
         } else {

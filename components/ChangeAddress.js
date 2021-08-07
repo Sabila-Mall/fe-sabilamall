@@ -38,6 +38,17 @@ export const ChangeAddress = ({ isMobile }) => {
     },
   ];
 
+  let senderAddresses = [
+    {
+      name: "Farahhhhh",
+      phoneNumber: "0888888888",
+    },
+    {
+      name: "Farahhhhhhh",
+      phoneNumber: "0888888887",
+    },
+  ];
+
   return (
     <Box
       bgColor={isMobile ? "gray.50" : "white"}
@@ -53,7 +64,7 @@ export const ChangeAddress = ({ isMobile }) => {
         bgColor="white"
       >
         <Stack dir="column">
-          <SenderAddresses isMobile={isMobile} />
+          <SenderAddresses isMobile={isMobile} addresses={senderAddresses} />
         </Stack>
       </Box>
       <Box

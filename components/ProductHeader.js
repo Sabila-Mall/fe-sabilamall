@@ -9,7 +9,7 @@ const ProductHeader = (libur, preOrder) => {
   const discount = 99;
   const rating = (5.0).toFixed(1);
   return (
-    <Box ml="0.5rem">
+    <Box>
       <Text
         fontSize={{ base: "18px", md: "24px" }}
         fontWeight="500"
@@ -22,8 +22,10 @@ const ProductHeader = (libur, preOrder) => {
         divider={
           <StackDivider borderColor={{ base: "white", md: "gray.200" }} />
         }
+        flexWrap="wrap"
         alignItems="center"
         direction="row"
+        lineHeight="1.5rem"
         spacing="8px"
         className="secondaryFont"
         fontSize="0.875rem"
@@ -61,7 +63,7 @@ const ProductHeader = (libur, preOrder) => {
           <Flex alignItems="center">
             <IoTimeOutline size="1.4em" color="#ECC94B" as="span" />
             <Text color="yellow.400" pl="0.5rem">
-              Toko Libur
+              Pre Order
             </Text>
           </Flex>
         )}

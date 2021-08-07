@@ -58,6 +58,8 @@ const ProductCheckout = () => {
 
   return (
     <VStack
+      maxW={{ "2xl": "300px" }}
+      pl={{ "2xl": "2rem" }}
       pt={{ base: "1rem", sm: "inherit" }}
       spacing={"12px"}
       className={"secondaryFont"}
@@ -121,7 +123,8 @@ const ProductCheckout = () => {
                 as={IoRemoveCircleOutline}
                 w={"24px"}
                 h={"24px"}
-                color={"gray.400"}
+                bgColor="transparent"
+                color={numberOfItem === 0 ? "gray.200" : "gray.400"}
                 _hover={{ cursor: "pointer" }}
                 onClick={() => handleModifyNumberOfItem("decrease")}
               />
@@ -138,6 +141,7 @@ const ProductCheckout = () => {
                 as={IoIosAddCircleOutline}
                 color={"gray.400"}
                 w={"24px"}
+                bgColor="transparent"
                 h={"24px"}
                 _hover={{ cursor: "pointer" }}
                 onClick={() => handleModifyNumberOfItem("increase")}
@@ -158,7 +162,7 @@ const ProductCheckout = () => {
           justifyContent={"space-between"}
           width={"full"}
         >
-          <Text textColor={"gray.500"} fontSize={"16px"}>
+          <Text textColor={"gray.500"} fontSize={"16px"} mr="0.5rem">
             Subtotal
           </Text>
           <VStack alignItems={"flex-end"}>
@@ -183,6 +187,7 @@ const ProductCheckout = () => {
           fontSize={"16px"}
           fontWeight={"bold"}
           className={"primaryFont"}
+          _hover={{ bgColor: "red.600" }}
           onClick={() =>
             toast({
               title: "Berhasil",
@@ -195,7 +200,7 @@ const ProductCheckout = () => {
             })
           }
         >
-          Masukan ke Keranjang
+          Masukkan ke Keranjang
         </Button>
       </VStack>
 

@@ -4,22 +4,15 @@ import {
   Text,
   Icon,
   Input,
-  VStack,
-  Heading,
-  Accordion,
   InputGroup,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  AccordionButton,
   Flex,
   InputLeftElement,
-  Avatar,
   Link,
   useDisclosure,
+  Grid,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
+import React, { useEffect, useRef, useState } from "react";
+import { BsChevronLeft } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
 import {
   IoMenu,
@@ -30,9 +23,10 @@ import {
 } from "react-icons/io5";
 
 import { productList } from "../constants/dummyData";
-import { menuCategory, menuSidebar, icons } from "../constants/navbarConstant";
+import { icons } from "../constants/navbarConstant";
 import styles from "../styles/Navbar.module.scss";
 import QuickAdd from "./QuickAdd";
+import Sidebar from "./Sidebar";
 
 const NavbarBottom = ({ onDrawerOpen }) => {
   return (
@@ -56,37 +50,108 @@ const NavbarBottom = ({ onDrawerOpen }) => {
   );
 };
 
-const UserInfo = ({ useBorder }) => (
-  <Flex
-    borderBottom={useBorder && "1px solid #e2e8f0"}
-    align="center"
-    pb="1rem"
-    justify="flex-start"
-    w="70vw"
-    mt=".8rem"
+const Overlay = ({ isSearched, isMainMenu, handleClickOverlay }) => (
+  <Box
+    position="fixed"
+    zIndex="2"
+    bg="gray.500"
+    top="0"
+    opacity="50%"
+    w={isMainMenu || isSearched ? "100vw" : "0"}
+    h="100vh"
+    onClick={handleClickOverlay}
+  />
+);
+
+const SearchedElement = ({ isSearched, setIsSearched }) => (
+  <Box
+    className={styles.boxSearch}
+    display={{ base: "flex", md: "none" }}
+    zIndex={isSearched ? "6" : "-6"}
+    w={isSearched ? "100vw" : "128px"}
+    bg={isSearched ? "white" : "transparent"}
   >
-    <Image w="3.4rem" h="3.4rem" src="/images/navbar/eclipse.svg" />
-    <Box ml=".5rem" fontSize="14px">
-      <Text fontWeight="700">Nama Siapa Hayoo</Text>
-      <Flex>
-        <Text>D0101</Text>
-        <Flex
-          h="22px"
-          px=".5rem"
-          py=".5rem"
-          bg="gray.400"
-          align="center"
-          justify="center"
-          borderRadius="30px"
-          color="white"
-          fontSize="12px"
-          ml="2rem"
-        >
-          Reguler
+    <Icon
+      as={BsChevronLeft}
+      onClick={() => setIsSearched(false)}
+      mr="12px"
+      w="20px"
+      h="20px"
+      _hover={{ cursor: "pointer" }}
+      display={isSearched ? "block" : "none"}
+    />
+    <InputGroup borderColor="white">
+      <InputLeftElement
+        children={<Icon as={IoSearch} className={styles.navbarIcon} />}
+        transition="all 0.8s"
+        display={isSearched ? "flex" : "none"}
+        alignItems="center"
+      />
+      <Input
+        type="text"
+        placeholder="Cari di toko..."
+        bg={isSearched ? "gray.100" : "transparent"}
+        pl={isSearched ? "45px" : "0"}
+        w={isSearched ? "100%" : "0"}
+        visibility={isSearched ? "visible" : "hidden"}
+        borderRadius="12px"
+        borderWidth="0"
+        transition="width 0.8s, padding-left 0.8s,  background-color 0s, visibility 0s"
+      />
+    </InputGroup>
+  </Box>
+);
+
+const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => (
+  <Grid
+    templateColumns={{
+      base: "repeat(3, 1fr)",
+      md: isLoggedIn ? "repeat(5,1fr)" : "repeat(4,1fr)",
+    }}
+    w="auto"
+    columnGap={{ base: 6, md: isLoggedIn ? 0 : 8 }}
+    alignItems="center"
+  >
+    <Icon
+      as={IoSearch}
+      className={styles.navbarIcon}
+      onClick={() => setIsSearched(true)}
+      display={{ base: "block", md: "none" }}
+    />
+    <Link href="/" w="fit-content">
+      <Icon as={IoNotifications} className={styles.navbarIcon} />
+    </Link>
+    <Link href="/" w="fit-content" display={{ base: "none", md: "block" }}>
+      <Icon as={IoCart} className={styles.navbarIcon} />
+    </Link>
+    <Link href="/" w="fit-content" onClick={onDrawerOpen}>
+      <Icon as={IoHeartSharp} className={styles.navbarIcon} />
+    </Link>
+    <Link w="fit-content" display={{ base: "none", md: "block" }} href="/">
+      <Icon as={FaUser} className={styles.navbarIcon} />
+    </Link>
+    {isLoggedIn && (
+      <Box
+        w="fit-content"
+        display={{ base: "none", md: "block" }}
+        fontSize="12px"
+      >
+        <Text fontWeight="bold">Kim Jong Un</Text>
+        <Flex w="full" justify="space-between">
+          <Text mr=".7rem">CSUI2021</Text>
+          <Box
+            bg="gray.400"
+            color="white"
+            px=".4rem"
+            py=".1rem"
+            borderRadius="30px"
+          >
+            Reguler
+          </Box>
         </Flex>
-      </Flex>
-    </Box>
-  </Flex>
+      </Box>
+    )}
+  </Grid>
 );
 
 const Navbar = () => {
@@ -100,20 +165,36 @@ const Navbar = () => {
   const onDrawerOpen = drawerDisclosure.onOpen;
   const onDrawerClose = drawerDisclosure.onClose;
 
+  const navbarEl = useRef(null);
+
   const handleClickOverlay = () => {
     setIsMainMenu(false);
     setIsCategoryMenu(false);
   };
 
+  useEffect(() => {
+    if (navbarEl.current)
+      navbarEl.current.style.width = document.body.clientWidth + "px";
+    const setNavbarWidth = () => {
+      if (navbarEl.current)
+        navbarEl.current.style.width = document.body.clientWidth + "px";
+    };
+    window.addEventListener("resize", setNavbarWidth);
+    return () => {
+      window.removeEventListener("resize", setNavbarWidth);
+    };
+  }, []);
+
   return (
     <>
       <Box
+        ref={navbarEl}
         className={styles.navbarTop}
-        px={{ base: ".8rem", md: "5px", lg: "15px", xl: "50px" }}
+        px={{ base: "1rem", md: "1.5rem", lg: "3rem", xl: "50px" }}
         h={{ base: "50px", md: "70px" }}
-        zIndex={isSearched ? "5" : "10"}
+        zIndex={isSearched ? "5" : "30"}
       >
-        <Box display="flex" alignItems="center" ml={{ md: "5px", lg: "20px" }}>
+        <Box display="flex" alignItems="center" w="100%">
           <Icon
             as={IoMenu}
             className={styles.navbarIcon}
@@ -122,15 +203,13 @@ const Navbar = () => {
               setIsMainMenu((prev) => !prev);
               setIsCategoryMenu(false);
             }}
+            mr="1rem"
           />
-          <Image
-            src="/images/Navbar/logo.svg"
-            ml={isLoggedIn ? { base: "5px", xl: "20px" } : "20px"}
-          />
+          <Image src="/images/Navbar/logo.svg" />
           <InputGroup
-            ml={isLoggedIn ? { base: "15px", xl: "30px" } : "30px"}
-            w="60vw"
-            mr={isLoggedIn ? { base: "15px", xl: "25px" } : "25px"}
+            mx={isLoggedIn ? { base: "15px", xl: "30px" } : "30px"}
+            w={{ base: "100%", lg: "60vw", xl: "70vw" }}
+            // minW={{ base: "auto", xl: "70vw" }}
             display={{ base: "none", md: "block" }}
           >
             <InputLeftElement
@@ -161,256 +240,29 @@ const Navbar = () => {
           </InputGroup>
         </Box>
 
-        <Box display="flex" alignItems="center" mr={{ md: "5px", lg: "20px" }}>
-          <Link href="/">
-            <Icon
-              as={IoNotifications}
-              className={styles.navbarIcon}
-              mr={{ base: "12px", md: "0" }}
-            />
-          </Link>
-          <Link href="/">
-            <Icon
-              as={IoCart}
-              className={styles.navbarIcon}
-              mx={
-                isLoggedIn
-                  ? { base: "8px", md: "10px", xl: "25px" }
-                  : { base: "8px", md: "15px", xl: "25px" }
-              }
-              display={{ base: "none", md: "block" }}
-            />
-          </Link>
-          <Link href="/" onClick={onDrawerOpen}>
-            <Icon as={IoHeartSharp} className={styles.navbarIcon} />
-          </Link>
-          <Link href="/">
-            <Icon
-              as={FaUser}
-              className={styles.navbarIcon}
-              ml={
-                isLoggedIn
-                  ? { base: "8px", md: "10px", xl: "25px" }
-                  : { base: "8px", md: "15px", xl: "25px" }
-              }
-              mr="1rem"
-              display={{ base: "none", md: "block" }}
-            />
-          </Link>
-          {isLoggedIn && (
-            <Box display={{ base: "none", md: "block" }} fontSize="12px">
-              <Text fontWeight="bold">Kim Jong Un</Text>
-              <Flex w="full" justify="space-between">
-                <Text mr=".7rem">CSUI2021</Text>
-                <Box
-                  bg="gray.400"
-                  color="white"
-                  px=".4rem"
-                  py=".1rem"
-                  borderRadius="30px"
-                >
-                  Reguler
-                </Box>
-              </Flex>
-            </Box>
-          )}
-        </Box>
-        <Box
-          className={styles.boxSearch}
-          display={{ base: "flex", md: "none" }}
-          zIndex={isSearched ? "6" : "-6"}
-          w={isSearched ? "100vw" : "128px"}
-          bg={isSearched ? "white" : "transparent"}
-        >
-          <Icon
-            as={BsChevronLeft}
-            onClick={() => setIsSearched(false)}
-            mr="12px"
-            w="20px"
-            h="20px"
-            _hover={{ cursor: "pointer" }}
-            display={isSearched ? "block" : "none"}
-          />
-          <InputGroup borderColor="white">
-            <InputLeftElement
-              children={
-                <Icon
-                  as={IoSearch}
-                  className={styles.navbarIcon}
-                  onClick={() => setIsSearched(true)}
-                  mr="20px"
-                />
-              }
-              ml={isSearched ? "15px" : "0"}
-              transition="all 0.8s"
-            />
-            <Input
-              type="text"
-              placeholder="Cari di toko..."
-              bg={isSearched ? "gray.100" : "transparent"}
-              pl={isSearched ? "45px" : "0"}
-              w={isSearched ? "100%" : "0"}
-              visibility={isSearched ? "visible" : "hidden"}
-              borderRadius="12px"
-              borderWidth="0"
-              transition="width 0.8s, padding-left 0.8s,  background-color 0s, visibility 0s"
-            />
-          </InputGroup>
-        </Box>
+        <IconRightElements
+          isLoggedIn={isLoggedIn}
+          onDrawerOpen={onDrawerOpen}
+          isSearched={isSearched}
+          setIsSearched={setIsSearched}
+        />
+        <SearchedElement
+          isSearched={isSearched}
+          setIsSearched={setIsSearched}
+        />
       </Box>
-      <Box
-        position="fixed"
-        zIndex="2"
-        bg="gray.500"
-        top="0"
-        opacity="50%"
-        w={isMainMenu || isSearched ? "100vw" : "0"}
-        h="100vh"
-        onClick={handleClickOverlay}
-      ></Box>
-      <Box
-        w={isMainMenu ? "85vw" : "0"}
-        zIndex="3"
-        className={styles.sidebarMenu}
-      >
-        <Box className={styles.headerSidebar}>
-          <Icon
-            as={BsChevronLeft}
-            onClick={
-              isCategoryMenu
-                ? () => setIsCategoryMenu(false)
-                : () => setIsMainMenu(false)
-            }
-            ml="20px"
-            mr="10px"
-            w="20px"
-            h="20px"
-          />
-          <Heading
-            className={styles.fontSizeSidebar}
-            visibility={isCategoryMenu ? "hidden" : "visible"}
-          >
-            {menuSidebar.headerText}
-          </Heading>
-        </Box>
-        <VStack spacing={1} px="10px" pt="5px">
-          {isLoggedIn && <UserInfo />}
-          {menuSidebar.menu.map((item) => {
-            if (item.id === "kb") {
-              return (
-                <Box
-                  className={styles.boxMenu}
-                  key={item.id}
-                  onClick={() => setIsCategoryMenu(true)}
-                >
-                  <Heading className={styles.fontSizeSidebar} lineHeight="50px">
-                    {item.text}
-                  </Heading>
-                  <Icon as={BsChevronRight} w="20px" h="20px" />
-                </Box>
-              );
-            } else if (item.id === "dagp") {
-              return (
-                <Box
-                  borderBottomWidth="1px"
-                  borderColor="gray.200"
-                  w="70vw"
-                  key={item.id}
-                >
-                  <Link href={item.href}>
-                    <Heading
-                      className={styles.fontSizeSidebar}
-                      lineHeight="40px"
-                    >
-                      {item.text}
-                    </Heading>
-                  </Link>
-                  <Image
-                    src="/images/Navbar/google-play.svg"
-                    alt="Google Play"
-                    mt="-13px"
-                    mb="14px"
-                  />
-                </Box>
-              );
-            }
-            return (
-              <Box className={styles.boxMenu} key={item.id}>
-                <Link href={item.href}>
-                  <Heading className={styles.fontSizeSidebar} lineHeight="50px">
-                    {item.text}
-                  </Heading>
-                </Link>
-              </Box>
-            );
-          })}
-        </VStack>
-      </Box>
-      <Box
-        w={isCategoryMenu ? "85vw" : "0"}
-        className={styles.sidebarMenu}
-        zIndex="4"
-        overflow="hidden"
-        transition="width .3s"
-      >
-        <Box className={styles.headerSidebar}>
-          <Icon
-            as={BsChevronLeft}
-            onClick={
-              isCategoryMenu
-                ? () => setIsCategoryMenu(false)
-                : () => setIsMainMenu(false)
-            }
-            ml="20px"
-            mr="10px"
-            w="20px"
-            h="20px"
-          />
-          <Heading
-            className={styles.fontSizeSidebar}
-            visibility={isCategoryMenu ? "visible" : "hidden"}
-          >
-            {menuCategory.headerText}
-          </Heading>
-        </Box>
-        <VStack spacing={1} px="10px" pt="5px">
-          {isLoggedIn && <UserInfo useBorder={false} />}
-          <Accordion defaultIndex={[0]} borderWidth="0" allowMultiple>
-            {menuCategory.menu.map((item) => {
-              return (
-                <AccordionItem key={item.id}>
-                  <AccordionButton
-                    borderWidth="0"
-                    borderColor="transparent"
-                    _focus={{ outline: "none" }}
-                  >
-                    <Box className={styles.boxCategoryMenu}>
-                      <Heading
-                        className={styles.fontSizeSidebar}
-                        lineHeight="30px"
-                      >
-                        {item.text}
-                      </Heading>
-                      <AccordionIcon />
-                    </Box>
-                  </AccordionButton>
-                  <AccordionPanel pb={1} pl="30px">
-                    {item.subMenu.map((sub) => (
-                      <Heading
-                        className={styles.fontSizeSidebar}
-                        lineHeight="40px"
-                        key={sub.id}
-                      >
-                        {sub.text}
-                      </Heading>
-                    ))}
-                  </AccordionPanel>
-                </AccordionItem>
-              );
-            })}
-          </Accordion>
-        </VStack>
-      </Box>
+      <Overlay
+        isMainMenu={isMainMenu}
+        isSearched={isSearched}
+        handleClickOverlay={handleClickOverlay}
+      />
+      <Sidebar
+        isLoggedIn={isLoggedIn}
+        setIsCategoryMenu={setIsCategoryMenu}
+        isCategoryMenu={isCategoryMenu}
+        setIsMainMenu={setIsMainMenu}
+        isMainMenu={isMainMenu}
+      />
       <NavbarBottom onDrawerOpen={onDrawerOpen} />
       <QuickAdd
         products={productList}

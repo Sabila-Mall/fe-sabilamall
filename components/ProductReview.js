@@ -1,5 +1,5 @@
 import { Image } from "@chakra-ui/image";
-import { Flex, HStack, Icon, Text, VStack } from "@chakra-ui/react";
+import { Flex, HStack, Icon, Stack, Text, VStack } from "@chakra-ui/react";
 import { IoStar } from "react-icons/io5";
 
 const ProductReview = () => {
@@ -62,10 +62,16 @@ const ProductReview = () => {
 
   return (
     <VStack className={"secondaryFont"} alignItems={"flex-start"} id="review">
-      <HStack fontSize={"24px"} as={"b"}>
-        <Text className={"primaryFont"}>Penilaian Produk </Text>
+      <Flex
+        direction={{ base: "column", md: "row" }}
+        fontSize={"24px"}
+        as={"b"}
+      >
+        <Text mr={{ base: 0, md: "1rem" }} className={"primaryFont"}>
+          Penilaian Produk{" "}
+        </Text>
         <Text textColor={"orange.300"}>({totalReview} ulasan)</Text>
-      </HStack>
+      </Flex>
 
       <HStack></HStack>
 

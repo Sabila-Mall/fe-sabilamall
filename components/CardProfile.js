@@ -8,8 +8,10 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { useRef } from "react";
 import { FaUser } from "react-icons/fa";
 import { IoHeart } from "react-icons/io5";
+import { IoWalletOutline } from "react-icons/io5";
 import { VscPackage } from "react-icons/vsc";
 
 import { ButtonStatusUser } from "./ButtonProfile";
@@ -53,24 +55,26 @@ export const SMCard = ({ sm, w }) => (
   </Flex>
 );
 
-export const CardProfile = ({ sm }) => {
+export const CardProfile = ({ sm, cardProfileText }) => {
   const router = useRouter();
-
   const profileMenu = [
     { text: "Akun Saya", icon: FaUser, path: "/profile" },
     { text: "Wishlist", icon: IoHeart, path: "/wishlist" },
-    { text: "Pesanan Saya", icon: VscPackage, path: "/order-information" },
+    { text: "Pesanan Saya", icon: VscPackage, path: "/profile/pesanan-saya" },
+    { text: "SM Pay", icon: IoWalletOutline, path: "/top-up" },
   ];
 
   return (
     <Box
+      position="sticky"
+      top="90px"
       w={{ md: "260px", lg: "270px" }}
       boxShadow=" 0px 2px 4px -1px rgba(45, 55, 72, 0.06), 0px 4px 6px -1px rgba(45, 55, 72, 0.1)"
-      maxHeight="600px"
       pt="20px"
       pb="36px"
       borderRadius="20px"
       bg="white"
+      alignSelf="flex-start"
     >
       <Flex align="center" direction="column">
         <Avatar
@@ -112,11 +116,23 @@ export const CardProfile = ({ sm }) => {
       >
         <StackDivider borderColor="gray.200" />
         {profileMenu.map((menu) => (
-          <Flex key={menu.text} fontSize="16px" align="center" pl="16px">
-            <Icon as={menu.icon} color="black" fontSize="20px" mr="10px" />
+          <Flex
+            key={menu.text}
+            fontSize="16px"
+            align="center"
+            pl="16px"
+            cursor="pointer"
+          >
+            <Icon
+              as={menu.icon}
+              color={cardProfileText === menu.text ? "orange.500" : "black"}
+              fontSize="20px"
+              mr="10px"
+            />
             <Text
               onClick={() => router.push(menu.path)}
               className="secondaryFont"
+              color={cardProfileText === menu.text ? "orange.500" : "black"}
               fontWeight="500"
               lineHeight="24px"
             >

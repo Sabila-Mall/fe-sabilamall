@@ -23,7 +23,11 @@ import { IoMdMail } from "react-icons/io";
 import { IoPeopleSharp, IoPhonePortraitOutline, IoFlag } from "react-icons/io5";
 import { MdLocationOn } from "react-icons/md";
 
-import { apiRegister, saveUserIdToCookies } from "../../api/Auth";
+import {
+  apiRegister,
+  saveTokenToCookies,
+  saveUserIdToCookies,
+} from "../../api/Auth";
 import { apiKota, apiProvinsi } from "../../api/Zone";
 import { Layout } from "../../components/Layout";
 import {
@@ -109,6 +113,7 @@ const SignUp = () => {
         if (isRequestSuccess(response)) {
           setUserData(filterObject(response.data[0], USER_FIELDS));
           saveUserIdToCookies(response.data[0].id);
+          // saveTokenToCookies(respose.data[0].token);
           setIsLoggedIn(true);
           router.push("/");
         } else {
