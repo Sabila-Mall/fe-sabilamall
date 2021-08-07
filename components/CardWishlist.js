@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { IoHeartOutline, IoHeart } from "react-icons/io5";
 
 import { addWishlist, deleteWishlist } from "../api/wishlist";
+import { IMAGE_HOST } from "../constants/api";
 
 const numberWithDot = (x) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -67,7 +68,7 @@ const CardWishlist = ({
         alignItems="center"
         justifyContent="center"
       >
-        <Image src={image_path} w="90%" h="auto" maxW="144px" />
+        <Image src={IMAGE_HOST + image_path} w="90%" h="auto" maxW="144px" />
       </Box>
       <Box
         h="100%"

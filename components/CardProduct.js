@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { IoHeartOutline, IoTimeSharp, IoHeart } from "react-icons/io5";
 
 import { addWishlist, deleteWishlist } from "../api/wishlist";
+import { IMAGE_HOST } from "../constants/api";
 import { useAuthContext } from "../contexts/authProvider";
 import styles from "../styles/Product.module.scss";
 
@@ -114,7 +115,7 @@ const CardProduct = ({
           display="flex"
           justifyContent="center"
           w="100%"
-          bgImage={`url(${image_path})`}
+          bgImage={`url(${IMAGE_HOST + image_path})`}
           bgPosition="center"
           bgRepeat="no-repeat"
           bgSize="cover"
