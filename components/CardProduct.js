@@ -2,6 +2,8 @@ import { Box, Image, Text, Icon } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { IoHeartOutline, IoTimeSharp, IoHeart } from "react-icons/io5";
 
+import { addWishlist, deleteWishlist } from "../api/wishlist";
+import { useAuthContext } from "../contexts/authProvider";
 import styles from "../styles/Product.module.scss";
 
 // import { BsFilter } from "react-icons/bs";
@@ -31,29 +33,47 @@ const numberWithDot = (x) => {
 };
 
 const CardProduct = ({
-  imageUrl,
-  productName,
+  image_path,
+  name,
   endTime,
   discount,
-  realPrice,
+  products_id: liked_products_id,
+  price,
   responsive,
+  isWishlist = false,
 }) => {
-  const [selected, setSelected] = useState(false);
   const [imageHeight, setImageHeight] = useState(144);
-  const realPriceString = numberWithDot(realPrice);
+  const realPriceString = numberWithDot(price.replace(/\.(.*?[0]{1,2})/g, ""));
   const priceAfterDiscount = discount
-    ? numberWithDot(realPrice - (realPrice * discount) / 100)
+    ? numberWithDot(price - (price * discount) / 100)
     : null;
-
   const timeLeft = endTime && calculateTimeLeft(endTime);
 
-  useEffect(() => {
-    return () => {
-      if (selected) {
-        console.log("send DELETE request ke backend");
-      }
-    };
-  }, []);
+  const [liked, setLiked] = useState(isWishlist);
+
+  const { userData } = useAuthContext();
+  const liked_customers_id = userData?.id || 6089;
+
+  const handleClickWishlist = () => {
+    setLiked((prev) => !prev);
+    if (liked) {
+      deleteWishlist({ liked_products_id, liked_customers_id }).then((res) => {
+        console.info("deleted");
+      });
+    } else {
+      addWishlist({ liked_products_id, liked_customers_id }).then((res) => {
+        console.info("added");
+      });
+    }
+  };
+
+  // useEffect(() => {
+  //   return () => {
+  //     if (liked) {
+  //       console.log("send DELETE request ke backend");
+  //     }
+  //   };
+  // }, []);
 
   useEffect(() => {
     function handleResize() {
@@ -94,12 +114,12 @@ const CardProduct = ({
           display="flex"
           justifyContent="center"
           w="100%"
-          bgImage={`url(${imageUrl})`}
+          bgImage={`url(${image_path})`}
           bgPosition="center"
           bgRepeat="no-repeat"
           bgSize="cover"
         ></Box>
-        <Box padding="2">
+        <Box padding="2" w="100%">
           {endTime && timeLeft && (
             <Box
               px="4px"
@@ -128,7 +148,7 @@ const CardProduct = ({
           )}
           <Box className={styles.productName} mb="8px">
             <Text fontSize="16px" fontWeight="500" lineHeight="24px">
-              {productName.toUpperCase()}
+              {name.toUpperCase()}
             </Text>
           </Box>
           {discount && (
@@ -167,9 +187,12 @@ const CardProduct = ({
           >
             <Text>Rp {priceAfterDiscount ?? realPriceString}</Text>
             <Icon
-              onClick={() => setSelected((prev) => !prev)}
-              as={selected ? IoHeart : IoHeartOutline}
-              color={selected ? "red.500" : "black"}
+              onClick={() => {
+                handleClickWishlist();
+                // setLiked((prev) => !prev)
+              }}
+              as={liked ? IoHeart : IoHeartOutline}
+              color={liked ? "red.500" : "black"}
             ></Icon>
           </Box>
         </Box>

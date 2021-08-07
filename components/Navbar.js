@@ -121,10 +121,14 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => (
     <Link href="/" w="fit-content">
       <Icon as={IoNotifications} className={styles.navbarIcon} />
     </Link>
-    <Link href="/" w="fit-content" display={{ base: "none", md: "block" }}>
+    <Link
+      w="fit-content"
+      display={{ base: "none", md: "block" }}
+      onClick={onDrawerOpen}
+    >
       <Icon as={IoCart} className={styles.navbarIcon} />
     </Link>
-    <Link href="/" w="fit-content" onClick={onDrawerOpen}>
+    <Link href="/wishlist" w="fit-content">
       <Icon as={IoHeartSharp} className={styles.navbarIcon} />
     </Link>
     <Link w="fit-content" display={{ base: "none", md: "block" }} href="/">
