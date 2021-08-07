@@ -16,11 +16,11 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { IoIosAddCircle } from "react-icons/io";
 
 import { AddressBoxSender } from "./AddressBox";
 import InputBoxAndLabel from "./InputBoxAndLabel";
-import { useForm } from "react-hook-form";
 
 const SenderAddresses = ({ isMobile, addresses }) => {
   const [addressList, setAddressList] = useState(addresses);
@@ -37,10 +37,10 @@ const SenderAddresses = ({ isMobile, addresses }) => {
     }
     console.log(outputList);
   };
-  const onSubmit = data => {
-    const tempAddress = { name: data.name, phoneNumber: data.phoneNumber }
+  const onSubmit = (data) => {
+    const tempAddress = { name: data.name, phoneNumber: data.phoneNumber };
     console.log(tempAddress);
-  }
+  };
 
   return (
     <Stack dir="column" pt="1rem" pb={isMobile ? "36px" : ""}>
@@ -64,14 +64,14 @@ const SenderAddresses = ({ isMobile, addresses }) => {
           onClick={onOpen}
           display={{ base: "none", md: "block" }}
         >
-          <Flex>
+          <Flex align="center">
             <IoIosAddCircle fontSize="1rem" />
             <Text
               className="primaryFont"
               fontWeight="700"
               fontSize="0.875rem"
               lineHeight="100%"
-              transform="translateY(2px)"
+              ml="0.2rem"
             >
               Tambah
             </Text>
@@ -80,7 +80,6 @@ const SenderAddresses = ({ isMobile, addresses }) => {
       </Flex>
       <Divider mt="0.5rem" />
       {addressList.map((address) => {
-
         return (
           <Box key={address.phoneNumber}>
             <AddressBoxSender
@@ -111,7 +110,9 @@ const SenderAddresses = ({ isMobile, addresses }) => {
           {isMobile ? (
             <></>
           ) : (
-            <ModalHeader fontWeight="700">Tambah Identitas Pengirim</ModalHeader>
+            <ModalHeader fontWeight="700">
+              Tambah Identitas Pengirim
+            </ModalHeader>
           )}
           <ModalCloseButton
             pos="absolute"

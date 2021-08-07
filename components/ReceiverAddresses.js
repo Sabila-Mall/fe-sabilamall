@@ -15,13 +15,14 @@ import {
   ModalCloseButton,
   FormControl,
   Grid,
-  GridItem
+  GridItem,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { IoIosAddCircle } from "react-icons/io";
+
 import AddressBoxReceiver from "./AddressBox";
 import InputBoxAndLabel from "./InputBoxAndLabel";
-import { useForm } from "react-hook-form";
 
 const ReceiverAddresses = ({ addresses, isMobile }) => {
   const [addressList, setAddressList] = useState(addresses);
@@ -39,7 +40,7 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
     console.log(outputList);
   };
 
-  const onSubmit = data => {
+  const onSubmit = (data) => {
     const tempAddress = {
       name: data.name,
       phoneNumber: data.phoneNumber,
@@ -47,62 +48,70 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
       city: data.city,
       district: data.district,
       province: data.province,
-      postalCode: data.postalCode
-    }
+      postalCode: data.postalCode,
+    };
     console.log(tempAddress);
-  }
+  };
 
-  const provinceOptions = [{
-    value: "option1",
-    text: "option1"
-  },
-  {
-    value: "option2",
-    text: "option2"
-  },
-  {
-    value: "option3",
-    text: "option3"
-  }]
+  const provinceOptions = [
+    {
+      value: "option1",
+      text: "option1",
+    },
+    {
+      value: "option2",
+      text: "option2",
+    },
+    {
+      value: "option3",
+      text: "option3",
+    },
+  ];
 
-  const cityOptions = [{
-    value: "option1",
-    text: "option1"
-  },
-  {
-    value: "option2",
-    text: "option2"
-  },
-  {
-    value: "option3",
-    text: "option3"
-  }]
+  const cityOptions = [
+    {
+      value: "option1",
+      text: "option1",
+    },
+    {
+      value: "option2",
+      text: "option2",
+    },
+    {
+      value: "option3",
+      text: "option3",
+    },
+  ];
 
-  const districtOptions = [{
-    value: "option1",
-    text: "option1"
-  },
-  {
-    value: "option2",
-    text: "option2"
-  },
-  {
-    value: "option3",
-    text: "option3"
-  }]
+  const districtOptions = [
+    {
+      value: "option1",
+      text: "option1",
+    },
+    {
+      value: "option2",
+      text: "option2",
+    },
+    {
+      value: "option3",
+      text: "option3",
+    },
+  ];
 
-  const postalCodeOptions = [{
-    value: "option1",
-    text: "option1"
-  },
-  {
-    value: "option2",
-    text: "option2"
-  },
-  {
-    value: "option3",
-    text: "option3"
-  }]
+  const postalCodeOptions = [
+    {
+      value: "option1",
+      text: "option1",
+    },
+    {
+      value: "option2",
+      text: "option2",
+    },
+    {
+      value: "option3",
+      text: "option3",
+    },
+  ];
 
   return (
     <Box pt="1rem" pb={isMobile ? "36px" : ""}>
@@ -125,15 +134,15 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
           p="11px 38px"
           display={{ base: "none", md: "block" }}
         >
-          <Flex>
+          <Flex align="center">
             <IoIosAddCircle fontSize="1rem" />
             <Text
               className="primaryFont"
               fontWeight="700"
               fontSize="0.875rem"
               lineHeight="100%"
-              transform="translateY(2px)"
               onClick={onOpen}
+              ml="0.2rem"
             >
               Tambah
             </Text>
@@ -186,11 +195,7 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
           <></>
         )}
       </Stack>
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        size={isMobile ? "6xl" : "5xl"}
-      >
+      <Modal isOpen={isOpen} onClose={onClose} size={isMobile ? "6xl" : "5xl"}>
         {isMobile ? <></> : <ModalOverlay />}
         <ModalContent
           borderRadius={isMobile ? "0" : "20px"}
