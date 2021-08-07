@@ -12,6 +12,7 @@ const InputBoxAndLabel = ({
   w,
   type,
   options,
+  defaultValue,
   required = true,
 }) => (
   <Box mt={mt} key={text} w={w}>

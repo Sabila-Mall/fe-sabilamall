@@ -192,7 +192,7 @@ const Navbar = () => {
         className={styles.navbarTop}
         px={{ base: "1rem", md: "1.5rem", lg: "3rem", xl: "50px" }}
         h={{ base: "50px", md: "70px" }}
-        zIndex={isSearched ? "5" : "10"}
+        zIndex={isSearched ? "5" : "30"}
       >
         <Box display="flex" alignItems="center" w="100%">
           <Icon

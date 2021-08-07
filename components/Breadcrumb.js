@@ -7,7 +7,7 @@ import { IoChevronForwardSharp } from "react-icons/io5";
 
 import styles from "../styles/Layout.module.scss";
 
-const BreadCrumb = ({ items }) => {
+const BreadCrumb = ({ items, px }) => {
   return (
     <Breadcrumb
       fontWeight={500}
