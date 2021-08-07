@@ -5,6 +5,7 @@ import { IoHeartOutline, IoTimeSharp, IoHeart } from "react-icons/io5";
 import { addWishlist, deleteWishlist } from "../api/wishlist";
 import { IMAGE_HOST } from "../constants/api";
 import { useAuthContext } from "../contexts/authProvider";
+import { useWishlistContext } from "../contexts/wishlistProvider";
 import styles from "../styles/Product.module.scss";
 
 // import { BsFilter } from "react-icons/bs";
@@ -41,6 +42,7 @@ const CardProduct = ({
   products_id: liked_products_id,
   price,
   responsive,
+  liked_customers_id,
   isWishlist = false,
 }) => {
   const [imageHeight, setImageHeight] = useState(144);
@@ -51,20 +53,13 @@ const CardProduct = ({
   const timeLeft = endTime && calculateTimeLeft(endTime);
 
   const [liked, setLiked] = useState(isWishlist);
-
-  const { userData } = useAuthContext();
-  const liked_customers_id = userData?.id || 6089;
-
+  const { addItem, deleteItem } = useWishlistContext();
   const handleClickWishlist = () => {
     setLiked((prev) => !prev);
     if (liked) {
-      deleteWishlist({ liked_products_id, liked_customers_id }).then((res) => {
-        console.info("deleted");
-      });
+      deleteItem(liked_products_id, liked_customers_id);
     } else {
-      addWishlist({ liked_products_id, liked_customers_id }).then((res) => {
-        console.info("added");
-      });
+      addItem(liked_products_id, liked_customers_id);
     }
   };
 

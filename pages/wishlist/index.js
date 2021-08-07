@@ -17,24 +17,12 @@ import Footer from "../../components/Footer";
 import { Layout } from "../../components/Layout";
 import Navbar from "../../components/Navbar";
 import { useAuthContext } from "../../contexts/authProvider";
+import { useWishlistContext } from "../../contexts/wishlistProvider";
 
 const Wishlist = () => {
   const { userData } = useAuthContext();
   const userId = userData?.id;
-
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    if (userId) {
-      getWishlistByUserId(userId)
-        .then((res) => {
-          setData(res);
-          console.log(res);
-        })
-        .finally(() => setLoading(false));
-    }
-  }, [userData]);
+  const { wishlistData: data, loading } = useWishlistContext();
 
   return (
     <Layout hasNavbar>
@@ -73,6 +61,7 @@ const Wishlist = () => {
                       return (
                         <CardProduct
                           {...item}
+                          liked_customers_id={userId}
                           key={item.id}
                           isWishlist={true}
                         />

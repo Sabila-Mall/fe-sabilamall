@@ -1,8 +1,10 @@
 import axios from "axios";
 import nookies from "nookies";
 
+import { HOST } from "../constants/api";
+
 export const apiLogin = (email, password) => {
-  return axios.post("https://api.sabilamall.co.id/api/user/proses_login", {
+  return axios.post(HOST + "/api/user/proses_login", {
     email: email,
     password: password,
   });
@@ -18,7 +20,7 @@ export const apiRegister = (
   zone_id,
   city_id,
 ) => {
-  return axios.post("https://api.sabilamall.co.id/api/user/proses_register", {
+  return axios.post(HOST + "/api/user/proses_register", {
     customers_firstname: first_name,
     customers_lastname: last_name,
     email: email,
@@ -31,16 +33,13 @@ export const apiRegister = (
 };
 
 export const apiResetPassword = (email) => {
-  return axios.post(
-    "https://apiweb.sabilamall.co.id/user/process_forgot_password",
-    {
-      email: email,
-    },
-  );
+  return axios.post(HOST + "/user/process_forgot_password", {
+    email: email,
+  });
 };
 
 export const apiGetUserProfile = (id) => {
-  return axios.post("https://api.sabilamall.co.id/api/user/get_profile", {
+  return axios.post(HOST + "/api/user/get_profile", {
     user_id: id,
   });
 };

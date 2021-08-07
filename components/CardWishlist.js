@@ -4,6 +4,7 @@ import { IoHeartOutline, IoHeart } from "react-icons/io5";
 
 import { addWishlist, deleteWishlist } from "../api/wishlist";
 import { IMAGE_HOST } from "../constants/api";
+import { useWishlistContext } from "../contexts/wishlistProvider";
 
 const numberWithDot = (x) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -23,17 +24,14 @@ const CardWishlist = ({
   const priceAfterDiscount = discount
     ? numberWithDot(price - (price * discount) / 100)
     : null;
+  const { addItem, deleteItem } = useWishlistContext();
 
   const handleClickWishlist = () => {
     setRemoved((prev) => !prev);
     if (!removed) {
-      deleteWishlist({ liked_products_id, liked_customers_id }).then((res) => {
-        console.info("deleted");
-      });
+      deleteItem(liked_products_id, liked_customers_id);
     } else {
-      addWishlist({ liked_products_id, liked_customers_id }).then((res) => {
-        console.info("added");
-      });
+      addItem(liked_products_id, liked_customers_id);
     }
   };
 
