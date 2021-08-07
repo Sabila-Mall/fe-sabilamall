@@ -34,7 +34,7 @@ import {
   useEditableControls,
   VStack,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { IoCreateOutline, IoChevronForward } from "react-icons/io5";
 
 import Footer from "../../components/Footer";
@@ -204,22 +204,34 @@ const Stepper = () => {
   );
 };
 
-function EditableControls() {
+function EditableControls({ ref }) {
   const { getEditButtonProps } = useEditableControls();
 
   return (
     <IconButton
       icon={<IoCreateOutline />}
       variant={"ghost"}
+      ref={ref}
       {...getEditButtonProps()}
     />
   );
 }
 
-const Produk = ({ produk }) => {
+const InputAddNote = () => {
+  const { getEditButtonProps } = useEditableControls();
+
+  return (
+    <Box {...getEditButtonProps()}>
+      <EditablePreview />
+      <EditableInput color="black" />
+    </Box>
+  );
+};
+
+const Produk = ({ produk, resi }) => {
   const { width } = useWindowSize();
   const isSmartphone = width < 768;
-
+  const editNoteEl = useRef(null);
   return (
     <Grid
       gridTemplateColumns={{
@@ -263,11 +275,8 @@ const Produk = ({ produk }) => {
             isPreviewFocusable={false}
           >
             <HStack spacing={"0.25rem"}>
-              <EditableControls />
-              <Box>
-                <EditablePreview />
-                <EditableInput />
-              </Box>
+              <EditableControls ref={editNoteEl} />
+              <InputAddNote />
             </HStack>
           </Editable>
         )}
