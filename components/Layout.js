@@ -17,6 +17,7 @@ export const Layout = ({
   breadCrumbItem,
   hasFooter,
   sticky,
+  maxWidth,
 }) => {
   return (
     <>

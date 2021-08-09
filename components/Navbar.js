@@ -7,10 +7,10 @@ import {
   InputGroup,
   Flex,
   InputLeftElement,
-  Link,
   useDisclosure,
   Grid,
 } from "@chakra-ui/react";
+import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import { BsChevronLeft } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
@@ -121,10 +121,14 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => (
     <Link href="/" w="fit-content">
       <Icon as={IoNotifications} className={styles.navbarIcon} />
     </Link>
-    <Link href="/" w="fit-content" display={{ base: "none", md: "block" }}>
+    <Box
+      w="fit-content"
+      display={{ base: "none", md: "block" }}
+      onClick={onDrawerOpen}
+    >
       <Icon as={IoCart} className={styles.navbarIcon} />
-    </Link>
-    <Link href="/" w="fit-content" onClick={onDrawerOpen}>
+    </Box>
+    <Link href="/wishlist" w="fit-content">
       <Icon as={IoHeartSharp} className={styles.navbarIcon} />
     </Link>
     <Link w="fit-content" display={{ base: "none", md: "block" }} href="/">
@@ -192,7 +196,7 @@ const Navbar = () => {
         className={styles.navbarTop}
         px={{ base: "1rem", md: "1.5rem", lg: "3rem", xl: "50px" }}
         h={{ base: "50px", md: "70px" }}
-        zIndex={isSearched ? "5" : "10"}
+        zIndex={isSearched ? "5" : "30"}
       >
         <Box display="flex" alignItems="center" w="100%">
           <Icon
@@ -205,7 +209,9 @@ const Navbar = () => {
             }}
             mr="1rem"
           />
-          <Image src="/images/Navbar/logo.svg" />
+          <Link href="/">
+            <Image src="/images/Navbar/logo.svg" />
+          </Link>
           <InputGroup
             mx={isLoggedIn ? { base: "15px", xl: "30px" } : "30px"}
             w={{ base: "100%", lg: "60vw", xl: "70vw" }}

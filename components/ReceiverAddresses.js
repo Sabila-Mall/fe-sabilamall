@@ -1,36 +1,33 @@
 import {
   Stack,
-  StackDivider,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalContent,
-  ModalCloseButton,
-  FormControl,
   Button,
-  FormLabel,
-  Input,
-  ModalOverlay,
   Box,
   useDisclosure,
-  ModalFooter,
   Divider,
-  Select,
-  Textarea,
-  Grid,
-  GridItem,
   Flex,
   Spacer,
   Text,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalBody,
+  ModalHeader,
+  ModalCloseButton,
+  FormControl,
+  Grid,
+  GridItem,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { IoIosAddCircle } from "react-icons/io";
 
-import AddressBox from "./AddressBox";
+import AddressBoxReceiver from "./AddressBox";
+import InputBoxAndLabel from "./InputBoxAndLabel";
 
 const ReceiverAddresses = ({ addresses, isMobile }) => {
   const [addressList, setAddressList] = useState(addresses);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { register, handleSubmit } = useForm();
 
   const deleteAddress = (phone) => {
     let outputList = [];
@@ -41,8 +38,81 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
       }
     }
     console.log(outputList);
-    // setAddressList([outputList])
   };
+
+  const onSubmit = (data) => {
+    const tempAddress = {
+      name: data.name,
+      phoneNumber: data.phoneNumber,
+      address: data.address,
+      city: data.city,
+      district: data.district,
+      province: data.province,
+      postalCode: data.postalCode,
+    };
+    console.log(tempAddress);
+  };
+
+  const provinceOptions = [
+    {
+      value: "option1",
+      text: "option1",
+    },
+    {
+      value: "option2",
+      text: "option2",
+    },
+    {
+      value: "option3",
+      text: "option3",
+    },
+  ];
+
+  const cityOptions = [
+    {
+      value: "option1",
+      text: "option1",
+    },
+    {
+      value: "option2",
+      text: "option2",
+    },
+    {
+      value: "option3",
+      text: "option3",
+    },
+  ];
+
+  const districtOptions = [
+    {
+      value: "option1",
+      text: "option1",
+    },
+    {
+      value: "option2",
+      text: "option2",
+    },
+    {
+      value: "option3",
+      text: "option3",
+    },
+  ];
+
+  const postalCodeOptions = [
+    {
+      value: "option1",
+      text: "option1",
+    },
+    {
+      value: "option2",
+      text: "option2",
+    },
+    {
+      value: "option3",
+      text: "option3",
+    },
+  ];
+
   return (
     <Box pt="1rem" pb={isMobile ? "36px" : ""}>
       <Flex alignItems="center">
@@ -64,15 +134,15 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
           p="11px 38px"
           display={{ base: "none", md: "block" }}
         >
-          <Flex>
+          <Flex align="center">
             <IoIosAddCircle fontSize="1rem" />
             <Text
               className="primaryFont"
               fontWeight="700"
               fontSize="0.875rem"
               lineHeight="100%"
-              transform="translateY(2px)"
               onClick={onOpen}
+              ml="0.2rem"
             >
               Tambah
             </Text>
@@ -82,233 +152,19 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
       <Divider mt="0.5rem" />
       <Stack>
         {addressList.map((address) => {
-          const [name, setname] = useState(address.name);
-          const [phoneNumber, setphoneNumber] = useState(address.phoneNumber);
-          const [fullAddress, setfullAddress] = useState(address.fullAddress);
-          const [district, setdistrict] = useState(address.district);
-          const [city, setcity] = useState(address.city);
-          const [province, setprovince] = useState(address.province);
-          const [postalCode, setpostalCode] = useState(address.postalCode);
-
-          const [tempName, settempName] = useState(name);
-          const [tempPhoneNumber, settempPhoneNumber] = useState(phoneNumber);
-          const [tempFullAddress, settempFullAddress] = useState(fullAddress);
-          const [tempDistrict, settempDistrict] = useState(district);
-          const [tempCity, settempCity] = useState(city);
-          const [tempProvince, settempProvince] = useState(province);
-          const [tempPostalCode, settempPostalCode] = useState(postalCode);
-
-          const handleSubmit = () => {
-            // setname(tempName)
-            // setphoneNumber(tempPhoneNumber)
-            // setfullAddress(tempFullAddress)
-            // setdistrict(tempDistrict)
-            // setcity(tempCity)
-            // setprovince(tempProvince)
-            // setpostalCode(tempPostalCode)
-            console.log(tempName);
-            console.log(tempPhoneNumber);
-            console.log(tempFullAddress);
-            console.log(tempDistrict);
-            console.log(tempCity);
-            console.log(tempProvince);
-            console.log(tempPostalCode);
-          };
-
           return (
-            <Box key={phoneNumber}>
-              <AddressBox
-                name={name}
-                phoneNumber={phoneNumber}
-                address={fullAddress}
-                district={district}
-                province={province}
-                postalCode={postalCode}
-                city={city}
+            <Box key={address.phoneNumber}>
+              <AddressBoxReceiver
+                name={address.name}
+                phoneNumber={address.phoneNumber}
+                address={address.fullAddress}
+                district={address.district}
+                province={address.province}
+                postalCode={address.postalCode}
+                city={address.city}
                 editAddress={onOpen}
-                deleteAddress={() => deleteAddress(phoneNumber)}
+                deleteAddress={() => deleteAddress(address.phoneNumber)}
               />
-              <Modal
-                isOpen={isOpen}
-                onClose={onClose}
-                size={isMobile ? "6xl" : "5xl"}
-              >
-                {isMobile ? <></> : <ModalOverlay />}
-                <ModalContent
-                  borderRadius={isMobile ? "0" : "20px"}
-                  bgColor={isMobile ? "#F7FAFC" : "white"}
-                  h={isMobile ? "calc(100% + 50px)" : "auto"}
-                  mt="50px"
-                >
-                  {isMobile ? (
-                    <></>
-                  ) : (
-                    <ModalHeader
-                      fontWeight="bold"
-                      fontSize="18px"
-                      className="primaryFont"
-                    >
-                      Ubah Alamat Penerima
-                    </ModalHeader>
-                  )}
-
-                  <Divider border="1px solid #E2E8F0" />
-
-                  <ModalCloseButton
-                    pos="absolute"
-                    top="-20px"
-                    right="-20px"
-                    borderRadius="50%"
-                    color="white"
-                    bg="red.600"
-                    _hover={{ bg: "red.700" }}
-                    w="48px"
-                    h="48px"
-                    visibility={isMobile ? "hidden" : "visible"}
-                  />
-                  <ModalBody m="12px 12px 0px 12px">
-                    <FormControl>
-                      <Grid
-                        templateColumns={{
-                          base: "repeat(1, 1fr)",
-                          md: "repeat(2, 1fr)",
-                        }}
-                        gap={isMobile ? "16px" : "24px"}
-                      >
-                        <GridItem colSpan={isMobile ? 2 : 1}>
-                          <FormLabel
-                            fontWeight="bold"
-                            fontSize="16px"
-                            className="primaryFont"
-                          >
-                            Nama Lengkap
-                          </FormLabel>
-                          <Input
-                            value={tempName}
-                            onChange={(e) => settempName(e.target.value)}
-                            isRequired={true}
-                          />
-                        </GridItem>
-                        <GridItem colSpan={isMobile ? 2 : 1}>
-                          <FormLabel
-                            fontWeight="bold"
-                            fontSize="16px"
-                            className="primaryFont"
-                          >
-                            Nomor Telepon
-                          </FormLabel>
-                          <Input
-                            value={tempPhoneNumber}
-                            onChange={(e) => settempPhoneNumber(e.target.value)}
-                            type="number"
-                            isRequired={true}
-                          />
-                        </GridItem>
-                        <GridItem colSpan={isMobile ? 2 : 1}>
-                          <FormLabel
-                            mt={4}
-                            fontWeight="bold"
-                            fontSize="16px"
-                            className="primaryFont"
-                          >
-                            Alamat Lengkap
-                          </FormLabel>
-                          <Textarea
-                            value={tempFullAddress}
-                            onChange={(e) => settempFullAddress(e.target.value)}
-                            isRequired={true}
-                          />
-                        </GridItem>
-                        <GridItem colSpan={isMobile ? 2 : 1}>
-                          <FormLabel>Provinsi</FormLabel>
-                          <Select
-                            placeholder="Select option"
-                            onChange={(e) => settempProvince(e.target.value)}
-                          >
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
-                          </Select>
-                        </GridItem>
-                        <GridItem colSpan={isMobile ? 2 : 1}>
-                          <FormLabel>Kota/Kabupaten</FormLabel>
-                          <Select
-                            placeholder="Select option"
-                            onChange={(e) => settempCity(e.target.value)}
-                          >
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
-                          </Select>
-                        </GridItem>
-                        <GridItem colSpan={isMobile ? 2 : 1}>
-                          <FormLabel>Kecamatan</FormLabel>
-                          <Select
-                            placeholder="Select option"
-                            onChange={(e) => settempDistrict(e.target.value)}
-                          >
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
-                          </Select>
-                        </GridItem>
-                        <GridItem colSpan={isMobile ? 2 : 1}>
-                          <FormLabel>Kode Pos</FormLabel>
-                          <Select
-                            placeholder="Select option"
-                            onChange={(e) => settempPostalCode(e.target.value)}
-                          >
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
-                          </Select>
-                        </GridItem>
-                      </Grid>
-                    </FormControl>
-                  </ModalBody>
-
-                  <ModalFooter bgColor={isMobile ? "#F7FAFC" : "white"}>
-                    <Flex
-                      w="100%"
-                      justifyContent="flex-end"
-                      flexDir={isMobile ? "column" : "row"}
-                    >
-                      {isMobile ? (
-                        <Button
-                          border="1px solid #C53030"
-                          borderRadius="20px"
-                          p="15px 64px"
-                          color="red.600"
-                          fontWeight="700"
-                          className="primaryFont"
-                          fontSize="14px"
-                          w={{ base: "100%", md: "25%" }}
-                        >
-                          Hapus
-                        </Button>
-                      ) : (
-                        <></>
-                      )}
-
-                      <Button
-                        colorScheme="orange"
-                        borderRadius="20px"
-                        p="15px 64px"
-                        mt="36px"
-                        onClick={() => {
-                          handleSubmit();
-                        }}
-                        fontWeight="700"
-                        className="primaryFont"
-                        fontSize="14px"
-                        w={{ base: "100%", md: "25%" }}
-                      >
-                        Update
-                      </Button>
-                    </Flex>
-                  </ModalFooter>
-                </ModalContent>
-              </Modal>
             </Box>
           );
         })}
@@ -321,6 +177,7 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
             p="11px 38px"
             borderRadius="20px"
             mb="48px"
+            onClick={onOpen}
           >
             <Flex alignItems="center">
               <IoIosAddCircle fontSize="1rem" />
@@ -339,6 +196,153 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
           <></>
         )}
       </Stack>
+      <Modal isOpen={isOpen} onClose={onClose} size={isMobile ? "5xl" : "5xl"}>
+        {isMobile ? <></> : <ModalOverlay />}
+        <ModalContent
+          borderRadius={isMobile ? "0" : "20px"}
+          bgColor={isMobile ? "gray.50" : "white"}
+          h={isMobile ? "fit-content" : "auto"}
+          mt={isMobile ? "50px" : ""}
+          top={isMobile ? "" : "20%"}
+          mb="0"
+        >
+          {isMobile ? (
+            <></>
+          ) : (
+            <ModalHeader
+              fontWeight="bold"
+              fontSize="18px"
+              className="primaryFont"
+            >
+              Tambah Alamat Penerima
+            </ModalHeader>
+          )}
+
+          <Divider border="1px solid #E2E8F0" />
+
+          <ModalCloseButton
+            pos="absolute"
+            top="-20px"
+            right="-20px"
+            borderRadius="50%"
+            color="white"
+            bg="red.600"
+            _hover={{ bg: "red.700" }}
+            w="48px"
+            h="48px"
+            visibility={isMobile ? "hidden" : "visible"}
+          />
+          <ModalBody m={{ md: "12px" }}>
+            <FormControl as="form" onSubmit={handleSubmit(onSubmit)}>
+              <Grid
+                templateColumns={{
+                  base: "repeat(1, 1fr)",
+                  md: "repeat(2, 1fr)",
+                }}
+                gap={isMobile ? "16px" : "24px"}
+              >
+                <GridItem colSpan={isMobile ? 2 : 1}>
+                  <InputBoxAndLabel
+                    register={register}
+                    text="Nama Lengkap"
+                    name="name"
+                  />
+                </GridItem>
+                <GridItem colSpan={isMobile ? 2 : 1}>
+                  <InputBoxAndLabel
+                    register={register}
+                    text="Nomor Telepon"
+                    name="phoneNumber"
+                    type="tel"
+                  />
+                </GridItem>
+                <GridItem colSpan={2}>
+                  <InputBoxAndLabel
+                    register={register}
+                    type="textarea"
+                    mt={4}
+                    text="Alamat Lengkap"
+                    name="address"
+                  />
+                </GridItem>
+                <GridItem colSpan={isMobile ? 2 : 1}>
+                  <InputBoxAndLabel
+                    register={register}
+                    type="select"
+                    text="Provinsi"
+                    options={provinceOptions}
+                    name="province"
+                  />
+                </GridItem>
+                <GridItem colSpan={isMobile ? 2 : 1}>
+                  <InputBoxAndLabel
+                    register={register}
+                    type="select"
+                    text="Kota/Kabupaten"
+                    options={cityOptions}
+                    name="city"
+                  />
+                </GridItem>
+                <GridItem colSpan={isMobile ? 2 : 1}>
+                  <InputBoxAndLabel
+                    register={register}
+                    type="select"
+                    text="Kecamatan"
+                    options={districtOptions}
+                    name="district"
+                  />
+                </GridItem>
+                <GridItem colSpan={isMobile ? 2 : 1}>
+                  <InputBoxAndLabel
+                    register={register}
+                    type="select"
+                    text="Kode Pos"
+                    options={postalCodeOptions}
+                    name="postalCode"
+                  />
+                </GridItem>
+              </Grid>
+              <Flex
+                w="100%"
+                justifyContent="flex-end"
+                flexDir={isMobile ? "column" : "row"}
+              >
+                {isMobile ? (
+                  <Button
+                    border="1px solid #C53030"
+                    borderRadius="20px"
+                    p="15px 64px"
+                    color="red.600"
+                    fontWeight="700"
+                    className="primaryFont"
+                    fontSize="14px"
+                    w={{ base: "100%", md: "25%" }}
+                    mt="2rem"
+                  >
+                    Hapus
+                  </Button>
+                ) : (
+                  <></>
+                )}
+
+                <Button
+                  colorScheme="orange"
+                  borderRadius="20px"
+                  p="15px 64px"
+                  mt=".5rem"
+                  type="submit"
+                  fontWeight="700"
+                  className="primaryFont"
+                  fontSize="14px"
+                  w={{ base: "100%", md: "25%" }}
+                >
+                  Update
+                </Button>
+              </Flex>
+            </FormControl>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };

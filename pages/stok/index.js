@@ -17,8 +17,8 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { FiChevronRight, FiSearch } from "react-icons/fi";
 
-import { apiStock } from "../../api/Stok";
-import { apiKota } from "../../api/Zone";
+import { apiGetProduct, apiGetProductBrand } from "../../api/GetProduct";
+import { apiStock } from "../../api/Stock";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
 import StokItem from "../../components/StokItem";
@@ -28,17 +28,74 @@ const Stok = () => {
   const [supplierFilter, setSupplierFilter] = useState("");
   const [nameSearch, setNameSearch] = useState("");
   const [supplier, setSupplier] = useState([]);
+  const [brandId, setBrandId] = useState(0);
+  const [products, setProducts] = useState([]);
+  const [stocks, setStocks] = useState([]);
+  const [variants, setVariants] = useState([]);
 
   useEffect(() => {
-    apiStock().then((res) => {
+    apiGetProduct().then((res) => {
       let d = res.data.data;
       setSupplier(d);
     });
   }, []);
 
+  useEffect(() => {
+    console.log(stocks);
+  }, [stocks]);
+
+  useEffect(() => {
+    if (brandId != 0) {
+      setLoading(true);
+      apiGetProductBrand(brandId).then((res) => {
+        let d = res.data.data.data;
+
+        d.map((product) => {
+          console.log(product);
+          apiStock(product.id).then(async (res) => {
+            const data = res.data;
+            const listWarna = Object.keys(data);
+            console.log("data ", data);
+
+            let variant = [];
+
+            listWarna.map((warna) => {
+              let ukuran = [];
+              let stok = [];
+
+              data[warna].map((el) => {
+                ukuran.push(el.ukuran);
+                stok.push(el.stock);
+              });
+
+              let ob = {
+                warna: warna,
+                ukuran: ukuran,
+                stok: stok,
+              };
+              variant.push(ob);
+            });
+
+            let stocksPush = {
+              img:
+                "https://www.planetware.com/wpimages/2020/02/france-in-pictures-beautiful-places-to-photograph-eiffel-tower.jpg",
+              nama: product.name,
+              supplier: "Supplier A",
+              tag: product.jenis,
+              variant: variant,
+            };
+
+            setStocks((curr) => [...curr, stocksPush]);
+          });
+        });
+      });
+    }
+  }, [brandId]);
+
   return (
     <>
       <Navbar />
+      {console.log("products: ", products)}
       <Box d="flex" justifyContent="center">
         <Box
           as="main"
@@ -87,12 +144,15 @@ const Stok = () => {
             <Select
               placeholder="Cari supplier"
               w={{ base: "100%", md: "30%" }}
-              onChange={(e) => setSupplierFilter(e.target.value)}
+              onChange={(e) => {
+                setBrandId(e.target.value);
+                setStocks([]);
+              }}
             >
               {supplier.length != 0 ? (
                 supplier.map((child) => {
                   return (
-                    <option key={child.id} value={child.name}>
+                    <option key={child.id} value={child.id}>
                       {child.name}
                     </option>
                   );
@@ -111,7 +171,7 @@ const Stok = () => {
               <Input
                 placeholder="Cari produk"
                 fontSize="sm"
-                onChange={async (e) => {
+                onChange={(e) => {
                   setNameSearch(e.target.value);
                 }}
               />
@@ -125,8 +185,7 @@ const Stok = () => {
             flexDir="column"
             justifyContent="space-between"
           >
-            {!(nameSearch === "" && supplierFilter === "") &&
-              stocks &&
+            {stocks.length != 0 ? (
               stocks.map((stock) => {
                 if (
                   stock.nama.toLowerCase().includes(nameSearch.toLowerCase()) &&
@@ -144,8 +203,8 @@ const Stok = () => {
                     />
                   );
                 }
-              })}
-            {nameSearch === "" && supplierFilter === "" && (
+              })
+            ) : (
               <Flex
                 border="1px"
                 borderColor="gray.300"

@@ -2,6 +2,7 @@ import { Box, Flex } from "@chakra-ui/react";
 
 import BreadCrumb from "../../components/Breadcrumb";
 import { Layout } from "../../components/Layout";
+import Navbar from "../../components/Navbar";
 import ProductCheckout from "../../components/ProductCheckout";
 import ProductHeader from "../../components/ProductHeader";
 import { ProductImages } from "../../components/ProductImages";
@@ -29,47 +30,62 @@ const ProductDetails = () => {
     },
   ];
   return (
-    <Layout sticky hasNavbar>
-      <Box>
-        <BreadCrumb items={path} />
+    <Layout hasNavbar sticky>
+      <Box w="full">
+        <Flex
+          display={{ base: "none", md: "block" }}
+          justifyContent="center"
+          w={{ base: "100%", md: "58%", lg: "38%", xl: "32%" }}
+        >
+          <BreadCrumb items={path} />
+        </Flex>
         <Flex
           flexDirection={{ base: "column", lg: "row" }}
           justifyContent={{ md: "center" }}
-          mt="24px"
+          mt="2rem"
+          w="full"
         >
           <Box
-            w={{ base: "100%", lg: "32%" }}
+            w={{ base: "100%", lg: "32%", "2xl": "25%" }}
             mb={{ base: "0.5rem", lg: "5rem" }}
           >
-            <Box h="fit-content" position={{ lg: "sticky" }} top="10.5%">
+            <Box h="fit-content" position={{ lg: "sticky" }} top="6rem">
               <ProductImages />
               <Box display={{ base: "none", lg: "block" }}>
                 <ShareProduct />
               </Box>
             </Box>
           </Box>
-          <Box w={{ base: "100%", lg: "43%" }} mr={{ lg: "1rem" }}>
+          <Box
+            w={{ base: "100%", lg: "fit-content" }}
+            maxW="100vw"
+            px={{ lg: "1rem", xl: "0.5rem", "2xl": "2rem" }}
+            mx={{ lg: "1rem" }}
+          >
             <ProductHeader preOrder />
             <Box display={{ base: "none", lg: "block" }}>
               <ProductInformation />
             </Box>
           </Box>
-          <Box w={{ base: "100%", lg: "25%" }}>
+          <Box w={{ base: "100%", lg: "25%" }} maxW="100vw">
             <ProductCheckout />
           </Box>
           <Box
             display={{ base: "block", lg: "none" }}
             mb={{ base: "2rem", lg: "0" }}
+            maxW="100vw"
           >
             <ProductInformation />
             <Box mb="1rem" />
             <ShareProduct />
           </Box>
         </Flex>
-        <Box w={{ lg: "75%" }}>
+        <Box w={{ lg: "75%" }} maxW="100vw">
           <ProductReview />
         </Box>
-        <RelatedProductContainer />
+        <Box maxW="100vw">
+          <RelatedProductContainer />
+        </Box>
       </Box>
     </Layout>
   );
