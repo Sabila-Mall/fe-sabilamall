@@ -34,6 +34,7 @@ const Stok = () => {
   const [products, setProducts] = useState(true);
   const [stocks, setStocks] = useState([]);
   const [firstTime, setFirstTime] = useState(true);
+  const [supplierName, setSupplierName] = useState("");
 
   useEffect(() => {
     apiGetProduct().then((res) => {
@@ -75,7 +76,7 @@ const Stok = () => {
               let stocksPush = {
                 img: getImageUrl(product.image_path),
                 nama: product.name,
-                supplier: "Supplier A",
+                supplier: supplierName,
                 tag: product.jenis,
                 variant: variant,
               };
@@ -112,14 +113,14 @@ const Stok = () => {
               fontSize={{ base: "sm", md: "md" }}
             >
               <BreadcrumbItem>
-                <BreadcrumbLink as={Link} to="#">
+                <BreadcrumbLink as={Link} to="/">
                   <Text className="secondaryFont" fontWeight="500">
                     Home
                   </Text>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbItem>
-                <BreadcrumbLink as={Link} to="#">
+                <BreadcrumbLink as={Link} to="/stok">
                   <Text
                     className="primaryFont"
                     color="orange.400"
@@ -142,7 +143,9 @@ const Stok = () => {
               placeholder={firstTime && "Cari supplier"}
               w={{ base: "100%", md: "30%" }}
               onChange={(e) => {
-                setBrandId(e.target.value);
+                let split = e.target.value.split(" ");
+                setBrandId(Number(split[0]));
+                setSupplierName(split[1]);
                 setFirstTime(false);
                 setStocks([]);
               }}
@@ -150,7 +153,7 @@ const Stok = () => {
               {supplier.length != 0 ? (
                 supplier.map((child) => {
                   return (
-                    <option key={child.id} value={child.id}>
+                    <option key={child.id} value={`${child.id} ${child.name}`}>
                       {child.name}
                     </option>
                   );
@@ -167,6 +170,7 @@ const Stok = () => {
             >
               <InputLeftElement children={<FiSearch color="red.500" />} />
               <Input
+                disabled={firstTime}
                 placeholder="Cari produk"
                 fontSize="sm"
                 onChange={(e) => {
@@ -193,6 +197,7 @@ const Stok = () => {
                 ) {
                   return (
                     <StokItem
+                      link={"/product-details"}
                       img={stock.img}
                       nama={stock.nama}
                       supplier={stock.supplier}
@@ -224,8 +229,8 @@ const Stok = () => {
                   textAlign="center"
                   className="secondaryFont"
                 >
-                  Silakan pilih supplier atau cari berdasarkan nama produk untuk
-                  melihat data stok yang tersedia.
+                  Silakan pilih supplier berdasarkan nama produk untuk melihat
+                  data stok yang tersedia.
                 </Text>
               </Flex>
             )}
