@@ -12,17 +12,29 @@ import {
   Flex,
   Img,
 } from "@chakra-ui/react";
+import axios from "axios";
+import { useEffect } from "react";
 import { useState } from "react";
 import { FiChevronRight, FiSearch } from "react-icons/fi";
 
+import { apiStock } from "../../api/Stok";
+import { apiKota } from "../../api/Zone";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
 import StokItem from "../../components/StokItem";
-import { supplier, stocks } from "../../constants/stokData";
+import { stocks } from "../../constants/stokData";
 
 const Stok = () => {
   const [supplierFilter, setSupplierFilter] = useState("");
   const [nameSearch, setNameSearch] = useState("");
+  const [supplier, setSupplier] = useState([]);
+
+  useEffect(() => {
+    apiStock().then((res) => {
+      let d = res.data.data;
+      setSupplier(d);
+    });
+  }, []);
 
   return (
     <>
@@ -77,14 +89,19 @@ const Stok = () => {
               w={{ base: "100%", md: "30%" }}
               onChange={(e) => setSupplierFilter(e.target.value)}
             >
-              {supplier &&
+              {supplier.length != 0 ? (
                 supplier.map((child) => {
                   return (
-                    <option key={child} value={child}>
-                      {child}
+                    <option key={child.id} value={child.name}>
+                      {child.name}
                     </option>
                   );
-                })}
+                })
+              ) : (
+                <option key={"loading"} value={"loading"}>
+                  {"Loading..."}
+                </option>
+              )}
             </Select>
             <InputGroup
               w={{ base: "100%", md: "69%" }}
@@ -94,7 +111,9 @@ const Stok = () => {
               <Input
                 placeholder="Cari produk"
                 fontSize="sm"
-                onChange={(e) => setNameSearch(e.target.value)}
+                onChange={async (e) => {
+                  setNameSearch(e.target.value);
+                }}
               />
             </InputGroup>
           </Box>
