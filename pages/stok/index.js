@@ -11,6 +11,7 @@ import {
   Input,
   Flex,
   Img,
+  Spinner,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect } from "react";
@@ -23,15 +24,16 @@ import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
 import StokItem from "../../components/StokItem";
 import { stocks } from "../../constants/stokData";
+import { getImageUrl } from "../../utils/api";
 
 const Stok = () => {
   const [supplierFilter, setSupplierFilter] = useState("");
   const [nameSearch, setNameSearch] = useState("");
   const [supplier, setSupplier] = useState([]);
   const [brandId, setBrandId] = useState(0);
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(true);
   const [stocks, setStocks] = useState([]);
-  const [variants, setVariants] = useState([]);
+  const [firstTime, setFirstTime] = useState(true);
 
   useEffect(() => {
     apiGetProduct().then((res) => {
@@ -41,53 +43,49 @@ const Stok = () => {
   }, []);
 
   useEffect(() => {
-    console.log(stocks);
-  }, [stocks]);
-
-  useEffect(() => {
     if (brandId != 0) {
-      setLoading(true);
       apiGetProductBrand(brandId).then((res) => {
         let d = res.data.data.data;
+        if (d.length != 0) {
+          setProducts(true);
+          d.map((product) => {
+            apiStock(product.id).then(async (res) => {
+              const data = res.data;
+              const listWarna = Object.keys(data);
 
-        d.map((product) => {
-          console.log(product);
-          apiStock(product.id).then(async (res) => {
-            const data = res.data;
-            const listWarna = Object.keys(data);
-            console.log("data ", data);
+              let variant = [];
 
-            let variant = [];
+              listWarna.map((warna) => {
+                let ukuran = [];
+                let stok = [];
 
-            listWarna.map((warna) => {
-              let ukuran = [];
-              let stok = [];
+                data[warna].map((el) => {
+                  ukuran.push(el.ukuran);
+                  stok.push(el.stock);
+                });
 
-              data[warna].map((el) => {
-                ukuran.push(el.ukuran);
-                stok.push(el.stock);
+                let ob = {
+                  warna: warna,
+                  ukuran: ukuran,
+                  stok: stok,
+                };
+                variant.push(ob);
               });
 
-              let ob = {
-                warna: warna,
-                ukuran: ukuran,
-                stok: stok,
+              let stocksPush = {
+                img: getImageUrl(product.image_path),
+                nama: product.name,
+                supplier: "Supplier A",
+                tag: product.jenis,
+                variant: variant,
               };
-              variant.push(ob);
+
+              setStocks((curr) => [...curr, stocksPush]);
             });
-
-            let stocksPush = {
-              img:
-                "https://www.planetware.com/wpimages/2020/02/france-in-pictures-beautiful-places-to-photograph-eiffel-tower.jpg",
-              nama: product.name,
-              supplier: "Supplier A",
-              tag: product.jenis,
-              variant: variant,
-            };
-
-            setStocks((curr) => [...curr, stocksPush]);
           });
-        });
+        } else {
+          setProducts(false);
+        }
       });
     }
   }, [brandId]);
@@ -95,7 +93,6 @@ const Stok = () => {
   return (
     <>
       <Navbar />
-      {console.log("products: ", products)}
       <Box d="flex" justifyContent="center">
         <Box
           as="main"
@@ -146,6 +143,7 @@ const Stok = () => {
               w={{ base: "100%", md: "30%" }}
               onChange={(e) => {
                 setBrandId(e.target.value);
+                setFirstTime(false);
                 setStocks([]);
               }}
             >
@@ -204,7 +202,12 @@ const Stok = () => {
                   );
                 }
               })
+            ) : !firstTime && products ? (
+              <Spinner />
             ) : (
+              !products && <h1>Tidak ada produk</h1>
+            )}
+            {firstTime && (
               <Flex
                 border="1px"
                 borderColor="gray.300"
