@@ -7,7 +7,6 @@ export const getWishlistByUserId = async (user_id) => {
     const res = await axios.post(HOST + "/api/wishlist/get_wishlist_by_user", {
       user_id,
     });
-    console.log(res);
     const data = await res.data?.data;
     return data;
   } catch (err) {
