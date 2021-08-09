@@ -139,7 +139,7 @@ const Stok = () => {
             justifyContent="space-between"
           >
             <Select
-              placeholder="Cari supplier"
+              placeholder={firstTime && "Cari supplier"}
               w={{ base: "100%", md: "30%" }}
               onChange={(e) => {
                 setBrandId(e.target.value);
