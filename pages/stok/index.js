@@ -11,18 +11,85 @@ import {
   Input,
   Flex,
   Img,
+  Spinner,
 } from "@chakra-ui/react";
+import axios from "axios";
+import { useEffect } from "react";
 import { useState } from "react";
 import { FiChevronRight, FiSearch } from "react-icons/fi";
 
+import { apiGetProduct, apiGetProductBrand } from "../../api/GetProduct";
+import { apiStock } from "../../api/Stock";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
 import StokItem from "../../components/StokItem";
-import { supplier, stocks } from "../../constants/stokData";
+import { stocks } from "../../constants/stokData";
+import { getImageUrl } from "../../utils/api";
 
 const Stok = () => {
   const [supplierFilter, setSupplierFilter] = useState("");
   const [nameSearch, setNameSearch] = useState("");
+  const [supplier, setSupplier] = useState([]);
+  const [brandId, setBrandId] = useState(0);
+  const [products, setProducts] = useState(true);
+  const [stocks, setStocks] = useState([]);
+  const [firstTime, setFirstTime] = useState(true);
+  const [supplierName, setSupplierName] = useState("");
+
+  useEffect(() => {
+    apiGetProduct().then((res) => {
+      let d = res.data.data;
+      setSupplier(d);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (brandId != 0) {
+      apiGetProductBrand(brandId).then((res) => {
+        let d = res.data.data.data;
+        if (d.length != 0) {
+          setProducts(true);
+          d.map((product) => {
+            apiStock(product.id).then(async (res) => {
+              const data = res.data;
+              const listWarna = Object.keys(data);
+
+              let variant = [];
+
+              listWarna.map((warna) => {
+                let ukuran = [];
+                let stok = [];
+
+                data[warna].map((el) => {
+                  ukuran.push(el.ukuran);
+                  stok.push(el.stock);
+                });
+
+                let ob = {
+                  warna: warna,
+                  ukuran: ukuran,
+                  stok: stok,
+                };
+                variant.push(ob);
+              });
+
+              let stocksPush = {
+                img: getImageUrl(product.image_path),
+                nama: product.name,
+                supplier: supplierName,
+                tag: product.jenis,
+                variant: variant,
+              };
+
+              setStocks((curr) => [...curr, stocksPush]);
+            });
+          });
+        } else {
+          setProducts(false);
+        }
+      });
+    }
+  }, [brandId]);
 
   return (
     <>
@@ -46,14 +113,14 @@ const Stok = () => {
               fontSize={{ base: "sm", md: "md" }}
             >
               <BreadcrumbItem>
-                <BreadcrumbLink as={Link} to="#">
+                <BreadcrumbLink as={Link} to="/">
                   <Text className="secondaryFont" fontWeight="500">
                     Home
                   </Text>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbItem>
-                <BreadcrumbLink as={Link} to="#">
+                <BreadcrumbLink as={Link} to="/stok">
                   <Text
                     className="primaryFont"
                     color="orange.400"
@@ -73,18 +140,29 @@ const Stok = () => {
             justifyContent="space-between"
           >
             <Select
-              placeholder="Cari supplier"
+              placeholder={firstTime && "Cari supplier"}
               w={{ base: "100%", md: "30%" }}
-              onChange={(e) => setSupplierFilter(e.target.value)}
+              onChange={(e) => {
+                let split = e.target.value.split(" ");
+                setBrandId(Number(split[0]));
+                setSupplierName(split[1]);
+                setFirstTime(false);
+                setStocks([]);
+              }}
             >
-              {supplier &&
+              {supplier.length != 0 ? (
                 supplier.map((child) => {
                   return (
-                    <option key={child} value={child}>
-                      {child}
+                    <option key={child.id} value={`${child.id} ${child.name}`}>
+                      {child.name}
                     </option>
                   );
-                })}
+                })
+              ) : (
+                <option key={"loading"} value={"loading"}>
+                  {"Loading..."}
+                </option>
+              )}
             </Select>
             <InputGroup
               w={{ base: "100%", md: "69%" }}
@@ -92,9 +170,12 @@ const Stok = () => {
             >
               <InputLeftElement children={<FiSearch color="red.500" />} />
               <Input
+                disabled={firstTime}
                 placeholder="Cari produk"
                 fontSize="sm"
-                onChange={(e) => setNameSearch(e.target.value)}
+                onChange={(e) => {
+                  setNameSearch(e.target.value);
+                }}
               />
             </InputGroup>
           </Box>
@@ -106,8 +187,7 @@ const Stok = () => {
             flexDir="column"
             justifyContent="space-between"
           >
-            {!(nameSearch === "" && supplierFilter === "") &&
-              stocks &&
+            {stocks.length != 0 ? (
               stocks.map((stock) => {
                 if (
                   stock.nama.toLowerCase().includes(nameSearch.toLowerCase()) &&
@@ -117,6 +197,7 @@ const Stok = () => {
                 ) {
                   return (
                     <StokItem
+                      link={"/product-details"}
                       img={stock.img}
                       nama={stock.nama}
                       supplier={stock.supplier}
@@ -125,8 +206,13 @@ const Stok = () => {
                     />
                   );
                 }
-              })}
-            {nameSearch === "" && supplierFilter === "" && (
+              })
+            ) : !firstTime && products ? (
+              <Spinner />
+            ) : (
+              !products && <h1>Tidak ada produk</h1>
+            )}
+            {firstTime && (
               <Flex
                 border="1px"
                 borderColor="gray.300"
@@ -143,8 +229,8 @@ const Stok = () => {
                   textAlign="center"
                   className="secondaryFont"
                 >
-                  Silakan pilih supplier atau cari berdasarkan nama produk untuk
-                  melihat data stok yang tersedia.
+                  Silakan pilih supplier berdasarkan nama produk untuk melihat
+                  data stok yang tersedia.
                 </Text>
               </Flex>
             )}
