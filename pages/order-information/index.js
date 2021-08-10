@@ -175,7 +175,7 @@ const OrderInformation = () => {
                     Kembali
                   </Text>
                 </Flex>
-                <Divider border="1px solid gray.200" />
+                <Divider />
               </>
             )}
 
@@ -340,7 +340,7 @@ const OrderInformation = () => {
                   08234234234
                 </Text>
 
-                <Divider border="1px solid gray.200" my="16px" />
+                <Divider my="16px" />
 
                 <Text color="black" fontWeight="700">
                   Data Penerima
