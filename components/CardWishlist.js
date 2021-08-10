@@ -1,26 +1,39 @@
 import { Box, Button, Text, Image, Icon } from "@chakra-ui/react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { IoHeartOutline, IoHeart } from "react-icons/io5";
+
+import { addWishlist, deleteWishlist } from "../api/wishlist";
+import { IMAGE_HOST } from "../constants/api";
+import { useWishlistContext } from "../contexts/wishlistProvider";
 
 const numberWithDot = (x) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };
 
-const CardWishlist = ({ imageUrl, productName, discount, realPrice }) => {
+const CardWishlist = ({
+  image_path,
+  name,
+  discount,
+  price,
+  products_id: liked_products_id,
+  liked_customers_id,
+}) => {
   const [removed, setRemoved] = useState(false);
-
-  const realPriceString = numberWithDot(realPrice);
+  // const removed = useRef(false);
+  const realPriceString = numberWithDot(price.replace(/\.(.*?[0]{1,2})/g, ""));
   const priceAfterDiscount = discount
-    ? numberWithDot(realPrice - (realPrice * discount) / 100)
+    ? numberWithDot(price - (price * discount) / 100)
     : null;
+  const { addItem, deleteItem } = useWishlistContext();
 
-  useEffect(() => {
-    return () => {
-      if (removed) {
-        console.log("send DELETE request ke backend");
-      }
-    };
-  }, []);
+  const handleClickWishlist = () => {
+    setRemoved((prev) => !prev);
+    if (!removed) {
+      deleteItem(liked_products_id, liked_customers_id);
+    } else {
+      addItem(liked_products_id, liked_customers_id);
+    }
+  };
 
   return (
     <Box
@@ -40,7 +53,7 @@ const CardWishlist = ({ imageUrl, productName, discount, realPrice }) => {
         alignItems="center"
         justifyContent="center"
       >
-        <Image src={imageUrl} w="90%" h="auto" maxW="144px" />
+        <Image src={IMAGE_HOST + image_path} w="90%" h="auto" maxW="144px" />
       </Box>
       <Box
         h="100%"
@@ -57,18 +70,21 @@ const CardWishlist = ({ imageUrl, productName, discount, realPrice }) => {
             fontSize="0.95rem"
             mt="0.8rem"
           >
-            {productName.toUpperCase()}
+            {name.toUpperCase()}
           </Text>
-          <Box d="flex" flexDir="row" alignItems="center" pt="0.3rem">
-            <Text as="del" color="gray.500" fontSize="0.9rem">
-              {`Rp ${realPriceString}`}
-            </Text>
-            <Box px="0.5ch" py={1} bg="red.200" borderRadius="lg" ml="0.6rem">
-              <Text color="red.700" fontSize="0.85rem">
-                {`${discount}%`}
+
+          {priceAfterDiscount && (
+            <Box d="flex" flexDir="row" alignItems="center" pt="0.3rem">
+              <Text as="del" color="gray.500" fontSize="0.9rem">
+                {`Rp ${realPriceString}`}
               </Text>
+              <Box px="0.5ch" py={1} bg="red.200" borderRadius="lg" ml="0.6rem">
+                <Text color="red.700" fontSize="0.85rem">
+                  {`${discount}%`}
+                </Text>
+              </Box>
             </Box>
-          </Box>
+          )}
           <Text
             pt="0.3rem"
             className="primaryFont"
@@ -101,7 +117,10 @@ const CardWishlist = ({ imageUrl, productName, discount, realPrice }) => {
               color="red.500"
               h="60%"
               w="60%"
-              onClick={() => setRemoved(!removed)}
+              onClick={() => {
+                handleClickWishlist();
+                // setRemoved((prev) => !prev);
+              }}
             />
           </Box>
         </Box>

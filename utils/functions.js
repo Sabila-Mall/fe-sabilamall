@@ -32,6 +32,10 @@ export const copyToClipboard = (text, onSuccess, onFail) => {
     .catch(() => console.error("Unable to copy", err));
 };
 
+export const formatNumber = (number) => {
+  return number.toLocaleString("id-ID");
+};
+
 /**
  * Filter an object based on the allowed keys
  * @param {object} obj

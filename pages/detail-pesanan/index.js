@@ -32,19 +32,19 @@ import {
   StackDivider,
   Textarea,
   useEditableControls,
-  useMediaQuery,
   VStack,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { IoCreateOutline, IoChevronForward } from "react-icons/io5";
 
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
+import { useWindowSize } from "../../hooks/useWindowSize";
 import styles from "../../styles/Footer.module.scss";
 
 // Helper function
 
-const formatNumber = (number) => {
+export const formatNumber = (number) => {
   return number.toLocaleString("id-ID");
 };
 
@@ -90,7 +90,7 @@ const dataPenerima = {
     "Jl Kb Kacang Grand Indonesia Shopping Town East Mall Lt Ground 30, TANGERANG - CILEDUG, BANTEN, 15148",
 };
 
-const listProduk = [
+export const listProduk = [
   {
     gambar: "/images/produk.svg",
     nama: "Nama Produk Croissant",
@@ -204,21 +204,34 @@ const Stepper = () => {
   );
 };
 
-function EditableControls() {
+function EditableControls({ ref }) {
   const { getEditButtonProps } = useEditableControls();
 
   return (
     <IconButton
       icon={<IoCreateOutline />}
       variant={"ghost"}
+      ref={ref}
       {...getEditButtonProps()}
     />
   );
 }
 
-const Produk = ({ produk }) => {
-  const [isSmartphone] = useMediaQuery("(max-width: 48em)");
+const InputAddNote = () => {
+  const { getEditButtonProps } = useEditableControls();
 
+  return (
+    <Box {...getEditButtonProps()}>
+      <EditablePreview />
+      <EditableInput color="black" />
+    </Box>
+  );
+};
+
+export const Produk = ({ produk, resi }) => {
+  const { width } = useWindowSize();
+  const isSmartphone = width < 768;
+  const editNoteEl = useRef(null);
   return (
     <Grid
       gridTemplateColumns={{
@@ -253,21 +266,20 @@ const Produk = ({ produk }) => {
             </Text>
           </Box>
         </HStack>
-        <Editable
-          className={styles.secondaryFont}
-          color={"gray.400"}
-          fontSize={"0.75rem"}
-          defaultValue="Tambah catatan"
-          isPreviewFocusable={false}
-        >
-          <HStack spacing={"0.25rem"}>
-            <EditableControls />
-            <Box>
-              <EditablePreview />
-              <EditableInput />
-            </Box>
-          </HStack>
-        </Editable>
+        {!resi && (
+          <Editable
+            className={styles.secondaryFont}
+            color={"gray.400"}
+            fontSize={"0.75rem"}
+            defaultValue="Tambah catatan"
+            isPreviewFocusable={false}
+          >
+            <HStack spacing={"0.25rem"}>
+              <EditableControls ref={editNoteEl} />
+              <InputAddNote />
+            </HStack>
+          </Editable>
+        )}
       </Box>
       <Box
         gridArea={"harga"}
@@ -279,7 +291,7 @@ const Produk = ({ produk }) => {
           align={"flex-end"}
           direction={{ base: "row-reverse", md: "column" }}
         >
-          <Box>
+          <Box textAlign={{ base: "right", lg: "left" }}>
             <Text fontSize={"0.75rem"} as={"s"} color={"gray.400"}>
               Rp{formatNumber(produk.harga)}
             </Text>
@@ -297,6 +309,7 @@ const Produk = ({ produk }) => {
           </Square>
         </Stack>
       </Box>
+
       <HStack
         gridArea={"jumlah"}
         alignSelf={{ base: "self-end", md: "center" }}
@@ -306,6 +319,7 @@ const Produk = ({ produk }) => {
         <Text color={"gray.500"}>{formatNumber(produk.jumlah)}</Text>
       </HStack>
       <HStack
+        fontWeight={resi && 700}
         gridArea={"subtotal"}
         justify={"space-between"}
         justifySelf={{ md: "center" }}
@@ -320,7 +334,8 @@ const Produk = ({ produk }) => {
 };
 
 const RingkasanPesanan = () => {
-  const [isSmartphone] = useMediaQuery("(max-width: 48em)");
+  const { width } = useWindowSize();
+  const isSmartphone = width < 768;
 
   return (
     <Box>
@@ -744,8 +759,9 @@ const Summary = ({ data }) => {
 };
 
 const DetailPesanan = () => {
-  const [isSmartphone] = useMediaQuery("(max-width: 48em)");
-  const [isTablet] = useMediaQuery("(max-width: 62em)");
+  const { width } = useWindowSize();
+  const isSmartphone = width < 768;
+  const isTablet = width < 1024;
 
   return (
     <>

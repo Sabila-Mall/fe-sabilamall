@@ -11,7 +11,6 @@ import {
   Divider,
   Icon,
   Circle,
-  useMediaQuery,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { IoCopy } from "react-icons/io5";
@@ -22,9 +21,11 @@ import OrderProductsTable, {
   OrderProductsTableMobile,
 } from "../../components/OrderProductsTable";
 import ScrollButton from "../../components/ScrollButton";
+import { useWindowSize } from "../../hooks/useWindowSize";
 
 const OrderInformation = () => {
-  const [isMobile] = useMediaQuery("(max-width: 48em)");
+  const { width } = useWindowSize();
+  const isMobile = width < 768;
   const sm = [
     { text: "SM Pay", value: "1000.000" },
     { text: "SM Point", value: 5 },
@@ -174,7 +175,7 @@ const OrderInformation = () => {
                     Kembali
                   </Text>
                 </Flex>
-                <Divider border="1px solid gray.200" />
+                <Divider />
               </>
             )}
 
@@ -327,7 +328,7 @@ const OrderInformation = () => {
 
             <Divider />
 
-            <VStack spacing="16px" pb="1rem">
+            <VStack spacing="16px" pb="1rem" align="flex-start">
               <Box className="primaryFont" fontSize="1rem">
                 <Text color="black" fontWeight="700">
                   Data Pengirim
@@ -342,7 +343,7 @@ const OrderInformation = () => {
                 <Divider my="16px" />
 
                 <Text color="black" fontWeight="700">
-                  Data Pengirim
+                  Data Penerima
                 </Text>
                 <Text color="gray.600" fontWeight="700" mt="16px">
                   M Abdurahman Basyah

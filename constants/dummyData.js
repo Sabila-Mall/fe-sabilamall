@@ -7,9 +7,9 @@ const endTime = new Date();
 endTime.setHours(endTime.getHours() + 10);
 
 const product = {
-  productName: "Alea Casual Gamis Banget",
-  imageUrl: "/images/product.png",
-  realPrice: 180000,
+  name: "Alea Casual Gamis Banget",
+  image_path: "/images/product.png",
+  price: "180000",
 };
 
 const flashSaleProduct = {
@@ -34,7 +34,7 @@ for (let i = 0; i <= 17; i++) {
   dataFlashSale.push({ ...flashSaleProduct, id: `fs${i}` });
   dataDiscount.push({ ...discountProduct, id: `ds${i}` });
   dataNormal.push({ ...product, id: `dn${i}` });
-  dataWishList.push({ ...wishList, id: `dw${i}` });
+  // dataWishList.push({ ...wishList, id: `dw${i}` });
 }
 
 export const productList = [

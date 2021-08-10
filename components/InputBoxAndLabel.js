@@ -1,10 +1,20 @@
-import { Box, Text, Input, Select } from "@chakra-ui/react";
+import { Box, Text, Input, Select, Textarea } from "@chakra-ui/react";
 
 // options wajib diisi kalau type-nya select
 // contohnya ada di file MyProfile.js
 // register itu fungsi dari react-hook-form
 
-const InputBoxAndLabel = ({ register, text, name, mt, w, type, options }) => (
+const InputBoxAndLabel = ({
+  register,
+  text,
+  name,
+  mt,
+  w,
+  type,
+  options,
+  defaultValue,
+  required = true,
+}) => (
   <Box mt={mt} key={text} w={w}>
     <Text
       className="primaryFont"
@@ -14,11 +24,13 @@ const InputBoxAndLabel = ({ register, text, name, mt, w, type, options }) => (
       mb="8px"
     >
       {text}{" "}
-      <Box as="span" color="red.500">
-        *
-      </Box>
+      {required && (
+        <Box as="span" color="red.500">
+          *
+        </Box>
+      )}
     </Text>
-    {type !== "select" && (
+    {type !== "select" && type !== "textarea" && (
       <Input
         {...register(name, { required: true })}
         type={type}
@@ -26,6 +38,7 @@ const InputBoxAndLabel = ({ register, text, name, mt, w, type, options }) => (
         placeholder={text}
         _focus={{ outline: "none" }}
         autoComplete="on"
+        defaultValue={defaultValue}
       />
     )}
     {type === "select" && (
@@ -43,6 +56,16 @@ const InputBoxAndLabel = ({ register, text, name, mt, w, type, options }) => (
           </option>
         ))}
       </Select>
+    )}
+    {type === "textarea" && (
+      <Textarea
+        {...register(name, { required: true })}
+        id={name}
+        placeholder={text}
+        _focus={{ outline: "none" }}
+        autoComplete="on"
+        defaultValue={defaultValue}
+      />
     )}
   </Box>
 );

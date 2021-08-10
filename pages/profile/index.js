@@ -10,7 +10,11 @@ const Profile = () => {
   return (
     <>
       <ProfileMobile sm={sm} />
-      <ProfileDesktop section="Profile Saya" element={<MyProfile />} />
+      <ProfileDesktop
+        section="Profil Saya"
+        cardProfileText="Akun Saya"
+        element={<MyProfile />}
+      />
     </>
   );
 };
