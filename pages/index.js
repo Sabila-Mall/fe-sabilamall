@@ -34,8 +34,6 @@ import { useAuthContext } from "../contexts/authProvider";
 
 const Home = () => {
   const { userData, isLoggedIn } = useAuthContext();
-  console.log(userData);
-  console.log(isLoggedIn);
   const category = [
     ["images/fashionMuslim.svg", "Fashion Muslim"],
     [FaBaby, "Fashion Bayi"],
@@ -91,14 +89,11 @@ const Home = () => {
   }
 
   useEffect(() => {
-    const watchScroll = () => {
-      window.addEventListener("scroll", scrollLogger);
-    };
-    watchScroll();
+    window.addEventListener("scroll", scrollLogger);
     return () => {
       window.removeEventListener("scroll", scrollLogger);
     };
-  });
+  }, []);
 
   useEffect(() => {
     const elem = scrollRef.current.getBoundingClientRect();

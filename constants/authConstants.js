@@ -8,6 +8,7 @@ export const USER_FIELDS = [
   "user_level",
   "user_name",
   "smpoint",
+  "avatar",
 ];
 
 export const AUTH_RESPONSE_STATUS = {
