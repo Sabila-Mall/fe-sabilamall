@@ -26,6 +26,7 @@ import { useState, useEffect } from "react";
 import { BiSearch } from "react-icons/bi";
 import { FiChevronRight } from "react-icons/fi";
 
+import { apiKota, apiProvinsi } from "../../api/Zone";
 import { getAddress } from "../../api/address";
 import Footer from "../../components/Footer";
 import Loading from "../../components/Loading";
@@ -38,47 +39,12 @@ const AlamatPenerima = () => {
   const userId = 6089;
   const [dataPengirim, setDataPengirim] = useState(null);
   const [dataPenerima, setDataPenerima] = useState(null);
-
-  useEffect(() => {
-    const getDataPengirim = () => {
-      getAddress({ customers_id: userId, address_book_type: 2 })
-        .then((res) => {
-          setDataPengirim(
-            res
-              ? [
-                  ...res?.map((d) => ({
-                    nama: d.firstname + " " + d.lastname,
-                    nomor: d.phone,
-                  })),
-                ]
-              : [],
-          );
-
-          getAddress({ customers_id: userId, address_book_type: 1 })
-            .then((res) => {
-              setDataPenerima(
-                res
-                  ? [
-                      ...res?.map((d) => ({
-                        nama: d.firstname + " " + d.lastname,
-                        nomor: d.phone,
-                        alamat: `Jl.${d.street}, ${d.subdistrict_name}, ${d.city_name}, ${d.zone_name}`,
-                      })),
-                    ]
-                  : [],
-              );
-            })
-            .catch(() => setDataPenerima([]));
-        })
-        .catch(() => setDataPengirim([]));
-    };
-
-    userId && getDataPengirim();
-  }, [userId]);
+  const [provinsi, setProvinsi] = useState([]);
+  const [kota, setKota] = useState([]);
+  // const [kecamatan, setkecamatan] = useState(null);
 
   const negara = ["Indonesia"];
-  const provinsi = ["DKI Jakarta", "Jawa Barat", "Jawa Tengah"];
-  const kota = ["Bandung", "Jakarta Barat", "Jakarta Utara"];
+
   const kecamatan = ["Kedoya Utara", "Kedoya Barat", "Kedoya Tenggara"];
   const kodePos = ["18181", "27272", "89898"];
 
@@ -107,6 +73,58 @@ const AlamatPenerima = () => {
   const [kodePosPenerima, setKodePosPenerima] = useState("");
   const [ponselPenerima, setPonselPenerima] = useState("");
   const [alamatTextPenerima, setAlamatTextPenerima] = useState("");
+
+  useEffect(() => {
+    const getDataPengirim = () => {
+      getAddress({ customers_id: userId, address_book_type: 2 })
+        .then((res) => {
+          setDataPengirim(
+            res
+              ? [
+                  ...res?.map((d) => ({
+                    nama: d.firstname + " " + d.lastname,
+                    nomor: d.phone,
+                  })),
+                ]
+              : [],
+          );
+          console.log("TESSSSSSSSSSSSSSSS");
+
+          apiProvinsi().then((res) => {
+            setProvinsi([...res.data.data]);
+          });
+
+          getAddress({ customers_id: userId, address_book_type: 1 })
+            .then((res) => {
+              setDataPenerima(
+                res
+                  ? [
+                      ...res?.map((d) => ({
+                        nama: d.firstname + " " + d.lastname,
+                        nomor: d.phone,
+                        alamat: `Jl.${d.street}, ${d.subdistrict_name}, ${d.city_name}, ${d.zone_name}`,
+                      })),
+                    ]
+                  : [],
+              );
+            })
+            .catch(() => setDataPenerima([]));
+        })
+        .catch(() => setDataPengirim([]));
+    };
+
+    userId && getDataPengirim();
+  }, [userId]);
+
+  useEffect(() => {
+    const getKota = () => {
+      apiKota(Number(provinsiPenerima)).then((res) => {
+        setKota([...res.data.data]);
+      });
+    };
+
+    provinsiPenerima && getKota();
+  }, [provinsiPenerima]);
 
   const pengirimRadioHandler = (e) => {
     setNamaPengirim(dataPengirim[e].nama);
@@ -684,8 +702,11 @@ const AlamatPenerima = () => {
                             {provinsi &&
                               provinsi.map((data, index) => {
                                 return (
-                                  <option key={index} value={data}>
-                                    {data}
+                                  <option
+                                    key={index}
+                                    value={data.zone_apicityid}
+                                  >
+                                    {data.zone_name}
                                   </option>
                                 );
                               })}
@@ -719,8 +740,8 @@ const AlamatPenerima = () => {
                             {kota &&
                               kota.map((data, index) => {
                                 return (
-                                  <option key={index} value={data}>
-                                    {data}
+                                  <option key={index} value={data.city_id}>
+                                    {data.city_name}
                                   </option>
                                 );
                               })}
