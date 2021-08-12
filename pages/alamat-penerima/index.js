@@ -22,51 +22,61 @@ import {
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BiSearch } from "react-icons/bi";
 import { FiChevronRight } from "react-icons/fi";
 
+import { getAddress } from "../../api/address";
 import Footer from "../../components/Footer";
+import Loading from "../../components/Loading";
 import Navbar from "../../components/Navbar";
+import { useAuthContext } from "../../contexts/authProvider";
 
 const AlamatPenerima = () => {
-  const dataPengirim = [
-    {
-      nama: "Ariq",
-      nomor: "081122334455",
-    },
-    {
-      nama: "Ariq",
-      nomor: "081122334455",
-    },
-    {
-      nama: "Ariq",
-      nomor: "081122334455",
-    },
-  ];
+  const { userData } = useAuthContext();
+  // const userId = userData?.id;
+  const userId = 6089;
+  const [dataPengirim, setDataPengirim] = useState(null);
+  const [dataPenerima, setDataPenerima] = useState(null);
 
-  const dataPenerima = [
-    {
-      nama: "Ariq",
-      nomor: "081122334455",
-      alamat:
-        "Jl. Margonda Raya, Pondok Cina, Kecamatan Beji, Kota Depok, Jawa Barat 16424",
-    },
-    {
-      nama: "Ariq",
-      nomor: "081122334455",
-      alamat:
-        "Jl. Margonda Raya, Pondok Cina, Kecamatan Beji, Kota Depok, Jawa Barat 16424",
-    },
-    {
-      nama: "Ariq",
-      nomor: "081122334455",
-      alamat:
-        "Jl. Margonda Raya, Pondok Cina, Kecamatan Beji, Kota Depok, Jawa Barat 16424",
-    },
-  ];
+  useEffect(() => {
+    const getDataPengirim = () => {
+      getAddress({ customers_id: userId, address_book_type: 2 })
+        .then((res) => {
+          setDataPengirim(
+            res
+              ? [
+                  ...res?.map((d) => ({
+                    nama: d.firstname + " " + d.lastname,
+                    nomor: d.phone,
+                  })),
+                ]
+              : [],
+          );
 
-  const negara = ["Indonesia", "Malaysia", "Singapore"];
+          getAddress({ customers_id: userId, address_book_type: 1 })
+            .then((res) => {
+              setDataPenerima(
+                res
+                  ? [
+                      ...res?.map((d) => ({
+                        nama: d.firstname + " " + d.lastname,
+                        nomor: d.phone,
+                        alamat: `Jl.${d.street}, ${d.subdistrict_name}, ${d.city_name}, ${d.zone_name}`,
+                      })),
+                    ]
+                  : [],
+              );
+            })
+            .catch(() => setDataPenerima([]));
+        })
+        .catch(() => setDataPengirim([]));
+    };
+
+    userId && getDataPengirim();
+  }, [userId]);
+
+  const negara = ["Indonesia"];
   const provinsi = ["DKI Jakarta", "Jawa Barat", "Jawa Tengah"];
   const kota = ["Bandung", "Jakarta Barat", "Jakarta Utara"];
   const kecamatan = ["Kedoya Utara", "Kedoya Barat", "Kedoya Tenggara"];
@@ -177,6 +187,9 @@ const AlamatPenerima = () => {
       }
     }
   };
+
+  if (!Array.isArray(dataPenerima) || !Array.isArray(dataPengirim))
+    return <Loading />;
 
   return (
     <>
