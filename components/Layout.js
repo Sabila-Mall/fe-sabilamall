@@ -18,6 +18,7 @@ export const Layout = ({
   hasFooter,
   sticky,
   maxWidth,
+  noFooter,
 }) => {
   return (
     <>
@@ -32,7 +33,7 @@ export const Layout = ({
           {children}
         </Box>
       </Box>
-      <Footer />
+      {!noFooter && <Footer />}
     </>
   );
 };
