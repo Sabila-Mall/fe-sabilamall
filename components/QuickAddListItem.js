@@ -4,6 +4,7 @@ import QuickAddItem from "./QuickAddItem";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
 const QuickAddListItem = ({ products }) => {
+  console.log(products);
   if (products.length > 0) {
     return (
       <VStack spacing={6} divider={<StackDivider borderColor="gray.200" />} align={"start"}>

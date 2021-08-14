@@ -11,11 +11,14 @@ import {
   Flex,
   Link,
   useBreakpointValue,
+  Spinner,
 } from "@chakra-ui/react";
 import React from "react";
+import { apiGetCartByCustomerID } from "../api/cart";
+import { useAuthContext } from "../contexts/authProvider";
+import { useCartContext } from "../contexts/cartProvider";
 
 import QuickAddListItem from "./QuickAddListItem";
-
 /**
  * Component untuk drawer yang menampilkan isi barang sekarang, perlu ada button yang memanggil component ini
  * @param products list dari produk, dimana tiap produk memiliki:
@@ -24,6 +27,18 @@ import QuickAddListItem from "./QuickAddListItem";
  * @param onDrawerClose callback function yang dipanggil untuk close modal [dapatkan dari useDisclosure()]
  */
 const QuickAdd = ({ products, isDrawerOpen, onDrawerClose }) => {
+  const { userData } = useAuthContext();
+  const userId = userData?.id;
+  console.log(userData);
+  const data = apiGetCartByCustomerID(userId);
+  console.log(data);
+  const tes = useCartContext();
+  console.log(tes);
+  // const [dataValue, setdataValue] = useState(cartData);
+  // const [loadingValue, setloadingValue] = useState(loading)
+  // console.log(dataValue);
+  // console.log(loadingValue);
+
   const total = "99.999.999";
   const size = useBreakpointValue({ base: "full", md: "md" });
 
@@ -47,7 +62,7 @@ const QuickAdd = ({ products, isDrawerOpen, onDrawerClose }) => {
           </DrawerHeader>
 
           <DrawerBody px={"2rem"}>
-            <QuickAddListItem products={products} />
+            <QuickAddListItem products={data} />
           </DrawerBody>
 
           <DrawerFooter borderTopWidth={"1px"} flexDirection={"column"}>
