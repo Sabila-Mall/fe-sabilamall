@@ -1,4 +1,5 @@
-import { Box, Text, Flex, HStack, Link, useToast } from "@chakra-ui/react";
+import { Box, Text, Flex, HStack, useToast } from "@chakra-ui/react";
+import Link from "next/link";
 import { IoLogoFacebook, IoMdLink } from "react-icons/io";
 import { IoLogoTwitter, IoLogoWhatsapp } from "react-icons/io5";
 
