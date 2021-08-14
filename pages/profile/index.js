@@ -1,6 +1,7 @@
 import MyProfile from "../../components/MyProfile";
 import ProfileDesktop from "../../components/ProfileDesktop";
 import ProfileMobile from "../../components/ProfileMobile";
+import { needForLogin } from "../../utils/functions";
 
 const Profile = () => {
   const sm = [
@@ -20,3 +21,5 @@ const Profile = () => {
 };
 
 export default Profile;
+
+export const getServerSideProps = needForLogin;

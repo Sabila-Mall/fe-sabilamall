@@ -1,3 +1,5 @@
+import nookies from "nookies";
+
 const fallbackCopyTextToClipboard = (text) => {
   var textArea = document.createElement("textarea");
   textArea.value = text;
@@ -64,4 +66,20 @@ export const setBadgeColor = (userLevel) => {
     default:
       return "gray.400";
   }
+};
+
+export const needForLogin = async (ctx) => {
+  const userId = nookies.get(ctx);
+
+  if (!userId.user_id) {
+    return {
+      redirect: {
+        destination: "/login",
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };
