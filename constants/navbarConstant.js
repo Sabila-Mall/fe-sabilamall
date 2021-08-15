@@ -1,15 +1,15 @@
 import { FaUser } from "react-icons/fa";
-import { IoCart, IoHomeSharp, IoReceiptSharp } from "react-icons/io5";
 
 export const menuSidebar = {
   headerText: "Menu",
   menu: [
     { text: "Kategori - Brand", id: "kb", href: "#" },
-    { text: "Mengenal SabilaMall", id: "ms", href: "#" },
+    { text: "Mengenal SabilaMall", id: "ms", href: "/about-us" },
     { text: "Gabung Reseller Baju Murah", id: "grbm", href: "#" },
-    { text: "Kebijakan Privasi", id: "kp", href: "#" },
-    { text: "Syarat & Ketentuan", id: "sk", href: "#" },
-    { text: "Hubungi Kami", id: "hk", href: "#" },
+    { text: "Kebijakan Privasi", id: "kp", href: "/privacy-policy" },
+    { text: "Syarat & Ketentuan", id: "sk", href: "/terms-and-conditions" },
+    { text: "Hubungi Kami", id: "hk", href: "/contact-us" },
+    { text: "Keluar", id: "kl" },
     { text: "Download Aplikasi", id: "dagp", href: "#" },
   ],
 };
@@ -123,10 +123,3 @@ export const menuCategory = {
     },
   ],
 };
-
-export const icons = [
-  { text: "Home", iconElement: IoHomeSharp, id: "ic1" },
-  { text: "Keranjang", iconElement: IoCart, id: "ic2" },
-  { text: "Pesanan", iconElement: IoReceiptSharp, id: "ic3" },
-  { text: "Akun", iconElement: FaUser, id: "ic4" },
-];

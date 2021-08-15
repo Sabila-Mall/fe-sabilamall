@@ -1,3 +1,5 @@
+import nookies from "nookies";
+
 const fallbackCopyTextToClipboard = (text) => {
   var textArea = document.createElement("textarea");
   textArea.value = text;
@@ -51,4 +53,33 @@ export const filterObject = (rawObj, allowed) => {
     }, {});
 
   return filtered;
+};
+
+export const setBadgeColor = (userLevel) => {
+  switch (userLevel?.toLowerCase()) {
+    case "reguler":
+      return "gray.400";
+    case "reseller":
+      return "orange.500";
+    case "agen":
+      return "red.600";
+    default:
+      return "gray.400";
+  }
+};
+
+export const needForLogin = async (ctx) => {
+  const userId = nookies.get(ctx);
+
+  if (!userId.user_id) {
+    return {
+      redirect: {
+        destination: "/login",
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
 };

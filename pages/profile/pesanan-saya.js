@@ -20,6 +20,7 @@ import Navbar from "../../components/Navbar";
 import NavbarProfile from "../../components/NavbarProfile";
 import ProfileDesktop from "../../components/ProfileDesktop";
 import { useWindowSize } from "../../hooks/useWindowSize";
+import { needForLogin } from "../../utils/functions";
 
 const sm = [
   { text: "SM Pay", value: "1000.000" },
@@ -197,3 +198,5 @@ const PesananSaya = () => {
 };
 
 export default PesananSaya;
+
+export const getServerSideProps = needForLogin;

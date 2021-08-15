@@ -11,29 +11,41 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const logout = () => {
+    nookies.destroy(null, "user_id");
+    setIsLoggedIn(false);
+    setUserData(null);
+  };
 
   useEffect(() => {
     if (userData === null) {
       const userId = nookies.get(null, "user_id");
-      if (Object.keys(userId).length !== 0) {
+      if (document.cookie.indexOf("user_id") !== -1) {
         setIsLoggedIn(true);
-        apiGetUserProfile(userId).then((res) => {
-          const response = res.data;
-          if (isRequestSuccess(response)) {
-            setUserData(filterObject(res.data.data, USER_FIELDS));
-          } else {
-            console.log(res);
-          }
-        });
+        setLoading(true);
+        apiGetUserProfile(userId)
+          .then((res) => {
+            const response = res.data;
+            if (isRequestSuccess(response)) {
+              setUserData(filterObject(res.data.data, USER_FIELDS));
+            } else {
+              console.log(res);
+            }
+          })
+          .finally(() => setLoading(false));
       }
     }
   }, []);
 
   const value = {
+    loading,
     userData,
     setUserData,
     isLoggedIn,
     setIsLoggedIn,
+    logout,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

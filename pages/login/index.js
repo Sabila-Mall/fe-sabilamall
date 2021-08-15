@@ -30,7 +30,7 @@ import { filterObject } from "../../utils/functions";
 
 const Login = () => {
   const router = useRouter();
-  const { setUserData, setIsLoggedIn } = useAuthContext();
+  const { setUserData, setIsLoggedIn, loading } = useAuthContext();
 
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
@@ -128,6 +128,7 @@ const Login = () => {
                   mt="48px"
                   href="/ResetPassword"
                   className="secondaryFont"
+                  textDecor="underline"
                 >
                   Lupa kata sandi
                 </Link>
@@ -141,8 +142,9 @@ const Login = () => {
                     _hover={{ color: "red.500" }}
                     type="submit"
                     isDisabled={
-                      loginEmail === "" || loginPassword === "" ? true : false
+                      loginEmail === "" || loginPassword === "" || loading
                     }
+                    isLoading={loading}
                   >
                     <Text color="white" as="b" className="primaryFont">
                       Login

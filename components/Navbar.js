@@ -9,9 +9,17 @@ import {
   InputLeftElement,
   useDisclosure,
   Grid,
+  Spinner,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Spacer,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
+import { BiUser, BiLogOut } from "react-icons/bi";
 import { BsChevronLeft } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
 import {
@@ -21,14 +29,18 @@ import {
   IoNotifications,
   IoCart,
 } from "react-icons/io5";
+import { IoHomeSharp, IoReceiptSharp } from "react-icons/io5";
 
 import { productList } from "../constants/dummyData";
 import { icons } from "../constants/navbarConstant";
+import { useAuthContext } from "../contexts/authProvider";
 import styles from "../styles/Navbar.module.scss";
+import { setBadgeColor } from "../utils/functions";
 import QuickAdd from "./QuickAdd";
 import Sidebar from "./Sidebar";
 
-const NavbarBottom = ({ onDrawerOpen }) => {
+const NavbarBottom = ({ onDrawerOpen, isLoggedIn }) => {
+  const router = useRouter();
   return (
     <Box
       as="nav"
@@ -36,16 +48,37 @@ const NavbarBottom = ({ onDrawerOpen }) => {
       zIndex="10"
       display={{ base: "flex", md: "none" }}
     >
-      {icons.map((icon) => (
-        <Box
-          className={styles.boxIcon}
-          key={icon.id}
-          onClick={icon.text === "Keranjang" ? onDrawerOpen : () => {}}
-        >
-          <Icon as={icon.iconElement} className={styles.navbarIcon} />
-          <Text className={styles.boxIconText}>{icon.text}</Text>
-        </Box>
-      ))}
+      <Box className={styles.boxIcon} onClick={() => router.push("/")}>
+        <Icon as={IoHomeSharp} className={styles.navbarIcon} />
+        <Text className={styles.boxIconText}>Beranda</Text>
+      </Box>
+      <Box
+        className={styles.boxIcon}
+        onClick={isLoggedIn ? onDrawerOpen : () => router.push("/login")}
+      >
+        <Icon as={IoCart} className={styles.navbarIcon} />
+        <Text className={styles.boxIconText}>Keranjang</Text>
+      </Box>
+      <Box
+        className={styles.boxIcon}
+        onClick={
+          isLoggedIn
+            ? router.push("/profile/pesanan-saya")
+            : () => router.push("/login")
+        }
+      >
+        <Icon as={IoReceiptSharp} className={styles.navbarIcon} />
+        <Text className={styles.boxIconText}>Pesanan</Text>
+      </Box>
+      <Box
+        className={styles.boxIcon}
+        onClick={
+          isLoggedIn ? router.push("/profile") : () => router.push("/login")
+        }
+      >
+        <Icon as={FaUser} className={styles.navbarIcon} />
+        <Text className={styles.boxIconText}>Akun</Text>
+      </Box>
     </Box>
   );
 };
@@ -102,68 +135,114 @@ const SearchedElement = ({ isSearched, setIsSearched }) => (
   </Box>
 );
 
-const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => (
-  <Grid
-    templateColumns={{
-      base: "repeat(3, 1fr)",
-      md: isLoggedIn ? "repeat(5,1fr)" : "repeat(4,1fr)",
-    }}
-    w="auto"
-    columnGap={{ base: 6, md: isLoggedIn ? 0 : 8 }}
-    alignItems="center"
-  >
-    <Icon
-      as={IoSearch}
-      className={styles.navbarIcon}
-      onClick={() => setIsSearched(true)}
-      display={{ base: "block", md: "none" }}
-    />
-    <Link href="/" w="fit-content">
-      <Icon as={IoNotifications} className={styles.navbarIcon} />
-    </Link>
-    <Box
-      w="fit-content"
-      display={{ base: "none", md: "block" }}
-      onClick={onDrawerOpen}
+const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
+  const { userData, loading, logout } = useAuthContext();
+  const router = useRouter();
+
+  return loading ? (
+    <Spinner mx="auto" />
+  ) : (
+    <Grid
+      templateColumns={{
+        base: "repeat(3, 1fr)",
+        md: isLoggedIn ? "repeat(5,1fr)" : "repeat(4,1fr)",
+      }}
+      w="auto"
+      columnGap={{ base: 6, md: 0 }}
+      alignItems="center"
     >
-      <Icon as={IoCart} className={styles.navbarIcon} />
-    </Box>
-    <Link href="/wishlist" w="fit-content">
-      <Icon as={IoHeartSharp} className={styles.navbarIcon} />
-    </Link>
-    <Link w="fit-content" display={{ base: "none", md: "block" }} href="/">
-      <Icon as={FaUser} className={styles.navbarIcon} />
-    </Link>
-    {isLoggedIn && (
+      <Icon
+        as={IoSearch}
+        className={styles.navbarIcon}
+        onClick={() => setIsSearched(true)}
+        display={{ base: "block", md: "none" }}
+      />
+      <Link href="/" w="fit-content">
+        <Icon as={IoNotifications} className={styles.navbarIcon} />
+      </Link>
       <Box
         w="fit-content"
         display={{ base: "none", md: "block" }}
-        fontSize="12px"
+        onClick={
+          isLoggedIn ? () => onDrawerOpen() : () => router.push("/login")
+        }
       >
-        <Text fontWeight="bold">Kim Jong Un</Text>
-        <Flex w="full" justify="space-between">
-          <Text mr=".7rem">CSUI2021</Text>
-          <Box
-            bg="gray.400"
-            color="white"
-            px=".4rem"
-            py=".1rem"
-            borderRadius="30px"
-          >
-            Reguler
-          </Box>
-        </Flex>
+        <Icon as={IoCart} className={styles.navbarIcon} />
       </Box>
-    )}
-  </Grid>
-);
+      <Link href={isLoggedIn ? "/wishlist" : "/login"} w="fit-content">
+        <Icon as={IoHeartSharp} className={styles.navbarIcon} />
+      </Link>
+      <Box
+        w="fit-content"
+        display={{ base: "none", md: "block" }}
+        position="relative"
+      >
+        {isLoggedIn ? (
+          <Menu>
+            <MenuButton as={FaUser} className={styles.navbarIcon} />
+            <MenuList
+              zIndex="popover"
+              position="relative"
+              right="12rem"
+              top="2rem"
+            >
+              <MenuItem icon={<BiUser />}>Profil</MenuItem>
+              <MenuItem
+                icon={<Icon as={BiLogOut} color="red.400" />}
+                color="red.400"
+                onClick={() => {
+                  logout();
+                  router.push("/login");
+                }}
+              >
+                Keluar
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        ) : (
+          <Flex
+            align="center"
+            _hover={{ cursor: "pointer" }}
+            onClick={() => router.push("/login")}
+          >
+            <Icon as={FaUser} className={styles.navbarIcon} />
+            <Spacer w="1rem" />
+            <Text>Masuk</Text>
+          </Flex>
+        )}
+      </Box>
+      {isLoggedIn && (
+        <Box
+          w="fit-content"
+          display={{ base: "none", md: "block" }}
+          fontSize="12px"
+        >
+          <Text fontWeight="bold" isTruncated maxWidth="16ch" overflow="hidden">
+            {userData?.first_name} {userData?.last_name}
+          </Text>
+          <Flex w="full" justify="space-between">
+            <Text mr=".7rem">{userData?.memberid}</Text>
+            <Box
+              bg={setBadgeColor(userData?.user_level)}
+              color="white"
+              px=".4rem"
+              py=".1rem"
+              borderRadius="30px"
+            >
+              {userData?.user_level}
+            </Box>
+          </Flex>
+        </Box>
+      )}
+    </Grid>
+  );
+};
 
 const Navbar = () => {
   const [isSearched, setIsSearched] = useState(false);
   const [isMainMenu, setIsMainMenu] = useState(false);
   const [isCategoryMenu, setIsCategoryMenu] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
-
+  const { isLoggedIn } = useAuthContext();
   const drawerDisclosure = useDisclosure();
   const isDrawerOpen = drawerDisclosure.isOpen;
   const onDrawerOpen = drawerDisclosure.onOpen;
@@ -210,7 +289,10 @@ const Navbar = () => {
             mr="1rem"
           />
           <Link href="/">
-            <Image src="/images/Navbar/logo.svg" />
+            <Image
+              src="/images/Navbar/logo.svg"
+              _hover={{ cursor: "pointer" }}
+            />
           </Link>
           <InputGroup
             mx={isLoggedIn ? { base: "15px", xl: "30px" } : "30px"}

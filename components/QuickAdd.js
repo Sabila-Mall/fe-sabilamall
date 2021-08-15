@@ -13,7 +13,7 @@ import {
   useBreakpointValue,
   Spinner,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import { apiGetCartByCustomerID } from "../api/cart";
 import { useAuthContext } from "../contexts/authProvider";
 import { useCartContext } from "../contexts/cartProvider";
@@ -29,15 +29,15 @@ import QuickAddListItem from "./QuickAddListItem";
 const QuickAdd = ({ products, isDrawerOpen, onDrawerClose }) => {
   const { userData } = useAuthContext();
   const userId = userData?.id;
-  console.log(userData);
   const data = apiGetCartByCustomerID(userId);
   console.log(data);
-  const tes = useCartContext();
-  console.log(tes);
-  // const [dataValue, setdataValue] = useState(cartData);
-  // const [loadingValue, setloadingValue] = useState(loading)
-  // console.log(dataValue);
-  // console.log(loadingValue);
+  const { cartData, loading } = useCartContext();
+  const [dataValue, setdataValue] = useState(cartData[0][0]);
+  const [loadingValue, setloadingValue] = useState(loading[0])
+  const cartValue = dataValue.keranjang
+  console.log(dataValue);
+  console.log(loadingValue);
+  console.log(cartValue);
 
   const total = "99.999.999";
   const size = useBreakpointValue({ base: "full", md: "md" });
@@ -62,7 +62,7 @@ const QuickAdd = ({ products, isDrawerOpen, onDrawerClose }) => {
           </DrawerHeader>
 
           <DrawerBody px={"2rem"}>
-            <QuickAddListItem products={data} />
+            <QuickAddListItem products={cartValue} />
           </DrawerBody>
 
           <DrawerFooter borderTopWidth={"1px"} flexDirection={"column"}>

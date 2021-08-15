@@ -33,7 +33,7 @@ export const apiRegister = (
 };
 
 export const apiResetPassword = (email) => {
-  return axios.post(HOST + "/user/process_forgot_password", {
+  return axios.post(HOST + "/api/user/process_forgot_password", {
     email: email,
   });
 };

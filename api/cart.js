@@ -9,7 +9,6 @@ export const apiGetCartByCustomerID = async (customers_id) => {
         }
     );
     const data = await res.data?.data
-    console.log(data);
     return data
 };
 

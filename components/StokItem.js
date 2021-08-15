@@ -13,6 +13,7 @@ import {
   Box,
   Text,
 } from "@chakra-ui/react";
+import Link from "next/link";
 import { useRef } from "react";
 import { BsClock } from "react-icons/bs";
 import {
@@ -21,7 +22,7 @@ import {
   IoFileTrayStacked,
 } from "react-icons/io5";
 
-const StokItem = ({ img, nama, supplier, tag, variant }) => {
+const StokItem = ({ img, nama, supplier, tag, variant, link }) => {
   const referenceAccordion = useRef(null);
 
   return (
@@ -199,18 +200,20 @@ const StokItem = ({ img, nama, supplier, tag, variant }) => {
           mb={{ base: "0.4rem", md: "0rem" }}
           pr={{ base: "0rem", md: "0.5rem", lg: "0rem" }}
         >
-          <Button
-            colorScheme="orange"
-            className="primaryFont"
-            maxW="12ch"
-            w="100%"
-            minW="8ch"
-            mr="1rem"
-            ml="1rem"
-            mb={{ base: "0.25rem", md: 0 }}
-          >
-            Beli
-          </Button>
+          <Link href={link}>
+            <Button
+              colorScheme="orange"
+              className="primaryFont"
+              maxW="12ch"
+              w="100%"
+              minW="8ch"
+              mr="1rem"
+              ml="1rem"
+              mb={{ base: "0.25rem", md: 0 }}
+            >
+              Beli
+            </Button>
+          </Link>
         </Flex>
       </Flex>
     </>
