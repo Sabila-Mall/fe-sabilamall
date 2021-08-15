@@ -88,29 +88,28 @@ const AlamatPenerima = () => {
                 ]
               : [],
           );
-          console.log("TESSSSSSSSSSSSSSSS");
-
-          apiProvinsi().then((res) => {
-            setProvinsi([...res.data.data]);
-          });
-
-          getAddress({ customers_id: userId, address_book_type: 1 })
-            .then((res) => {
-              setDataPenerima(
-                res
-                  ? [
-                      ...res?.map((d) => ({
-                        nama: d.firstname + " " + d.lastname,
-                        nomor: d.phone,
-                        alamat: `Jl.${d.street}, ${d.subdistrict_name}, ${d.city_name}, ${d.zone_name}`,
-                      })),
-                    ]
-                  : [],
-              );
-            })
-            .catch(() => setDataPenerima([]));
         })
         .catch(() => setDataPengirim([]));
+
+      apiProvinsi().then((res) => {
+        setProvinsi([...res.data.data]);
+      });
+
+      getAddress({ customers_id: userId, address_book_type: 1 })
+        .then((res) => {
+          setDataPenerima(
+            res
+              ? [
+                  ...res?.map((d) => ({
+                    nama: d.firstname + " " + d.lastname,
+                    nomor: d.phone,
+                    alamat: `Jl.${d.street}, ${d.subdistrict_name}, ${d.city_name}, ${d.zone_name}`,
+                  })),
+                ]
+              : [],
+          );
+        })
+        .catch(() => setDataPenerima([]));
     };
 
     userId && getDataPengirim();
