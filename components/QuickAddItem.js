@@ -2,6 +2,8 @@ import { Flex, HStack, IconButton, Input, Text, VStack, Image } from "@chakra-ui
 import { useState } from "react";
 import { IoAddCircleOutline, IoRemoveCircleOutline, IoTrash } from "react-icons/io5";
 import { IMAGE_HOST } from "../constants/api";
+import { useAuthContext } from "../contexts/authProvider";
+import { useCartContext } from "../contexts/cartProvider";
 
 const formatPrice = (price) => {
   return new Intl.NumberFormat(
@@ -10,8 +12,14 @@ const formatPrice = (price) => {
     .format(price);
 };
 
-
 const QuickAddItem = ({ product }) => {
+  const { userData } = useAuthContext();
+  const userId = userData?.id;
+  const { tempData, updateCart } = useCartContext();
+
+  console.log(tempData[0]);
+  console.log(product);
+
   const [quantity, setquantity] = useState(0)
   const stock = product.products_stok
   const handleModifyNumberOfItem = (event) => {
@@ -29,6 +37,11 @@ const QuickAddItem = ({ product }) => {
       }
     }
   };
+
+  const handleDelete = (productId) => {
+    updateCart(productId, userId)
+  }
+
   return (
     <VStack align={"start"} w={"full"}>
       <HStack align={"top"} justify={"space-between"} spacing={"1rem"} w={"full"}>
@@ -71,6 +84,7 @@ const QuickAddItem = ({ product }) => {
           icon={<IoTrash size={"1.25rem"} />}
           variant={"ghost"}
           h={5}
+          onClick={() => handleDelete(product.products_id)}
         />
       </HStack>
 

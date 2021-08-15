@@ -8,6 +8,7 @@ import { useAuthContext } from "./authProvider";
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
+    const [tempData, settempData] = useState([])
     const [cartData, setcartData] = useState([]);
     const [loading, setloading] = useState(false);
     const { userData } = useAuthContext();
@@ -32,6 +33,21 @@ export const CartProvider = ({ children }) => {
             isClosable: true,
         });
     };
+    const updateCart = async (productId, customerId) => {
+        if (userId) {
+            setcartData(
+                cartData.filter((item) => {
+                    // console.log(item.keranjang[0].products_id);
+                    item.keranjang[0].products_id != productId
+                }),
+            );
+            apiGetCartByCustomerID(customerId).
+                then((res) => {
+                    settempData(res)
+                })
+            console.log(tempData);
+        }
+    }
 
 
     useEffect(() => {
@@ -44,11 +60,9 @@ export const CartProvider = ({ children }) => {
                 .finally(() => setloading(false));
         }
     }, [userData]);
-    console.log(cartData);
-    console.log(userId);
 
     return (
-        <CartContext.Provider value={{ cartData: [cartData, setcartData], loading: [loading, setloading] }} >
+        <CartContext.Provider value={{ cartData: [cartData, setcartData], loading: [loading, setloading], tempData: [tempData, settempData], updateCart }} >
             {children}
         </CartContext.Provider>
     )

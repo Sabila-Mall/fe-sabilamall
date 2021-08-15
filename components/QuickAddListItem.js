@@ -9,7 +9,7 @@ const QuickAddListItem = ({ products }) => {
     return (
       <VStack spacing={6} divider={<StackDivider borderColor="gray.200" />} align={"start"}>
         {products.map((product, index) =>
-          <QuickAddItem key={index} product={product} />,
+          <QuickAddItem key={index} product={product.keranjang[0]} />,
         )}
       </VStack>
     );

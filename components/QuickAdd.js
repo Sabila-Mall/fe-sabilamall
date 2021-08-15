@@ -32,11 +32,9 @@ const QuickAdd = ({ products, isDrawerOpen, onDrawerClose }) => {
   const data = apiGetCartByCustomerID(userId);
   console.log(data);
   const { cartData, loading } = useCartContext();
-  const [dataValue, setdataValue] = useState(cartData[0][0]);
+  const [dataValue, setdataValue] = useState(cartData[0]);
   const [loadingValue, setloadingValue] = useState(loading[0])
   const cartValue = dataValue.keranjang
-  console.log(dataValue);
-  console.log(loadingValue);
   console.log(cartValue);
 
   const total = "99.999.999";
@@ -62,7 +60,7 @@ const QuickAdd = ({ products, isDrawerOpen, onDrawerClose }) => {
           </DrawerHeader>
 
           <DrawerBody px={"2rem"}>
-            <QuickAddListItem products={cartValue} />
+            <QuickAddListItem products={dataValue} />
           </DrawerBody>
 
           <DrawerFooter borderTopWidth={"1px"} flexDirection={"column"}>
