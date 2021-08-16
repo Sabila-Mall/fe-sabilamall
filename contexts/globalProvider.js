@@ -9,7 +9,9 @@ export const GlobalProvider = ({ children }) => {
     <ChakraProvider>
       <AuthProvider>
         <WishlistProvider>
-          <CartProvider>{children}</CartProvider>
+          <CartProvider>
+            {children}
+          </CartProvider>
         </WishlistProvider>
       </AuthProvider>
     </ChakraProvider>

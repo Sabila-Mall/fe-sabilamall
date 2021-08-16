@@ -2,6 +2,7 @@ import { Button } from "@chakra-ui/button";
 import { Input, InputGroup, InputRightAddon } from "@chakra-ui/input";
 import { Box, Flex, Text } from "@chakra-ui/layout";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/table";
+import { useState } from "react";
 
 import { AddAmount } from "../../components/AddAmount";
 import { CardCheckout } from "../../components/CardCheckout";
@@ -9,8 +10,13 @@ import { CartPrice } from "../../components/CartPrice";
 import { Layout } from "../../components/Layout";
 import { ProductCart } from "../../components/ProductCart";
 import { TableContent } from "../../components/TableContent";
-
+import { useCartContext } from "../../contexts/cartProvider";
 const cartDetails = () => {
+
+  const { cartData, loading } = useCartContext();
+  const [dataValue, setdataValue] = useState(cartData[0]);
+  const [loadingValue, setloadingValue] = useState(loading[0])
+
   return (
     <Layout hasNavbar>
       <Box w="full">
@@ -36,8 +42,11 @@ const cartDetails = () => {
               </Thead>
 
               <Tbody>
-                <TableContent price={"99.999.999"} isDiscount />
-                <TableContent price={"99.999.999"} isDiscount />
+                {dataValue.map((el, index) => {
+                  return (
+                    <TableContent product={el} />
+                  )
+                })}
               </Tbody>
             </Table>
           </Box>

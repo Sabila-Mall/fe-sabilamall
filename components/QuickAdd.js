@@ -14,8 +14,6 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { apiGetCartByCustomerID } from "../api/cart";
-import { useAuthContext } from "../contexts/authProvider";
 import { useCartContext } from "../contexts/cartProvider";
 
 import QuickAddListItem from "./QuickAddListItem";
@@ -27,14 +25,11 @@ import QuickAddListItem from "./QuickAddListItem";
  * @param onDrawerClose callback function yang dipanggil untuk close modal [dapatkan dari useDisclosure()]
  */
 const QuickAdd = ({ products, isDrawerOpen, onDrawerClose }) => {
-  const { userData } = useAuthContext();
-  const userId = userData?.id;
-  const data = apiGetCartByCustomerID(userId);
-  console.log(data);
   const { cartData, loading } = useCartContext();
   const [dataValue, setdataValue] = useState(cartData[0]);
   const [loadingValue, setloadingValue] = useState(loading[0])
   const cartValue = dataValue.keranjang
+  console.log(dataValue);
   console.log(cartValue);
 
   const total = "99.999.999";

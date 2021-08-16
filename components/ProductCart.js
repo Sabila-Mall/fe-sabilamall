@@ -8,10 +8,23 @@ import { useState } from "react";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 import { IoTrash } from "react-icons/io5";
 import { RiPencilFill } from "react-icons/ri";
+import { IMAGE_HOST } from "../constants/api";
+import { useAuthContext } from "../contexts/authProvider";
+import { useCartContext } from "../contexts/cartProvider";
 
 import { CartPrice } from "./CartPrice";
 
-export const ProductCart = ({ isDiscount, price }) => {
+export const ProductCart = ({ isDiscount, product }) => {
+  const { userData } = useAuthContext();
+  const userId = userData?.id;
+  const { tempData, updateCart } = useCartContext();
+
+  const productName = product?.products_name
+  const productPath = product?.products_image_path
+  const productPrice = product?.final_price
+
+  console.log(tempData[0]);
+  console.log(product);
   return (
     <Box width="100%" px={{ base: "1rem", md: 0 }}>
       <Flex
@@ -45,7 +58,7 @@ export const ProductCart = ({ isDiscount, price }) => {
           fontWeight="500"
         >
           <Text as="h1" isTruncated mb="8px">
-            Nama Produk Croissant Jujubes asdadasdadadasd
+            {productName}
           </Text>
           <VStack spacing="3px" alignItems="start" mb="1rem">
             <Text color="gray.500" fontSize="14px">
@@ -59,7 +72,7 @@ export const ProductCart = ({ isDiscount, price }) => {
             </Text>
           </VStack>
           <Box display={{ md: "none" }}>
-            <CartPrice isDiscount={isDiscount} price={price} />
+            <CartPrice isDiscount={isDiscount} price={productPrice} />
           </Box>
         </Flex>
       </Flex>

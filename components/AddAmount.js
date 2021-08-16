@@ -4,10 +4,10 @@ import { css } from "@emotion/react";
 import { useState } from "react";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 
-export const AddAmount = ({ setTotal, price, total }) => {
+export const AddAmount = ({ setTotal, price, total, maxQuantity }) => {
   const [amount, setAmount] = useState(1);
 
-  const prices = parseInt(price.replace(/\./g, ""));
+  const prices = parseInt(price?.replace(/\./g, ""));
 
   return (
     <>
@@ -21,10 +21,10 @@ export const AddAmount = ({ setTotal, price, total }) => {
             `}
           >
             <AiOutlineMinusCircle
-              color="#E2E8F0"
+              color={amount === 1 ? "#E2E8F0" : "#A0AEC0"}
               size="1.5em"
               onClick={() => {
-                if (amount > 0) setAmount(amount - 1);
+                if (amount > 1) setAmount(amount - 1);
                 setTotal(prices * amount);
               }}
             />
@@ -47,11 +47,13 @@ export const AddAmount = ({ setTotal, price, total }) => {
             `}
           >
             <AiOutlinePlusCircle
-              color="#A0AEC0"
+              color={amount === maxQuantity ? "#E2E8F0" : "#A0AEC0"}
               size="1.5em"
               onClick={() => {
-                setAmount(amount + 1);
-                setTotal(prices * amount);
+                if (amount < maxQuantity) {
+                  setAmount(amount + 1);
+                  setTotal(prices * amount);
+                }
               }}
             />
           </Box>
