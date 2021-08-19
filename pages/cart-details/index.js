@@ -10,9 +10,17 @@ import { Layout } from "../../components/Layout";
 import { ProductCart } from "../../components/ProductCart";
 import { TableContent } from "../../components/TableContent";
 
+const path = [
+  {
+    name: "Keranjang",
+    link: "/cart-details",
+    isOnPage: true,
+  },
+];
+
 const cartDetails = () => {
   return (
-    <Layout hasNavbar>
+    <Layout hasNavbar hasPadding hasBreadCrumb breadCrumbItem={path}>
       <Box w="full">
         <Box display={{ lg: "flex" }} justifyContent="space-between">
           <Box

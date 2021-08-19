@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 import { IoCopy } from "react-icons/io5";
 
 import { CardProfile } from "../../components/CardProfile";
+import { Layout } from "../../components/Layout";
 import NavbarProfile from "../../components/NavbarProfile";
 import OrderProductsTable, {
   OrderProductsTableMobile,
@@ -121,28 +122,21 @@ const OrderInformation = () => {
 
   return (
     <Box>
-      {isMobile ? (
+      {isMobile && (
         <NavbarProfile
           section="Informasi Pesanan"
           onClick={() => router.push("/profile")}
         />
-      ) : (
-        <></>
       )}
-      <Box
-        bg="gray.50"
-        h="100%"
-        px={{ base: "16px", md: "" }}
-        pt={{ base: "66px", md: "84px" }}
-        pb={{ base: "66px", md: "" }}
-      >
+      <Layout hasNavbar={!isMobile} hasPadding background="gray.50" sticky>
         <Flex
+          mt={{ base: "4rem", md: 0 }}
           justify="center"
           pb="32px"
           bg="gray.50"
           px={{ base: "0", md: "10px", lg: "80px", xl: "120px" }}
         >
-          <Flex display={{ base: "none", md: "block" }}>
+          <Flex display={{ base: "none", lg: "block" }}>
             <CardProfile sm={sm} />
           </Flex>
           <Stack
@@ -424,7 +418,8 @@ const OrderInformation = () => {
                         ></Circle>
                         <Text
                           color="gray.400"
-                          minW="fit-content"
+                          w={{ base: "6rem", lg: "fit-content" }}
+                          minW={{ base: "6rem", lg: "fit-content" }}
                           fontSize={{ base: "0.8rem", md: "0.875rem" }}
                         >
                           {step.timestamp}
@@ -537,7 +532,7 @@ const OrderInformation = () => {
             </Grid>
           </Stack>
         </Flex>
-      </Box>
+      </Layout>
       {isMobile ? <ScrollButton /> : <></>}
     </Box>
   );

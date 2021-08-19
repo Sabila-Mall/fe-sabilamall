@@ -19,24 +19,26 @@ import Navbar from "../../components/Navbar";
 import { useAuthContext } from "../../contexts/authProvider";
 import { useWishlistContext } from "../../contexts/wishlistProvider";
 
+const path = [
+  {
+    name: "Wishlist",
+    link: "/wishlist",
+    isOnPage: true,
+  },
+];
+
 const Wishlist = () => {
   const { userData } = useAuthContext();
   const userId = userData?.id;
   const { wishlistData: data, loading } = useWishlistContext();
 
   return (
-    <Layout hasNavbar>
-      <Flex direction="column">
+    <Layout hasNavbar hasPadding hasBreadCrumb breadCrumbItem={path}>
+      <Flex direction="column" w="full">
         {loading ? (
           <Spinner />
         ) : (
-          <Box
-            as="main"
-            pt={{ base: "51px", md: "71px" }}
-            pb="12"
-            d="flex"
-            justifyContent="center"
-          >
+          <Box as="main" pb="12" w="full" d="flex">
             {data.length > 0 && (
               <Box paddingTop="1.8rem" minH="100vh">
                 <Text

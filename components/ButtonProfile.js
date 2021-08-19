@@ -25,8 +25,8 @@ export const ButtonStatusUser = ({ text, mt }) => {
 export const ButtonSubmit = ({ text }) => (
   <Button
     className="primaryFont"
-    fontWeight="700"
-    fontSize="18px"
+    fontWeight="semibold"
+    fontSize="15px"
     type="submit"
     display={{ base: "none", md: "block" }}
     size="lg"

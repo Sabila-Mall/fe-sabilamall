@@ -34,22 +34,18 @@ const contactUs = () => {
     <Layout
       hasFooter
       hasNavbar
+      hasPadding
       hasBreadCrumb
-      breadCrumbItem={[{ name: "Kontak Kami", link: "#", isOnPage: true }]}
+      breadCrumbItem={[
+        { name: "Kontak Kami", link: "/contact-us", isOnPage: true },
+      ]}
     >
-      <Flex
-        px={{ base: "1rem", md: "auto" }}
-        className={styles.layout}
-        fontWeight="500"
-        flexDirection="column"
-        justifyContent="center"
-      >
+      <Flex fontWeight="500" flexDirection="column" justifyContent="center">
         <Box>
           <Text
             mb="25px"
             fontWeight="700"
             fontSize={{ base: "2rem", "2xl": "3rem" }}
-            mt="23px"
           >
             Kontak Kami
           </Text>
@@ -146,7 +142,7 @@ const contactUs = () => {
                     src="/images/sm-mascott.svg"
                     alt=""
                     w="auto"
-                    h="320px"
+                    h={{ base: "200px", md: "320px" }}
                   />
                 </Flex>
                 <Text fontSize="1.5rem" fontWeight="700" textAlign="center">

@@ -16,8 +16,8 @@ const Join = () => {
   const router = useRouter();
 
   return (
-    <Layout hasNavbar hasFooter>
-      <Box className="secondaryFont" pt={{ base: "2.5rem", md: "4.8rem" }}>
+    <Layout hasNavbar hasFooter hasPadding>
+      <Box className="secondaryFont">
         <Text
           className="secondaryFont"
           fontWeight="bold"

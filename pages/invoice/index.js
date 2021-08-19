@@ -4,6 +4,18 @@ import { IoCopyOutline } from "react-icons/io5";
 import { Layout } from "../../components/Layout";
 import { copyToClipboard } from "../../utils/functions";
 
+const path = [
+  {
+    name: "Checkout",
+    link: "/alamat-penerima",
+    isOnPage: false,
+  },
+  {
+    name: "Terima Kasih",
+    link: "/invoice",
+    isOnPage: true,
+  },
+];
 const Invoice = () => {
   return (
     <>
@@ -11,13 +23,14 @@ const Invoice = () => {
         hasNavbar
         hasBreadCrumb
         hasFooter
-        breadCrumbItem={[{ name: "Checkout" }, { name: "Terima Kasih" }]}
+        breadCrumbItem={path}
+        hasPadding
       >
         <Box
           maxW={{ base: "375px", lg: "568px" }}
-          mx="1rem"
+          mx="auto"
           fontSize="0.85rem"
-          minW="300px"
+          minW="280px"
           minH="300px"
           border="1.5px solid #718096"
           borderRadius="8px"
@@ -44,7 +57,7 @@ const Invoice = () => {
             <Text>Total Tagihan</Text>
             <Text>Rp.199.999</Text>
           </Flex>
-          <Text>
+          <Text mb="0.5rem">
             Pembayaran dilakukan dengan melakukan Transfer ke Rekening berikut:
           </Text>
           <Flex flexDir="column" w={{ base: "60%", lg: "40%" }} mb="0.5rem">

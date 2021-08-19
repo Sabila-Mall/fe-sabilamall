@@ -24,6 +24,7 @@ import {
   saveTokenToCookies,
   saveUserIdToCookies,
 } from "../../api/Auth";
+import { Layout } from "../../components/Layout";
 import { USER_FIELDS } from "../../constants/authConstants";
 import { useAuthContext } from "../../contexts/authProvider";
 import { isRequestSuccess } from "../../utils/api";
@@ -62,15 +63,14 @@ const Login = () => {
   };
 
   return (
-    <Center w="100%" h="100vh" className="login">
+    <Layout noFooter hasPadding>
       <Stack
+        pb={{ lg: "4rem" }}
         divider={
           <StackDivider borderColor={{ base: "white", md: "gray.200" }} />
         }
         spacing={{ base: "4px" }}
         direction={{ base: "column", md: "row" }}
-        w={{ base: "100%", md: "90%" }}
-        h={{ md: "60%" }}
       >
         <Center w={{ base: "100%", md: "50%" }}>
           <Image
@@ -206,7 +206,7 @@ const Login = () => {
           </Box>
         </Center>
       </Stack>
-    </Center>
+    </Layout>
   );
 };
 

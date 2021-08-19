@@ -5,6 +5,7 @@ import { IoKey, IoMedalOutline } from "react-icons/io5";
 import { VscPackage } from "react-icons/vsc";
 
 import { CardProfile } from "./CardProfile";
+import { Layout } from "./Layout";
 import Navbar from "./Navbar";
 
 const ProfileDesktop = ({ section, element, cardProfileText }) => {
@@ -24,31 +25,21 @@ const ProfileDesktop = ({ section, element, cardProfileText }) => {
     },
     {
       text: "Upgrade Akun",
-      path: "/profile/profile-saya",
+      path: "/profile/upgrade-account",
       icon: IoMedalOutline,
     },
     { text: "Ubah Password", path: "/profile/ubah-password", icon: IoKey },
   ];
 
   return (
-    <Box bg="gray.50" h="100%" display={{ base: "none", md: "block" }}>
-      <Flex
-        justify="center"
-        pt="120px"
-        pb="30px"
-        bg="gray.50"
-        // px={{ base: "50px", md: "10px", lg: "80px", xl: "120px" }}
-        px={{ base: "1rem", md: "1.5rem", lg: "3rem", xl: "50px" }}
-      >
-        <Box
-          display={{ base: "none", md: "block" }}
-          position="fixed"
-          top="0"
-          left="0"
-          zIndex="2"
-        >
-          <Navbar />
-        </Box>
+    <Layout
+      hasNavbar
+      hasPadding
+      sticky
+      background="gray.50"
+      display={{ base: "none", md: "flex" }}
+    >
+      <Flex justify="center" pb="30px" bg="gray.50">
         <Flex>
           <CardProfile sm={sm} cardProfileText={cardProfileText} />
         </Flex>
@@ -98,7 +89,7 @@ const ProfileDesktop = ({ section, element, cardProfileText }) => {
           {element}
         </Box>
       </Flex>
-    </Box>
+    </Layout>
   );
 };
 
