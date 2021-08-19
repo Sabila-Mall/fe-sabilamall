@@ -26,12 +26,13 @@ import { useState, useEffect } from "react";
 import { BiSearch } from "react-icons/bi";
 import { FiChevronRight } from "react-icons/fi";
 
-import { apiKota, apiProvinsi } from "../../api/Zone";
-import { getAddress } from "../../api/address";
+import { apiKecamatan, apiKodePos, apiKota, apiProvinsi } from "../../api/Zone";
+import { addAddress, getAddress } from "../../api/address";
 import Footer from "../../components/Footer";
 import Loading from "../../components/Loading";
 import Navbar from "../../components/Navbar";
 import { useAuthContext } from "../../contexts/authProvider";
+import { extractName } from "../../utils/functions";
 
 const AlamatPenerima = () => {
   const { userData } = useAuthContext();
@@ -41,12 +42,10 @@ const AlamatPenerima = () => {
   const [dataPenerima, setDataPenerima] = useState(null);
   const [provinsi, setProvinsi] = useState([]);
   const [kota, setKota] = useState([]);
-  // const [kecamatan, setkecamatan] = useState(null);
+  const [kecamatan, setKecamatan] = useState([]);
+  const [kodePos, setKodePos] = useState([]);
 
   const negara = ["Indonesia"];
-
-  const kecamatan = ["Kedoya Utara", "Kedoya Barat", "Kedoya Tenggara"];
-  const kodePos = ["18181", "27272", "89898"];
 
   const [pengirimCurrentTab, setPengirimCurrentTab] = useState(0);
   const [penerimaCurrentTab, setPenerimaCurrentTab] = useState(0);
@@ -55,7 +54,7 @@ const AlamatPenerima = () => {
   const [penerimaSearch, setPenerimaSearch] = useState("");
 
   const [namaPengirim, setNamaPengirim] = useState("");
-  const [alamatPengirim, setAlamatPengirim] = useState("");
+  const [nomorPengirim, setNomorPengirim] = useState("");
 
   const [namaTextPengirim, setNamaTextPengirim] = useState("");
   const [ponselPengirim, setPonselPengirim] = useState("");
@@ -73,6 +72,36 @@ const AlamatPenerima = () => {
   const [kodePosPenerima, setKodePosPenerima] = useState("");
   const [ponselPenerima, setPonselPenerima] = useState("");
   const [alamatTextPenerima, setAlamatTextPenerima] = useState("");
+
+  const addAddressPengirim = async () => {
+    try {
+      await addAddress({
+        entry_firstname: extractName(namaPengirim)?.firstname,
+        entry_lastname: extractName(namaPengirim)?.lastname,
+        entry_phone: nomorPengirim,
+        address_book_type: 2,
+        customers_id: userId,
+        is_default: 0,
+      });
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+  const addAddressPenerima = async () => {
+    try {
+      await addAddress({
+        entry_firstname: namaAkhirPenerima,
+        entry_lastname: namaAkhirPenerima,
+        entry_phone: ponselPenerima,
+        address_book_type: 1,
+        customers_id: userId,
+        is_default: 0,
+      });
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
 
   useEffect(() => {
     const getDataPengirim = () => {
@@ -125,9 +154,33 @@ const AlamatPenerima = () => {
     provinsiPenerima && getKota();
   }, [provinsiPenerima]);
 
+  useEffect(() => {
+    const getKecamatan = () => {
+      apiKecamatan(Number(kotaPenerima)).then((res) => {
+        setKecamatan([...res.data.data]);
+      });
+    };
+
+    kotaPenerima && getKecamatan();
+  }, [kotaPenerima]);
+
+  useEffect(() => {
+    const getKodePos = () => {
+      apiKodePos(
+        Number(kotaPenerima),
+        Number(kecamatanPenerima),
+        Number(provinsiPenerima),
+      ).then((res) => {
+        setKodePos([...res.data.data]);
+      });
+    };
+
+    kecamatanPenerima && getKodePos();
+  }, [kecamatanPenerima]);
+
   const pengirimRadioHandler = (e) => {
     setNamaPengirim(dataPengirim[e].nama);
-    setAlamatPengirim(dataPengirim[e].alamat);
+    setNomorPengirim(dataPengirim[e].nomor);
   };
 
   const penerimaRadioHandler = (e) => {
@@ -136,11 +189,14 @@ const AlamatPenerima = () => {
     setAlamatPenerima(dataPenerima[e].alamat);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (pengirimCurrentTab == 0 && penerimaCurrentTab == 0) {
-      console.log("submit type 0");
+      try {
+      } catch (err) {
+        console.error(err);
+      }
     } else if (pengirimCurrentTab == 0 && penerimaCurrentTab == 1) {
       console.log("submit type 1");
     } else if (pengirimCurrentTab == 1 && penerimaCurrentTab == 0) {
@@ -765,8 +821,11 @@ const AlamatPenerima = () => {
                             {kecamatan &&
                               kecamatan.map((data, index) => {
                                 return (
-                                  <option key={index} value={data}>
-                                    {data}
+                                  <option
+                                    key={data?.subdistrict_id || index}
+                                    value={data?.subdistrict_id}
+                                  >
+                                    {data?.subdistrict_name}
                                   </option>
                                 );
                               })}
@@ -800,8 +859,11 @@ const AlamatPenerima = () => {
                             {kodePos &&
                               kodePos.map((data, index) => {
                                 return (
-                                  <option key={index} value={data}>
-                                    {data}
+                                  <option
+                                    key={data?.id || index}
+                                    value={data?.postal_code}
+                                  >
+                                    {data?.postal_code}
                                   </option>
                                 );
                               })}

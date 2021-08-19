@@ -52,3 +52,21 @@ export const filterObject = (rawObj, allowed) => {
 
   return filtered;
 };
+
+export const extractName = (name) => {
+  if (!name) return;
+
+  const splittedName = name.split(" ");
+  const firstname = splittedName[0];
+
+  if (splittedName.length === 1) {
+    return {
+      firstname,
+      lastname: "",
+    };
+  }
+
+  const lastname = splittedName.slice(1).join(" ");
+
+  return { firstname, lastname };
+};
