@@ -21,11 +21,19 @@ import { FiChevronRight, FiSearch } from "react-icons/fi";
 import { apiGetProduct, apiGetProductBrand } from "../../api/GetProduct";
 import { apiStock } from "../../api/Stock";
 import Footer from "../../components/Footer";
+import { Layout } from "../../components/Layout";
 import Navbar from "../../components/Navbar";
 import StokItem from "../../components/StokItem";
 import { stocks } from "../../constants/stokData";
 import { getImageUrl } from "../../utils/api";
 
+const path = [
+  {
+    name: "Stok",
+    link: "/stok",
+    isOnPage: true,
+  },
+];
 const Stok = () => {
   const [supplierFilter, setSupplierFilter] = useState("");
   const [nameSearch, setNameSearch] = useState("");
@@ -92,48 +100,18 @@ const Stok = () => {
   }, [brandId]);
 
   return (
-    <>
-      <Navbar />
+    <Layout hasNavbar hasPadding hasBreadCrumb breadCrumbItem={path}>
       <Box d="flex" justifyContent="center">
         <Box
           as="main"
-          pt={{ base: "51px", md: "71px" }}
           overflow="hidden"
           d="flex"
           flexDir="column"
           alignItems="center"
-          w="100%"
-          maxW="1536px"
-          mt="2rem"
+          w="full"
         >
-          <Box w={{ base: "90%", md: "80%" }}>
-            <Breadcrumb
-              spacing="8px"
-              separator={<FiChevronRight color="gray.500" />}
-              fontSize={{ base: "sm", md: "md" }}
-            >
-              <BreadcrumbItem>
-                <BreadcrumbLink as={Link} to="/">
-                  <Text className="secondaryFont" fontWeight="500">
-                    Home
-                  </Text>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbItem>
-                <BreadcrumbLink as={Link} to="/stok">
-                  <Text
-                    className="primaryFont"
-                    color="orange.400"
-                    fontWeight="700"
-                  >
-                    Data Stok
-                  </Text>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-            </Breadcrumb>
-          </Box>
           <Box
-            w={{ base: "90%", md: "80%" }}
+            w="full"
             marginTop="2rem"
             d="flex"
             flexDir={{ base: "column", md: "row" }}
@@ -180,8 +158,7 @@ const Stok = () => {
             </InputGroup>
           </Box>
           <Box
-            mb="2rem"
-            w={{ base: "90%", md: "80%" }}
+            w="full"
             marginTop="1rem"
             d="flex"
             flexDir="column"
@@ -225,7 +202,7 @@ const Stok = () => {
                 <Img src="/images/9.svg" boxSize="20rem" />
                 <Text
                   color="gray.500"
-                  w={{ base: "28ch", md: "50ch" }}
+                  w={{ base: "26ch", md: "50ch" }}
                   textAlign="center"
                   className="secondaryFont"
                 >
@@ -237,8 +214,7 @@ const Stok = () => {
           </Box>
         </Box>
       </Box>
-      <Footer />
-    </>
+    </Layout>
   );
 };
 

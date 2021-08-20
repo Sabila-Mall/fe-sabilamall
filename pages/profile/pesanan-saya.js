@@ -15,11 +15,13 @@ import { BiSearch } from "react-icons/bi";
 import { IoCopy } from "react-icons/io5";
 
 import { CardProfile } from "../../components/CardProfile";
+import Footer from "../../components/Footer";
 import { Layout } from "../../components/Layout";
 import Navbar from "../../components/Navbar";
 import NavbarProfile from "../../components/NavbarProfile";
 import ProfileDesktop from "../../components/ProfileDesktop";
 import { useWindowSize } from "../../hooks/useWindowSize";
+import { needForLogin } from "../../utils/functions";
 
 const sm = [
   { text: "SM Pay", value: "1000.000" },
@@ -176,16 +178,15 @@ const PesananSayaDesktop = () => {
 
 const PesananSayaMobile = () => {
   return (
-    <Box bg="gray.50" minH="100vh">
-      <Layout>
-        <NavbarProfile section={"Pesanan Saya"} />
-        <VStack spacing="1rem" mb="1rem" mx="1rem">
-          <SearchBar />
-          <CardPesanan />
-          <CardPesanan />
-          <CardPesanan />
-        </VStack>
-      </Layout>
+    <Box bg="gray.50" minH="100vh" pt="5rem">
+      <NavbarProfile section={"Pesanan Saya"} />
+      <VStack spacing="1rem" mb="2rem" mx="1rem">
+        <SearchBar />
+        <CardPesanan />
+        <CardPesanan />
+        <CardPesanan />
+      </VStack>
+      <Footer />
     </Box>
   );
 };
@@ -197,3 +198,5 @@ const PesananSaya = () => {
 };
 
 export default PesananSaya;
+
+export const getServerSideProps = needForLogin;

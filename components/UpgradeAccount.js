@@ -35,7 +35,7 @@ export const UpgradeAccount = ({ isMobile, currentAccount }) => {
   const options = [
     {
       name: "Agen",
-      value: "agen",
+      value: "agent",
       price: "Rp 2.005.749",
       discount: "30%",
     },
@@ -177,14 +177,14 @@ export const UpgradeAccount = ({ isMobile, currentAccount }) => {
         className="secondaryFont"
         fontWeight="500"
         mt="30px"
-        color={value === "agen" ? "orange.500" : "black"}
+        color={value === "agent" ? "orange.500" : "black"}
       >
-        {value === "agen"
+        {value === "agent"
           ? "Akunmu sudah level tertinggi (Agen)!"
           : "Pilih level member yang ingin kamu ajukan"}
       </Text>
 
-      {value === "agen" ? (
+      {value === "agent" ? (
         <Center mt={isMobile ? "50%" : "auto"}>
           <Image src="/images/agentAccount.svg" alt="" />
         </Center>
@@ -252,17 +252,17 @@ export const UpgradeAccount = ({ isMobile, currentAccount }) => {
       <Flex justify="flex-end" w="100%">
         <Button
           className="primaryFont"
-          fontWeight="700"
-          fontSize="18px"
+          fontWeight="semibold"
+          fontSize="15px"
           onClick={() => handleSubmit()}
           size="lg"
-          w={isMobile ? "90%" : "25%"}
+          w={isMobile ? "100%" : "25%"}
           ml="5%"
-          mt={isMobile ? "" : "72px"}
+          mt={isMobile ? "2rem" : "72px"}
+          mx={isMobile && "auto"}
+          mb={isMobile && "2rem"}
           color="white"
           bg="orange.500"
-          pos={isMobile ? "absolute" : ""}
-          bottom={isMobile ? "36px" : ""}
           borderRadius="6px"
           _hover={{ bg: "orange.400" }}
         >

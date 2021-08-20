@@ -8,22 +8,27 @@ import {
 } from "@chakra-ui/react";
 
 import Footer from "../../components/Footer";
+import { Layout } from "../../components/Layout";
 import Navbar from "../../components/Navbar";
+
+const path = [
+  {
+    name: "Syarat dan Ketentuan",
+    link: "/terms-and-conditions",
+    isOnPage: true,
+  },
+];
 
 const TermsAndConditions = () => {
   return (
-    <>
-      <Navbar />
+    <Layout hasNavbar hasPadding breadCrumbItem={path} hasBreadCrumb>
       <Box d="flex" justifyContent="center">
         <Box
           as="main"
-          pt={{ base: "51px", md: "71px" }}
           overflow="hidden"
           w="100%"
           maxW="1536px"
-          mt="2rem"
           mb="2rem"
-          px={{ base: "1.8rem", md: "3rem" }}
           textAlign="justify"
           className="secondaryFont"
           fontSize="0.75rem"
@@ -510,8 +515,7 @@ const TermsAndConditions = () => {
           </Stack>
         </Box>
       </Box>
-      <Footer />
-    </>
+    </Layout>
   );
 };
 

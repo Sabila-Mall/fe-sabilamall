@@ -29,8 +29,10 @@ import { FiChevronRight } from "react-icons/fi";
 import { apiKecamatan, apiKodePos, apiKota, apiProvinsi } from "../../api/Zone";
 import { addAddress, getAddress } from "../../api/address";
 import Footer from "../../components/Footer";
+import { Layout } from "../../components/Layout";
 import Loading from "../../components/Loading";
 import Navbar from "../../components/Navbar";
+import { Stepper } from "../../components/Stepper";
 import { useAuthContext } from "../../contexts/authProvider";
 import { extractName } from "../../utils/functions";
 
@@ -46,6 +48,19 @@ const AlamatPenerima = () => {
   const [kodePos, setKodePos] = useState([]);
 
   const negara = ["Indonesia"];
+
+  const path = [
+    {
+      name: "Checkout",
+      link: "/alamat-penerima",
+      isOnPage: false,
+    },
+    {
+      name: "Alamat Penerima",
+      link: "/alamat-penerima",
+      isOnPage: true,
+    },
+  ];
 
   const [pengirimCurrentTab, setPengirimCurrentTab] = useState(0);
   const [penerimaCurrentTab, setPenerimaCurrentTab] = useState(0);
@@ -94,6 +109,12 @@ const AlamatPenerima = () => {
         entry_firstname: namaAkhirPenerima,
         entry_lastname: namaAkhirPenerima,
         entry_phone: ponselPenerima,
+        entry_country_id: 100,
+        entry_zone_id: Number(provinsiPenerima),
+        entry_city: Number(kotaPenerima),
+        entry_district: Number(kecamatanPenerima),
+        entry_postcode: Number(kodePosPenerima),
+
         address_book_type: 1,
         customers_id: userId,
         is_default: 0,
@@ -170,9 +191,11 @@ const AlamatPenerima = () => {
         Number(kotaPenerima),
         Number(kecamatanPenerima),
         Number(provinsiPenerima),
-      ).then((res) => {
-        setKodePos([...res.data.data]);
-      });
+      )
+        .then((res) => {
+          setKodePos([...res.data.data]);
+        })
+        .catch((err) => console.error(err));
     };
 
     kecamatanPenerima && getKodePos();
@@ -265,96 +288,11 @@ const AlamatPenerima = () => {
     return <Loading />;
 
   return (
-    <>
-      <Navbar />
-      <Box
-        as="main"
-        pt={{ base: "51px", md: "71px" }}
-        d="flex"
-        flexDir="column"
-        alignItems="center"
-        marginTop={{ base: "2rem", md: "3rem" }}
-      >
-        <Box w={{ base: "90vw", lg: "80vw" }}>
-          <Breadcrumb
-            spacing="8px"
-            separator={<FiChevronRight color="gray.500" />}
-            fontSize={{ base: "sm", md: "md" }}
-          >
-            <BreadcrumbItem>
-              <BreadcrumbLink as={Link} to="#">
-                <Text className="secondaryFont" fontWeight="500">
-                  Home
-                </Text>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink as={Link} to="#">
-                <Text className="secondaryFont" fontWeight="500">
-                  Checkout
-                </Text>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbItem>
-              <BreadcrumbLink as={Link} to="#">
-                <Text
-                  className="primaryFont"
-                  color="orange.400"
-                  fontWeight="700"
-                >
-                  Alamat Penerima
-                </Text>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-          </Breadcrumb>
-        </Box>
+    <Layout hasNavbar hasBreadCrumb breadCrumbItem={path} hasPadding sticky>
+      <Box as="main" d="flex" flexDir="column" alignItems="center">
+        <Stepper step={1} />
         <Box
-          w={{ base: "85%", md: "100%" }}
-          d="flex"
-          justifyContent="center"
-          alignItems="center"
-          marginTop="2rem"
-        >
-          <Circle
-            bg="orange.400"
-            size={{ base: "1.8rem", md: "2.2rem" }}
-            fontSize={{ base: "0.75rem", md: "0.85rem" }}
-          >
-            1
-          </Circle>
-          <Text
-            className="secondaryFont"
-            marginLeft="0.5rem"
-            fontSize={{ base: "sm", md: "md" }}
-          >
-            Alamat Penerima
-          </Text>
-          <Box
-            marginLeft="1rem"
-            bg="gray.500"
-            h={{ base: "1px", md: "1.2px" }}
-            w="10rem"
-          />
-          <Circle
-            bg="gray.50"
-            marginLeft="1rem"
-            size={{ base: "1.8rem", md: "2.2rem" }}
-            fontSize={{ base: "0.75rem", md: "0.85rem" }}
-            color="gray.500"
-          >
-            2
-          </Circle>
-          <Text
-            className="secondaryFont"
-            marginLeft="0.5rem"
-            color="gray.500"
-            fontSize={{ base: "sm", md: "md" }}
-          >
-            Detail Pesanan
-          </Text>
-        </Box>
-        <Box
-          w={{ base: "90vw", lg: "80vw" }}
+          w="full"
           marginTop="2rem"
           d="flex"
           justifyContent="space-between"
@@ -424,8 +362,9 @@ const AlamatPenerima = () => {
                       />
                     </InputGroup>
                     <Box
-                      height={{ base: "11.5rem", lg: "7.3rem" }}
-                      overflowY="scroll"
+                      maxH={{ base: "11.5rem", lg: "7.3rem" }}
+                      overflowY="auto"
+                      pb="0.25rem"
                       css={
                         {
                           // "&::-webkit-scrollbar": {
@@ -596,10 +535,7 @@ const AlamatPenerima = () => {
                         children={<BiSearch color="black" />}
                       />
                     </InputGroup>
-                    <Box
-                      height={{ base: "31rem", lg: "20rem" }}
-                      overflowY="scroll"
-                    >
+                    <Box overflowY="auto" maxH="20rem">
                       <RadioGroup onChange={(e) => penerimaRadioHandler(e)}>
                         <Grid
                           templateColumns={{
@@ -1095,8 +1031,7 @@ const AlamatPenerima = () => {
         </Box>
         <Box></Box>
       </Box>
-      <Footer />
-    </>
+    </Layout>
   );
 };
 

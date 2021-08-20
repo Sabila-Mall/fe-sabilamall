@@ -11,34 +11,28 @@ import ProductReview from "../../components/ProductReview";
 import RelatedProductContainer from "../../components/RelatedProductContainer";
 import { ShareProduct } from "../../components/ShareProduct";
 
+const path = [
+  {
+    name: "Kategori",
+    link: "/",
+    isOnPage: false,
+  },
+  {
+    name: "Supplier",
+    link: "/",
+    isOnPage: false,
+  },
+  {
+    name: "Nama Produk",
+    link: "/",
+    isOnPage: true,
+  },
+];
+
 const ProductDetails = () => {
-  const path = [
-    {
-      name: "Kategori",
-      link: "/",
-      isOnPage: false,
-    },
-    {
-      name: "Supplier",
-      link: "/",
-      isOnPage: false,
-    },
-    {
-      name: "Nama Produk",
-      link: "/",
-      isOnPage: true,
-    },
-  ];
   return (
-    <Layout hasNavbar sticky>
+    <Layout hasNavbar sticky hasBreadCrumb breadCrumbItem={path} hasPadding>
       <Box w="full">
-        <Flex
-          display={{ base: "none", md: "block" }}
-          justifyContent="center"
-          w={{ base: "100%", md: "58%", lg: "38%", xl: "32%" }}
-        >
-          <BreadCrumb items={path} />
-        </Flex>
         <Flex
           flexDirection={{ base: "column", lg: "row" }}
           justifyContent={{ md: "center" }}

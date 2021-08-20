@@ -28,8 +28,9 @@ const NavbarProfile = ({ section }) => {
       <Box display="flex" alignItems="center">
         <Icon
           as={IoChevronBack}
-          onClick={() => router.push("/profile")}
-          display={section === "Akun Saya" ? "none" : "block"}
+          onClick={() =>
+            section === "Akun Saya" ? router.push("/") : router.push("/profile")
+          }
         />
 
         <Text ml="8px">{section}</Text>
