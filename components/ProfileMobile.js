@@ -22,8 +22,8 @@ const ProfileMobile = ({ sm }) => {
   const router = useRouter();
 
   const wisPack = [
-    { text: "Wishlist", icon: IoHeart, href: "/#" },
-    { text: "Pesanan Saya", icon: VscPackage, href: "/#" },
+    { text: "Wishlist", icon: IoHeart, href: "/wishlist" },
+    { text: "Pesanan Saya", icon: VscPackage, href: "/profile/pesanan-saya" },
   ];
 
   const profileMenu = [
@@ -119,6 +119,7 @@ const ProfileMobile = ({ sm }) => {
                 flexDirection="column"
                 alignItems="center"
                 key={item.text}
+                onClick={() => router.push(item.href)}
               >
                 <Icon as={item.icon} color="orange.400" fontSize="30px" />
                 <Text
