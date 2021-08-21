@@ -13,6 +13,7 @@ import {
   Text,
   Icon,
   FormControl,
+  useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -44,9 +45,7 @@ const SignUp = () => {
 
   const [provinsi, setProvinsi] = useState([]);
   const [kota, setKota] = useState([]);
-
   const [showPassword, setShowPassword] = useState(false);
-
   const [namaDepan, setNamaDepan] = useState("");
   const [namaBelakang, setNamaBelakang] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
@@ -55,11 +54,16 @@ const SignUp = () => {
   const [city, setCity] = useState("");
   const [alamat, setAlamat] = useState("");
   const [handphone, setHandphone] = useState("");
-
   const [provinceId, setProvinceId] = useState(null);
   const [cityId, setCityId] = useState(null);
-
   const [loading, setLoading] = useState(false);
+  const [validatePass, setValidatePass] = useState({
+    length: false,
+    alphanumeric: false,
+  });
+  const toast = useToast();
+
+  const passwordPattern = /(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{2,})$/;
 
   useEffect(() => {
     apiProvinsi()
@@ -95,6 +99,19 @@ const SignUp = () => {
     }
   }, [city]);
 
+  useEffect(() => {
+    console.log(passwordPattern.test(password));
+    if (password?.length >= 8 && passwordPattern.test(password)) {
+      setValidatePass({ length: true, alphanumeric: true });
+    } else if (passwordPattern.test(password)) {
+      setValidatePass({ length: false, alphanumeric: true });
+    } else if (password?.length >= 8) {
+      setValidatePass({ alphanumeric: false, length: true });
+    } else {
+      setValidatePass({ alphanumeric: false, length: false });
+    }
+  }, [password]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -118,18 +135,28 @@ const SignUp = () => {
           router.push("/");
         } else {
           setLoading(false);
-          console.error(response.message);
+          toast({
+            position: "top",
+            title: response.message,
+            status: "error",
+            isClosable: true,
+          });
         }
       })
       .catch((err) => {
         setLoading(false);
-        console.error(err);
+        toast({
+          position: "top",
+          title: err,
+          status: "error",
+          isClosable: true,
+        });
       });
   };
-
+  console.log(validatePass);
   return (
-    <Layout>
-      <Center maxW="100vw" minH="100vh">
+    <Layout noFooter>
+      <Center maxW="100vw" minH="100vh" mb="5rem">
         <Stack
           divider={
             <StackDivider borderColor={{ base: "white", md: "gray.200" }} />
@@ -264,6 +291,21 @@ const SignUp = () => {
                   />
                 </InputGroup>
               </FormControl>
+              {Boolean(!(validatePass.length && validatePass.alphanumeric)) && (
+                <Box
+                  mt="-4rem"
+                  fontSize="0.85rem"
+                  color="red.500"
+                  fontWeight="600"
+                >
+                  {!validatePass.length && (
+                    <Text>*Minimal terdiri dari 8 karakter</Text>
+                  )}
+                  {!validatePass.alphanumeric && (
+                    <Text>*Harus mengandung huruf dan angka</Text>
+                  )}
+                </Box>
+              )}
               <Box
                 borderRadius="md"
                 borderWidth={1}
@@ -431,7 +473,9 @@ const SignUp = () => {
                   province !== "" &&
                   city !== "" &&
                   alamat !== "" &&
-                  handphone !== ""
+                  handphone !== "" &&
+                  validatePass.length &&
+                  validatePass.alphanumeric
                     ? false
                     : true
                 }
@@ -448,7 +492,7 @@ const SignUp = () => {
               >
                 Sudah punya akun?{" "}
                 <b>
-                  <Link href="/">Masuk</Link>
+                  <Link href="/login">Masuk</Link>
                 </b>
               </Text>
               <Text

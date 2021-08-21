@@ -15,7 +15,7 @@ const TextStyled = ({ text }) => (
 
 const Konfirmasi = () => {
   const breadcrumbItems = [
-    { name: "Pesanan Saya", link: "/", isOnPage: false },
+    { name: "Pesanan Saya", link: "/profile/pesanan-saya", isOnPage: false },
     { name: "Konfirmasi", link: "/konfirmasi", isOnPage: true },
   ];
 
@@ -28,7 +28,13 @@ const Konfirmasi = () => {
   ];
 
   return (
-    <Layout sticky hasNavbar hasBreadCrumb breadCrumbItem={breadcrumbItems}>
+    <Layout
+      sticky
+      hasNavbar
+      hasPadding
+      hasBreadCrumb
+      breadCrumbItem={breadcrumbItems}
+    >
       <Flex
         className="primaryFont"
         justifyContent="center"

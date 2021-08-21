@@ -70,7 +70,7 @@ const About = () => {
   const router = useRouter();
 
   return (
-    <Layout hasNavbar hasFooter>
+    <Layout hasNavbar hasFooter hasPadding>
       <Box
         className="secondaryFont"
         pt={{ base: "1.5rem", md: "3rem", lg: "5rem" }}

@@ -47,14 +47,18 @@ const CardWishlist = ({
       mb="1.5rem"
     >
       <Box
-        h="100%"
+        h="calc(100% - 2rem)"
         w="45%"
+        mx="1rem"
+        my="1rem"
         d="flex"
         alignItems="center"
         justifyContent="center"
-      >
-        <Image src={getImageUrl(image_path)} w="90%" h="auto" maxW="144px" />
-      </Box>
+        backgroundImage={`url(${getImageUrl(image_path)})`}
+        backgroundSize="contain"
+        backgroundRepeat="no-repeat"
+        backgroundPosition="center"
+      ></Box>
       <Box
         h="100%"
         w="55%"

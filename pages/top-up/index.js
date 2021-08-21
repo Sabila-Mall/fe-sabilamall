@@ -411,15 +411,13 @@ const SmartPhoneTopUp = ({ nominal, setNominal }) => {
 const DesktopTopUp = ({ nominal, setNominal }) => {
   return (
     <Box bg="gray.50">
-      <Layout hasNavbar={true}>
+      <Layout hasNavbar={true} hasPadding>
         <HStack
           background={"gray.50"}
           align={"start"}
           spacing={"1rem"}
-          mt={"7.5rem"}
           paddingBottom={"4rem"}
           w="full"
-          px={{ base: "1rem", md: "1.5rem", lg: "3rem", xl: "50px" }}
         >
           <CardProfile sm={sm} cardProfileText="SM Pay" />
 

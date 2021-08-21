@@ -38,7 +38,9 @@ import { useRef, useState } from "react";
 import { IoCreateOutline, IoChevronForward } from "react-icons/io5";
 
 import Footer from "../../components/Footer";
+import { Layout } from "../../components/Layout";
 import Navbar from "../../components/Navbar";
+import { Stepper } from "../../components/Stepper";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import styles from "../../styles/Footer.module.scss";
 
@@ -180,29 +182,6 @@ const dataSummary = {
 };
 
 // Separated each section into component
-
-const Stepper = () => {
-  return (
-    <HStack className={styles.secondaryFont} justify={"center"}>
-      <Circle bg={"gray.50"} size={"2rem"}>
-        1
-      </Circle>
-      <Text color={"gray.500"}>Alamat penerima</Text>
-
-      <Divider
-        orientation="horizontal"
-        color={"gray.500"}
-        w={{ base: "5%", md: "25%" }}
-        mx={"auto"}
-      />
-
-      <Circle bg={"orange.400"} size={"2rem"}>
-        2
-      </Circle>
-      <Text>Detail pesanan</Text>
-    </HStack>
-  );
-};
 
 function EditableControls({ ref }) {
   const { getEditButtonProps } = useEditableControls();
@@ -666,6 +645,8 @@ const Summary = ({ data }) => {
       divider={<StackDivider borderColor="gray.200" />}
       maxW={{ xl: "25%" }}
       w={"full"}
+      position={{ base: "relative", lg: "sticky" }}
+      top={{ base: "0", lg: "6rem" }}
     >
       <VStack spacing={"0.625rem"} align={"stretch"} color={"gray.500"}>
         <Heading
@@ -758,47 +739,33 @@ const Summary = ({ data }) => {
   );
 };
 
+const path = [
+  {
+    name: "Checkout",
+    link: "/alamat-penerima",
+    isOnPage: false,
+  },
+  {
+    name: "Detail Pesanan",
+    link: "/detail-pesanan",
+    isOnPage: true,
+  },
+];
+
 const DetailPesanan = () => {
   const { width } = useWindowSize();
   const isSmartphone = width < 768;
   const isTablet = width < 1024;
 
   return (
-    <>
-      <Navbar />
-      <Breadcrumb
-        separator={<IoChevronForward />}
-        ml={{ base: "2rem", md: "7.5rem" }}
-        className={styles.secondaryFont}
-        mb={"1.5rem"}
-        mt={{ base: "4rem", md: "5.5rem" }}
-        p={"0.625rem"}
-      >
-        <BreadcrumbItem>
-          <BreadcrumbLink href="#">Home</BreadcrumbLink>
-        </BreadcrumbItem>
-
-        <BreadcrumbItem>
-          <BreadcrumbLink href="#">Checkout</BreadcrumbLink>
-        </BreadcrumbItem>
-
-        <BreadcrumbItem
-          isCurrentPage
-          color={"orange.400"}
-          className={styles.primaryFont}
-        >
-          <BreadcrumbLink href="#">Detail Pesanan</BreadcrumbLink>
-        </BreadcrumbItem>
-      </Breadcrumb>
-
+    <Layout hasNavbar hasPadding sticky hasBreadCrumb breadCrumbItem={path}>
       <Stack
         align={"start"}
         direction={{ base: "column", md: "row" }}
         spacing={{ md: "1.5rem" }}
-        px={{ base: "2rem", md: "7rem" }}
       >
         <Box>
-          <Stepper />
+          <Stepper step={2} />
           <VStack
             divider={<StackDivider borderColor="gray.200" />}
             spacing={"1.5rem"}
@@ -826,6 +793,7 @@ const DetailPesanan = () => {
                   variant={"outline"}
                   color={"gray.500"}
                   flexGrow={{ base: 1, xl: 0 }}
+                  marginRight={{ lg: "1rem" }}
                 >
                   Sebelumnya
                 </Button>
@@ -845,8 +813,7 @@ const DetailPesanan = () => {
 
         {!isSmartphone && !isTablet && <Summary data={dataSummary} />}
       </Stack>
-      <Footer />
-    </>
+    </Layout>
   );
 };
 

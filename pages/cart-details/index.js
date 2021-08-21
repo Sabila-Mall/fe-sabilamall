@@ -11,14 +11,24 @@ import { Layout } from "../../components/Layout";
 import { ProductCart } from "../../components/ProductCart";
 import { TableContent } from "../../components/TableContent";
 import { useCartContext } from "../../contexts/cartProvider";
+
+const path = [
+  {
+    name: "Keranjang",
+    link: "/cart-details",
+    isOnPage: true,
+  },
+];
+
 const cartDetails = () => {
 
-  const { cartData, loading } = useCartContext();
+  const { cartData, loading, totalPrice } = useCartContext();
   const [dataValue, setdataValue] = useState(cartData[0]);
   const [loadingValue, setloadingValue] = useState(loading[0])
+  const [priceValue, setpriceValue] = useState(totalPrice[0])
 
   return (
-    <Layout hasNavbar>
+    <Layout hasNavbar hasPadding hasBreadCrumb breadCrumbItem={path}>
       <Box w="full">
         <Box display={{ lg: "flex" }} justifyContent="space-between">
           <Box
@@ -52,18 +62,18 @@ const cartDetails = () => {
           </Box>
 
           <Box display={{ base: "none", lg: "block" }} w={{ lg: "25%" }}>
-            <CardCheckout subTotal={"99.999.999"} discount="0" />
+            <CardCheckout subTotal={priceValue} discount="0" />
           </Box>
         </Box>
 
         <Box display={{ base: "block", md: "none" }}>
-          <ProductCart isDiscount price={"99.999.999"} />
+          <ProductCart isDiscount price={"9.999.999"} />
         </Box>
       </Box>
 
       <AddVoucher />
       <Box display={{ lg: "none" }}>
-        <CardCheckout subTotal={"99.999.999"} discount={"89.999.999"} />
+        <CardCheckout subTotal={priceValue} discount={"89.999.999"} />
       </Box>
     </Layout>
   );

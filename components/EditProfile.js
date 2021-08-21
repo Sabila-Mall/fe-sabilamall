@@ -18,8 +18,9 @@ export const EditProfile = ({ isMobile }) => {
         // pt="18px"
         pt={{ base: "48px", md: "28px" }}
         onSubmit={handleSubmit(onSubmit)}
-        h={isMobile && "100vh"}
+        minH={isMobile && "100vh"}
         position="relative"
+        pb={isMobile && "3rem"}
       >
         <Box px="28px">
           <InputBoxAndLabel

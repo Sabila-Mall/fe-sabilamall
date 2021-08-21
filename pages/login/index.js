@@ -9,10 +9,11 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
-  Link,
   Button,
   FormControl,
+  useToast,
 } from "@chakra-ui/react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { BsFillLockFill } from "react-icons/bs";
@@ -23,6 +24,7 @@ import {
   saveTokenToCookies,
   saveUserIdToCookies,
 } from "../../api/Auth";
+import { Layout } from "../../components/Layout";
 import { USER_FIELDS } from "../../constants/authConstants";
 import { useAuthContext } from "../../contexts/authProvider";
 import { isRequestSuccess } from "../../utils/api";
@@ -30,14 +32,15 @@ import { filterObject } from "../../utils/functions";
 
 const Login = () => {
   const router = useRouter();
-  const { setUserData, setIsLoggedIn, loading } = useAuthContext();
+  const toast = useToast();
+  const { setUserData, setIsLoggedIn, loading, setLoading } = useAuthContext();
 
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
   const submitHandler = (event) => {
     event.preventDefault();
-
+    setLoading(true);
     apiLogin(loginEmail, loginPassword)
       .then((res) => {
         const response = res.data;
@@ -48,22 +51,26 @@ const Login = () => {
           setIsLoggedIn(true);
           router.push("/");
         } else {
-          console.error(response.message);
+          toast({
+            position: "top",
+            title: response.message,
+            status: "error",
+            isClosable: true,
+          });
         }
       })
-      .catch((err) => console.error(err));
+      .finally(() => setLoading(false));
   };
 
   return (
-    <Center w="100%" h="100vh" className="login">
+    <Layout noFooter hasPadding>
       <Stack
+        pb={{ lg: "4rem" }}
         divider={
           <StackDivider borderColor={{ base: "white", md: "gray.200" }} />
         }
         spacing={{ base: "4px" }}
         direction={{ base: "column", md: "row" }}
-        w={{ base: "100%", md: "90%" }}
-        h={{ md: "60%" }}
       >
         <Center w={{ base: "100%", md: "50%" }}>
           <Image
@@ -93,7 +100,7 @@ const Login = () => {
             </Text>
 
             <FormControl>
-              <Stack mt="32px" spacing="16px">
+              <Stack mt="18px" spacing="16px">
                 <InputGroup>
                   <InputLeftElement
                     pointerEvents="none"
@@ -126,7 +133,7 @@ const Login = () => {
                   color="gray.400"
                   align="end"
                   mt="48px"
-                  href="/ResetPassword"
+                  href="/reset-password"
                   className="secondaryFont"
                   textDecor="underline"
                 >
@@ -135,24 +142,32 @@ const Login = () => {
               </Stack>
 
               <Stack direction="row" w="100%" mt="24px" spacing="16px">
-                <Link onClick={(e) => submitHandler(e)} w="100%" h="100%">
-                  <Button
-                    bgColor="red.500"
-                    w="100%"
-                    _hover={{ color: "red.500" }}
-                    type="submit"
-                    isDisabled={
-                      loginEmail === "" || loginPassword === "" || loading
-                    }
-                    isLoading={loading}
+                <Button
+                  onClick={(e) => submitHandler(e)}
+                  bgColor="red.500"
+                  w="100%"
+                  _hover={{ color: "red.500" }}
+                  type="submit"
+                  isDisabled={
+                    loginEmail === "" || loginPassword === "" || loading
+                  }
+                  isLoading={loading}
+                >
+                  <Text
+                    textDecoration="none !important"
+                    color="white"
+                    className="primaryFont"
                   >
-                    <Text color="white" as="b" className="primaryFont">
-                      Login
-                    </Text>
-                  </Button>
-                </Link>
+                    Login
+                  </Text>
+                </Button>
 
-                <Link href="/signup/" w="100%" h="100%">
+                <Link
+                  _hover={{ textDecoration: "none" }}
+                  href="/signup/"
+                  w="100%"
+                  h="100%"
+                >
                   <Button
                     bgColor="white"
                     variant="outline"
@@ -191,7 +206,7 @@ const Login = () => {
           </Box>
         </Center>
       </Stack>
-    </Center>
+    </Layout>
   );
 };
 

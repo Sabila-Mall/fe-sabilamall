@@ -10,11 +10,21 @@ import {
   Radio,
   Button,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 import NavbarProfile from "../../components/NavbarProfile";
+import { useWindowSize } from "../../hooks/useWindowSize";
 import styles from "../../styles/InvoiceUpgradeTable.module.scss";
 
 const InvoiceUpgradeAkunMobile = () => {
+  const { width } = useWindowSize();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (width >= 768) router.push("/profile/upgrade-account");
+  }, [width]);
+
   return (
     <Box display={{ base: "block", md: "none" }} h="100vh">
       <NavbarProfile section={"Invoice Upgrade Akun"} />

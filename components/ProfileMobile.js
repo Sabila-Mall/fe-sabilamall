@@ -22,8 +22,8 @@ const ProfileMobile = ({ sm }) => {
   const router = useRouter();
 
   const wisPack = [
-    { text: "Wishlist", icon: IoHeart, href: "/#" },
-    { text: "Pesanan Saya", icon: VscPackage, href: "/#" },
+    { text: "Wishlist", icon: IoHeart, href: "/wishlist" },
+    { text: "Pesanan Saya", icon: VscPackage, href: "/profile/pesanan-saya" },
   ];
 
   const profileMenu = [
@@ -32,7 +32,7 @@ const ProfileMobile = ({ sm }) => {
     { text: "Edit Profile", path: "/profile/edit-profile" },
     {
       text: "Upgrade Akun",
-      path: ["/profile/invoice-upgrade-akun", "/profile/profile-saya"],
+      path: ["/profile/invoice-upgrade-akun", "/profile/upgrade-account"],
     },
     { text: "Pusat Bantuan", path: "/" },
     { text: "Keluar", path: "/" },
@@ -47,7 +47,12 @@ const ProfileMobile = ({ sm }) => {
   };
 
   return (
-    <Box bg="gray.50" h="100%" display={{ base: "block", md: "none" }}>
+    <Box
+      bg="gray.50"
+      minH="100%"
+      pb="1rem"
+      display={{ base: "block", md: "none" }}
+    >
       <Box>
         <ModalProfile
           isOpen={isOpen}
@@ -106,7 +111,7 @@ const ProfileMobile = ({ sm }) => {
               <ButtonStatusUser text="Reguler" />
             </Box>
           </Flex>
-          <SMCard sm={sm} w="308px" />
+          <SMCard sm={sm} w="300px" />
           <Box display="flex" justifyContent="space-evenly" mt="20px">
             {wisPack.map((item) => (
               <Box
@@ -114,6 +119,7 @@ const ProfileMobile = ({ sm }) => {
                 flexDirection="column"
                 alignItems="center"
                 key={item.text}
+                onClick={() => router.push(item.href)}
               >
                 <Icon as={item.icon} color="orange.400" fontSize="30px" />
                 <Text
