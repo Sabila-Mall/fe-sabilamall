@@ -4,9 +4,9 @@ import { css } from "@emotion/react";
 
 export const CardCheckout = ({ subTotal, discount }) => {
   const idr = Intl.NumberFormat("id-ID");
-  const subtotal = subTotal.replace(/\./g, "");
+  // const subtotal = subTotal.replace(/\./g, "");
   const disc = discount.replace(/\./g, "");
-  const total = Number(subtotal) - Number(disc);
+  const total = Number(subTotal) - Number(disc);
 
   return (
     <Box

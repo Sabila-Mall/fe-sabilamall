@@ -15,7 +15,9 @@ const formatPrice = (price) => {
 const QuickAddItem = ({ product }) => {
   const { userData } = useAuthContext();
   const userId = userData?.id;
-  const { tempData, updateCart } = useCartContext();
+  const { tempData, updateCart, totalPrice } = useCartContext();
+  const [priceValue, setpriceValue] = useState(totalPrice[0]);
+  console.log(priceValue);
 
   console.log(tempData[0]);
   console.log(product);
@@ -36,6 +38,7 @@ const QuickAddItem = ({ product }) => {
         setquantity(0);
       }
     }
+    setpriceValue(priceValue + quantity * totalPrice)
   };
 
   const handleDelete = (productId) => {

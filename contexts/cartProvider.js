@@ -11,6 +11,7 @@ export const CartProvider = ({ children }) => {
     const [tempData, settempData] = useState([])
     const [cartData, setcartData] = useState([]);
     const [loading, setloading] = useState(false);
+    const [totalPrice, settotalPrice] = useState(0)
     const { userData } = useAuthContext();
     const userId = userData?.id;
 
@@ -62,7 +63,13 @@ export const CartProvider = ({ children }) => {
     }, [userData]);
 
     return (
-        <CartContext.Provider value={{ cartData: [cartData, setcartData], loading: [loading, setloading], tempData: [tempData, settempData], updateCart }} >
+        <CartContext.Provider value={{
+            cartData: [cartData, setcartData],
+            loading: [loading, setloading],
+            tempData: [tempData, settempData],
+            updateCart,
+            totalPrice: [totalPrice, settotalPrice]
+        }} >
             {children}
         </CartContext.Provider>
     )
