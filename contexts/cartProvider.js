@@ -14,6 +14,7 @@ export const CartProvider = ({ children }) => {
     const [totalPrice, settotalPrice] = useState(0)
     const { userData } = useAuthContext();
     const userId = userData?.id;
+    console.log(userId);
 
     const toast = useToast();
 
@@ -56,7 +57,28 @@ export const CartProvider = ({ children }) => {
         if (userId) {
             apiGetCartByCustomerID(userId)
                 .then((res) => {
-                    setcartData(res);
+                    let tempCart = cartData
+                    let productIDs = []
+
+
+                    res.forEach(element => {
+                        console.log(element.keranjang);
+                        element.keranjang.forEach(item => {
+
+                            // check if data is duplicate
+                            if (productIDs.indexOf(item.products_id) === -1) {
+                                tempCart.push(item)
+                            }
+
+                            tempCart.forEach(cartItem => {
+                                productIDs.push(cartItem.products_id)
+                            })
+                        });
+
+                    });
+                    console.log(productIDs);
+                    setcartData(tempCart)
+                    console.log(cartData);
                 })
                 .finally(() => setloading(false));
         }
@@ -64,11 +86,12 @@ export const CartProvider = ({ children }) => {
 
     return (
         <CartContext.Provider value={{
-            cartData: [cartData, setcartData],
-            loading: [loading, setloading],
-            tempData: [tempData, settempData],
+            cartData,
+            loading,
+            tempData,
             updateCart,
-            totalPrice: [totalPrice, settotalPrice]
+            totalPrice,
+            settotalPrice
         }} >
             {children}
         </CartContext.Provider>

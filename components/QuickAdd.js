@@ -26,12 +26,7 @@ import QuickAddListItem from "./QuickAddListItem";
  */
 const QuickAdd = ({ products, isDrawerOpen, onDrawerClose }) => {
   const { cartData, loading, totalPrice } = useCartContext();
-  const [dataValue, setdataValue] = useState(cartData[0]);
-  const [loadingValue, setloadingValue] = useState(loading[0])
-  const [priceValue, setpriceValue] = useState(totalPrice[0]);
-  const cartValue = dataValue.keranjang
-  console.log(dataValue);
-  console.log(cartValue);
+  console.log(cartData ? cartData : "");
 
   const size = useBreakpointValue({ base: "full", md: "md" });
 
@@ -61,7 +56,7 @@ const QuickAdd = ({ products, isDrawerOpen, onDrawerClose }) => {
         </DrawerHeader>
 
         <DrawerBody px={"2rem"}>
-          <QuickAddListItem products={dataValue} />
+          {cartData ? <QuickAddListItem products={cartData} /> : <></>}
         </DrawerBody>
 
         <DrawerFooter borderTopWidth={"1px"} flexDirection={"column"}>
@@ -79,7 +74,7 @@ const QuickAdd = ({ products, isDrawerOpen, onDrawerClose }) => {
               fontSize={"20"}
               fontWeight={"bold"}
             >
-              Rp{formatPrice(priceValue)}
+              Rp{formatPrice(totalPrice)}
             </Text>
           </Flex>
           <Text

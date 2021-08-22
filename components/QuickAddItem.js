@@ -15,30 +15,34 @@ const formatPrice = (price) => {
 const QuickAddItem = ({ product }) => {
   const { userData } = useAuthContext();
   const userId = userData?.id;
-  const { tempData, updateCart, totalPrice } = useCartContext();
-  const [priceValue, setpriceValue] = useState(totalPrice[0]);
-  console.log(priceValue);
+  const { tempData, updateCart, totalPrice, settotalPrice } = useCartContext();
+  // console.log(priceValue);
 
-  console.log(tempData[0]);
+  // console.log(tempData[0]);
   console.log(product);
 
   const [quantity, setquantity] = useState(0)
+  const price = product.final_price
   const stock = product.products_stok
   const handleModifyNumberOfItem = (event) => {
+    let tempPrice = totalPrice
     if (event === "increase") {
-      if (stock - quantity === 0) {
+      if (stock - quantity <= 0) {
         setquantity(stock);
       } else {
         setquantity(quantity + 1);
+        tempPrice += Number(price)
       }
     } else if (event === "decrease") {
       if (quantity > 0) {
         setquantity(quantity - 1);
+        tempPrice -= Number(price)
       } else {
         setquantity(0);
       }
     }
-    setpriceValue(priceValue + quantity * totalPrice)
+    settotalPrice(tempPrice)
+    console.log(totalPrice)
   };
 
   const handleDelete = (productId) => {
