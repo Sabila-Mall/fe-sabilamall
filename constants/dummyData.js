@@ -58,6 +58,104 @@ export const productList = [
   },
 ];
 
+export const dataPengirim = {
+  nama: "Tatang Sutarman",
+  nomorHandphone: "085555555555",
+};
+
+export const dataPenerima = {
+  nama: "Hendra Setiawan Indradjaja ",
+  nomorHandphone: "085555555555",
+  alamat:
+    "Jl Kb Kacang Grand Indonesia Shopping Town East Mall Lt Ground 30, TANGERANG - CILEDUG, BANTEN, 15148",
+};
+
+export const daftarProduk = [
+  {
+    id: "1",
+    gambar: "/images/produk.svg",
+    nama: "Nama Produk Croissant",
+    deskripsi: "Lengan panjang, merah cabe, XXXXXL",
+    berat: 1000,
+    diskon: 25,
+    harga: 10000,
+    jumlah: 2,
+  },
+  {
+    id: "2",
+    gambar: "/images/produk.svg",
+    nama: "Nama Produk Croissant",
+    deskripsi: "Lengan panjang, merah cabe, XXXXXL",
+    berat: 1000,
+    diskon: 99,
+    harga: 99999999,
+    jumlah: 999,
+  },
+  {
+    id: "3",
+    gambar: "/images/produk.svg",
+    nama: "Nama Produk Croissant",
+    deskripsi: "Lengan panjang, merah cabe, XXXXXL",
+    berat: 1000,
+    diskon: 99,
+    harga: 99999999,
+    jumlah: 999,
+  },
+];
+
+export const daftarJasaPengiriman = [
+  {
+    id: "jne",
+    nama: "JNE JTR",
+  },
+  {
+    id: "sicepat",
+    nama: "SICEPAT",
+  },
+  {
+    id: "pos",
+    nama: "POS INDONESIA",
+  },
+];
+
+export const daftarMetodePembayaran = [
+  {
+    id: "bank",
+    nama: "Transfer Bank",
+    biaya: 4000,
+  },
+  {
+    id: "deposit",
+    nama: "Deposit",
+    biaya: 3000,
+  },
+  {
+    id: "cod",
+    nama: "Cash On Delivery (COD)",
+    biaya: 20,
+  },
+  {
+    id: "gopay",
+    nama: "Go-Pay",
+    biaya: 4000,
+  },
+  {
+    id: "alfamart",
+    nama: "Alfamart",
+    biaya: 10000,
+  },
+];
+
+export const dataSummary = {
+  jumlah: 9999999,
+  berat: 1000000,
+  subtotal: 99999999,
+  diskon: 99999999,
+  pengiriman: 99999999,
+  tambahan: 4000,
+  voucher: 99999999,
+};
+
 export const dummyDataPDF = [
   {
     id: "pou1",

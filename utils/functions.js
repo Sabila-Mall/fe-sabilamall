@@ -34,8 +34,25 @@ export const copyToClipboard = (text, onSuccess, onFail) => {
     .catch(() => console.error("Unable to copy", err));
 };
 
-export const formatNumber = (number) => {
-  return number.toLocaleString("id-ID");
+export const formatNumber = (amount) => {
+  return new Intl.NumberFormat('id-ID').format(amount);
+};
+
+export const formatPhoneNumber = (phoneNumber) => {
+  return (
+    phoneNumber.slice(0, 4) +
+    "-" +
+    phoneNumber.slice(4, 8) +
+    "-" +
+    phoneNumber.slice(7, 11)
+  );
+};
+
+export const isEmpty = (obj) => {
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) return false;
+  }
+  return true;
 };
 
 /**
