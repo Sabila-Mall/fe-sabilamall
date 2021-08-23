@@ -61,13 +61,28 @@ export const setBadgeColor = (userLevel) => {
       return "gray.400";
     case "reseller":
       return "orange.500";
-    case "agen":
+    case "agent":
       return "red.600";
     default:
       return "gray.400";
   }
 };
 
+export const alreadyLogin = async (ctx) => {
+  const userId = nookies.get(ctx);
+
+  if (userId.user_id) {
+    return {
+      redirect: {
+        destination: "/",
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};
 export const needForLogin = async (ctx) => {
   const userId = nookies.get(ctx);
 
@@ -82,4 +97,11 @@ export const needForLogin = async (ctx) => {
   return {
     props: {},
   };
+};
+
+export const currencyFormat = (amount) => {
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+  }).format(amount);
 };

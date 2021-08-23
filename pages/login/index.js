@@ -28,7 +28,7 @@ import { Layout } from "../../components/Layout";
 import { USER_FIELDS } from "../../constants/authConstants";
 import { useAuthContext } from "../../contexts/authProvider";
 import { isRequestSuccess } from "../../utils/api";
-import { filterObject } from "../../utils/functions";
+import { alreadyLogin, filterObject } from "../../utils/functions";
 
 const Login = () => {
   const router = useRouter();
@@ -211,3 +211,5 @@ const Login = () => {
 };
 
 export default Login;
+
+export const getServerSideProps = alreadyLogin;
