@@ -40,8 +40,8 @@ import Sidebar from "./Sidebar";
 
 export const NavbarBottom = ({ onDrawerOpen, isLoggedIn }) => {
   const router = useRouter();
-  console.log(router);
-  console.log(isLoggedIn);
+  // console.log(router);
+  // console.log(isLoggedIn);
   return (
     <Box
       as="nav"
@@ -142,7 +142,7 @@ const SearchedElement = ({ isSearched, setIsSearched }) => {
     if (event.key === "Enter") {
       if (searchQuery) router.push(`/search?q=${searchQuery}`);
     }
-  }
+  };
 
   return (
     <Box
@@ -167,7 +167,9 @@ const SearchedElement = ({ isSearched, setIsSearched }) => {
           transition="all 0.8s"
           display={isSearched ? "flex" : "none"}
           alignItems="center"
-          onClick={() => {if (searchQuery) router.push(`/search?q=${searchQuery}`)}}
+          onClick={() => {
+            if (searchQuery) router.push(`/search?q=${searchQuery}`);
+          }}
         />
         <Input
           type="text"
@@ -331,8 +333,7 @@ const Navbar = () => {
     if (event.key === "Enter") {
       if (searchQuery) router.push(`/search?q=${searchQuery}`);
     }
-  }
-
+  };
 
   const navbarEl = useRef(null);
 
@@ -399,7 +400,9 @@ const Navbar = () => {
                   }}
                   color="orange.400"
                   ml="17px"
-                  onClick={() => {if (searchQuery) router.push(`/search?q=${searchQuery}`)}}
+                  onClick={() => {
+                    if (searchQuery) router.push(`/search?q=${searchQuery}`);
+                  }}
                 />
               }
             />

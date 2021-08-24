@@ -16,11 +16,20 @@ import {
   SimpleGrid,
   Spacer,
   StackDivider,
-  Textarea, useOutsideClick,
+  Textarea,
+  useOutsideClick,
   VStack,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useRouter } from "next/router";
+import { useRef, useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
 
+import { getKurir } from "../../api/Order";
+import CheckoutBreadcrumb from "../../components/CheckoutBreadcrumb";
+import CheckoutProduct from "../../components/CheckoutProduct";
+import CheckoutStepper from "../../components/CheckoutStepper";
+import CheckoutSummary from "../../components/CheckoutSummary";
+import { Layout } from "../../components/Layout";
 import {
   dataPenerima,
   dataPengirim,
@@ -34,13 +43,6 @@ import {
   formatPhoneNumber,
   isEmpty,
 } from "../../utils/functions";
-import { useRouter } from "next/router";
-import CheckoutSummary from "../../components/CheckoutSummary";
-import CheckoutBreadcrumb from "../../components/CheckoutBreadcrumb";
-import CheckoutStepper from "../../components/CheckoutStepper";
-import { Layout } from "../../components/Layout";
-import CheckoutProduct from "../../components/CheckoutProduct";
-import { useForm } from "react-hook-form";
 
 /**
  * @param {Object} dataPengirim
@@ -60,12 +62,7 @@ const RingkasanPesanan = ({ dataPengirim, dataPenerima, daftarProduk }) => {
 
   return (
     <>
-      <Heading
-        as="h3"
-        fontSize="1.5rem"
-        mb="1rem"
-        className="primaryFont"
-      >
+      <Heading as="h3" fontSize="1.5rem" mb="1rem" className="primaryFont">
         Ringkasan Pesanan
       </Heading>
       <SimpleGrid spacing="1rem" columns={{ base: 1, md: 2 }} mb="1rem">
@@ -80,7 +77,9 @@ const RingkasanPesanan = ({ dataPengirim, dataPenerima, daftarProduk }) => {
               Data Pengirim
             </Text>
             <Button
-              variant="outline" color="gray.400" size="sm"
+              variant="outline"
+              color="gray.400"
+              size="sm"
               onClick={() => router.push("/alamat-penerima")}
             >
               Ubah
@@ -106,7 +105,9 @@ const RingkasanPesanan = ({ dataPengirim, dataPenerima, daftarProduk }) => {
               Data Penerima
             </Text>
             <Button
-              variant="outline" color="gray.400" size="sm"
+              variant="outline"
+              color="gray.400"
+              size="sm"
               onClick={() => router.push("/alamat-penerima")}
             >
               Ubah
@@ -162,22 +163,16 @@ const RingkasanPesanan = ({ dataPengirim, dataPenerima, daftarProduk }) => {
  * @param {Object[]} daftarJasaPengiriman
  *  @param {string} daftarJasaPengiriman[].id Id jasa pengiriman buat value di select
  *  @param {string} daftarJasaPengiriman[].nama Nama jasa pengiriman buat yg ditampilin di select
- * @param {Object} pengirman Object pengiriman
+ * @param {Object} pengiriman Object pengiriman
  *  @param {string} pengiriman.nama Nama pengiriman
  *  @param {string} pengiriman.estimasi Estimasi pengiriman dalam hari (Misal. "1-2")
  *  @param {int} pengiriman.harga Harga pengiriman
  * @param {function} setPengiriman Function buat ngubah pengiriman
  */
-const Pengiriman = ({ beratTotal, daftarJasaPengiriman, pengiriman, handler }) => {
-
+const Pengiriman = ({ beratTotal, kurir, pengiriman, handler }) => {
   return (
     <>
-      <Heading
-        as="h3"
-        mb="1rem"
-        fontSize="1.5rem"
-        className="primaryFont"
-      >
+      <Heading as="h3" mb="1rem" fontSize="1.5rem" className="primaryFont">
         Pengiriman
       </Heading>
       <SimpleGrid
@@ -200,9 +195,9 @@ const Pengiriman = ({ beratTotal, daftarJasaPengiriman, pengiriman, handler }) =
               handler(event.target.value);
             }}
           >
-            {daftarJasaPengiriman.map((jasa, index) => (
-              <option value={jasa.id} key={index}>
-                {jasa.nama}
+            {kurir.map((jasa, index) => (
+              <option value={jasa.name} key={index}>
+                {jasa.name}
               </option>
             ))}
           </Select>
@@ -211,9 +206,11 @@ const Pengiriman = ({ beratTotal, daftarJasaPengiriman, pengiriman, handler }) =
           {!isEmpty(pengiriman) && (
             <>
               <Flex direction={"column"}>
-                <Text className="primaryFont" fontWeight="bold">{pengiriman.nama}</Text>
+                <Text className="primaryFont" fontWeight="bold">
+                  {pengiriman.nama}
+                </Text>
                 <Text className="secondaryFont">
-                  Estimasi {pengiriman.estimasi} hari
+                  Estimasi {pengiriman.estimasi}
                 </Text>
               </Flex>
 
@@ -228,23 +225,23 @@ const Pengiriman = ({ beratTotal, daftarJasaPengiriman, pengiriman, handler }) =
   );
 };
 
-const CatatanPesanan = ({setCatatanPesanan}) => {
-  const ref = useRef()
-  const {register, getValues} = useForm();
+const CatatanPesanan = ({ setCatatanPesanan }) => {
+  const ref = useRef();
+  const { register, getValues } = useForm();
 
   useOutsideClick({
     ref: ref,
-    handler: () => setCatatanPesanan(getValues("catatan-pesanan"))
-  })
+    handler: () => setCatatanPesanan(getValues("catatan-pesanan")),
+  });
 
   return (
     <>
-      <Heading as="h3" mb="1rem" fontSize="1.5rem" className="primaryFont"
-      >
+      <Heading as="h3" mb="1rem" fontSize="1.5rem" className="primaryFont">
         Catatan Pesanan
       </Heading>
       <Textarea
-        ref={ref} className="secondaryFont"
+        ref={ref}
+        className="secondaryFont"
         placeholder="Tuliskan catatan untuk penjual"
         {...register("catatan-pesanan")}
       />
@@ -264,7 +261,11 @@ const CatatanPesanan = ({setCatatanPesanan}) => {
  *  @param {int} metodePembayaran.diskon Diskon metode pembayaran (hanya berlaku untuk cod)
  * @param {function} setPengiriman Function buat ngubah metode pembayaran
  */
-const MetodePembayaran = ({ metodePembayaran, handler, daftarMetodePembayaran }) => {
+const MetodePembayaran = ({
+  metodePembayaran,
+  handler,
+  daftarMetodePembayaran,
+}) => {
   return (
     <VStack spacing="1rem" align="stretch">
       <Heading as="h3" fontSize="1.5rem" className="primaryFont">
@@ -282,11 +283,7 @@ const MetodePembayaran = ({ metodePembayaran, handler, daftarMetodePembayaran })
         ))}
       </Select>
       {!isEmpty(metodePembayaran) && (
-        <Flex
-          justify="space-between"
-          color="gray.600"
-          className="primaryFont"
-        >
+        <Flex justify="space-between" color="gray.600" className="primaryFont">
           {metodePembayaran.isCod ? (
             <InputGroup className="secondaryFont">
               <InputLeftAddon children="Diskon Pelanggan" />
@@ -317,7 +314,7 @@ const MetodePembayaran = ({ metodePembayaran, handler, daftarMetodePembayaran })
 };
 
 const Voucher = ({ voucher, setVoucher }) => {
-  const {register, handleSubmit} = useForm();
+  const { register, handleSubmit } = useForm();
 
   const checkVoucher = (voucher) => {
     // Handle logic untuk ngecek apa vouchernya valid atau engga
@@ -386,7 +383,10 @@ const Voucher = ({ voucher, setVoucher }) => {
 const Confirmation = () => {
   return (
     <Box
-      padding="1rem" borderRadius="0.5rem" border="1px" mb="1.5rem"
+      padding="1rem"
+      borderRadius="0.5rem"
+      border="1px"
+      mb="1.5rem"
       borderColor="gray.300"
     >
       <Checkbox defaultIsChecked colorScheme="red">
@@ -408,6 +408,16 @@ const DetailPesanan = () => {
   const [voucher, setVoucher] = useState({});
   const [persetujuan, setPersetujuan] = useState(false);
 
+  const [kurir, setKurir] = useState([]);
+
+  useEffect(() => {
+    getKurir()
+      .then((res) => {
+        setKurir(res.data.data.kurirIndonesia.services);
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
   const onSubmit = () => {
     // Values udah berisi semua input yang dimasukin user dalam bentuk object
     // Buat liat bentuknya bisa di cek di console
@@ -420,12 +430,14 @@ const DetailPesanan = () => {
   const handleSelectedPengirman = (selected) => {
     // Ambil data tegantung id pengiriman yg dipilih, setPengiriman ke data yg didapet dari server
     if (selected === "") {
-      setPengiriman({})
+      setPengiriman({});
     } else {
+      const tempPengiriman = kurir.filter((data) => data.name === selected)[0];
       setPengiriman({
-        nama: selected,
-        estimasi: "1-2",
-        harga: 9000,
+        nama: tempPengiriman.name,
+        estimasi: tempPengiriman.destination.split("|")[2],
+        harga: tempPengiriman.rate,
+        destination: tempPengiriman.destination,
       });
     }
   };
@@ -455,15 +467,20 @@ const DetailPesanan = () => {
   return (
     <Layout hasNavbar>
       <Flex
-        as="main" direction="column" alignItems="center"
+        as="main"
+        direction="column"
+        alignItems="center"
         marginTop={{ base: "2rem", md: "3rem" }}
       >
         <CheckoutBreadcrumb
-          breadCrumbText="Detail Pesanan" breadCrumbLink="/detail-pesanan"
+          breadCrumbText="Detail Pesanan"
+          breadCrumbLink="/detail-pesanan"
         />
         <CheckoutStepper currentStep={2} />
         <Box
-          w={{ base: "90vw", lg: "80vw" }} mt="2rem" display="flex"
+          w={{ base: "90vw", lg: "80vw" }}
+          mt="2rem"
+          display="flex"
           justifyContent="space-between"
           flexDir={{ base: "column", lg: "row" }}
         >
@@ -475,7 +492,9 @@ const DetailPesanan = () => {
             mb="2rem"
           >
             <VStack
-              w="100%" spacing="1.5rem" align="stretch"
+              w="100%"
+              spacing="1.5rem"
+              align="stretch"
               divider={<StackDivider borderColor="gray.200" />}
             >
               <RingkasanPesanan
@@ -487,7 +506,7 @@ const DetailPesanan = () => {
                 pengiriman={pengiriman}
                 handler={handleSelectedPengirman}
                 beratTotal={999}
-                daftarJasaPengiriman={daftarJasaPengiriman}
+                kurir={kurir}
               />
               <CatatanPesanan setCatatanPesanan={setCatatanPesanan} />
               <SimpleGrid spacing="1.5rem" columns={{ base: 1, md: 2 }}>
@@ -512,7 +531,9 @@ const DetailPesanan = () => {
                 </Button>
                 {isDesktop && (
                   <Button
-                    className="primaryFont" bg="red.500" color="white"
+                    className="primaryFont"
+                    bg="red.500"
+                    color="white"
                     onClick={onSubmit}
                   >
                     Pesan Sekarang
