@@ -36,6 +36,7 @@ import {
   daftarMetodePembayaran,
   daftarProduk,
 } from "../../constants/dummyData";
+import { useCheckoutContext } from "../../contexts/checkoutProvider";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import {
   filterObject,
@@ -54,12 +55,24 @@ import {
  *  @param {string} dataPenerima.alamat Alamat penerima
  * @param {CheckoutProduct[]} daftarProduk
  */
-const RingkasanPesanan = ({ dataPengirim, dataPenerima, daftarProduk }) => {
+
+const RingkasanPesanan = ({ daftarProduk }) => {
   const { width } = useWindowSize();
   const isSmartphone = width < 768;
 
   const router = useRouter();
-
+  const {
+    namaPengirim,
+    nomorPengirim,
+    namaPenerima,
+    nomorPenerima,
+    provinsiPenerima,
+    kotaPenerima,
+    kecamatanPenerima,
+    kodePosPenerima,
+    alamatPenerima,
+  } = useCheckoutContext()
+  console.log(namaPengirim);
   return (
     <>
       <Heading as="h3" fontSize="1.5rem" mb="1rem" className="primaryFont">
@@ -87,10 +100,10 @@ const RingkasanPesanan = ({ dataPengirim, dataPenerima, daftarProduk }) => {
           </Flex>
 
           <Text fontWeight="bold" className="primaryFont">
-            {dataPengirim.nama}
+            {namaPengirim}
           </Text>
           <Text className="primaryFont" fontWeight="normal">
-            {formatPhoneNumber(dataPengirim.nomorHandphone)}
+            {formatPhoneNumber(nomorPengirim)}
           </Text>
         </Box>
 
@@ -115,15 +128,15 @@ const RingkasanPesanan = ({ dataPengirim, dataPenerima, daftarProduk }) => {
           </Flex>
 
           <Text fontWeight="bold" className="primaryFont">
-            {dataPenerima.nama}
+            {namaPenerima}
           </Text>
           <Text className="primaryFont" fontWeight="normal">
-            {formatPhoneNumber(dataPenerima.nomorHandphone)}
+            {formatPhoneNumber(nomorPenerima)}
           </Text>
 
           <Spacer h="0.5rem" />
 
-          <Text className="secondaryFont">{dataPenerima.alamat}</Text>
+          <Text className="secondaryFont">{alamatPenerima}</Text>
         </Box>
       </SimpleGrid>
       <VStack
@@ -523,8 +536,6 @@ const DetailPesanan = () => {
               divider={<StackDivider borderColor="gray.200" />}
             >
               <RingkasanPesanan
-                dataPengirim={dataPengirim}
-                dataPenerima={dataPenerima}
                 daftarProduk={daftarProduk}
               />
               <Pengiriman
