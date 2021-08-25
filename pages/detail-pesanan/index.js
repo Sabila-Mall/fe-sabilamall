@@ -38,6 +38,7 @@ import {
 } from "../../constants/dummyData";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import {
+  filterObject,
   formatNumber,
   formatPhoneNumber,
   isEmpty,
@@ -263,7 +264,8 @@ const CatatanPesanan = ({ setCatatanPesanan }) => {
 const MetodePembayaran = ({
   metodePembayaran,
   handler,
-  daftarMetodePembayaran,
+  handleDiskonPengiriman,
+  paymentMethod,
 }) => {
   return (
     <VStack spacing="1rem" align="stretch">
@@ -275,9 +277,9 @@ const MetodePembayaran = ({
         placeholder="Pilih metode pembayaran"
         onChange={(event) => handler(event.target.value)}
       >
-        {daftarMetodePembayaran.map((metode, index) => (
-          <option value={metode.id} key={index}>
-            {metode.nama}
+        {paymentMethod.map((method, index) => (
+          <option value={method.method} key={index}>
+            {method.name}
           </option>
         ))}
       </Select>
@@ -292,7 +294,8 @@ const MetodePembayaran = ({
                 max={100}
                 allowMouseWheel
                 textAlign="right"
-                isDisabled={true}
+                onChange={(e) => handleDiskonPengiriman(e)}
+                // isDisabled={true}
               >
                 <NumberInputField textAlign="right" />
               </NumberInput>
@@ -421,6 +424,7 @@ const DetailPesanan = () => {
   useEffect(() => {
     getPaymentMethod()
       .then((res) => {
+        setPaymentMethod(res.data.data);
         console.log(res.data.data);
       })
       .catch((err) => console.error(err));
@@ -453,10 +457,15 @@ const DetailPesanan = () => {
     // Ambil data tergantung metode pembayaran yg dipilih, terus pake setMetodePembayaran
     // Kalo misalkan metode pembayaran cod, setCod ubah jadi true
 
+    const tempPayment = paymentMethod.filter(
+      (data) => data.method === selected,
+    )[0];
     if (selected === "cod") {
       setMetodePembayaran({
-        nama: selected,
-        biaya: 99000,
+        nama: tempPayment.name,
+        biaya: tempPayment?.payment_cost_amount
+          ? tempPayment.payment_cost_amount
+          : "0",
         isCod: true,
         diskon: 10,
       });
@@ -464,12 +473,20 @@ const DetailPesanan = () => {
       setMetodePembayaran({});
     } else {
       setMetodePembayaran({
-        nama: selected,
-        biaya: 99000,
+        nama: tempPayment.name,
+        biaya: tempPayment?.payment_cost_amount
+          ? tempPayment.payment_cost_amount
+          : "0",
         isCod: false,
         diskon: 10,
       });
     }
+  };
+
+  const handleDiskonPengiriman = (diskon) => {
+    let temp = metodePembayaran;
+    temp.diskon = diskon;
+    setMetodePembayaran(temp);
   };
 
   return (
@@ -521,7 +538,8 @@ const DetailPesanan = () => {
                 <MetodePembayaran
                   metodePembayaran={metodePembayaran}
                   handler={handleSelectedMetodePembayaran}
-                  daftarMetodePembayaran={daftarMetodePembayaran}
+                  paymentMethod={paymentMethod}
+                  handleDiskonPengiriman={handleDiskonPengiriman}
                 />
                 <Voucher voucher={voucher} setVoucher={setVoucher} />
               </SimpleGrid>
