@@ -24,7 +24,7 @@ import { useRouter } from "next/router";
 import { useRef, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-import { getKurir } from "../../api/Order";
+import { getKurir, getPaymentMethod } from "../../api/Order";
 import CheckoutBreadcrumb from "../../components/CheckoutBreadcrumb";
 import CheckoutProduct from "../../components/CheckoutProduct";
 import CheckoutStepper from "../../components/CheckoutStepper";
@@ -33,7 +33,6 @@ import { Layout } from "../../components/Layout";
 import {
   dataPenerima,
   dataPengirim,
-  daftarJasaPengiriman,
   daftarMetodePembayaran,
   daftarProduk,
 } from "../../constants/dummyData";
@@ -409,11 +408,20 @@ const DetailPesanan = () => {
   const [persetujuan, setPersetujuan] = useState(false);
 
   const [kurir, setKurir] = useState([]);
+  const [paymentMethod, setPaymentMethod] = useState([]);
 
   useEffect(() => {
     getKurir()
       .then((res) => {
         setKurir(res.data.data.kurirIndonesia.services);
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
+  useEffect(() => {
+    getPaymentMethod()
+      .then((res) => {
+        console.log(res.data.data);
       })
       .catch((err) => console.error(err));
   }, []);

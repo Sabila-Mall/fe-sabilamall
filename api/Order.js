@@ -84,3 +84,17 @@ export const getKurir = (
     },
   );
 };
+
+export const getPaymentMethod = () => {
+  return axios.post(
+    "https://apiweb.sabilamall.co.id/api/payment/get_payment_method",
+    {
+      language_id: 1,
+      "vendors_id[]": 703,
+      users_id: 859,
+      "productsjenis[]": "reguler",
+      totalorder: 15000,
+      kurir: "SiCepat - Reg",
+    },
+  );
+};
