@@ -22,105 +22,110 @@ import {
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import { FiChevronRight } from "react-icons/fi";
 
-import CheckoutSummary from "../../components/CheckoutSummary";
 import Footer from "../../components/Footer";
 import { Layout } from "../../components/Layout";
 import Navbar from "../../components/Navbar";
+import { useCheckoutContext } from "../../contexts/checkoutProvider";
 import { Stepper } from "../../components/Stepper";
-
-const path = [
-  {
-    name: "Checkout",
-    link: "/alamat-penerima",
-    isOnPage: false,
-  },
-  {
-    name: "Alamat Penerima",
-    link: "/alamat-penerima",
-    isOnPage: true,
-  },
-];
-
-const dataPengirim = [
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-  },
-];
-
-const dataPenerima = [
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-    alamat:
-      "Jl. Margonda Raya, Pondok Cina, Kecamatan Beji, Kota Depok, Jawa Barat 16424",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-    alamat:
-      "Jl. Margonda Raya, Pondok Cina, Kecamatan Beji, Kota Depok, Jawa Barat 16424",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-    alamat:
-      "Jl. Margonda Raya, Pondok Cina, Kecamatan Beji, Kota Depok, Jawa Barat 16424",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-    alamat:
-      "Jl. Margonda Raya, Pondok Cina, Kecamatan Beji, Kota Depok, Jawa Barat 16424",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-    alamat:
-      "Jl. Margonda Raya, Pondok Cina, Kecamatan Beji, Kota Depok, Jawa Barat 16424",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-    alamat:
-      "Jl. Margonda Raya, Pondok Cina, Kecamatan Beji, Kota Depok, Jawa Barat 16424",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-    alamat:
-      "Jl. Margonda Raya, Pondok Cina, Kecamatan Beji, Kota Depok, Jawa Barat 16424",
-  },
-];
 const AlamatPenerima = () => {
+  const router = useRouter();
+
+  const {
+    setnamaPengirim,
+    setnomorPengirim,
+    setnamaPenerima,
+    setnamaAwalPenerima,
+    setnamaAkhirPenerima,
+    setnomorPenerima,
+    setnegaraPenerima,
+    setprovinsiPenerima,
+    setkotaPenerima,
+    setkecamatanPenerima,
+    setkodePosPenerima,
+    setalamatPenerima
+  } = useCheckoutContext();
+
+  const dataPenerima = [
+    {
+      nama: "Ariq",
+      nomor: "081122334455",
+      alamat:
+        "Jl. Margonda Raya, Pondok Cina",
+      kecamatan: "Kecamatan Beji",
+      kota: "Kota Depok",
+      provinsi: "Jawa Barat",
+      kodePos: "16424"
+    },
+    {
+      nama: "Ariq",
+      nomor: "081122334455",
+      alamat:
+        "Jl. Margonda Raya, Pondok Cina",
+      kecamatan: "Kecamatan Beji",
+      kota: "Kota Depok",
+      provinsi: "Jawa Barat",
+      kodePos: "16424"
+    },
+    {
+      nama: "Ariq",
+      nomor: "081122334455",
+      alamat:
+        "Jl. Margonda Raya, Pondok Cina",
+      kecamatan: "Kecamatan Beji",
+      kota: "Kota Depok",
+      provinsi: "Jawa Barat",
+      kodePos: "16424"
+    },
+  ];
+
+  const path = [
+    {
+      name: "Checkout",
+      link: "/alamat-penerima",
+      isOnPage: false,
+    },
+    {
+      name: "Alamat Penerima",
+      link: "/alamat-penerima",
+      isOnPage: true,
+    },
+  ];
+
+  const dataPengirim = [
+    {
+      nama: "Ariq",
+      nomor: "081122334455",
+    },
+    {
+      nama: "Ariq",
+      nomor: "081122334455",
+    },
+    {
+      nama: "Ariq",
+      nomor: "081122334455",
+    },
+    {
+      nama: "Ariq",
+      nomor: "081122334455",
+    },
+    {
+      nama: "Ariq",
+      nomor: "081122334455",
+    },
+    {
+      nama: "Ariq",
+      nomor: "081122334455",
+    },
+    {
+      nama: "Ariq",
+      nomor: "081122334455",
+    },
+  ];
   const negara = ["Indonesia", "Malaysia", "Singapore"];
   const provinsi = ["DKI Jakarta", "Jawa Barat", "Jawa Tengah"];
   const kota = ["Bandung", "Jakarta Barat", "Jakarta Utara"];
@@ -133,14 +138,11 @@ const AlamatPenerima = () => {
   const [pengirimSearch, setPengirimSearch] = useState("");
   const [penerimaSearch, setPenerimaSearch] = useState("");
 
-  const [namaPengirim, setNamaPengirim] = useState("");
-  const [alamatPengirim, setAlamatPengirim] = useState("");
+  const [namaPengirimInput, setNamaPengirimInput] = useState("");
 
-  const [namaTextPengirim, setNamaTextPengirim] = useState("");
   const [ponselPengirim, setPonselPengirim] = useState("");
 
   const [namaPenerima, setNamaPenerima] = useState("");
-  const [nomorPenerima, setNomorPenerima] = useState("");
   const [alamatPenerima, setAlamatPenerima] = useState("");
 
   const [namaAwalPenerima, setNamaAwalPenerima] = useState("");
@@ -151,43 +153,54 @@ const AlamatPenerima = () => {
   const [kecamatanPenerima, setKecamatanPenerima] = useState("");
   const [kodePosPenerima, setKodePosPenerima] = useState("");
   const [ponselPenerima, setPonselPenerima] = useState("");
-  const [alamatTextPenerima, setAlamatTextPenerima] = useState("");
 
   const pengirimRadioHandler = (e) => {
-    setNamaPengirim(dataPengirim[e].nama);
-    setAlamatPengirim(dataPengirim[e].alamat);
+    setNamaPengirimInput(dataPengirim[e].nama);
+    setPonselPengirim(dataPengirim[e].nomor);
   };
 
   const penerimaRadioHandler = (e) => {
     setNamaPenerima(dataPenerima[e].nama);
-    setNomorPenerima(dataPenerima[e].nomor);
     setAlamatPenerima(dataPenerima[e].alamat);
+    setKecamatanPenerima(dataPenerima[e].kecamatan);
+    setKotaPenerima(dataPenerima[e].kota);
+    setProvinsiPenerima(dataPenerima[e].provinsi)
+    setKodePosPenerima(dataPenerima[e].kodePos);
+    setPonselPenerima(dataPenerima[e].nomor);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (pengirimCurrentTab == 0 && penerimaCurrentTab == 0) {
-      console.log("submit type 0");
-    } else if (pengirimCurrentTab == 0 && penerimaCurrentTab == 1) {
-      console.log("submit type 1");
-    } else if (pengirimCurrentTab == 1 && penerimaCurrentTab == 0) {
-      console.log("submit type 2");
+    setnamaPengirim(namaPengirimInput);
+    setnomorPengirim(ponselPengirim);
+
+    setnomorPenerima(ponselPenerima);
+    setalamatPenerima(alamatPenerima);
+    setkecamatanPenerima(kecamatanPenerima);
+    setkotaPenerima(kotaPenerima);
+    setprovinsiPenerima(provinsiPenerima)
+    setkodePosPenerima(kodePosPenerima);
+    setnomorPenerima(ponselPenerima);
+    setalamatPenerima(alamatPenerima);
+
+    if (penerimaCurrentTab == 0) {
+      setnamaPenerima(namaPenerima);
     } else {
-      console.log("submit type 3");
+      setnamaPenerima(namaAwalPenerima + " " + namaAkhirPenerima)
     }
   };
 
   const handleDisable = () => {
     if (pengirimCurrentTab == 0 && penerimaCurrentTab == 0) {
-      if (namaPengirim !== "" && namaPenerima !== "") {
+      if (namaPengirimInput !== "" && namaPenerima !== "") {
         return false;
       } else {
         return true;
       }
     } else if (pengirimCurrentTab == 0 && penerimaCurrentTab == 1) {
       if (
-        namaPengirim !== "" &&
+        namaPengirimInput !== "" &&
         namaAwalPenerima !== "" &&
         namaAkhirPenerima !== "" &&
         negaraPenerima !== "" &&
@@ -196,7 +209,7 @@ const AlamatPenerima = () => {
         kecamatanPenerima !== "" &&
         kodePosPenerima !== "" &&
         ponselPenerima !== "" &&
-        alamatTextPenerima !== ""
+        alamatPenerima !== ""
       ) {
         return false;
       } else {
@@ -204,7 +217,7 @@ const AlamatPenerima = () => {
       }
     } else if (pengirimCurrentTab == 1 && penerimaCurrentTab == 0) {
       if (
-        namaTextPengirim !== "" &&
+        namaPengirimInput !== "" &&
         ponselPengirim !== "" &&
         namaPenerima !== ""
       ) {
@@ -214,7 +227,7 @@ const AlamatPenerima = () => {
       }
     } else {
       if (
-        namaTextPengirim !== "" &&
+        namaPengirimInput !== "" &&
         ponselPengirim !== "" &&
         namaAwalPenerima !== "" &&
         namaAkhirPenerima !== "" &&
@@ -224,7 +237,7 @@ const AlamatPenerima = () => {
         kecamatanPenerima !== "" &&
         kodePosPenerima !== "" &&
         ponselPenerima !== "" &&
-        alamatTextPenerima !== ""
+        alamatPenerima !== ""
       ) {
         return false;
       } else {
@@ -245,7 +258,7 @@ const AlamatPenerima = () => {
           flexDir={{ base: "column-reverse", lg: "row" }}
         >
           <Box
-            w={{ base: "100%", lg: "70%" }}
+            w={{ base: "100%", lg: "65%" }}
             d={{ base: "flex", lg: "inline" }}
             flexDir={{ base: "column", lg: "row" }}
             alignItems={{ base: "center", lg: "stretch" }}
@@ -396,7 +409,7 @@ const AlamatPenerima = () => {
                           placeholder="Masukkan nama pengirim"
                           marginTop="0.5rem"
                           fontSize="sm"
-                          onChange={(e) => setNamaTextPengirim(e.target.value)}
+                          onChange={(e) => setNamaPengirimInput(e.target.value)}
                         />
                       </Box>
                       <Box w={{ base: "100%", lg: "47.5%" }}>
@@ -530,7 +543,7 @@ const AlamatPenerima = () => {
                                     >
                                       <Text>{data.nama}</Text>
                                       <Text>{data.nomor}</Text>
-                                      <Text>{data.alamat}</Text>
+                                      <Text>{`${data.alamat}, ${data.kecamatan}, ${data.kota}, ${data.provinsi} ${data.kodePos}`}</Text>
                                     </Box>
                                   </Box>
                                 );
@@ -772,7 +785,7 @@ const AlamatPenerima = () => {
                       marginTop="0.5rem"
                       resize="none"
                       fontSize="sm"
-                      onChange={(e) => setAlamatTextPenerima(e.target.value)}
+                      onChange={(e) => setAlamatPenerima(e.target.value)}
                     />
                   </TabPanel>
                 </TabPanels>
@@ -787,14 +800,14 @@ const AlamatPenerima = () => {
                   marginBottom="2rem"
                   marginRight={{ base: "0rem", lg: "1rem" }}
                   isDisabled={handleDisable()}
-                  onClick={(e) => handleSubmit(e)}
+                  onClick={(e) => { handleSubmit(e); router.push("/detail-pesanan") }}
                 >
                   Lanjutkan
                 </Button>
               </Box>
             </Box>
           </Box>
-          <Box w={{ base: "100%", lg: "25%" }}>
+          <Box w={{ base: "100%", lg: "30%" }}>
             <Box
               w="100%"
               border="1px solid"
