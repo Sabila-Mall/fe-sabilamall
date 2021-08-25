@@ -41,6 +41,7 @@ import Footer from "../../components/Footer";
 import { Layout } from "../../components/Layout";
 import Navbar from "../../components/Navbar";
 import { Stepper } from "../../components/Stepper";
+import { useCheckoutContext } from "../../contexts/checkoutProvider";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import styles from "../../styles/Footer.module.scss";
 
@@ -756,6 +757,7 @@ const DetailPesanan = () => {
   const { width } = useWindowSize();
   const isSmartphone = width < 768;
   const isTablet = width < 1024;
+  
 
   return (
     <Layout hasNavbar hasPadding sticky hasBreadCrumb breadCrumbItem={path}>

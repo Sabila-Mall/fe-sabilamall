@@ -22,24 +22,31 @@ import {
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
+import { default as NextLink } from "next/link";
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { BiSearch } from "react-icons/bi";
 import { FiChevronRight } from "react-icons/fi";
 
 import { apiKecamatan, apiKodePos, apiKota, apiProvinsi } from "../../api/Zone";
 import { addAddress, getAddress } from "../../api/address";
+import { getMyCart } from "../../api/cart";
 import Footer from "../../components/Footer";
 import { Layout } from "../../components/Layout";
 import Loading from "../../components/Loading";
 import Navbar from "../../components/Navbar";
 import { Stepper } from "../../components/Stepper";
+import { ErrorToast, SuccessToast } from "../../components/Toast";
 import { useAuthContext } from "../../contexts/authProvider";
-import { extractName } from "../../utils/functions";
+import { useCheckoutContext } from "../../contexts/checkoutProvider";
+import { extractName, numberWithDot } from "../../utils/functions";
 
 const AlamatPenerima = () => {
   const { userData } = useAuthContext();
-  // const userId = userData?.id;
-  const userId = 6089;
+  const { addCheckoutData } = useCheckoutContext();
+  const userId = userData?.id;
+  const router = useRouter();
+  // const userId = 6089;
   const [dataPengirim, setDataPengirim] = useState(null);
   const [dataPenerima, setDataPenerima] = useState(null);
   const [provinsi, setProvinsi] = useState([]);
@@ -78,6 +85,13 @@ const AlamatPenerima = () => {
   const [nomorPenerima, setNomorPenerima] = useState("");
   const [alamatPenerima, setAlamatPenerima] = useState("");
 
+  const [ringkasan, setRingkasan] = useState({
+    pcs: 0,
+    weight: 0,
+    subTotal: 0,
+    discount: 0,
+  });
+
   const [namaAwalPenerima, setNamaAwalPenerima] = useState("");
   const [namaAkhirPenerima, setNamaAkhirPenerima] = useState("");
   const [negaraPenerima, setNegaraPenerima] = useState("");
@@ -91,13 +105,14 @@ const AlamatPenerima = () => {
   const addAddressPengirim = async () => {
     try {
       await addAddress({
-        entry_firstname: extractName(namaPengirim)?.firstname,
-        entry_lastname: extractName(namaPengirim)?.lastname,
-        entry_phone: nomorPengirim,
+        entry_firstname: extractName(namaTextPengirim)?.firstname,
+        entry_lastname: extractName(namaTextPengirim)?.lastname,
+        entry_phone: ponselPengirim,
         address_book_type: 2,
         customers_id: userId,
         is_default: 0,
       });
+      SuccessToast("Berhasil menambahkan alamat pengirim");
     } catch (err) {
       throw new Error(err);
     }
@@ -106,19 +121,20 @@ const AlamatPenerima = () => {
   const addAddressPenerima = async () => {
     try {
       await addAddress({
-        entry_firstname: namaAkhirPenerima,
+        entry_firstname: namaAwalPenerima,
         entry_lastname: namaAkhirPenerima,
         entry_phone: ponselPenerima,
         entry_country_id: 100,
-        entry_zone_id: Number(provinsiPenerima),
-        entry_city: Number(kotaPenerima),
-        entry_district: Number(kecamatanPenerima),
+        entry_zone_id: Number(provinsiPenerima?.split(" ")?.[0]),
+        entry_city: Number(kotaPenerima?.split(" ")?.[0]),
+        entry_district: Number(kecamatanPenerima?.split(" ")?.[0]),
         entry_postcode: Number(kodePosPenerima),
-
         address_book_type: 1,
         customers_id: userId,
         is_default: 0,
+        entry_street_address: alamatTextPenerima,
       });
+      SuccessToast("Berhasil menambahkan alamat penerima");
     } catch (err) {
       throw new Error(err);
     }
@@ -148,18 +164,40 @@ const AlamatPenerima = () => {
       getAddress({ customers_id: userId, address_book_type: 1 })
         .then((res) => {
           setDataPenerima(
-            res
+            res && Array.isArray(res)
               ? [
                   ...res?.map((d) => ({
                     nama: d.firstname + " " + d.lastname,
                     nomor: d.phone,
-                    alamat: `Jl.${d.street}, ${d.subdistrict_name}, ${d.city_name}, ${d.zone_name}`,
+                    alamat: `${d.street}, ${d.subdistrict_name}, ${d.city_name}, ${d.zone_name}`,
                   })),
                 ]
               : [],
           );
         })
         .catch(() => setDataPenerima([]));
+
+      getMyCart(userId)
+        .then((res) => {
+          let pcs = 0;
+          let weight = 0;
+          let subTotal = 0;
+          let discount = 0;
+          res?.forEach((d) => {
+            pcs += d?.keranjang?.length;
+            d.keranjang.forEach((k) => {
+              weight += Number(k.products_weight);
+              subTotal += Number(k.products_price);
+              discount +=
+                (JSON.parse(k.customers_discount_schema)[k.customers_level] /
+                  100) *
+                Number(k.products_price);
+            });
+          });
+          const d = { pcs, weight, subTotal, discount };
+          setRingkasan({ ...d });
+        })
+        .catch(() => console.error("err"));
     };
 
     userId && getDataPengirim();
@@ -167,17 +205,19 @@ const AlamatPenerima = () => {
 
   useEffect(() => {
     const getKota = () => {
-      apiKota(Number(provinsiPenerima)).then((res) => {
-        setKota([...res.data.data]);
-      });
+      apiKota(Number(provinsiPenerima?.split(" ")?.[0]))
+        .then((res) => {
+          setKota([...res.data.data]);
+        })
+        .catch(() => setKota([]));
     };
 
     provinsiPenerima && getKota();
-  }, [provinsiPenerima]);
+  }, [provinsiPenerima, kota]);
 
   useEffect(() => {
     const getKecamatan = () => {
-      apiKecamatan(Number(kotaPenerima)).then((res) => {
+      apiKecamatan(Number(kotaPenerima?.split(" ")?.[0])).then((res) => {
         setKecamatan([...res.data.data]);
       });
     };
@@ -188,9 +228,9 @@ const AlamatPenerima = () => {
   useEffect(() => {
     const getKodePos = () => {
       apiKodePos(
-        Number(kotaPenerima),
-        Number(kecamatanPenerima),
-        Number(provinsiPenerima),
+        Number(kotaPenerima?.split(" ")?.[0]),
+        Number(kecamatanPenerima?.split(" ")?.[0]),
+        Number(provinsiPenerima?.split(" ")?.[0]),
       )
         .then((res) => {
           setKodePos([...res.data.data]);
@@ -212,20 +252,106 @@ const AlamatPenerima = () => {
     setAlamatPenerima(dataPenerima[e].alamat);
   };
 
+  const saveToContext = (data) => {
+    try {
+      addCheckoutData(data);
+    } catch {
+      console.log("EERRRRR");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (handleDisable()) return;
+
+    const splittedAlamatPenerima = alamatPenerima.split(", ");
 
     if (pengirimCurrentTab == 0 && penerimaCurrentTab == 0) {
       try {
+        saveToContext({
+          ...ringkasan,
+          userId,
+          namaPengirim,
+          nomorPengirim,
+          namaPenerima,
+          nomorPenerima,
+          provinsiPenerima:
+            splittedAlamatPenerima[splittedAlamatPenerima.length - 1],
+          kotaPenerima:
+            splittedAlamatPenerima[splittedAlamatPenerima.length - 2],
+          kecamatanPenerima:
+            splittedAlamatPenerima[splittedAlamatPenerima.length - 3],
+          jalanPenerima: splittedAlamatPenerima
+            .slice(0, splittedAlamatPenerima.length - 3)
+            .join(", "),
+        });
+        router.push("/detail-pesanan");
       } catch (err) {
         console.error(err);
       }
     } else if (pengirimCurrentTab == 0 && penerimaCurrentTab == 1) {
-      console.log("submit type 1");
+      try {
+        saveToContext({
+          ...ringkasan,
+          userId,
+          namaPengirim,
+          nomorPengirim,
+          namaPenerima: namaAwalPenerima + namaAkhirPenerima,
+          provinsiPenerima: provinsiPenerima?.split(", ")?.[1],
+          kotaPenerima: kotaPenerima?.split(", ")?.[1],
+          kecamatanPenerima: kecamatanPenerima?.split(", ")?.[1],
+          jalanPenerima: alamatTextPenerima,
+          nomorPenerima: ponselPenerima,
+        });
+        await addAddressPenerima();
+        router.push("/detail-pesanan");
+      } catch (err) {
+        ErrorToast("Gagal menambahkan alamat penerima");
+      }
     } else if (pengirimCurrentTab == 1 && penerimaCurrentTab == 0) {
-      console.log("submit type 2");
+      try {
+        saveToContext({
+          ...ringkasan,
+          userId,
+          namaPengirim: namaTextPengirim,
+          nomorPengirim: ponselPengirim,
+          namaPenerima: namaAwalPenerima + namaAkhirPenerima,
+          nomorPenerima,
+          provinsiPenerima:
+            splittedAlamatPenerima[splittedAlamatPenerima.length - 1],
+          kotaPenerima:
+            splittedAlamatPenerima[splittedAlamatPenerima.length - 2],
+          kecamatanPenerima:
+            splittedAlamatPenerima[splittedAlamatPenerima.length - 3],
+          jalanPenerima: splittedAlamatPenerima
+            .slice(0, splittedAlamatPenerima.length - 3)
+            .join(", "),
+        });
+        await addAddressPengirim();
+        router.push("/detail-pesanan");
+      } catch (err) {
+        ErrorToast("Gagal menambahkan alamat pengirim");
+      }
     } else {
-      console.log("submit type 3");
+      try {
+        saveToContext({
+          ...ringkasan,
+          userId,
+          namaPengirim: namaTextPengirim,
+          nomorPengirim: ponselPengirim,
+          namaPenerima: namaAwalPenerima + namaAkhirPenerima,
+          provinsiPenerima: provinsiPenerima?.split(", ")?.[1],
+          kotaPenerima: kotaPenerima?.split(", ")?.[1],
+          kecamatanPenerima: kecamatanPenerima?.split(", ")?.[1],
+          jalanPenerima: alamatTextPenerima,
+          nomorPenerima: ponselPenerima,
+        });
+        await addAddressPengirim();
+        await addAddressPenerima();
+        router.push("/detail-pesanan");
+      } catch (err) {
+        ErrorToast("Gagal menambahkan alamat pengirim / penerima");
+      }
     }
   };
 
@@ -695,7 +821,7 @@ const AlamatPenerima = () => {
                                 return (
                                   <option
                                     key={index}
-                                    value={data.zone_apicityid}
+                                    value={`${data.zone_apicityid} ${data.zone_name}`}
                                   >
                                     {data.zone_name}
                                   </option>
@@ -731,7 +857,10 @@ const AlamatPenerima = () => {
                             {kota &&
                               kota.map((data, index) => {
                                 return (
-                                  <option key={index} value={data.city_id}>
+                                  <option
+                                    key={index}
+                                    value={`${data.city_id} ${data.city_name}`}
+                                  >
                                     {data.city_name}
                                   </option>
                                 );
@@ -759,7 +888,7 @@ const AlamatPenerima = () => {
                                 return (
                                   <option
                                     key={data?.subdistrict_id || index}
-                                    value={data?.subdistrict_id}
+                                    value={`${data?.subdistrict_id} ${data?.subdistrict_name}`}
                                   >
                                     {data?.subdistrict_name}
                                   </option>
@@ -897,7 +1026,7 @@ const AlamatPenerima = () => {
                   fontWeight="500"
                   isTruncated
                 >
-                  9.999.999 pcs
+                  {ringkasan.pcs} pcs
                 </Text>
               </Box>
               <Box
@@ -920,7 +1049,7 @@ const AlamatPenerima = () => {
                   fontWeight="500"
                   isTruncated
                 >
-                  1.000.000 gr
+                  {ringkasan.weight} gr
                 </Text>
               </Box>
               <Divider orientation="horizontal" marginY="0.5rem" />
@@ -952,7 +1081,7 @@ const AlamatPenerima = () => {
                   fontWeight="500"
                   isTruncated
                 >
-                  Rp99.999.999
+                  Rp{numberWithDot(ringkasan.subTotal)}
                 </Text>
               </Box>
               <Box
@@ -975,7 +1104,7 @@ const AlamatPenerima = () => {
                   fontWeight="500"
                   isTruncated
                 >
-                  Rp99.999.999
+                  Rp{numberWithDot(ringkasan.discount)}
                 </Text>
               </Box>
               <Box
@@ -998,7 +1127,7 @@ const AlamatPenerima = () => {
                   fontWeight="500"
                   isTruncated
                 >
-                  Rp99.999.999
+                  Rp{0}
                 </Text>
               </Box>
               <Divider orientation="horizontal" marginY="0.5rem" />
@@ -1023,7 +1152,7 @@ const AlamatPenerima = () => {
                   fontSize="1.25rem"
                   isTruncated
                 >
-                  Rp99.999.999
+                  Rp{numberWithDot(ringkasan.subTotal - ringkasan.discount)}
                 </Text>
               </Box>
             </Box>

@@ -1,40 +1,49 @@
 import { useToast } from "@chakra-ui/toast";
+import { useRouter } from "next/router";
+import { parseCookies, setCookie, destroyCookie } from "nookies";
 import { createContext, useContext, useEffect, useState } from "react";
 
 import { useAuthContext } from "./authProvider";
 
 const CheckoutContext = createContext();
 
-export const WishlistProvider = ({ children }) => {
-  const [checkoutData, setCheckoutData] = useState([]);
+export const CheckoutProvider = ({ children }) => {
+  const [checkoutData, setCheckoutData] = useState({});
   const [loading, setLoading] = useState(false);
-  const { userData } = useAuthContext();
-  const userId = userData?.id;
-  const toast = useToast();
+  const router = useRouter();
 
-  const successToast = (successMessage) => {
-    toast({
-      position: "top",
-      title: successMessage,
-      status: "success",
-      isClosable: true,
+  const addCheckoutData = (data) => {
+    const cookies = parseCookies();
+    if (cookies?.checkoutData?.userId !== cookies.user_id) {
+      destroyCookie(null, "checkoutData");
+    }
+    setCookie(null, "checkoutData", JSON.stringify(data), {
+      path: "/",
     });
+
+    setCheckoutData(data);
   };
 
-  const errorToast = (errMessage) => {
-    toast({
-      position: "top",
-      title: errMessage,
-      status: "error",
-      isClosable: true,
-    });
-  };
+  useEffect(() => {
+    const cookies = parseCookies();
+
+    if (cookies?.checkoutData) {
+      if (
+        JSON.parse(cookies.checkoutData).userId == JSON.parse(cookies.user_id)
+      ) {
+        setCheckoutData(JSON.parse(cookies.checkoutData));
+      } else {
+        destroyCookie(null, "checkoutData");
+      }
+    }
+  }, [router]);
 
   const value = {
     checkoutData,
     setCheckoutData,
     loading,
     setLoading,
+    addCheckoutData,
   };
 
   return (
