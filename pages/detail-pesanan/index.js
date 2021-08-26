@@ -71,7 +71,7 @@ const RingkasanPesanan = ({ daftarProduk }) => {
     kecamatanPenerima,
     kodePosPenerima,
     alamatPenerima,
-  } = useCheckoutContext()
+  } = useCheckoutContext();
   console.log(namaPengirim);
   return (
     <>
@@ -395,7 +395,7 @@ const Voucher = ({ voucher, setVoucher }) => {
   );
 };
 
-const Confirmation = () => {
+const Confirmation = ({ setPersetujuan }) => {
   return (
     <Box
       padding="1rem"
@@ -404,7 +404,11 @@ const Confirmation = () => {
       mb="1.5rem"
       borderColor="gray.300"
     >
-      <Checkbox defaultIsChecked colorScheme="red">
+      <Checkbox
+        defaultIsChecked={false}
+        colorScheme="red"
+        onChange={(e) => setPersetujuan(e.target.checked)}
+      >
         Saya menyetujui bahwa biaya pengiriman bersifat final. Apabila terjadi
         selisih maka tidak ada penagihan/pengembalian.
       </Checkbox>
@@ -535,9 +539,7 @@ const DetailPesanan = () => {
               align="stretch"
               divider={<StackDivider borderColor="gray.200" />}
             >
-              <RingkasanPesanan
-                daftarProduk={daftarProduk}
-              />
+              <RingkasanPesanan daftarProduk={daftarProduk} />
               <Pengiriman
                 pengiriman={pengiriman}
                 handler={handleSelectedPengirman}
@@ -554,7 +556,7 @@ const DetailPesanan = () => {
                 />
                 <Voucher voucher={voucher} setVoucher={setVoucher} />
               </SimpleGrid>
-              <Confirmation />
+              <Confirmation setPersetujuan={setPersetujuan} />
               <Flex justify="space-between">
                 <Button
                   className="primaryFont"
@@ -572,6 +574,7 @@ const DetailPesanan = () => {
                     bg="red.500"
                     color="white"
                     onClick={onSubmit}
+                    disabled={!persetujuan}
                   >
                     Pesan Sekarang
                   </Button>
