@@ -23,9 +23,8 @@ const path = [
 const cartDetails = () => {
 
   const { cartData, loading, totalPrice } = useCartContext();
-  const [dataValue, setdataValue] = useState(cartData[0]);
-  const [loadingValue, setloadingValue] = useState(loading[0])
   const [priceValue, setpriceValue] = useState(totalPrice[0])
+  console.log(totalPrice);
 
   return (
     <Layout hasNavbar hasPadding hasBreadCrumb breadCrumbItem={path}>
@@ -50,14 +49,16 @@ const cartDetails = () => {
                   </Th>
                 </Tr>
               </Thead>
+              {cartData &&
+                <Tbody>
+                  {cartData.map((el, index) => {
+                    return (
+                      <TableContent product={el} />
+                    )
+                  })}
+                </Tbody>
+              }
 
-              <Tbody>
-                {dataValue.map((el, index) => {
-                  return (
-                    <TableContent product={el} />
-                  )
-                })}
-              </Tbody>
             </Table>
           </Box>
 
