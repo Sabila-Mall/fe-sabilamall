@@ -14,7 +14,9 @@ import {
   Button,
   Image,
   Link,
+  useToast,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import { FaPhoneAlt } from "react-icons/fa";
 import { IoLogoFacebook } from "react-icons/io";
 import {
@@ -26,11 +28,42 @@ import {
   IoLogoLinkedin,
 } from "react-icons/io5";
 
+import { apiSendMail } from "../../api/SendEmail";
 import { Layout } from "../../components/Layout";
 import styles from "../../styles/ContactUs.module.scss";
 import { socialMedia } from "../../utils/socialMediaLink";
 
 const contactUs = () => {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    const res = await apiSendMail(name, phone, email, message);
+    if (res.success === true) {
+      toast({
+        title: "Email sent",
+        description: "Pesan sukses terkirim!",
+        status: "success",
+        duration: 4000,
+        position: "top",
+      });
+    } else {
+      toast({
+        title: "Email failed to sent",
+        description: "Gagal mengirimkan email",
+        status: "error",
+        duration: 4000,
+        position: "top",
+      });
+    }
+    setLoading(false);
+  };
+
   return (
     <Layout
       hasFooter
@@ -178,7 +211,13 @@ const contactUs = () => {
                     fontSize="1em"
                     children={<IoPeopleSharp color="#A0AEC0" size="24px" />}
                   />
-                  <Input type="tel" placeholder="Nama Anda" />
+                  <Input
+                    value={name}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                    }}
+                    placeholder="Nama Anda"
+                  />
                 </InputGroup>
 
                 <InputGroup>
@@ -187,7 +226,13 @@ const contactUs = () => {
                     fontSize="1em"
                     children={<IoMail color="#A0AEC0" size="24px" />}
                   />
-                  <Input placeholder="Alamat email Anda" />
+                  <Input
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                    }}
+                    placeholder="Alamat email Anda"
+                    value={email}
+                  />
                 </InputGroup>
 
                 <InputGroup>
@@ -196,15 +241,27 @@ const contactUs = () => {
                     fontSize="1em"
                     children={<FaPhoneAlt color="#A0AEC0" size="24px" />}
                   />
-                  <Input placeholder="Nomor telepon Anda" />
+                  <Input
+                    value={phone}
+                    onChange={(e) => {
+                      setPhone(e.target.value);
+                    }}
+                    placeholder="Nomor telepon Anda"
+                  />
                 </InputGroup>
                 <Textarea
                   h="7.5rem"
-                  placeholder="Tuliskan pesan Anda di sini"
+                  placeholder="Tuliskan pesan Anda di sini (minimal 25 karakter)"
                   resize={"none"}
+                  value={message}
+                  onChange={(e) => {
+                    setMessage(e.target.value);
+                  }}
                 />
                 <Flex justifyContent="flex-end">
                   <Button
+                    isLoading={loading}
+                    onClick={handleSubmit}
                     w={{ base: "100%", lg: "10.4rem" }}
                     colorScheme="red"
                     color="white"
