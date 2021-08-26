@@ -28,6 +28,7 @@ import {
 
 import { Layout } from "../../components/Layout";
 import styles from "../../styles/ContactUs.module.scss";
+import { socialMedia } from "../../utils/socialMediaLink";
 
 const contactUs = () => {
   return (
@@ -121,14 +122,20 @@ const contactUs = () => {
                       </Text>
                     </Box>
                     <Box mt="1rem">
-                      <Button
-                        variant="outline"
-                        fontWeight="700"
-                        colorScheme="orange"
-                        fontSize="14px"
+                      <Link
+                        target="_blank"
+                        href="https://g.page/sabilamall?share"
+                        _hover={{ textDecoration: "none" }}
                       >
-                        Lihat di Google Maps
-                      </Button>
+                        <Button
+                          variant="outline"
+                          fontWeight="700"
+                          colorScheme="orange"
+                          fontSize="14px"
+                        >
+                          Lihat di Google Maps
+                        </Button>
+                      </Link>
                     </Box>
                   </Flex>
                 </Flex>
@@ -149,18 +156,13 @@ const contactUs = () => {
                   Follow SabilaMall yuk!
                 </Text>
                 <Stack direction="row" spacing={4} justifyContent="center">
-                  <Link target="_blank" href="/">
-                    <IoLogoFacebook size="2.5rem" color="orange" />
-                  </Link>
-                  <Link target="_blank" href="/">
-                    <IoLogoTwitter size="2.5rem" color="orange" />
-                  </Link>
-                  <Link target="_blank" href="/">
-                    <IoLogoInstagram size="2.5rem" color="orange" />
-                  </Link>
-                  <Link target="_blank" href="/">
-                    <IoLogoLinkedin size="2.5rem" color="orange" />
-                  </Link>
+                  {socialMedia.map(({ link, logo }) => {
+                    return (
+                      <Link target="_blank" href={link} cursor="pointer">
+                        {logo}
+                      </Link>
+                    );
+                  })}
                 </Stack>
               </Stack>
             </GridItem>

@@ -9,14 +9,20 @@ import {
   Stack,
   HStack,
   VStack,
-  Link,
   Grid,
   GridItem,
 } from "@chakra-ui/react";
-import { FaFacebookSquare, FaLinkedin, FaUser } from "react-icons/fa";
-import { IoLogoTwitter, IoLogoInstagram } from "react-icons/io5";
+import Link from "next/link";
+import { FaUser } from "react-icons/fa";
+import { IoLogoFacebook } from "react-icons/io";
+import {
+  IoLogoTwitter,
+  IoLogoInstagram,
+  IoLogoLinkedin,
+} from "react-icons/io5";
 
 import styles from "../styles/Footer.module.scss";
+import { socialMedia } from "../utils/socialMediaLink";
 
 const DesktopFooter = () => {
   return (
@@ -53,10 +59,17 @@ const DesktopFooter = () => {
             <Heading fontSize="18px" className={styles.primaryFont} pb={3}>
               Unduh Aplikasi
             </Heading>
-            <Image
-              src="/images/Footer/google-play.png"
-              alt="Google Play Store"
-            />
+            <Text
+              as="a"
+              href="https://play.google.com/store/apps/details?id=id.co.sabilamall.sm_app"
+              target="_blank"
+            >
+              <Image
+                src="/images/Footer/google-play.png"
+                alt="Google Play Store Sabila Mall"
+                cursor="pointer"
+              />
+            </Text>
           </Box>
         </Flex>
 
@@ -75,11 +88,31 @@ const DesktopFooter = () => {
               align="initial"
               className={styles.secondaryFont}
             >
-              <Link>Mengenal SabilaMall</Link>
-              <Link>Gabung Reseller Baju Muslim</Link>
-              <Link>Kebijakan Privasi</Link>
-              <Link>Syarat & Ketentuan</Link>
-              <Link>Kontak kami</Link>
+              <Link href="/about-us">
+                <Text cursor="pointer" _hover={{ textDecoration: "underline" }}>
+                  Mengenal SabilaMall
+                </Text>
+              </Link>
+              <Link href="/join-reseller">
+                <Text cursor="pointer" _hover={{ textDecoration: "underline" }}>
+                  Gabung Reseller Baju Muslim
+                </Text>
+              </Link>
+              <Link href="/privacy-policy">
+                <Text cursor="pointer" _hover={{ textDecoration: "underline" }}>
+                  Kebijakan Privasi
+                </Text>
+              </Link>
+              <Link href="/terms-and-conditions">
+                <Text cursor="pointer" _hover={{ textDecoration: "underline" }}>
+                  Syarat & Ketentuan
+                </Text>
+              </Link>
+              <Link href="/contact-us">
+                <Text cursor="pointer" _hover={{ textDecoration: "underline" }}>
+                  Kontak kami
+                </Text>
+              </Link>
             </VStack>
           </Box>
 
@@ -91,58 +124,25 @@ const DesktopFooter = () => {
               spacing={{ base: 1, lg: 4 }}
               className={styles.secondaryFont}
             >
-              <Link
-                href="https://facebook.com"
-                target="_blank"
-                _focus={{ boxShadow: "none" }}
-              >
-                <Icon
-                  aria-label="Facebook"
-                  as={FaFacebookSquare}
-                  color="orange.400"
-                  w={6}
-                  h={6}
-                />
-              </Link>
-              <Link
-                href="https://facebook.com"
-                target="_blank"
-                _focus={{ boxShadow: "none" }}
-              >
-                <Icon
-                  aria-label="Twitter"
-                  as={IoLogoTwitter}
-                  color="orange.400"
-                  w={6}
-                  h={6}
-                />
-              </Link>
-              <Link
-                href="https://facebook.com"
-                target="_blank"
-                _focus={{ boxShadow: "none" }}
-              >
-                <Icon
-                  aria-label="Instagram"
-                  as={IoLogoInstagram}
-                  color="orange.400"
-                  w={6}
-                  h={6}
-                />
-              </Link>
-              <Link
-                href="https://facebook.com"
-                target="_blank"
-                _focus={{ boxShadow: "none" }}
-              >
-                <Icon
-                  aria-label="LinkedIn"
-                  as={FaLinkedin}
-                  color="orange.400"
-                  w={6}
-                  h={6}
-                />
-              </Link>
+              {socialMedia.map(({ name, link, logoType }) => {
+                return (
+                  <Text
+                    as="a"
+                    href={link}
+                    target="_blank"
+                    _focus={{ boxShadow: "none" }}
+                    cursor="pointer"
+                  >
+                    <Icon
+                      aria-label={name}
+                      as={logoType}
+                      color="orange.400"
+                      w={6}
+                      h={6}
+                    />
+                  </Text>
+                );
+              })}
             </HStack>
           </Box>
         </VStack>
