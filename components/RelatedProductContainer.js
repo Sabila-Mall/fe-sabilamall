@@ -8,8 +8,10 @@ import {
 } from "@chakra-ui/react";
 
 import RelatedProductCard from "../components/RelatedProductCard";
+import { IMAGE_HOST } from "../constants/api";
+import CardProduct from "./CardProduct";
 
-const RelatedProductContainer = () => {
+const RelatedProductContainer = ({ related_products, customers_id }) => {
   return (
     <Stack divider={<StackDivider borderColor="gray.200" />} mt="24px">
       <Stack direction="row" justify="space-between" w="100%" align="center">
@@ -21,59 +23,20 @@ const RelatedProductContainer = () => {
         </Link>
       </Stack>
       <Grid
-        templateColumns="repeat(6, 1fr)"
+        templateColumns={`repeat(${related_products?.length}, 1fr)`}
         gap="24px"
         mt="16px"
         overflowX="auto"
       >
-        <GridItem>
-          <RelatedProductCard
-            name={"ALEA GAMIS CASUAL"}
-            isDiscount={true}
-            discountAmount={10}
-            price={180000}
+        {related_products.map(({ id, ...product }, i) => (
+          <CardProduct
+            {...product}
+            key={id}
+            id={id}
+            // responsive={true}
+            liked_customers_id={customers_id}
           />
-        </GridItem>
-        <GridItem>
-          <RelatedProductCard
-            name={"ALEA GAMIS CASUAL"}
-            isDiscount={true}
-            discountAmount={10}
-            price={180000}
-          />
-        </GridItem>
-        <GridItem>
-          <RelatedProductCard
-            name={"ALEA GAMIS CASUAL"}
-            isDiscount={true}
-            discountAmount={10}
-            price={180000}
-          />
-        </GridItem>
-        <GridItem>
-          <RelatedProductCard
-            name={"ALEA GAMIS CASUAL"}
-            isDiscount={true}
-            discountAmount={10}
-            price={180000}
-          />
-        </GridItem>
-        <GridItem>
-          <RelatedProductCard
-            name={"ALEA GAMIS CASUAL"}
-            isDiscount={true}
-            discountAmount={10}
-            price={180000}
-          />
-        </GridItem>
-        <GridItem>
-          <RelatedProductCard
-            name={"ALEA GAMIS CASUAL"}
-            isDiscount={true}
-            discountAmount={10}
-            price={180000}
-          />
-        </GridItem>
+        ))}
       </Grid>
     </Stack>
   );

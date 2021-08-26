@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react";
 import nookies from "nookies";
 
 const fallbackCopyTextToClipboard = (text) => {
@@ -35,7 +36,7 @@ export const copyToClipboard = (text, onSuccess, onFail) => {
 };
 
 export const formatNumber = (amount) => {
-  return new Intl.NumberFormat('id-ID').format(amount);
+  return new Intl.NumberFormat("id-ID").format(amount);
 };
 
 export const formatPhoneNumber = (phoneNumber) => {
@@ -70,6 +71,34 @@ export const filterObject = (rawObj, allowed) => {
     }, {});
 
   return filtered;
+};
+
+export const calculateTimeLeft = (endTime) => {
+  let difference = +endTime - +new Date();
+  let timeLeft = {};
+
+  if (difference > 0) {
+    timeLeft = {
+      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+      minutes: Math.floor((difference / 1000 / 60) % 60),
+      seconds: Math.floor((difference / 1000) % 60),
+    };
+  }
+
+  return timeLeft;
+};
+
+export const numberWithDot = (x) => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+};
+
+export const calculateDiscountedPrice = (realPrice, discount) => {
+  if (!discount) {
+    return realPrice;
+  }
+
+  return realPrice - realPrice * (discount / 100);
 };
 
 export const setBadgeColor = (userLevel) => {

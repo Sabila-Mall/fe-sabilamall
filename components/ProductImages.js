@@ -4,39 +4,34 @@ import { useState } from "react";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import Slider from "react-slick";
 
+import { IMAGE_HOST } from "../constants/api";
 import styles from "../styles/ProductDetails.module.scss";
 
-const imageSrc = [
-  {
-    src: "images/ProductDetail/image2.svg",
-  },
-  {
-    src: "images/ProductDetail/image3.svg",
-  },
-  {
-    src: "images/ProductDetail/image5.svg",
-  },
-  {
-    src: "images/ProductDetail/image6.svg",
-  },
-  {
-    src: "images/ProductDetail/image7.svg",
-  },
-];
-
-export const ProductImages = ({ slider }) => {
+export const ProductImages = ({
+  slider,
+  products_image,
+  images: images_list,
+}) => {
   // Set which Image clicked
   // To be implemented when APIs ready
   const [imageNum, setImageNum] = useState(0);
+  const [image, setImage] = useState(products_image);
+  const images = [
+    { id: "podafae", image: products_image, sort_order: images_list?.lenght },
+    ...images_list,
+  ];
 
   let ref = null;
+
+  const [imageActive, setImageActive] = useState("podafae");
 
   const settings = {
     arrows: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 5,
+    slidesToShow: images.length < 5 ? images.length : 5,
     slidesToScroll: 4,
+    centerMode: false,
     responsive: [
       {
         breakpoint: 325,
@@ -64,8 +59,8 @@ export const ProductImages = ({ slider }) => {
       </Head>
       <Flex flexDir="column" justifyContent="center" mb="1.5rem">
         <Flex mb="1rem" justifyContent="center">
-          <Box>
-            <Image src="images/produk.svg" />
+          <Box w="22rem">
+            <Image src={IMAGE_HOST + image} />
           </Box>
         </Flex>
 
@@ -82,6 +77,8 @@ export const ProductImages = ({ slider }) => {
                   ref.slickPrev();
                 }
               }}
+              className={styles.slickButton}
+              display={images.length < 5 ? "none" : "block"}
             >
               <MdKeyboardArrowLeft size="2em" color="white" />
             </Box>
@@ -92,6 +89,8 @@ export const ProductImages = ({ slider }) => {
               bg="rgba(246, 173, 85, 0.8)"
               cursor="pointer"
               zIndex="20"
+              className={styles.slickButton}
+              display={images.length < 5 ? "none" : "block"}
               onClick={() => {
                 if (ref !== null) {
                   ref.slickNext();
@@ -100,18 +99,45 @@ export const ProductImages = ({ slider }) => {
             >
               <MdKeyboardArrowRight size="2em" color="white" />
             </Box>
-            <Box>
+            <Box
+              width={
+                images.length < 5 ? `calc(${images.length} * 4rem)` : "full"
+              }
+            >
               <Slider
                 ref={(node) => {
                   ref = node;
-                  console.log(node);
                 }}
                 {...settings}
               >
-                {imageSrc.map((e) => {
+                {images.map((e) => {
                   return (
-                    <Box>
-                      <Image key={e.src} src={e.src} />
+                    <Box key={e.image} pr="5rem">
+                      {/* <Image
+                        border={imageActive === e.id ? "3px solid #f6ad55" : ""}
+                        src={IMAGE_HOST + e.image}
+                        onClick={() => {
+                          setImage(e.image);
+                          setImageActive(e.id);
+                        }}
+                        w="4rem"
+                        h="4rem"
+                        cursor="pointer"
+                      /> */}
+                      <Box
+                        w="3rem"
+                        h="3rem"
+                        backgroundImage={`url("${IMAGE_HOST + e.image}")`}
+                        backgroundRepeat="no-repeat"
+                        backgroundSize="cover"
+                        border={imageActive === e.id ? "3px solid #f6ad55" : ""}
+                        backgroundPosition="center"
+                        cursor="pointer"
+                        onClick={() => {
+                          setImage(e.image);
+                          setImageActive(e.id);
+                        }}
+                      />
                     </Box>
                   );
                 })}

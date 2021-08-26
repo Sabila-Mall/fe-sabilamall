@@ -1,35 +1,39 @@
 import { Box, Text, Flex, HStack, useToast } from "@chakra-ui/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { IoLogoFacebook, IoMdLink } from "react-icons/io";
 import { IoLogoTwitter, IoLogoWhatsapp } from "react-icons/io5";
 
+import { IMAGE_HOST } from "../constants/api";
 import { copyToClipboard } from "../utils/functions";
-
-const d = [
-  {
-    name: "facebook",
-    link: "https://www.facebook.com/sabilamall.id/",
-    logo: <IoLogoFacebook size="1.5em" />,
-  },
-  {
-    name: "twitter",
-    link: "https://google.com",
-    logo: <IoLogoTwitter size="1.5em" />,
-  },
-  {
-    name: "whatsapp",
-    link: "https://google.com",
-    logo: <IoLogoWhatsapp size="1.5em" />,
-  },
-  {
-    name: "link",
-    link: "https://google.com",
-    logo: <IoMdLink size="1.5em" />,
-  },
-];
 
 export const ShareProduct = () => {
   const toast = useToast();
+  const router = useRouter();
+  const link = IMAGE_HOST + router.asPath;
+  const d = [
+    {
+      name: "facebook",
+      link: `https://www.facebook.com/sharer/sharer.php?u=${link}`,
+      logo: <IoLogoFacebook size="1.5em" />,
+    },
+    {
+      name: "twitter",
+      link: `https://twitter.com/intent/tweet?url=${link}`,
+      logo: <IoLogoTwitter size="1.5em" />,
+    },
+    {
+      name: "whatsapp",
+      link: "https://api.whatsapp.com/send?phone=6282125023944",
+      logo: <IoLogoWhatsapp size="1.5em" />,
+    },
+    {
+      name: "link",
+      link,
+      logo: <IoMdLink size="1.5em" />,
+    },
+  ];
+
   return (
     <Box>
       <HStack
