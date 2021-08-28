@@ -40,3 +40,13 @@ export const apiSearchOrder = async (customerId, orderId) => {
     throw new Error(err);
   }
 };
+
+export const apiGetOrderCustomer = async (customerId, orderId) => {
+  const res = await axios.post(HOST + `/api/order/get_by_customers`, {
+    customers_id: customerId,
+    currency_code: "IDR",
+    language_id: 1,
+    orders_id: orderId,
+  });
+  return res.data;
+};

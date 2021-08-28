@@ -40,8 +40,6 @@ import Sidebar from "./Sidebar";
 
 export const NavbarBottom = ({ onDrawerOpen, isLoggedIn }) => {
   const router = useRouter();
-  console.log(router);
-  console.log(isLoggedIn);
   return (
     <Box
       as="nav"
