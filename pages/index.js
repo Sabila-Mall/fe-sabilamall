@@ -18,7 +18,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 
-import Footer from "../components/Footer";
+
 import LayoutCategoryList from "../components/LayoutCategoryList";
 import LayoutProductList, {
   LayoutFlashSale,
@@ -31,6 +31,7 @@ import {
   dataDiscount,
 } from "../constants/dummyData";
 import { useAuthContext } from "../contexts/authProvider";
+import Footer from "../components/Footer";
 
 const Home = () => {
   const { userData, isLoggedIn } = useAuthContext();

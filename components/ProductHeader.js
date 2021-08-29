@@ -4,10 +4,40 @@ import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { IoTimeOutline } from "react-icons/io5";
 import { RiCalendarEventFill } from "react-icons/ri";
 
-const ProductHeader = (libur, preOrder) => {
-  const stock = 999;
-  const discount = 99;
-  const rating = (5.0).toFixed(1);
+import { numberWithDot } from "../utils/functions";
+
+const ProductHeader = ({
+  libur,
+  preOrder,
+  products_name,
+  vendors_name,
+  products_ordered,
+  rating,
+  customerdiscount: discount,
+  current_price,
+  products_quantity: stock,
+  isholidaydata,
+  po_opendate,
+  po_closedate,
+  discount_price: discount_price_be,
+  po_shippingdate,
+  po_close_status,
+}) => {
+  const isClose = preOrder && po_close_status == 1;
+
+  const discount_price = discount_price_be
+    ? new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+      }).format(Number(discount_price_be))
+    : null;
+  const price = current_price
+    ? new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+      }).format(Number(current_price))
+    : null;
+
   return (
     <Box>
       <Text
@@ -15,7 +45,7 @@ const ProductHeader = (libur, preOrder) => {
         fontWeight="500"
         className="secondaryFont"
       >
-        Nama Produk Croissant Jujubes Sweet Sweet Powder Tiramisu Caramels
+        {products_name}
       </Text>
 
       <Stack
@@ -35,11 +65,11 @@ const ProductHeader = (libur, preOrder) => {
         <Flex alignItems="center">
           <FaStar color="gray" as="span" size={"1em"} />
           <Text color="gray.500" pl="0.3rem">
-            {rating}
+            {Number(rating).toFixed(1)}
           </Text>
         </Flex>
-        <Text color="gray.500">Nama Supplier</Text>
-        <Text color="gray.500">Terjual 9999</Text>
+        <Text color="gray.500">{vendors_name}</Text>
+        <Text color="gray.500">Terjual {products_ordered}</Text>
         {libur ? (
           <Flex alignItems="center">
             <RiCalendarEventFill size="1.4em" color="#DD6B20" as="span" />
@@ -83,12 +113,11 @@ const ProductHeader = (libur, preOrder) => {
           textAlign="center"
           fontSize="1rem"
         >
-          Toko ini sedang libur. [insert additional message here] Sweet Powder
-          Tiramisu Caramels Caramels Caramels
+          Toko ini sedang libur. {isholidaydata ?? ""}
         </Box>
       )}
 
-      {preOrder && (
+      {po_opendate && po_closedate && po_shippingdate && !isClose && (
         <Box
           my="1rem"
           w={{ lg: "95%", xl: "full" }}
@@ -105,20 +134,39 @@ const ProductHeader = (libur, preOrder) => {
             <Box>
               <Text>Periode Pemesanan</Text>
               <Text fontWeight="400" fontSize="1.2rem">
-                30/08/21 s.d. 30/09/21
+                {po_opendate} s.d. {po_closedate}
               </Text>
             </Box>
             <Box>
               <Text>Estimasi Pengiriman</Text>
               <Text fontWeight="400" fontSize="1.2rem">
-                30/08/21 s.d. 30/09/21
+                {po_shippingdate}
               </Text>
             </Box>
           </Flex>
         </Box>
       )}
 
-      {discount ? (
+      {isClose && (
+        <Flex
+          my="1rem"
+          w={{ lg: "95%", xl: "full" }}
+          bg="orange.50"
+          color="orange.400"
+          fontWeight="500"
+          px="1rem"
+          py="0.5rem"
+          border="1px red solid"
+          borderRadius="8px"
+          fontSize="1rem"
+          justify="center"
+          align="center"
+        >
+          <Text>Pre Order Telah Berakhir</Text>
+        </Flex>
+      )}
+
+      {discount_price ? (
         <Box d={{ base: "none", md: "block" }}>
           <Text
             as="del"
@@ -127,7 +175,7 @@ const ProductHeader = (libur, preOrder) => {
             fontSize="16px"
             h="24px"
           >
-            Rp999.999
+            Rp{price}
           </Text>
         </Box>
       ) : (
@@ -141,7 +189,7 @@ const ProductHeader = (libur, preOrder) => {
           fontSize="36px"
           fontWeight="bold"
         >
-          Rp999.999
+          {discount_price ?? price}
         </Text>
         <Box alignSelf="center">
           {discount ? (

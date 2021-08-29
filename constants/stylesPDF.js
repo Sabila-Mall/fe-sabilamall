@@ -36,7 +36,10 @@ export const styles = StyleSheet.create({
   },
 
   address: {
-    width: "50%",
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+    backgroundColor: "red",
     fontSize: "12px",
     marginBottom: "32px",
   },
@@ -55,19 +58,24 @@ export const styles = StyleSheet.create({
   },
 
   produk: {
-    width: "40%",
+    width: "30%",
+  },
+
+  biayaTambahan: {
+    width: "20%",
+    textAlign: "center",
   },
 
   hargaSatuan: {
     width: "20%",
-    textAlign: "right",
+    textAlign: "center",
   },
   jumlah: {
-    width: "17%",
+    width: "10%",
     textAlign: "center",
   },
   subTotal: {
-    width: "23%",
+    width: "20%",
     textAlign: "right",
   },
 

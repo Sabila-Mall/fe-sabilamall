@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import {
   Page,
   Text,
@@ -7,8 +8,8 @@ import {
   Font,
 } from "@react-pdf/renderer";
 
-import { dummyDataPDF, detailPricePDF } from "../constants/dummyData";
 import { styles } from "../constants/stylesPDF";
+import { currencyFormat } from "../utils/functions";
 
 Font.register({
   family: "Noto Serif",
@@ -56,29 +57,52 @@ const DetailPesanan = ({
       {isDetail ? (
         <>
           <Text>{name}</Text>
-          <Text style={{ fontSize: "10px" }}>{detail}</Text>
-          <Text style={{ fontSize: "10px" }}>Berat: {berat}</Text>
+          <Box style={{ fontSize: "10px" }}>
+            {detail.map(({ products_options, products_options_values }) => {
+              return (
+                <Text>
+                  {products_options}: {products_options_values}
+                </Text>
+              );
+            })}
+          </Box>
+          <Text style={{ fontSize: "10px" }}>Berat: {berat} gram</Text>
         </>
       ) : (
         <Text>Produk</Text>
       )}
     </View>
+    <View style={styles.biayaTambahan}>
+      <Text style={{ fontSize: `${isDetail ? "10px" : "12px"}` }}>
+        {isDetail ? currencyFormat(biayaTambahan(detail)) : "Biaya Tambahan"}
+      </Text>
+    </View>
     <View style={styles.hargaSatuan}>
       <Text style={{ fontSize: `${isDetail ? "10px" : "12px"}` }}>
-        {isDetail ? hargaSatuan : "Harga Satuan"}
+        {isDetail ? currencyFormat(hargaSatuan) : "Harga Satuan"}
       </Text>
     </View>
     <View style={styles.jumlah}>
       <Text>{isDetail ? jumlah : "Jumlah"}</Text>
     </View>
     <View style={styles.subTotal}>
-      <Text>{isDetail ? subTotal : "Sub Total"}</Text>
+      <Text>{isDetail ? currencyFormat(subTotal) : "Sub Total"}</Text>
     </View>
   </View>
 );
 
 // Create Document Component
-const MyDocument = () => (
+const MyDocument = ({
+  namaPembeli,
+  namaPenjual,
+  telpPembeli,
+  telpPenjual,
+  alamat,
+  nomorPesanan,
+  waktuPesanan,
+  data,
+  detailPrice,
+}) => (
   <PDFViewer width="100%" height="100%">
     <Document>
       <Page size="A4" style={styles.page}>
@@ -88,32 +112,30 @@ const MyDocument = () => (
           </View>
 
           <HeadContent
-            textHeadLeft="Nama Pembeli"
-            textContentLeft="Kim Jong Un"
-            textHeadRight="Nama Penjual"
-            textContentRight="Donald Trump"
+            textHeadLeft="Nama Pengirim"
+            textContentLeft={namaPembeli}
+            textHeadRight="Nama Penerima"
+            textContentRight={namaPenjual}
           />
 
           <HeadContent
-            textHeadLeft="Nomor Telepon Pembeli"
-            textContentLeft="012345678910"
-            textHeadRight="Nomor Telepon Penjual"
-            textContentRight="012345678910"
+            textHeadLeft="Nomor Telepon Pengirim"
+            textContentLeft={telpPembeli}
+            textHeadRight="Nomor Telepon Penerima"
+            textContentRight={telpPenjual}
           />
-
-          <View style={styles.address}>
-            <TextHead text="Alamat Pembeli" />
-            <Text>
-              Jl Kb Kacang Grand Indonesia Shopping Town East Mall Lt Ground 30,
-              TANGERANG - CILEDUG, BANTEN, 15148
-            </Text>
+          <View style={{ marginBottom: 25, marginTop: 5 }}>
+            <HeadContent
+              textHeadRight="Alamat Penerima"
+              textContentRight={alamat}
+            />
           </View>
 
           <HeadContent
             textHeadLeft="Nomor Pemesanan"
-            textContentLeft="CSUI2020SKRT"
+            textContentLeft={nomorPesanan}
             textHeadRight="Waktu Pemesanan"
-            textContentRight="12 Juli 2021"
+            textContentRight={waktuPesanan}
           />
 
           <Text style={[styles.textHead, { marginTop: "32px" }]}>
@@ -122,15 +144,29 @@ const MyDocument = () => (
 
           <View style={styles.detailPesanan}>
             <DetailPesanan />
-            {dummyDataPDF.map(({ ...dataDetail }) => (
-              <DetailPesanan
-                isDetail={true}
-                fontWeight="normal"
-                {...dataDetail}
-              />
-            ))}
+            {data.map(
+              ({
+                products_name,
+                products_price,
+                products_quantity,
+                final_price,
+                products_weight,
+                attributes,
+              }) => (
+                <DetailPesanan
+                  name={products_name}
+                  hargaSatuan={products_price}
+                  jumlah={products_quantity}
+                  subTotal={final_price}
+                  berat={products_weight}
+                  isDetail={true}
+                  fontWeight="normal"
+                  detail={attributes}
+                />
+              ),
+            )}
           </View>
-          {detailPricePDF.map(({ id, name, price }) => (
+          {detailPrice.map(({ id, name, price }) => (
             <View key={id}>
               <View
                 style={[
@@ -153,5 +189,13 @@ const MyDocument = () => (
     </Document>
   </PDFViewer>
 );
+
+const biayaTambahan = (detail) => {
+  let total = 0;
+  detail.forEach(({ options_values_price }) => {
+    total += Number(options_values_price);
+  });
+  return total;
+};
 
 export default MyDocument;

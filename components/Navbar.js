@@ -32,7 +32,6 @@ import {
 import { IoHomeSharp, IoReceiptSharp } from "react-icons/io5";
 
 import { productList } from "../constants/dummyData";
-import { icons } from "../constants/navbarConstant";
 import { useAuthContext } from "../contexts/authProvider";
 import styles from "../styles/Navbar.module.scss";
 import { setBadgeColor } from "../utils/functions";
@@ -41,8 +40,6 @@ import Sidebar from "./Sidebar";
 
 export const NavbarBottom = ({ onDrawerOpen, isLoggedIn }) => {
   const router = useRouter();
-  console.log(router);
-  console.log(isLoggedIn);
   return (
     <Box
       as="nav"
@@ -135,44 +132,59 @@ const Overlay = ({ isSearched, isMainMenu, handleClickOverlay }) => (
   />
 );
 
-const SearchedElement = ({ isSearched, setIsSearched }) => (
-  <Box
-    className={styles.boxSearch}
-    display={{ base: "flex", md: "none" }}
-    zIndex={isSearched ? "6" : "-6"}
-    w={isSearched ? "100vw" : "128px"}
-    bg={isSearched ? "white" : "transparent"}
-  >
-    <Icon
-      as={BsChevronLeft}
-      onClick={() => setIsSearched(false)}
-      mr="12px"
-      w="20px"
-      h="20px"
-      _hover={{ cursor: "pointer" }}
-      display={isSearched ? "block" : "none"}
-    />
-    <InputGroup borderColor="white">
-      <InputLeftElement
-        children={<Icon as={IoSearch} className={styles.navbarIcon} />}
-        transition="all 0.8s"
-        display={isSearched ? "flex" : "none"}
-        alignItems="center"
+const SearchedElement = ({ isSearched, setIsSearched }) => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      if (searchQuery) router.push(`/search?q=${searchQuery}`);
+    }
+  }
+
+  return (
+    <Box
+      className={styles.boxSearch}
+      display={{ base: "flex", md: "none" }}
+      zIndex={isSearched ? "6" : "-6"}
+      w={isSearched ? "100vw" : "128px"}
+      bg={isSearched ? "white" : "transparent"}
+    >
+      <Icon
+        as={BsChevronLeft}
+        onClick={() => setIsSearched(false)}
+        mr="12px"
+        w="20px"
+        h="20px"
+        _hover={{ cursor: "pointer" }}
+        display={isSearched ? "block" : "none"}
       />
-      <Input
-        type="text"
-        placeholder="Cari di toko..."
-        bg={isSearched ? "gray.100" : "transparent"}
-        pl={isSearched ? "45px" : "0"}
-        w={isSearched ? "100%" : "0"}
-        visibility={isSearched ? "visible" : "hidden"}
-        borderRadius="12px"
-        borderWidth="0"
-        transition="width 0.8s, padding-left 0.8s,  background-color 0s, visibility 0s"
-      />
-    </InputGroup>
-  </Box>
-);
+      <InputGroup borderColor="white">
+        <InputLeftElement
+          children={<Icon as={IoSearch} className={styles.navbarIcon} />}
+          transition="all 0.8s"
+          display={isSearched ? "flex" : "none"}
+          alignItems="center"
+          onClick={() => {if (searchQuery) router.push(`/search?q=${searchQuery}`)}}
+        />
+        <Input
+          type="text"
+          placeholder="Cari di toko..."
+          bg={isSearched ? "gray.100" : "transparent"}
+          pl={isSearched ? "45px" : "0"}
+          w={isSearched ? "100%" : "0"}
+          visibility={isSearched ? "visible" : "hidden"}
+          borderRadius="12px"
+          borderWidth="0"
+          transition="width 0.8s, padding-left 0.8s,  background-color 0s, visibility 0s"
+          value={searchQuery}
+          onChange={(event) => setSearchQuery(event.target.value)}
+          onKeyDown={(event) => handleKeyDown(event)}
+        />
+      </InputGroup>
+    </Box>
+  );
+};
 
 const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
   const { userData, loading, logout } = useAuthContext();
@@ -310,6 +322,16 @@ const Navbar = () => {
   const onDrawerOpen = drawerDisclosure.onOpen;
   const onDrawerClose = drawerDisclosure.onClose;
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      if (searchQuery) router.push(`/search?q=${searchQuery}`);
+    }
+  }
+
+
   const navbarEl = useRef(null);
 
   const handleClickOverlay = () => {
@@ -375,6 +397,7 @@ const Navbar = () => {
                   }}
                   color="orange.400"
                   ml="17px"
+                  onClick={() => {if (searchQuery) router.push(`/search?q=${searchQuery}`)}}
                 />
               }
             />
@@ -386,6 +409,9 @@ const Navbar = () => {
               bg="gray.100"
               pl="55px"
               focusBorderColor="gray.100"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              onKeyDown={(event) => handleKeyDown(event)}
             />
           </InputGroup>
         </Box>

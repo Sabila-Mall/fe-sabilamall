@@ -10,17 +10,37 @@ import {
   InputRightElement,
   Text,
   VStack,
+  Spinner,
+  useToast,
+  useDisclosure,
+  Link,
 } from "@chakra-ui/react";
+import { useEffect } from "react";
+import { useState } from "react";
+import { useContext } from "react";
 import { BiSearch } from "react-icons/bi";
 import { IoCopy } from "react-icons/io5";
 
+import { apiCancelOrder } from "../../api/CancelOrder";
+import { CancelOrder } from "../../components/CancelOrderModal";
 import { CardProfile } from "../../components/CardProfile";
 import Footer from "../../components/Footer";
 import { Layout } from "../../components/Layout";
 import Navbar from "../../components/Navbar";
 import NavbarProfile from "../../components/NavbarProfile";
-import ProfileDesktop from "../../components/ProfileDesktop";
+import { MONTH } from "../../constants/pesanan-saya";
+import { useAuthContext } from "../../contexts/authProvider";
+import {
+  MyOrderProvider,
+  useMyOrderContext,
+} from "../../contexts/customerOrderProvider";
 import { useWindowSize } from "../../hooks/useWindowSize";
+import styles from "../../styles/Pagination.module.scss";
+import {
+  copyToClipboard,
+  currencyFormat,
+  formatNumber,
+} from "../../utils/functions";
 import { needForLogin } from "../../utils/functions";
 
 const sm = [
@@ -28,22 +48,96 @@ const sm = [
   { text: "SM Point", value: 5 },
 ];
 
+const handleSearch = (
+  search,
+  setFetchOrder,
+  setOrderId,
+  setData,
+  cacheData,
+  currentPage,
+  setSearchState,
+) => {
+  const pattern = /\bSMC\d{3,}$/;
+  if (search.match(pattern)) {
+    const orderId = search.split("SMC")[1];
+    setOrderId(orderId);
+    setFetchOrder(true);
+  } else {
+    setData(cacheData[currentPage - 1]);
+    setSearchState(false);
+  }
+};
+
 const SearchBar = () => {
+  const {
+    setData,
+    cacheData,
+    currentPage,
+    setFetchOrder,
+    setOrderId,
+    setSearchState,
+  } = useMyOrderContext();
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    if (search.length > 3) {
+      handleSearch(
+        search,
+        setFetchOrder,
+        setOrderId,
+        setData,
+        cacheData,
+        currentPage,
+        setSearchState,
+      );
+    } else {
+      setOrderId("");
+      setData(cacheData[currentPage - 1]);
+      setSearchState(false);
+    }
+  }, [search]);
+
   return (
     <Flex w="full" justify="flex-end">
       <InputGroup maxW="35rem">
-        <Input placeholder="Cari Pesanan" bg="white" />
+        <Input
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
+          placeholder="Nomor Order"
+          bg="white"
+          value={search}
+        />
         <InputRightElement children={<BiSearch />} />
       </InputGroup>
     </Flex>
   );
 };
 
-const CardPesanan = ({ isMobile }) => {
+const CardPesanan = ({
+  isMobile,
+  orderNum,
+  datePurchased,
+  orderStatus,
+  paymentStatus,
+  dropShip,
+  deliverer,
+  totalPrice,
+  orderId,
+  parentId,
+  totalPriceAgent,
+}) => {
   const { width } = useWindowSize();
+  const { userData } = useAuthContext();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
+  const date = datePurchased.split(" ")[0].split("-");
+  const formatedDate = `${Number(date[2])} ${MONTH[Number(date[1])]} ${Number(
+    date[0],
+  )}`;
   return (
     <VStack
-      p="1.5rem"
+      p={width > 320 && "1.5rem"}
       boxShadow="0px 2px 4px -1px rgba(45, 55, 72, 0.06), 0px 4px 6px -1px rgba(45, 55, 72, 0.1)"
       borderRadius="20px"
       background="white"
@@ -55,38 +149,56 @@ const CardPesanan = ({ isMobile }) => {
         direction={{ base: "column", md: "row" }}
         w="full"
       >
-        <Button
-          mr="1rem"
-          color="white"
-          bg="orange.500"
-          alignSelf={{ base: "flex-start", md: "center" }}
-          mb={{ base: "1rem", md: "0" }}
+        <Link
+          _hover={{ textDecoration: "none" }}
+          target="_blank"
+          href={`${window.location.origin}/nota-pembayaran/${orderId}`}
         >
-          Cetak Nota
-        </Button>
+          {parentId == 0 && paymentStatus !== "Batal" && (
+            <Button
+              mr="1rem"
+              color="white"
+              bg="orange.500"
+              alignSelf={{ base: "flex-start", md: "center" }}
+              mb={{ base: "1rem", md: "0" }}
+            >
+              Cetak Nota
+            </Button>
+          )}
+        </Link>
         <Flex justifyContent="space-between" w="full" mb="0.5rem">
           <Flex alignItems="center">
             <Text fontSize="1rem" fontWeight="500" mr="0.5rem">
-              SMC10101
+              {orderNum}
             </Text>
             <IoCopy
               size="1.25rem"
               color="#DD6B20"
               style={{ marginTop: "2px" }}
+              cursor="pointer"
+              onClick={() => {
+                copyToClipboard(orderNum, "Nomor order berhasil disalin");
+                toast({
+                  position: "top",
+                  title: "Berhasil menyalin nomor order",
+                  status: "success",
+                  isClosable: true,
+                });
+              }}
             />
             <Divider orientation="vertical" mx="1rem" />
             <Text fontSize="1rem" fontWeight="500" mr="0.5rem">
-              4 Juli 2021
+              {formatedDate}
             </Text>
           </Flex>
           <Flex align="center">
             <Text
               fontSize="1rem"
-              fontWeight="500"
+              fontWeight="700"
               mr="0.5rem"
               color="orange.500"
             >
-              [Status Pesanan]
+              {orderStatus}
             </Text>
           </Flex>
         </Flex>
@@ -98,13 +210,13 @@ const CardPesanan = ({ isMobile }) => {
             Pengirim
           </Text>
           <Text fontSize="1rem" fontWeight="500">
-            [Nama Pengirim]
+            {dropShip}
           </Text>
           <Text color="gray.500" fontWeight="normal">
             Penerima
           </Text>
           <Text fontSize="1rem" fontWeight="500">
-            [Nama Penerima]
+            {deliverer}
           </Text>
         </GridItem>
         <GridItem colStart={{ base: 0, md: 2 }} colEnd={{ base: 1, md: 3 }}>
@@ -112,20 +224,32 @@ const CardPesanan = ({ isMobile }) => {
             Status Pembayaran
           </Text>
           <Text fontSize="1rem" fontWeight="500">
-            [Status Pembayaran]
+            {paymentStatus}
           </Text>
         </GridItem>
       </Grid>
       <Divider />
-      <Flex w="full" justify="flex-end">
+      <Flex w="full" justify="flex-end" flexWrap="wrap" py="0.5rem">
         <Flex align="center">
-          <Text color="gray.500" fontWeight="normal" mr="0.5rem">
-            Total Pesanan:
+          <Text color="gray.700" fontWeight="normal" mr="0.5rem">
+            {totalPriceAgent === 0 ? "Total Price :" : "Harga Agen :"}
           </Text>
           <Text fontSize="1.2rem" fontWeight="bold">
-            Rp9.999.999
+            {totalPriceAgent === 0
+              ? currencyFormat(String(totalPrice))
+              : currencyFormat(totalPriceAgent)}
           </Text>
         </Flex>
+        {totalPriceAgent !== 0 && (
+          <Flex ml="1rem" align="center">
+            <Text color="gray.700" fontWeight="normal" mr="0.5rem">
+              Harga Reseller :
+            </Text>
+            <Text fontSize="1.2rem" fontWeight="bold">
+              {currencyFormat(String(totalPrice))}
+            </Text>
+          </Flex>
+        )}
       </Flex>
       <Flex w="full" justify="flex-end">
         <Flex
@@ -138,15 +262,43 @@ const CardPesanan = ({ isMobile }) => {
             borderWidth="1px"
             _hover={{ bg: "#EEE" }}
             borderColor="orange.500"
-            mr="1rem"
             w={width < 365 ? "full" : "auto"}
             mb={width < 365 ? "0.25rem" : "0"}
           >
             Lihat Detail Transaksi
           </Button>
-          <Button bg="red.600" color="white" w={width < 365 ? "full" : "auto"}>
-            Batalkan
-          </Button>
+          {orderStatus === "Booking" &&
+            paymentStatus === "Pending" &&
+            parentId === 0 && (
+              <>
+                <Button
+                  bg="red.600"
+                  color="white"
+                  ml={width > 365 && "1rem"}
+                  w={width < 365 ? "full" : "auto"}
+                  onClick={onOpen}
+                >
+                  Batalkan
+                </Button>
+                <CancelOrder
+                  id={userData.id}
+                  isOpen={isOpen}
+                  onClose={onClose}
+                  orderNum={orderNum}
+                  orderId={orderId}
+                />
+              </>
+            )}
+          {orderStatus === "Selesai" && (
+            <Button
+              bg="orange.500"
+              color="white"
+              ml={width > 365 && "1rem"}
+              w={width < 365 ? "full" : "auto"}
+            >
+              Berikan Penilaian
+            </Button>
+          )}
         </Flex>
       </Flex>
     </VStack>
@@ -154,6 +306,16 @@ const CardPesanan = ({ isMobile }) => {
 };
 
 const PesananSayaDesktop = () => {
+  const {
+    data,
+    loading,
+    setCurrentPage,
+    currentPage,
+    searchState,
+    lastPage,
+  } = useMyOrderContext();
+  const { width } = useWindowSize();
+
   return (
     <Box bg="gray.50" minH="100vh">
       <Layout hasNavbar={true}>
@@ -163,12 +325,74 @@ const PesananSayaDesktop = () => {
           align="flex-start"
         >
           <CardProfile sm={sm} cardProfileText="Pesanan Saya" />
-          <VStack pl="1rem" w="full" mx={{ base: "1rem", md: 0 }}>
-            <SearchBar />
-            <CardPesanan />
-            <CardPesanan />
-            <CardPesanan />
-            <CardPesanan />
+          <VStack
+            maxW={width > 768 && width < 1024 && "478px"}
+            minW={width > 768 && width < 1024 && "478px"}
+            alignItems="flex-end"
+            pl="1rem"
+            w="full"
+            mx={{ base: "1rem", md: 0 }}
+            spacing="1rem"
+          >
+            <Flex
+              justifyContent={!searchState ? "space-between" : "flex-end"}
+              w="full"
+              alignItems="center"
+            >
+              {!searchState && (
+                <Text
+                  fontWeight="500"
+                  fontSize="1.1rem"
+                  w={{ base: "20%", "2xl": "35%" }}
+                  pl={{ base: "0.5rem" }}
+                >
+                  Halaman : {currentPage}
+                </Text>
+              )}
+              <SearchBar />
+            </Flex>
+            {!searchState && !(lastPage === currentPage) && (
+              <NextPrevPages
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+              />
+            )}
+
+            <Box w="full" d="flex" alignItems="center" flexDir="column">
+              {loading ? (
+                <Spinner />
+              ) : (
+                data.map((dataPesanan, i) => {
+                  let totalPriceAgent = 0;
+                  if (dataPesanan.parent_id) {
+                    totalPriceAgent = dataPesanan.total_price_agent;
+                  }
+                  return (
+                    <CardPesanan
+                      key={i}
+                      orderId={dataPesanan.orders_id}
+                      orderNum={dataPesanan.orders_number}
+                      datePurchased={dataPesanan.date_purchased}
+                      orderStatus={dataPesanan.orders_status}
+                      paymentStatus={dataPesanan.payments_status}
+                      dropShip={dataPesanan.dropship_name}
+                      deliverer={dataPesanan.delivery_name}
+                      totalPrice={dataPesanan.total_price}
+                      parentId={dataPesanan.parent_id}
+                      totalPriceAgent={totalPriceAgent}
+                    />
+                  );
+                })
+              )}
+            </Box>
+            {!searchState && !(lastPage === currentPage) && (
+              <Box w="full" mb="3rem">
+                <Pages
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                />
+              </Box>
+            )}
           </VStack>
         </Flex>
       </Layout>
@@ -177,24 +401,155 @@ const PesananSayaDesktop = () => {
 };
 
 const PesananSayaMobile = () => {
+  const {
+    data,
+    loading,
+    currentPage,
+    setCurrentPage,
+    searchState,
+  } = useMyOrderContext();
+  const { width } = useWindowSize();
+
   return (
-    <Box bg="gray.50" minH="100vh" pt="5rem">
-      <NavbarProfile section={"Pesanan Saya"} />
-      <VStack spacing="1rem" mb="2rem" mx="1rem">
-        <SearchBar />
-        <CardPesanan />
-        <CardPesanan />
-        <CardPesanan />
-      </VStack>
-      <Footer />
+    <Box minH="100vh">
+      <Layout>
+        <NavbarProfile section={"Pesanan Saya"} />
+        <Flex pt="2rem" flexDir="column" width="100%" my="1rem">
+          <SearchBar />
+          {!searchState && (
+            <Box w="full">
+              <Pages
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+              />
+            </Box>
+          )}
+        </Flex>
+        <VStack spacing="1rem" mb="1rem">
+          {loading ? (
+            <Spinner />
+          ) : (
+            data.map((dataPesanan) => {
+              return (
+                <CardPesanan
+                  key={dataPesanan.order_number}
+                  orderNum={dataPesanan.orders_number}
+                  datePurchased={dataPesanan.date_purchased}
+                  orderStatus={dataPesanan.orders_status}
+                  paymentStatus={dataPesanan.payments_status}
+                  dropShip={dataPesanan.dropship_name}
+                  deliverer={dataPesanan.delivery_name}
+                  totalPrice={dataPesanan.total_price}
+                  parentId={dataPesanan.parent_id}
+                />
+              );
+            })
+          )}
+        </VStack>
+        {!searchState && (
+          <Box w="full" mb="3rem">
+            <Pages currentPage={currentPage} setCurrentPage={setCurrentPage} />
+          </Box>
+        )}
+      </Layout>
     </Box>
   );
 };
 
-const PesananSaya = () => {
-  const { width } = useWindowSize();
+const Pages = ({ currentPage, setCurrentPage }) => {
+  const { loading } = useMyOrderContext();
 
-  return width >= 768 ? <PesananSayaDesktop /> : <PesananSayaMobile />;
+  return (
+    <>
+      {!loading && (
+        <>
+          <Text
+            my="1rem"
+            fontWeight="500"
+            fontSize="1.1rem"
+            w="full%"
+            pl="0.5rem"
+          >
+            Halaman : {currentPage}
+          </Text>
+
+          <NextPrevPages
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        </>
+      )}
+    </>
+  );
+};
+
+const NextPrevPages = ({ currentPage, setCurrentPage }) => {
+  const { width } = useWindowSize();
+  return (
+    <Flex
+      justifyContent={currentPage !== 1 ? "space-between" : "flex-end"}
+      w="full"
+      fontWeight="500"
+      textDecoration="underline"
+      color="orange.500"
+      px="0.5rem"
+      fontSize={width < 325 && "0.9rem"}
+    >
+      {currentPage > 1 && (
+        <Text
+          cursor="pointer"
+          onClick={() => {
+            setCurrentPage((curr) => curr - 1);
+          }}
+        >
+          Halaman Sebelumnya
+        </Text>
+      )}
+      <Text
+        cursor="pointer"
+        onClick={() => {
+          setCurrentPage((curr) => curr + 1);
+          window.scrollTo(0, 0);
+        }}
+      >
+        Halaman Selanjutnya
+      </Text>
+    </Flex>
+  );
+};
+
+const PesananSayaComponent = () => {
+  const { width } = useWindowSize();
+  const { userData } = useAuthContext();
+  const { data } = useMyOrderContext();
+
+  return userData == null || data.length == 0 ? (
+    <>
+      <Navbar />
+      {console.log(userData)}
+      <Box
+        d="flex"
+        w="100vw"
+        h="100vh"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Spinner />
+      </Box>
+    </>
+  ) : width >= 768 ? (
+    <PesananSayaDesktop />
+  ) : (
+    <PesananSayaMobile />
+  );
+};
+
+const PesananSaya = () => {
+  return (
+    <MyOrderProvider>
+      <PesananSayaComponent />
+    </MyOrderProvider>
+  );
 };
 
 export default PesananSaya;
