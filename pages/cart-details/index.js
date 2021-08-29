@@ -78,7 +78,7 @@ const cartDetails = () => {
           </Box>
 
           <Box display={{ base: "none", lg: "block" }} w={{ lg: "25%" }}>
-            <CardCheckout discount="0" />
+            <CardCheckout />
           </Box>
         </Box>
 
@@ -89,7 +89,7 @@ const cartDetails = () => {
 
       {cartData.length ? <AddVoucher width={{ base: "full", lg: "30%" }} /> : <></>}
       <Box display={{ lg: "none" }}>
-        <CardCheckout discount={"89.999.999"} />
+        <CardCheckout />
       </Box>
     </Layout>
   );

@@ -3,12 +3,13 @@ import { Box, Divider, Flex, HStack, Text, VStack } from "@chakra-ui/layout";
 import { css } from "@emotion/react";
 import { useCartContext } from "../contexts/cartProvider";
 
-export const CardCheckout = ({ discount }) => {
-  const { totalPrice } = useCartContext();
+export const CardCheckout = () => {
+  const { totalPrice, totalDiscount } = useCartContext();
   const idr = Intl.NumberFormat("id-ID");
   // const subtotal = subTotal.replace(/\./g, "");
-  const disc = discount.replace(/\./g, "");
-  const total = Number(totalPrice) - Number(disc);
+  // const disc = totalDiscount.replace(/\./g, "");
+  const total = Number(totalPrice) - Number(totalDiscount);
+  console.log(totalDiscount);
 
   return (
     <Box
@@ -23,10 +24,11 @@ export const CardCheckout = ({ discount }) => {
           <Text fontWeight="700">Subtotal</Text>
           <Text>Rp{totalPrice}</Text>
         </Flex>
-        <Flex my="6px" justifyContent="space-between">
+        {totalDiscount ? <Flex my="6px" justifyContent="space-between">
           <Text fontWeight="700">Diskon</Text>
-          <Text>-Rp{discount}</Text>
-        </Flex>
+          <Text>-Rp{totalDiscount}</Text>
+        </Flex> : <></>}
+
         <Divider my="6px" />
         <Flex my="6px" justifyContent="space-between">
           <Text fontWeight="700">Total</Text>

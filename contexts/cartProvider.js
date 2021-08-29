@@ -13,6 +13,7 @@ export const CartProvider = ({ children }) => {
     const [cartData, setcartData] = useState([]);
     const [loading, setloading] = useState(false);
     const [totalPrice, settotalPrice] = useState(0)
+    const [totalDiscount, settotalDiscount] = useState(0)
     const { userData } = useAuthContext();
     const userId = userData?.id;
     console.log(userId);
@@ -61,6 +62,18 @@ export const CartProvider = ({ children }) => {
                         });
 
                     });
+
+                    let tempPrice = 0
+                    let tempDiscount = 0
+                    tempCart.forEach(element => {
+                        const price = element.final_price
+                        const quantity = element.customers_basket_quantity
+                        const discount = element.products_discount
+                        tempPrice += price * quantity
+                        tempDiscount += discount * quantity
+                    });
+                    settotalPrice(tempPrice)
+                    settotalDiscount(tempDiscount)
                     console.log(productIDs);
                     setcartData(tempCart)
                     console.log(cartData);
@@ -133,7 +146,9 @@ export const CartProvider = ({ children }) => {
             deleteCartItem,
             updateQuantity,
             totalPrice,
-            settotalPrice
+            settotalPrice,
+            totalDiscount,
+            settotalDiscount
         }} >
             {children}
         </CartContext.Provider>
