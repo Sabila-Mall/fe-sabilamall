@@ -69,6 +69,8 @@ const AlamatPenerima = () => {
     },
   ];
 
+  const [refetch, setRefetch] = useState(null);
+
   const [pengirimCurrentTab, setPengirimCurrentTab] = useState(0);
   const [penerimaCurrentTab, setPenerimaCurrentTab] = useState(0);
 
@@ -77,6 +79,7 @@ const AlamatPenerima = () => {
 
   const [namaPengirim, setNamaPengirim] = useState("");
   const [nomorPengirim, setNomorPengirim] = useState("");
+  const [addressIdPengirim, setAddressIdPengirim] = useState(null);
 
   const [namaTextPengirim, setNamaTextPengirim] = useState("");
   const [ponselPengirim, setPonselPengirim] = useState("");
@@ -84,12 +87,14 @@ const AlamatPenerima = () => {
   const [namaPenerima, setNamaPenerima] = useState("");
   const [nomorPenerima, setNomorPenerima] = useState("");
   const [alamatPenerima, setAlamatPenerima] = useState("");
+  const [addressIdPenerima, setAddressIdPenerima] = useState(null);
 
   const [ringkasan, setRingkasan] = useState({
     pcs: 0,
     weight: 0,
     subTotal: 0,
     discount: 0,
+    vendors_id: null,
   });
 
   const [namaAwalPenerima, setNamaAwalPenerima] = useState("");
@@ -102,9 +107,26 @@ const AlamatPenerima = () => {
   const [ponselPenerima, setPonselPenerima] = useState("");
   const [alamatTextPenerima, setAlamatTextPenerima] = useState("");
 
+  const clearInputPenerima = () => {
+    setNamaAwalPenerima("");
+    setNamaAkhirPenerima("");
+    setNegaraPenerima("");
+    setProvinsiPenerima("");
+    setKotaPenerima("");
+    setKecamatanPenerima("");
+    setKodePosPenerima("");
+    setPonselPenerima("");
+    setAlamatTextPenerima("");
+  };
+
+  const clearInputPengirim = () => {
+    setNamaTextPengirim("");
+    setPonselPengirim("");
+  };
+
   const addAddressPengirim = async () => {
     try {
-      await addAddress({
+      const res = await addAddress({
         entry_firstname: extractName(namaTextPengirim)?.firstname,
         entry_lastname: extractName(namaTextPengirim)?.lastname,
         entry_phone: ponselPengirim,
@@ -113,6 +135,8 @@ const AlamatPenerima = () => {
         is_default: 0,
       });
       SuccessToast("Berhasil menambahkan alamat pengirim");
+
+      return res;
     } catch (err) {
       throw new Error(err);
     }
@@ -120,7 +144,7 @@ const AlamatPenerima = () => {
 
   const addAddressPenerima = async () => {
     try {
-      await addAddress({
+      const res = await addAddress({
         entry_firstname: namaAwalPenerima,
         entry_lastname: namaAkhirPenerima,
         entry_phone: ponselPenerima,
@@ -134,7 +158,9 @@ const AlamatPenerima = () => {
         is_default: 0,
         entry_street_address: alamatTextPenerima,
       });
+
       SuccessToast("Berhasil menambahkan alamat penerima");
+      return res;
     } catch (err) {
       throw new Error(err);
     }
@@ -150,6 +176,7 @@ const AlamatPenerima = () => {
                   ...res?.map((d) => ({
                     nama: d.firstname + " " + d.lastname,
                     nomor: d.phone,
+                    ...d,
                   })),
                 ]
               : [],
@@ -170,6 +197,7 @@ const AlamatPenerima = () => {
                     nama: d.firstname + " " + d.lastname,
                     nomor: d.phone,
                     alamat: `${d.street}, ${d.subdistrict_name}, ${d.city_name}, ${d.zone_name}`,
+                    address_id: d.address_id,
                   })),
                 ]
               : [],
@@ -179,6 +207,7 @@ const AlamatPenerima = () => {
 
       getMyCart(userId)
         .then((res) => {
+          // console.log(res, "RSSSS");
           let pcs = 0;
           let weight = 0;
           let subTotal = 0;
@@ -194,14 +223,20 @@ const AlamatPenerima = () => {
                 Number(k.products_price);
             });
           });
-          const d = { pcs, weight, subTotal, discount };
+          const d = {
+            pcs,
+            weight,
+            subTotal,
+            discount,
+            vendors_id: res?.[0]?.vendors_id,
+          };
           setRingkasan({ ...d });
         })
         .catch(() => console.error("err"));
     };
 
     userId && getDataPengirim();
-  }, [userId]);
+  }, [userId, refetch]);
 
   useEffect(() => {
     const getKota = () => {
@@ -244,12 +279,14 @@ const AlamatPenerima = () => {
   const pengirimRadioHandler = (e) => {
     setNamaPengirim(dataPengirim[e].nama);
     setNomorPengirim(dataPengirim[e].nomor);
+    setAddressIdPengirim(dataPengirim[e].address_id);
   };
 
   const penerimaRadioHandler = (e) => {
     setNamaPenerima(dataPenerima[e].nama);
     setNomorPenerima(dataPenerima[e].nomor);
     setAlamatPenerima(dataPenerima[e].alamat);
+    setAddressIdPenerima(dataPenerima[e].address_id);
   };
 
   const saveToContext = (data) => {
@@ -271,6 +308,8 @@ const AlamatPenerima = () => {
         saveToContext({
           ...ringkasan,
           userId,
+          dropshipper_id: addressIdPengirim,
+          delivery_id: addressIdPenerima,
           namaPengirim,
           nomorPengirim,
           namaPenerima,
@@ -291,9 +330,12 @@ const AlamatPenerima = () => {
       }
     } else if (pengirimCurrentTab == 0 && penerimaCurrentTab == 1) {
       try {
+        const res = await addAddressPenerima();
         saveToContext({
           ...ringkasan,
           userId,
+          dropshipper_id: addressIdPengirim,
+          delivery_id: res.address_id,
           namaPengirim,
           nomorPengirim,
           namaPenerima: namaAwalPenerima + namaAkhirPenerima,
@@ -303,16 +345,20 @@ const AlamatPenerima = () => {
           jalanPenerima: alamatTextPenerima,
           nomorPenerima: ponselPenerima,
         });
-        await addAddressPenerima();
-        router.push("/detail-pesanan");
+
+        setRefetch(res);
+        clearInputPenerima();
       } catch (err) {
         ErrorToast("Gagal menambahkan alamat penerima");
       }
     } else if (pengirimCurrentTab == 1 && penerimaCurrentTab == 0) {
       try {
+        const res = await addAddressPengirim();
         saveToContext({
           ...ringkasan,
           userId,
+          dropshipper_id: res.address_id,
+          delivery_id: addressIdPenerima,
           namaPengirim: namaTextPengirim,
           nomorPengirim: ponselPengirim,
           namaPenerima: namaAwalPenerima + namaAkhirPenerima,
@@ -327,16 +373,21 @@ const AlamatPenerima = () => {
             .slice(0, splittedAlamatPenerima.length - 3)
             .join(", "),
         });
-        await addAddressPengirim();
-        router.push("/detail-pesanan");
+
+        setRefetch(res);
+        clearInputPengirim();
       } catch (err) {
         ErrorToast("Gagal menambahkan alamat pengirim");
       }
     } else {
       try {
+        const res1 = await addAddressPengirim();
+        const res2 = await addAddressPenerima();
         saveToContext({
           ...ringkasan,
           userId,
+          dropshipper_id: res1.address_id,
+          delivery_id: res2.address_id,
           namaPengirim: namaTextPengirim,
           nomorPengirim: ponselPengirim,
           namaPenerima: namaAwalPenerima + namaAkhirPenerima,
@@ -346,9 +397,12 @@ const AlamatPenerima = () => {
           jalanPenerima: alamatTextPenerima,
           nomorPenerima: ponselPenerima,
         });
-        await addAddressPengirim();
-        await addAddressPenerima();
-        router.push("/detail-pesanan");
+
+        // router.push("/alamat-penerima");
+        // router.reload(window.location.pathname);
+        setRefetch(res);
+        clearInputPengirim();
+        clearInputPenerima();
       } catch (err) {
         ErrorToast("Gagal menambahkan alamat pengirim / penerima");
       }
