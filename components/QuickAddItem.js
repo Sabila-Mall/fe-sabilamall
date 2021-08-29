@@ -15,38 +15,48 @@ const formatPrice = (price) => {
 const QuickAddItem = ({ product }) => {
   const { userData } = useAuthContext();
   const userId = userData?.id;
-  const { tempData, updateCart, totalPrice, settotalPrice } = useCartContext();
+  const { updateQuantity, deleteCartItem, totalPrice, settotalPrice } = useCartContext();
   // console.log(priceValue);
 
-  // console.log(tempData[0]);
   console.log(product);
 
-  const [quantity, setquantity] = useState(0)
+  const [quantity, setquantity] = useState(product.customers_basket_quantity)
   const price = product.final_price
   const stock = product.products_stok
+  settotalPrice(price * quantity)
   const handleModifyNumberOfItem = (event) => {
     let tempPrice = totalPrice
     if (event === "increase") {
       if (stock - quantity <= 0) {
         setquantity(stock);
+        tempPrice = Number(price * quantity)
+        settotalPrice(tempPrice)
+        updateQuantity(userId, product.customers_basket_id, quantity)
       } else {
         setquantity(quantity + 1);
-        tempPrice += Number(price)
+        tempPrice = Number(price * quantity)
+        settotalPrice(tempPrice)
+        updateQuantity(userId, product.customers_basket_id, quantity)
       }
     } else if (event === "decrease") {
-      if (quantity > 0) {
+      if (quantity > 1) {
         setquantity(quantity - 1);
-        tempPrice -= Number(price)
+        tempPrice = Number(price * quantity)
+        settotalPrice(tempPrice)
+        updateQuantity(userId, product.customers_basket_id, quantity)
       } else {
-        setquantity(0);
+        setquantity(1);
+        tempPrice = Number(price)
+        settotalPrice(tempPrice)
+        updateQuantity(userId, product.customers_basket_id, quantity)
       }
     }
-    settotalPrice(tempPrice)
     console.log(totalPrice)
   };
 
   const handleDelete = (productId) => {
-    updateCart(productId, userId)
+    console.log(productId);
+    deleteCartItem(userId, productId)
   }
 
   return (
@@ -91,7 +101,7 @@ const QuickAddItem = ({ product }) => {
           icon={<IoTrash size={"1.25rem"} />}
           variant={"ghost"}
           h={5}
-          onClick={() => handleDelete(product.products_id)}
+          onClick={() => handleDelete(product.customers_basket_id)}
         />
       </HStack>
 
@@ -107,7 +117,7 @@ const QuickAddItem = ({ product }) => {
                 icon={<IoRemoveCircleOutline size={"1.5rem"} />}
                 variant={"ghost"}
                 color={"gray.400"}
-                color={quantity === 0 ? "gray.200" : "gray.400"}
+                color={quantity === 1 ? "gray.200" : "gray.400"}
                 _hover={{ cursor: "pointer" }}
                 onClick={() => handleModifyNumberOfItem("decrease")}
               />

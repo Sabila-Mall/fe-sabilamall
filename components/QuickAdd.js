@@ -12,6 +12,7 @@ import {
   Link,
   useBreakpointValue,
   Spinner,
+  Grid,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useCartContext } from "../contexts/cartProvider";
@@ -24,9 +25,8 @@ import QuickAddListItem from "./QuickAddListItem";
  * @param isDrawerOpen stattus drawer sekarang apakah sedang terbuka atau tidak [dapatkan dari useDisclosure()]
  * @param onDrawerClose callback function yang dipanggil untuk close modal [dapatkan dari useDisclosure()]
  */
-const QuickAdd = ({ products, isDrawerOpen, onDrawerClose }) => {
-  const { cartData, loading, totalPrice } = useCartContext();
-  console.log(cartData ? cartData : "");
+const QuickAdd = ({ isDrawerOpen, onDrawerClose }) => {
+  const { loading, totalPrice } = useCartContext();
 
   const size = useBreakpointValue({ base: "full", md: "md" });
 
@@ -55,56 +55,60 @@ const QuickAdd = ({ products, isDrawerOpen, onDrawerClose }) => {
           <Text className={"secondaryFont"}>Keranjang Saya</Text>
         </DrawerHeader>
 
-        <DrawerBody px={"2rem"}>
-          {cartData ? <QuickAddListItem products={cartData} /> : <></>}
-        </DrawerBody>
+        {loading ? <Grid placeItems="center">
+          <Spinner></Spinner></Grid> : <>
+          <DrawerBody px={"2rem"}>
+            <QuickAddListItem />
+          </DrawerBody>
 
-        <DrawerFooter borderTopWidth={"1px"} flexDirection={"column"}>
-          <Flex align={"center"} justify={"space-between"} w={"full"}>
+          <DrawerFooter borderTopWidth={"1px"} flexDirection={"column"}>
+            <Flex align={"center"} justify={"space-between"} w={"full"}>
+              <Text
+                className={"secondaryFont"}
+                fontSize={"16px"}
+                textColor={"gray.500"}
+              >
+                Total
+              </Text>
+              <Text
+                className={"primaryFont"}
+                textColor={"orange.400"}
+                fontSize={"20"}
+                fontWeight={"bold"}
+              >
+                Rp{formatPrice(totalPrice)}
+              </Text>
+            </Flex>
             <Text
+              fontSize={{ base: "12px", md: "14px" }}
+              textColor={"gray.400"}
               className={"secondaryFont"}
+              textAlign="center"
+              my="0.5rem"
+            >
+              Ongkos kirim akan dihitung saat proses checkout
+            </Text>
+            <Button
+              backgroundColor={"red.500"}
+              color={"white"}
               fontSize={"16px"}
-              textColor={"gray.500"}
-            >
-              Total
-            </Text>
-            <Text
               className={"primaryFont"}
-              textColor={"orange.400"}
-              fontSize={"20"}
-              fontWeight={"bold"}
+              width={"full"}
             >
-              Rp{formatPrice(totalPrice)}
-            </Text>
-          </Flex>
-          <Text
-            fontSize={{ base: "12px", md: "14px" }}
-            textColor={"gray.400"}
-            className={"secondaryFont"}
-            textAlign="center"
-            my="0.5rem"
-          >
-            Ongkos kirim akan dihitung saat proses checkout
-          </Text>
-          <Button
-            backgroundColor={"red.500"}
-            color={"white"}
-            fontSize={"16px"}
-            className={"primaryFont"}
-            width={"full"}
-          >
-            Checkout
-          </Button>
-          <Link
-            textColor={"red.500"}
-            fontWeight={"bold"}
-            fontSize={"14px"}
-            className={"primaryFont"}
-            mt="0.5rem"
-          >
-            Lihat detail keranjang belanja
-          </Link>
-        </DrawerFooter>
+              Checkout
+            </Button>
+            <Link
+              textColor={"red.500"}
+              fontWeight={"bold"}
+              fontSize={"14px"}
+              className={"primaryFont"}
+              mt="0.5rem"
+            >
+              Lihat detail keranjang belanja
+            </Link>
+          </DrawerFooter>
+        </>}
+
       </DrawerContent>
     </Drawer>
   );

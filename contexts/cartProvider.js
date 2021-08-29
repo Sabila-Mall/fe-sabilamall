@@ -1,7 +1,8 @@
 import { useToast } from "@chakra-ui/react";
 import { createContext, useContext, useEffect, useState } from "react";
 
-import { apiGetCartByCustomerID } from "../api/cart";
+import { addCart, apiGetCartByCustomerID, deleteCart, updateCartQuantity } from "../api/cart";
+import { isRequestSuccess } from "../utils/api";
 import { useAuthContext } from "./authProvider";
 
 
@@ -35,24 +36,8 @@ export const CartProvider = ({ children }) => {
             isClosable: true,
         });
     };
-    const updateCart = async (productId, customerId) => {
-        if (userId) {
-            setcartData(
-                cartData.filter((item) => {
-                    // console.log(item.keranjang[0].products_id);
-                    item.keranjang[0].products_id != productId
-                }),
-            );
-            apiGetCartByCustomerID(customerId).
-                then((res) => {
-                    settempData(res)
-                })
-            console.log(tempData);
-        }
-    }
 
-
-    useEffect(() => {
+    const getAllData = () => {
         setloading(true);
         if (userId) {
             apiGetCartByCustomerID(userId)
@@ -82,14 +67,71 @@ export const CartProvider = ({ children }) => {
                 })
                 .finally(() => setloading(false));
         }
+    }
+
+    const addCartItem = async (customers_id, user_level, products_id, quantity, option_id, option_values_id) => {
+        addCart({ customers_id, user_level, products_id, quantity, option_id, option_values_id })
+            .then((res) => {
+                console.log(res);
+                if (isRequestSuccess(res)) {
+                    successToast("Produk berhasil ditambahkan ke keranjang belanja")
+                    getAllData()
+                } else {
+                    errorToast("Produk gagal ditambahkan ke keranjang belanja")
+                    getAllData()
+                }
+            })
+            .catch(() => {
+                errorToast("Produk gagal ditambahkan ke keranjang belanja")
+            })
+    }
+
+    const deleteCartItem = async (customers_id, customers_basket_id) => {
+        deleteCart({ customers_id, customers_basket_id })
+            .then((res) => {
+                if (isRequestSuccess(res)) {
+                    successToast("Produk berhasil dihapus dari keranjang belanja")
+                    getAllData()
+                } else {
+                    errorToast("Gagal menghapus produk dari keranjang belanja")
+                    getAllData()
+                }
+            })
+            .catch(() => {
+                errorToast("Gagal menghapus produk dari keranjang belanja")
+                getAllData()
+            })
+    }
+    const updateQuantity = async (customers_id, customers_basket_id, customers_basket_quantity) => {
+        updateCartQuantity({ customers_id, customers_basket_id, customers_basket_quantity })
+            .then((res) => {
+                if (isRequestSuccess(res)) {
+                    console.log("berhasil");
+                } else {
+                    console.log("gagal");
+                }
+            })
+            .catch(() => {
+                console.log("gagal error");
+            })
+    }
+
+    useEffect(() => {
+        getAllData()
     }, [userData]);
+
+    console.log(cartData);
+
+
 
     return (
         <CartContext.Provider value={{
             cartData,
             loading,
             tempData,
-            updateCart,
+            addCartItem,
+            deleteCartItem,
+            updateQuantity,
             totalPrice,
             settotalPrice
         }} >

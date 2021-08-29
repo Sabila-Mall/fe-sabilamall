@@ -23,8 +23,8 @@ const path = [
 const cartDetails = () => {
 
   const { cartData, loading, totalPrice } = useCartContext();
-  const [priceValue, setpriceValue] = useState(totalPrice[0])
-  console.log(totalPrice);
+  // const [priceValue, setpriceValue] = useState(totalPrice[0])
+  // console.log(totalPrice);
 
   return (
     <Layout hasNavbar hasPadding hasBreadCrumb breadCrumbItem={path}>
@@ -49,21 +49,21 @@ const cartDetails = () => {
                   </Th>
                 </Tr>
               </Thead>
-              {cartData &&
+              {cartData ?
                 <Tbody>
                   {cartData.map((el, index) => {
                     return (
                       <TableContent product={el} />
                     )
                   })}
-                </Tbody>
+                </Tbody> : <></>
               }
 
             </Table>
           </Box>
 
           <Box display={{ base: "none", lg: "block" }} w={{ lg: "25%" }}>
-            <CardCheckout subTotal={priceValue} discount="0" />
+            <CardCheckout subTotal={totalPrice} discount="0" />
           </Box>
         </Box>
 
@@ -74,7 +74,7 @@ const cartDetails = () => {
 
       <AddVoucher />
       <Box display={{ lg: "none" }}>
-        <CardCheckout subTotal={priceValue} discount={"89.999.999"} />
+        <CardCheckout subTotal={totalPrice} discount={"89.999.999"} />
       </Box>
     </Layout>
   );

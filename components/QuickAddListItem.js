@@ -2,15 +2,22 @@ import { Button, DrawerCloseButton, Flex, Icon, StackDivider, Text, VStack } fro
 import React from "react";
 import QuickAddItem from "./QuickAddItem";
 import { AiOutlineArrowLeft } from "react-icons/ai";
+import { useCartContext } from "../contexts/cartProvider";
 
-const QuickAddListItem = ({ products }) => {
-  console.log(products);
-  if (products.length > 0) {
+const QuickAddListItem = () => {
+
+  const { cartData, loading } = useCartContext();
+  console.log(cartData);
+  if (cartData.length > 0) {
     return (
       <VStack spacing={6} divider={<StackDivider borderColor="gray.200" />} align={"start"}>
-        {products.map((product, index) =>
-          <QuickAddItem key={index} product={product} />,
-        )}
+        {loading ? <Grid placeItems="center"><Spinner /></Grid> :
+          cartData && cartData.map((product, index) => {
+            return (
+              <QuickAddItem key={index} product={product} />
+            )
+          }
+          )}
       </VStack>
     );
   } else {
