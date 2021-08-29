@@ -1,4 +1,4 @@
-import { Button, DrawerCloseButton, Flex, Icon, StackDivider, Text, VStack } from "@chakra-ui/react";
+import { Button, DrawerCloseButton, Icon, StackDivider, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 import QuickAddItem from "./QuickAddItem";
 import { AiOutlineArrowLeft } from "react-icons/ai";

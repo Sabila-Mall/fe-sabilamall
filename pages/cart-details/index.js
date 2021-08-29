@@ -22,7 +22,7 @@ const path = [
 
 const cartDetails = () => {
 
-  const { cartData, loading, totalPrice } = useCartContext();
+  const { cartData, loading } = useCartContext();
   // const [priceValue, setpriceValue] = useState(totalPrice[0])
   // console.log(totalPrice);
 
@@ -63,7 +63,7 @@ const cartDetails = () => {
           </Box>
 
           <Box display={{ base: "none", lg: "block" }} w={{ lg: "25%" }}>
-            <CardCheckout subTotal={totalPrice} discount="0" />
+            <CardCheckout discount="0" />
           </Box>
         </Box>
 
@@ -74,7 +74,7 @@ const cartDetails = () => {
 
       <AddVoucher />
       <Box display={{ lg: "none" }}>
-        <CardCheckout subTotal={totalPrice} discount={"89.999.999"} />
+        <CardCheckout discount={"89.999.999"} />
       </Box>
     </Layout>
   );

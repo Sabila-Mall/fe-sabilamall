@@ -9,11 +9,11 @@ import {
   Button,
   Text,
   Flex,
-  Link,
   useBreakpointValue,
   Spinner,
   Grid,
 } from "@chakra-ui/react";
+import Link from "next/link";
 import React, { useState } from "react";
 import { useCartContext } from "../contexts/cartProvider";
 
@@ -98,13 +98,16 @@ const QuickAdd = ({ isDrawerOpen, onDrawerClose }) => {
               Checkout
             </Button>
             <Link
-              textColor={"red.500"}
-              fontWeight={"bold"}
-              fontSize={"14px"}
-              className={"primaryFont"}
-              mt="0.5rem"
+              href="/cart-details"
             >
-              Lihat detail keranjang belanja
+              <Text
+                mt="0.5rem"
+                textColor={"red.500"}
+                fontWeight={"bold"}
+                fontSize={"14px"}
+                className={"primaryFont"}>
+                Lihat detail keranjang belanja
+              </Text>
             </Link>
           </DrawerFooter>
         </>}

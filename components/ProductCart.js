@@ -23,7 +23,8 @@ export const ProductCart = ({ isDiscount, product }) => {
   const productPath = product?.products_image_path
   const productPrice = product?.final_price
 
-  console.log(tempData[0]);
+  const varian = product?.varian
+
   console.log(product);
   return (
     <Box width="100%" px={{ base: "1rem", md: 0 }}>
@@ -61,15 +62,13 @@ export const ProductCart = ({ isDiscount, product }) => {
             {productName}
           </Text>
           <VStack spacing="3px" alignItems="start" mb="1rem">
-            <Text color="gray.500" fontSize="14px">
-              Varian : Lengan Panjang
-            </Text>
-            <Text color="gray.500" fontSize="14px">
-              Warna : Merah Cabe
-            </Text>
-            <Text color="gray.500" fontSize="14px">
-              Ukuran : XXXXXXXL
-            </Text>
+            {varian && varian.map((el, index) => {
+              return (
+                <Text color="gray.500" fontSize="14px">
+                  {`${el.products_options_name} : ${el.products_options_values_name}`}
+                </Text>
+              )
+            })}
           </VStack>
           <Box display={{ md: "none" }}>
             <CartPrice isDiscount={isDiscount} price={productPrice} />
