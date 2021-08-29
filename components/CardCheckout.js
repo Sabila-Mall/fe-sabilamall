@@ -10,7 +10,6 @@ export const CardCheckout = () => {
   // const disc = totalDiscount.replace(/\./g, "");
   const total = Number(selectedPrice) - Number(totalDiscount);
   console.log(totalDiscount);
-
   return (
     <Box
       width="full"

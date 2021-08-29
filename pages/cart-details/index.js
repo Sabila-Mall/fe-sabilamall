@@ -1,13 +1,8 @@
 import { Button } from "@chakra-ui/button";
-import { Input, InputGroup, InputRightAddon } from "@chakra-ui/input";
 import { Box, Flex, Text } from "@chakra-ui/layout";
-import { Center, Grid } from "@chakra-ui/react";
+import { Center, Grid, Spinner } from "@chakra-ui/react";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/table";
-import { useState } from "react";
-
-import { AddAmount } from "../../components/AddAmount";
 import { CardCheckout } from "../../components/CardCheckout";
-import { CartPrice } from "../../components/CartPrice";
 import { Layout } from "../../components/Layout";
 import { ProductCart } from "../../components/ProductCart";
 import { TableContent } from "../../components/TableContent";
@@ -30,62 +25,65 @@ const cartDetails = () => {
 
   return (
     <Layout hasNavbar hasPadding hasBreadCrumb breadCrumbItem={path}>
-      <Box w="full">
-        <Box display={{ lg: "flex" }} justifyContent="space-between">
-          <Box
-            w={{ lg: "75%" }}
-            mr={{ lg: "1rem", xl: "2rem" }}
-            border={{ md: "1px solid #CBD5E0" }}
-            borderRadius={{ md: "12px" }}
-          >
-            <Table size="md" display={{ base: "none", md: "block" }}>
-              <Thead>
-                <Tr>
-                  <Th w="50%">Produk</Th>
-                  <Th w="20%">Harga Satuan</Th>
-                  <Th textAlign="center" pr={{ xl: "0.5rem" }} p="0" w="20%">
-                    Jumlah
-                  </Th>
-                  <Th w="20%" textAlign="center" px="1em">
-                    Subtotal
-                  </Th>
-                </Tr>
-              </Thead>
-              {cartData.length ?
-                <Tbody>
-                  {cartData.map((el, index) => {
-                    return (
-                      <TableContent product={el} />
-                    )
-                  })}
-                </Tbody> :
-                <Box w="100%">
-                  <Center w="100%" >
-                    <Text
-                      mt="1rem"
-                      fontSize={"1rem"}
-                      className={"secondaryFont"}>
-                      Belum ada barang di dalam keranjang belanja
-                    </Text>
-                  </Center>
-                  <Center w="100%">
-                    <AddVoucher width={{ base: "full", lg: "50%" }} />
-                  </Center>
-                </Box>
-              }
+      {loading ? <Grid placeItems="center">
+        <Spinner></Spinner></Grid> :
+        <Box w="full">
+          <Box display={{ lg: "flex" }} justifyContent="space-between">
+            <Box
+              w={{ lg: "75%" }}
+              mr={{ lg: "1rem", xl: "2rem" }}
+              border={{ md: "1px solid #CBD5E0" }}
+              borderRadius={{ md: "12px" }}
+            >
+              <Table size="md" display={{ base: "none", md: "block" }}>
+                <Thead>
+                  <Tr>
+                    <Th w="50%">Produk</Th>
+                    <Th w="20%">Harga Satuan</Th>
+                    <Th textAlign="center" pr={{ xl: "0.5rem" }} p="0" w="20%">
+                      Jumlah
+                    </Th>
+                    <Th w="20%" textAlign="center" px="1em">
+                      Subtotal
+                    </Th>
+                  </Tr>
+                </Thead>
+                {cartData.length ?
+                  <Tbody>
+                    {cartData.map((el, index) => {
+                      return (
+                        <TableContent product={el} />
+                      )
+                    })}
+                  </Tbody> :
+                  <Box w="100%">
+                    <Center w="100%" >
+                      <Text
+                        mt="1rem"
+                        fontSize={"1rem"}
+                        className={"secondaryFont"}>
+                        Belum ada barang di dalam keranjang belanja
+                      </Text>
+                    </Center>
+                    <Center w="100%">
+                      <AddVoucher width={{ base: "full", lg: "50%" }} />
+                    </Center>
+                  </Box>
+                }
 
-            </Table>
+              </Table>
+            </Box>
+
+            <Box display={{ base: "none", lg: "block" }} w={{ lg: "25%" }}>
+              <CardCheckout />
+            </Box>
           </Box>
 
-          <Box display={{ base: "none", lg: "block" }} w={{ lg: "25%" }}>
-            <CardCheckout />
+          <Box display={{ base: "block", md: "none" }}>
+            <ProductCart isDiscount price={"9.999.999"} />
           </Box>
         </Box>
-
-        <Box display={{ base: "block", md: "none" }}>
-          <ProductCart isDiscount price={"9.999.999"} />
-        </Box>
-      </Box>
+      }
 
       {cartData.length ? <AddVoucher width={{ base: "full", lg: "30%" }} /> : <></>}
       <Box display={{ lg: "none" }}>
