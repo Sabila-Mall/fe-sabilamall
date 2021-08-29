@@ -1,6 +1,7 @@
 import { Button } from "@chakra-ui/button";
 import { Input, InputGroup, InputRightAddon } from "@chakra-ui/input";
 import { Box, Flex, Text } from "@chakra-ui/layout";
+import { Center, Grid } from "@chakra-ui/react";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/table";
 import { useState } from "react";
 
@@ -25,6 +26,7 @@ const cartDetails = () => {
   const { cartData, loading } = useCartContext();
   // const [priceValue, setpriceValue] = useState(totalPrice[0])
   // console.log(totalPrice);
+  console.log(cartData.length);
 
   return (
     <Layout hasNavbar hasPadding hasBreadCrumb breadCrumbItem={path}>
@@ -49,14 +51,27 @@ const cartDetails = () => {
                   </Th>
                 </Tr>
               </Thead>
-              {cartData ?
+              {cartData.length ?
                 <Tbody>
                   {cartData.map((el, index) => {
                     return (
                       <TableContent product={el} />
                     )
                   })}
-                </Tbody> : <></>
+                </Tbody> :
+                <Box w="100%">
+                  <Center w="100%" >
+                    <Text
+                      mt="1rem"
+                      fontSize={"1rem"}
+                      className={"secondaryFont"}>
+                      Belum ada barang di dalam keranjang belanja
+                    </Text>
+                  </Center>
+                  <Center w="100%">
+                    <AddVoucher width={{ base: "full", lg: "50%" }} />
+                  </Center>
+                </Box>
               }
 
             </Table>
@@ -72,7 +87,7 @@ const cartDetails = () => {
         </Box>
       </Box>
 
-      <AddVoucher />
+      {cartData.length ? <AddVoucher width={{ base: "full", lg: "30%" }} /> : <></>}
       <Box display={{ lg: "none" }}>
         <CardCheckout discount={"89.999.999"} />
       </Box>
@@ -80,14 +95,14 @@ const cartDetails = () => {
   );
 };
 
-const AddVoucher = () => {
+const AddVoucher = ({ width }) => {
   return (
     <Box w={{ lg: "75%" }} mt={{ md: "1.5rem" }} pr={{ lg: "1.9rem" }}>
       <Flex justifyContent={{ lg: "center" }}>
         <Button
           mt={{ base: "13px", lg: "0" }}
           mb={{ base: "2rem", lg: "0" }}
-          w={{ base: "full", lg: "30%" }}
+          w={width}
           variant="outline"
           colorScheme="orange"
           color="orange.400"
