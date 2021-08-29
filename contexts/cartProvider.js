@@ -14,6 +14,9 @@ export const CartProvider = ({ children }) => {
     const [loading, setloading] = useState(false);
     const [totalPrice, settotalPrice] = useState(0)
     const [totalDiscount, settotalDiscount] = useState(0)
+    const [selectedPrice, setselectedPrice] = useState(0)
+    const [selectedItem, setselectedItem] = useState([])
+
     const { userData } = useAuthContext();
     const userId = userData?.id;
     console.log(userId);
@@ -72,14 +75,49 @@ export const CartProvider = ({ children }) => {
                         tempPrice += price * quantity
                         tempDiscount += discount * quantity
                     });
+
                     settotalPrice(tempPrice)
                     settotalDiscount(tempDiscount)
                     console.log(productIDs);
                     setcartData(tempCart)
                     console.log(cartData);
+
                 })
                 .finally(() => setloading(false));
         }
+    }
+
+    const addToCheckout = (data) => {
+        let tempData = selectedItem
+        tempData.push(data)
+        setselectedItem(tempData)
+        console.log(selectedItem);
+        calculateTotalSelected()
+    }
+
+    const deleteFromCheckout = (data) => {
+        let tempData = []
+        selectedItem.forEach(element => {
+            console.log(element.products_id === data.products_id);
+            if (element.customers_basket_id !== data.customers_basket_id) {
+                tempData.push(element)
+            }
+        });
+        console.log(tempData);
+        setselectedItem(tempData)
+        calculateTotalSelected()
+    }
+
+    const calculateTotalSelected = () => {
+        setselectedPrice(0)
+        if (selectedItem.length > 0) {
+            let tempTotal = 0
+            selectedItem.forEach(element => {
+                tempTotal += element.final_price * element.customers_basket_quantity
+            });
+            setselectedPrice(tempTotal)
+        }
+
     }
 
     const addCartItem = async (customers_id, user_level, products_id, quantity, option_id, option_values_id) => {
@@ -148,7 +186,12 @@ export const CartProvider = ({ children }) => {
             totalPrice,
             settotalPrice,
             totalDiscount,
-            settotalDiscount
+            settotalDiscount,
+            selectedItem,
+            setselectedItem,
+            addToCheckout,
+            deleteFromCheckout,
+            selectedPrice
         }} >
             {children}
         </CartContext.Provider>

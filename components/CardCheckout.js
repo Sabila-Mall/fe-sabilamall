@@ -4,11 +4,11 @@ import { css } from "@emotion/react";
 import { useCartContext } from "../contexts/cartProvider";
 
 export const CardCheckout = () => {
-  const { totalPrice, totalDiscount } = useCartContext();
+  const { totalDiscount, selectedPrice } = useCartContext();
   const idr = Intl.NumberFormat("id-ID");
   // const subtotal = subTotal.replace(/\./g, "");
   // const disc = totalDiscount.replace(/\./g, "");
-  const total = Number(totalPrice) - Number(totalDiscount);
+  const total = Number(selectedPrice) - Number(totalDiscount);
   console.log(totalDiscount);
 
   return (
@@ -22,7 +22,7 @@ export const CardCheckout = () => {
       <Flex flexDirection="column" color="gray.500" fontWeight="500">
         <Flex my="6px" justifyContent="space-between">
           <Text fontWeight="700">Subtotal</Text>
-          <Text>Rp{totalPrice}</Text>
+          <Text>Rp{selectedPrice}</Text>
         </Flex>
         {totalDiscount ? <Flex my="6px" justifyContent="space-between">
           <Text fontWeight="700">Diskon</Text>

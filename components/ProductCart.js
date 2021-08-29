@@ -1,13 +1,8 @@
-import { Input } from "@chakra-ui/input";
 import { Divider, Text } from "@chakra-ui/layout";
-import { HStack } from "@chakra-ui/layout";
 import { VStack } from "@chakra-ui/layout";
 import { Flex, Box } from "@chakra-ui/layout";
-import Image from "next/image";
+import { Checkbox, Image, Radio } from "@chakra-ui/react";
 import { useState } from "react";
-import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
-import { IoTrash } from "react-icons/io5";
-import { RiPencilFill } from "react-icons/ri";
 import { IMAGE_HOST } from "../constants/api";
 import { useAuthContext } from "../contexts/authProvider";
 import { useCartContext } from "../contexts/cartProvider";
@@ -15,25 +10,35 @@ import { useCartContext } from "../contexts/cartProvider";
 import { CartPrice } from "./CartPrice";
 
 export const ProductCart = ({ isDiscount, product }) => {
+  const [isSelected, setisSelected] = useState(false)
   const { userData } = useAuthContext();
   const userId = userData?.id;
-  const { tempData, updateCart } = useCartContext();
+  const { addToCheckout, deleteFromCheckout } = useCartContext();
 
   const productName = product?.products_name
   const productPath = product?.products_image_path
   const productPrice = product?.final_price
-
   const varian = product?.varian
+
+  const handleCheckbox = () => {
+    setisSelected(!isSelected)
+    if (isSelected) {
+      addToCheckout(product)
+    } else {
+      deleteFromCheckout(product)
+    }
+  }
 
   console.log(product);
   return (
-    <Box width="100%" px={{ base: "1rem", md: 0 }}>
+    <Box width="100%" px={{ base: "1rem", md: 0 }} as="label" onClick={(e) => handleCheckbox()}>
       <Flex
         alignItems="start"
         justifyContent={{ base: "center", md: "start" }}
         mb={{ base: "1.75rem", md: "0" }}
         justifyContent="flex-start"
       >
+        <Checkbox alignSelf="center" mr="20px"></Checkbox>
         <Flex
           flexDirection="column"
           justifyContent="center"
@@ -48,7 +53,7 @@ export const ProductCart = ({ isDiscount, product }) => {
             <Image
               layout="fill"
               quality={100}
-              src="/images/cart/cartimage.svg"
+              src={IMAGE_HOST + productPath}
             />
           </Box>
         </Flex>
