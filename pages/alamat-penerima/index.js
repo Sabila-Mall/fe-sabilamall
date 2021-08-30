@@ -342,9 +342,9 @@ const AlamatPenerima = () => {
           namaPengirim,
           nomorPengirim,
           namaPenerima: namaAwalPenerima + namaAkhirPenerima,
-          provinsiPenerima: provinsiPenerima?.split(", ")?.[1],
-          kotaPenerima: kotaPenerima?.split(", ")?.[1],
-          kecamatanPenerima: kecamatanPenerima?.split(", ")?.[1],
+          provinsiPenerima: provinsiPenerima?.split(" ")?.[1],
+          kotaPenerima: kotaPenerima?.split(" ")?.[1],
+          kecamatanPenerima: kecamatanPenerima?.split(" ")?.[1],
           jalanPenerima: alamatTextPenerima,
           nomorPenerima: ponselPenerima,
         });
@@ -363,7 +363,7 @@ const AlamatPenerima = () => {
           delivery_id: addressIdPenerima,
           namaPengirim: namaTextPengirim,
           nomorPengirim: ponselPengirim,
-          namaPenerima: namaAwalPenerima + namaAkhirPenerima,
+          namaPenerima,
           nomorPenerima,
           provinsiPenerima:
             splittedAlamatPenerima[splittedAlamatPenerima.length - 1],
@@ -376,7 +376,7 @@ const AlamatPenerima = () => {
             .join(", "),
         });
 
-        router.push("/alamat-penerima");
+        router.push("/detail-pesanan");
       } catch (err) {
         ErrorToast("Gagal menambahkan alamat pengirim");
       }
@@ -392,14 +392,15 @@ const AlamatPenerima = () => {
           namaPengirim: namaTextPengirim,
           nomorPengirim: ponselPengirim,
           namaPenerima: namaAwalPenerima + namaAkhirPenerima,
-          provinsiPenerima: provinsiPenerima?.split(", ")?.[1],
-          kotaPenerima: kotaPenerima?.split(", ")?.[1],
-          kecamatanPenerima: kecamatanPenerima?.split(", ")?.[1],
+          provinsiPenerima: provinsiPenerima?.split(" ")?.[1],
+          kotaPenerima: kotaPenerima?.split(" ")?.[1],
+          kecamatanPenerima: kecamatanPenerima?.split(" ")?.[1],
           jalanPenerima: alamatTextPenerima,
           nomorPenerima: ponselPenerima,
         });
 
-        router.push("/alamat-penerima");
+        // console.log(provinsiPenerima, "PROOOOVVV");
+        router.push("/detail-pesanan");
       } catch (err) {
         ErrorToast("Gagal menambahkan alamat pengirim / penerima");
       }
