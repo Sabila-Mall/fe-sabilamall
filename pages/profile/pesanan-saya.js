@@ -312,7 +312,6 @@ const PesananSayaDesktop = () => {
     setCurrentPage,
     currentPage,
     searchState,
-    lastPage,
   } = useMyOrderContext();
   const { width } = useWindowSize();
 
@@ -351,7 +350,7 @@ const PesananSayaDesktop = () => {
               )}
               <SearchBar />
             </Flex>
-            {!searchState && !(lastPage === currentPage) && (
+            {!searchState && !loading && (
               <NextPrevPages
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
@@ -385,7 +384,7 @@ const PesananSayaDesktop = () => {
                 })
               )}
             </Box>
-            {!searchState && !(lastPage === currentPage) && (
+            {!searchState && !loading && (
               <Box w="full" mb="3rem">
                 <Pages
                   currentPage={currentPage}
@@ -446,7 +445,7 @@ const PesananSayaMobile = () => {
             })
           )}
         </VStack>
-        {!searchState && (
+        {!searchState && !loading && (
           <Box w="full" mb="3rem">
             <Pages currentPage={currentPage} setCurrentPage={setCurrentPage} />
           </Box>
@@ -457,7 +456,7 @@ const PesananSayaMobile = () => {
 };
 
 const Pages = ({ currentPage, setCurrentPage }) => {
-  const { loading } = useMyOrderContext();
+  const { loading, lastPage } = useMyOrderContext();
 
   return (
     <>
@@ -484,7 +483,11 @@ const Pages = ({ currentPage, setCurrentPage }) => {
 };
 
 const NextPrevPages = ({ currentPage, setCurrentPage }) => {
+  const { lastPage } = useMyOrderContext();
   const { width } = useWindowSize();
+  console.log(lastPage == currentPage);
+  console.log("last page: " + lastPage);
+  console.log("currentPage: " + currentPage);
   return (
     <Flex
       justifyContent={currentPage !== 1 ? "space-between" : "flex-end"}
@@ -505,15 +508,17 @@ const NextPrevPages = ({ currentPage, setCurrentPage }) => {
           Halaman Sebelumnya
         </Text>
       )}
-      <Text
-        cursor="pointer"
-        onClick={() => {
-          setCurrentPage((curr) => curr + 1);
-          window.scrollTo(0, 0);
-        }}
-      >
-        Halaman Selanjutnya
-      </Text>
+      {!(lastPage === currentPage) && (
+        <Text
+          cursor="pointer"
+          onClick={() => {
+            setCurrentPage((curr) => curr + 1);
+            window.scrollTo(0, 0);
+          }}
+        >
+          Halaman Selanjutnya
+        </Text>
+      )}
     </Flex>
   );
 };
