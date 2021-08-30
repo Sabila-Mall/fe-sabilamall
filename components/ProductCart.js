@@ -27,9 +27,6 @@ export const ProductCart = ({ isDiscount, product }) => {
       deleteFromCheckout(product)
     }
   }
-
-
-  console.log(product);
   return (
     <Box width="100%" px={{ base: "1rem", md: 0 }} as="label" onClick={() => handleCheckbox()}>
       <Flex

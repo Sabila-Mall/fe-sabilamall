@@ -93,12 +93,26 @@ export const CartProvider = ({ children }) => {
         }
     }
 
+    const checkCheckout = () => {
+        if (selectedItem.length) {
+            console.log(selectedItem);
+            let tempVendor = selectedItem[0].vendors_id
+            selectedItem.forEach(element => {
+                if (element.vendors_id != tempVendor) {
+                    errorToast("Vendor yang dipilih harus sama")
+                    return;
+                }
+            });
+        }
+    }
+
     const addToCheckout = (data) => {
         let tempData = selectedItem
         tempData.push(data)
         setselectedItem(tempData)
         console.log(selectedItem);
         calculateTotalSelected(tempData)
+        checkCheckout()
     }
 
     const deleteFromCheckout = (data) => {
