@@ -2,6 +2,7 @@ import { Button } from "@chakra-ui/button";
 import { Box, Flex, Text } from "@chakra-ui/layout";
 import { Center, Grid, Spinner } from "@chakra-ui/react";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/table";
+import { AddAmount } from "../../components/AddAmount";
 import { CardCheckout } from "../../components/CardCheckout";
 import { Layout } from "../../components/Layout";
 import { ProductCart } from "../../components/ProductCart";
@@ -111,7 +112,11 @@ const cartDetails = () => {
                       </Text>
                       {el.keranjang.map((elemenKeranjang, index) => {
                         return (
-                          <ProductCart product={elemenKeranjang} />
+                          <>
+                            <ProductCart product={elemenKeranjang} />
+                            <AddAmount product={elemenKeranjang} />
+                          </>
+
                         )
                       })}
                     </>
