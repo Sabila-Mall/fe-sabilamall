@@ -6,7 +6,7 @@ import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 import { useAuthContext } from "../contexts/authProvider";
 import { useCartContext } from "../contexts/cartProvider";
 
-export const AddAmount = ({ product }) => {
+export const AddAmount = ({ product, mb }) => {
 
   const { userData } = useAuthContext();
   const { updateQuantity, totalPrice, settotalPrice, deleteCartItem, totalDiscount, settotalDiscount } = useCartContext();
@@ -53,7 +53,7 @@ export const AddAmount = ({ product }) => {
   }
 
   return (
-    <>
+    <Box mb={mb}>
       <Flex justifyContent="center">
         <HStack w="8rem" alignItems="center" justifyContent={{ lg: "center" }}>
           <Box
@@ -107,6 +107,6 @@ export const AddAmount = ({ product }) => {
       >
         Hapus
       </Text>
-    </>
+    </Box>
   );
 };

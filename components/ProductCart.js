@@ -35,7 +35,6 @@ export const ProductCart = ({ isDiscount, product }) => {
       <Flex
         alignItems="start"
         justifyContent={{ base: "center", md: "start" }}
-        mb={{ base: "1.75rem", md: "0" }}
         justifyContent="flex-start"
       >
         <Checkbox alignSelf="center" mr="20px" ref={inputRef}></Checkbox>
@@ -80,7 +79,6 @@ export const ProductCart = ({ isDiscount, product }) => {
           </Box>
         </Flex>
       </Flex>
-      <Divider display={{ md: "none" }} />
     </Box>
   );
 };
