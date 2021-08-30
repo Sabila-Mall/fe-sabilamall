@@ -22,7 +22,7 @@ export const ButtonStatusUser = ({ text, mt }) => {
   );
 };
 
-export const ButtonSubmit = ({ text }) => (
+export const ButtonSubmit = ({ text, isLoading }) => (
   <Button
     className="primaryFont"
     fontWeight="semibold"
@@ -33,6 +33,7 @@ export const ButtonSubmit = ({ text }) => (
     colorScheme="orange.500"
     bg="orange.500"
     _hover={{ bg: "orange.400" }}
+    isLoading={isLoading}
   >
     {text}
   </Button>

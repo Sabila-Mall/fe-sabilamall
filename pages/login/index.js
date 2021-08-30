@@ -65,12 +65,14 @@ const Login = () => {
   return (
     <Layout noFooter hasPadding>
       <Stack
-        pb={{ lg: "4rem" }}
+        marginBottom="-2rem"
         divider={
           <StackDivider borderColor={{ base: "white", md: "gray.200" }} />
         }
         spacing={{ base: "4px" }}
         direction={{ base: "column", md: "row" }}
+        alignItems="center"
+        minH="95vh"
       >
         <Center w={{ base: "100%", md: "50%" }}>
           <Image
@@ -129,15 +131,17 @@ const Login = () => {
                   />
                 </InputGroup>
 
-                <Link
-                  color="gray.400"
-                  align="end"
-                  mt="48px"
-                  href="/reset-password"
-                  className="secondaryFont"
-                  textDecor="underline"
-                >
-                  Lupa kata sandi
+                <Link href="/reset-password">
+                  <Text
+                    color="gray.400"
+                    align="end"
+                    mt="48px"
+                    _hover={{ cursor: "pointer" }}
+                    className="secondaryFont"
+                    textDecor="underline"
+                  >
+                    Lupa kata sandi
+                  </Text>
                 </Link>
               </Stack>
 

@@ -29,7 +29,9 @@ export const AuthProvider = ({ children }) => {
           .then((res) => {
             const response = res.data;
             if (isRequestSuccess(response)) {
-              setUserData(filterObject(res.data.data, USER_FIELDS));
+              const tempData = filterObject(response.data, USER_FIELDS);
+              const finalData = filterObject(response, USER_FIELDS);
+              setUserData({ ...tempData, ...finalData });
             } else {
               console.log(res);
             }

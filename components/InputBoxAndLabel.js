@@ -14,6 +14,8 @@ const InputBoxAndLabel = ({
   options,
   defaultValue,
   required = true,
+  disabled = false,
+  error,
 }) => (
   <Box mt={mt} key={text} w={w}>
     <Text
@@ -32,19 +34,21 @@ const InputBoxAndLabel = ({
     </Text>
     {type !== "select" && type !== "textarea" && (
       <Input
-        {...register(name, { required: true })}
+        {...register(name, { required: required })}
         type={type}
         id={name}
         placeholder={text}
         _focus={{ outline: "none" }}
         autoComplete="on"
+        disabled={disabled}
         defaultValue={defaultValue}
       />
     )}
     {type === "select" && (
       <Select
-        {...register(name, { required: true })}
+        {...register(name, { required: required })}
         _focus={{ outline: "none" }}
+        defaultValue={defaultValue}
       >
         {options.map((option, index) => (
           <option
@@ -59,7 +63,7 @@ const InputBoxAndLabel = ({
     )}
     {type === "textarea" && (
       <Textarea
-        {...register(name, { required: true })}
+        {...register(name, { required: required })}
         id={name}
         placeholder={text}
         _focus={{ outline: "none" }}
@@ -67,6 +71,9 @@ const InputBoxAndLabel = ({
         defaultValue={defaultValue}
       />
     )}
+    <Text fontSize="0.85rem" color="red.500" fontWeight="600">
+      {error}
+    </Text>
   </Box>
 );
 

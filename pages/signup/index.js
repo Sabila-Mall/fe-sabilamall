@@ -492,7 +492,14 @@ const SignUp = () => {
               >
                 Sudah punya akun?{" "}
                 <b>
-                  <Link href="/login">Masuk</Link>
+                  <Link href="/login">
+                    <Text
+                      _hover={{ textDecor: "underline", cursor: "pointer" }}
+                      display="inline-block"
+                    >
+                      Masuk
+                    </Text>
+                  </Link>
                 </b>
               </Text>
               <Text

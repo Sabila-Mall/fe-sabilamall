@@ -169,3 +169,18 @@ export const currencyFormat = (amount) => {
     currency: "IDR",
   }).format(amount);
 };
+
+/**
+ * date: MM/DD/YYYY
+ */
+export const dateFormat = (date) => {
+  return `${new Date(date).getFullYear()}-${
+    new Date(date).getMonth() + 1 < 10
+      ? "0" + (new Date(date).getMonth() + 1).toString()
+      : new Date(date).getMonth() + 1
+  }-${
+    new Date(date).getDate() < 10
+      ? "0" + new Date(date).getDate().toString()
+      : new Date(date).getDate()
+  }`;
+};
