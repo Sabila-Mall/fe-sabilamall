@@ -48,33 +48,38 @@ export const CartProvider = ({ children }) => {
             apiGetCartByCustomerID(userId)
                 .then((res) => {
                     let tempCart = []
-                    let productIDs = []
+                    let allData = res
 
-                    console.log(res);
+                    allData.forEach(vendor => {
+                        for (let i = 0; i < vendor.keranjang.length; i++) {
+                            for (let j = 0; j < i; j++) {
+                                const firstItem = vendor.keranjang[i]
+                                const secondItem = vendor.keranjang[j]
+                                const firstVarian = makeObjectOfVariant(firstItem?.varian)
+                                const secondVarian = makeObjectOfVariant(secondItem?.varian)
 
-                    setcartDataByVendor(res)
-
-                    res.forEach(vendor => {
+                                // delete object two product has same variant
+                                if (JSON.stringify(firstVarian) === JSON.stringify(secondVarian)) {
+                                    let tempKeranjang = []
+                                    vendor.keranjang.forEach(el => {
+                                        if (el.customers_basket_id !== secondItem.customers_basket_id) {
+                                            tempKeranjang.push(el)
+                                        }
+                                    });
+                                    vendor.keranjang = tempKeranjang
+                                    console.log(vendor.keranjang);
+                                    console.log(secondItem);
+                                }
+                            }
+                        }
+                    });
+                    setcartDataByVendor(allData)
+                    allData.forEach(vendor => {
                         vendor.keranjang.forEach(product => {
                             tempCart.push(product)
                         });
                     });
                     console.log(tempCart);
-
-                    // res.forEach(element => {
-                    //     element.keranjang.forEach(item => {
-
-                    //         // check if data is duplicate
-                    //         if (productIDs.indexOf(item.products_id) === -1) {
-                    //             tempCart.push(item)
-                    //         }
-
-                    //         tempCart.forEach(cartItem => {
-                    //             productIDs.push(cartItem.products_id)
-                    //         })
-                    //     });
-
-                    // });
 
                     let tempPrice = 0
                     let tempDiscount = 0
@@ -93,6 +98,14 @@ export const CartProvider = ({ children }) => {
                 })
                 .finally(() => setloading(false));
         }
+    }
+
+    const makeObjectOfVariant = (varian) => {
+        let temp = {}
+        varian?.forEach(el => {
+            temp[el.products_options_id] = el.products_options_values_id
+        });
+        return temp
     }
 
     const checkoutValidation = () => {
@@ -196,10 +209,8 @@ export const CartProvider = ({ children }) => {
         getAllData()
     }, [userData]);
 
-    console.log(cartData);
 
-
-
+    console.log(cartDataByVendor);
     return (
         <CartContext.Provider value={{
             cartData,
