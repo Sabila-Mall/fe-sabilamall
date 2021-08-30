@@ -113,7 +113,9 @@ const QuickAdd = ({ isDrawerOpen, onDrawerClose }) => {
                 textColor={"red.500"}
                 fontWeight={"bold"}
                 fontSize={"14px"}
-                className={"primaryFont"}>
+                className={"primaryFont"}
+                cursor="pointer"
+                onClick={() => router.push("/cart-details")}>
                 Lihat detail keranjang belanja
               </Text>
             </Link>

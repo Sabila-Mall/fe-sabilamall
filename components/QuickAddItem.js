@@ -104,7 +104,7 @@ const QuickAddItem = ({ product, my }) => {
                 : <></>}
               {varian && varian.map((el, index) => {
                 return (
-                  <Text color="gray.500" fontSize="14px">
+                  <Text color="gray.500" fontSize="14px" key={index}>
                     {`${el.products_options_name} : ${el.products_options_values_name}`}
                   </Text>
                 )
