@@ -94,12 +94,38 @@ const cartDetails = () => {
           </Box>
 
           <Box display={{ base: "block", md: "none" }}>
-            <ProductCart isDiscount price={"9.999.999"} />
+            {cartDataByVendor.length ?
+              <Box>
+                {cartDataByVendor.map((el, index) => {
+                  console.log(cartData);
+                  return (
+                    <>
+                      <Text
+                        className="secondaryFont"
+                        ml="1rem"
+                        fontSize="1rem"
+                        fontWeight="700"
+                        mt="1rem"
+                      >
+                        {el.vendors_name}
+                      </Text>
+                      {el.keranjang.map((elemenKeranjang, index) => {
+                        return (
+                          <ProductCart product={elemenKeranjang} />
+                        )
+                      })}
+                    </>
+
+                  )
+                })}
+              </Box> :
+              <></>
+            }
           </Box>
         </Box>
       }
 
-      {cartData.length ? <AddVoucher width={{ base: "full", lg: "30%" }} /> : <></>}
+      {cartDataByVendor.length ? <AddVoucher width={{ base: "full", lg: "30%" }} /> : <></>}
       <Box display={{ lg: "none" }}>
         <CardCheckout />
       </Box>
