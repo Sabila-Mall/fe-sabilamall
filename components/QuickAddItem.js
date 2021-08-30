@@ -18,13 +18,11 @@ const QuickAddItem = ({ product, my }) => {
   const { addToCheckout, deleteFromCheckout, updateQuantity, deleteCartItem, totalPrice, settotalPrice, totalDiscount, settotalDiscount } = useCartContext();
   // console.log(priceValue);
 
-
-  console.log(product);
-
   const [quantity, setquantity] = useState(product.customers_basket_quantity)
   const price = product.final_price
   const stock = product.products_stok
   const discount = product?.products_discount
+  const varian = product?.varian
 
 
   settotalPrice(price * quantity)
@@ -83,7 +81,7 @@ const QuickAddItem = ({ product, my }) => {
             <Image
               src={IMAGE_HOST + product.products_image_path}
               alt="Product Image"
-              w={"3rem"} h={"3rem"}
+              w={"4rem"} h={"4rem"}
             />
 
             <VStack flexDirection={"column"} align={"start"}>
@@ -106,7 +104,15 @@ const QuickAddItem = ({ product, my }) => {
                 className={"secondaryFont"}
               >
                 Diskon {product.discount}%
-              </Flex> : <></>}
+              </Flex>
+                : <></>}
+              {varian && varian.map((el, index) => {
+                return (
+                  <Text color="gray.500" fontSize="14px">
+                    {`${el.products_options_name} : ${el.products_options_values_name}`}
+                  </Text>
+                )
+              })}
 
             </VStack>
           </HStack>
@@ -125,7 +131,7 @@ const QuickAddItem = ({ product, my }) => {
 
       <Flex align={"center"} justify={"space-between"} w={"full"}>
         <VStack align={"start"} spacing={"0.25rem"} w={"full"}>
-          <Text textColor={"gray.500"} fontSize={"0.75rem"} className={"secondaryFont"}>
+          <Text textColor={"gray.500"} fontSize={"0.75rem"} className={"secondaryFont"} ml="66px">
             Jumlah
           </Text>
           <HStack align={"center"} justify={"space-between"} w={"full"} spacing={{ base: "2rem", md: "8rem" }}>

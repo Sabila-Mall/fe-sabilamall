@@ -111,11 +111,11 @@ const cartDetails = () => {
                       </Text>
                       {el.keranjang.map((elemenKeranjang, index) => {
                         return (
-                          <>
+                          <Box key={index}>
                             <ProductCart product={elemenKeranjang} />
                             <AddAmount product={elemenKeranjang} mb="2rem" />
                             <Divider />
-                          </>
+                          </Box>
 
                         )
                       })}
