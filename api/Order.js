@@ -1,45 +1,44 @@
 import axios from "axios";
 
-// export const placeOrder = (
-//   vendorId,
-//   customerBasketId,
-//   destination,
-//   customerId,
-//   deliveryId,
-//   dropshipperId,
-//   paymentMethod,
-//   paymentDesc,
-//   isCouponApplied,
-//   coupons,
-//   couponAmount,
-//   orderNote,
-//   appVersion,
-//   paymentAddCostMethod,
-//   paymentAddCostValue,
-// ) => {
-//   return axios.post("https://api.sabilamall.co.id/api/order/place_order", {
-//     dataorder: [
-//       {
-//         vendors_id: 425,
-//         customers_basket_id: [115859, 115860],
-//         destination:
-//           "JNE | OKE19 | 2 - 3 D | cityid: 179,destinationid: 185,servicecode: OKE19,servicedisplay: OKE,type: Document / Paket,currency: IDR,price: 10000,est: 2 - 3 D | 10000 | Jawa Barat | Kota Depok | DEPOK | 179 | Kota BANDUNG | 40111 | 425 | 343 | Bandung Kidul",
-//       },
-//     ],
-//     customers_id: 6917,
-//     delivery_id: 7597,
-//     dropshipper_id: 7982,
-//     payment_method: "transferbank",
-//     payment_desc: "BCA - 8691879542",
-//     is_coupon_applied: 0,
-//     coupons: {},
-//     coupon_amount: 0,
-//     order_notes: "",
-//     app_version: "1.0.2",
-//     payment_addcostmethod: "",
-//     payment_addcostvalue: 0,
-//   });
-// };
+import { HOST } from "../constants/api";
+
+export const apiPlaceOrder = (
+  vendorId,
+  customerBasketId,
+  destination,
+  customerId,
+  deliveryId,
+  dropshipperId,
+  paymentMethod,
+  isCouponApplied,
+  coupons,
+  couponAmount,
+  orderNote,
+  appVersion,
+  paymentAddCostMethod,
+  paymentAddCostValue,
+) => {
+  return axios.post(HOST + "/api/order/place_order", {
+    dataorder: [
+      {
+        vendors_id: vendorId,
+        customers_basket_id: customerBasketId,
+        destination: destination,
+      },
+    ],
+    customers_id: customerId,
+    delivery_id: deliveryId,
+    dropshipper_id: dropshipperId,
+    payment_method: paymentMethod,
+    is_coupon_applied: isCouponApplied,
+    coupons: coupons,
+    coupon_amount: couponAmount,
+    order_notes: orderNote,
+    app_version: appVersion,
+    payment_addcostmethod: paymentAddCostMethod,
+    payment_addcostvalue: paymentAddCostValue,
+  });
+};
 
 export const getKurir = (
   customerId,
@@ -53,7 +52,7 @@ export const getKurir = (
   vendorOrigin,
 ) => {
   return axios.post(
-    "https://apiweb.sabilamall.co.id/api/shipping/get_all_shipping",
+    HOST + "/api/shipping/get_all_shipping",
     // {
     //   customers_id: customerId,
     //   countries_id: 100,
@@ -85,16 +84,19 @@ export const getKurir = (
   );
 };
 
-export const getPaymentMethod = () => {
-  return axios.post(
-    "https://apiweb.sabilamall.co.id/api/payment/get_payment_method",
-    {
-      language_id: "1",
-      vendors_id: ["703"],
-      users_id: "859",
-      productsjenis: ["reguler"],
-      totalorder: "15000",
-      kurir: "SiCepat - Reg",
-    },
-  );
+export const getPaymentMethod = (
+  vendors_id,
+  users_id,
+  products_jenis,
+  totalorder,
+  kurir,
+) => {
+  return axios.post(HOST + "/api/payment/get_payment_method", {
+    language_id: "1",
+    vendors_id: ["703"],
+    users_id: "859",
+    productsjenis: ["reguler"],
+    totalorder: "15000",
+    kurir: "SiCepat - Reg",
+  });
 };

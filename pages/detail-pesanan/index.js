@@ -21,17 +21,15 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
+import { getKurir, getPaymentMethod, apiPlaceOrder } from "../../api/Order";
 import CheckoutBreadcrumb from "../../components/CheckoutBreadcrumb";
 import CheckoutProduct from "../../components/CheckoutProduct";
 import CheckoutStepper from "../../components/CheckoutStepper";
 import CheckoutSummary from "../../components/CheckoutSummary";
-import Footer from "../../components/Footer";
 import { Layout } from "../../components/Layout";
-import Navbar from "../../components/Navbar";
-import { Stepper } from "../../components/Stepper";
 import {
   dataPenerima,
   dataPengirim,
@@ -74,7 +72,6 @@ const RingkasanPesanan = ({ daftarProduk }) => {
     kodePosPenerima,
     alamatPenerima,
   } = useCheckoutContext();
-  console.log(namaPengirim);
   return (
     <>
       <Heading as="h3" fontSize="1.5rem" mb="1rem" className="primaryFont">
@@ -184,12 +181,7 @@ const RingkasanPesanan = ({ daftarProduk }) => {
  *  @param {int} pengiriman.harga Harga pengiriman
  * @param {function} setPengiriman Function buat ngubah pengiriman
  */
-const Pengiriman = ({
-  beratTotal,
-  daftarJasaPengiriman,
-  pengiriman,
-  handler,
-}) => {
+const Pengiriman = ({ beratTotal, kurir, pengiriman, handler }) => {
   return (
     <>
       <Heading as="h3" mb="1rem" fontSize="1.5rem" className="primaryFont">
@@ -284,7 +276,8 @@ const CatatanPesanan = ({ setCatatanPesanan }) => {
 const MetodePembayaran = ({
   metodePembayaran,
   handler,
-  daftarMetodePembayaran,
+  handleDiskonPengiriman,
+  paymentMethod,
 }) => {
   return (
     <VStack spacing="1rem" align="stretch">
@@ -424,11 +417,10 @@ const Confirmation = ({ setPersetujuan }) => {
 
 const DetailPesanan = () => {
   const { width } = useWindowSize();
-  const isSmartphone = width < 768;
-  const isTablet = width < 1024;
-
   const isDesktop = width >= 1024;
   const router = useRouter();
+
+  const { checkoutData, setOrderNumber, setSubtotal } = useCheckoutContext();
 
   const [catatanPesanan, setCatatanPesanan] = useState("");
   const [pengiriman, setPengiriman] = useState({});
@@ -438,6 +430,7 @@ const DetailPesanan = () => {
 
   const [kurir, setKurir] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState([]);
+  const [paymentDesc, setPaymentDesc] = useState("");
 
   useEffect(() => {
     getKurir()
@@ -451,7 +444,6 @@ const DetailPesanan = () => {
     getPaymentMethod()
       .then((res) => {
         setPaymentMethod(res.data.data);
-        console.log(res.data.data);
       })
       .catch((err) => console.error(err));
   }, []);
@@ -463,6 +455,29 @@ const DetailPesanan = () => {
     console.log("PENGIRIMAN", pengiriman);
     console.log("METODE PEMBAYARAN", metodePembayaran);
     console.log("VOUCHER", voucher);
+
+    apiPlaceOrder(
+      checkoutData.vendors_id,
+      // checkoutData.basket, // tanya abduh
+      pengiriman.destination,
+      checkoutData.userId,
+      checkoutData.delivery_id,
+      checkoutData.dropshipper_id,
+      metodePembayaran.payment_method,
+      false,
+      0,
+      0,
+      catatanPesanan,
+      "1.0.2",
+      "",
+      0,
+    )
+      .then((res) => {
+        setOrderNumber(res.data.orders_number);
+        setSubtotal(res.data.subtotal);
+        router.push("/invoice");
+      })
+      .catch((err) => console.error(err));
   };
 
   const handleSelectedPengirman = (selected) => {
@@ -494,6 +509,7 @@ const DetailPesanan = () => {
           : "0",
         isCod: true,
         diskon: 10,
+        payment_method: tempPayment?.payment_method,
       });
     } else if (selected === "") {
       setMetodePembayaran({});
@@ -505,6 +521,7 @@ const DetailPesanan = () => {
           : "0",
         isCod: false,
         diskon: 10,
+        payment_method: tempPayment?.payment_method,
       });
     }
   };

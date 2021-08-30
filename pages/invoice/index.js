@@ -2,7 +2,9 @@ import { Box, Button, Flex, Text, useToast } from "@chakra-ui/react";
 import { IoCopyOutline } from "react-icons/io5";
 
 import { Layout } from "../../components/Layout";
-import { copyToClipboard } from "../../utils/functions";
+import { useCheckoutContext } from "../../contexts/checkoutProvider";
+import { copyToClipboard, currencyFormat } from "../../utils/functions";
+import { currencyFormat } from "../../utils/functions";
 
 const path = [
   {
@@ -17,6 +19,8 @@ const path = [
   },
 ];
 const Invoice = () => {
+  const { orderNumber, subtotal } = useCheckoutContext();
+
   return (
     <>
       <Layout
@@ -47,7 +51,7 @@ const Invoice = () => {
           </Text>
           <Flex justifyContent="space-between" w={{ base: "75%", lg: "60%" }}>
             <Text>Nomor Order/Invoice</Text>
-            <Text fontWeight="bold">SMC58172</Text>
+            <Text fontWeight="bold">{orderNumber}</Text>
           </Flex>
           <Flex
             mb="1rem"
@@ -55,7 +59,7 @@ const Invoice = () => {
             w={{ base: "75%", lg: "60%" }}
           >
             <Text>Total Tagihan</Text>
-            <Text>Rp.199.999</Text>
+            <Text>{currencyFormat(subtotal)}</Text>
           </Flex>
           <Text mb="0.5rem">
             Pembayaran dilakukan dengan melakukan Transfer ke Rekening berikut:
