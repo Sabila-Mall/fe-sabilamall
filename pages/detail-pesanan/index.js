@@ -21,15 +21,17 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
-import { getKurir, getPaymentMethod } from "../../api/Order";
 import CheckoutBreadcrumb from "../../components/CheckoutBreadcrumb";
 import CheckoutProduct from "../../components/CheckoutProduct";
 import CheckoutStepper from "../../components/CheckoutStepper";
 import CheckoutSummary from "../../components/CheckoutSummary";
+import Footer from "../../components/Footer";
 import { Layout } from "../../components/Layout";
+import Navbar from "../../components/Navbar";
+import { Stepper } from "../../components/Stepper";
 import {
   dataPenerima,
   dataPengirim,
@@ -182,7 +184,12 @@ const RingkasanPesanan = ({ daftarProduk }) => {
  *  @param {int} pengiriman.harga Harga pengiriman
  * @param {function} setPengiriman Function buat ngubah pengiriman
  */
-const Pengiriman = ({ beratTotal, kurir, pengiriman, handler }) => {
+const Pengiriman = ({
+  beratTotal,
+  daftarJasaPengiriman,
+  pengiriman,
+  handler,
+}) => {
   return (
     <>
       <Heading as="h3" mb="1rem" fontSize="1.5rem" className="primaryFont">
@@ -277,8 +284,7 @@ const CatatanPesanan = ({ setCatatanPesanan }) => {
 const MetodePembayaran = ({
   metodePembayaran,
   handler,
-  handleDiskonPengiriman,
-  paymentMethod,
+  daftarMetodePembayaran,
 }) => {
   return (
     <VStack spacing="1rem" align="stretch">
@@ -418,6 +424,9 @@ const Confirmation = ({ setPersetujuan }) => {
 
 const DetailPesanan = () => {
   const { width } = useWindowSize();
+  const isSmartphone = width < 768;
+  const isTablet = width < 1024;
+
   const isDesktop = width >= 1024;
   const router = useRouter();
 

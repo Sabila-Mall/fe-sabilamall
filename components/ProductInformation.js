@@ -26,50 +26,58 @@ const StarRatings = dynamic(() => import("react-star-ratings"), {
   ssr: false,
 });
 
-const ProductInformation = () => {
+const ProductInformation = ({
+  products_description,
+  vendors_name: vendor,
+  vendor_rating: vendorRating, // still hardcode
+  vendors_address,
+  id,
+  total_user_rated: ratingAmount,
+  rating,
+  one_ratio,
+  two_ratio,
+  three_ratio,
+  four_ratio,
+  five_ratio,
+}) => {
   const [description, setDescription] = useBoolean(false);
 
-  let productRating = 4.3;
-  const productDescription =
-    "Chupa chups bonbon cotton candy. Cotton candy jelly-o lollipop. Bonbon carrot cake topping chocolate cake marzipan pie dragée liquorice. Chocolate cake bonbon candy canes bonbon chocolate bar. Cupcake fruitcake dragée. Liquorice ice cream pie oat cake toffee fruitcake powder sweet roll macaroon. Tart carrot cake muffin croissant jujubes oat cake caramels. Fruitcake candy dessert bear claw dragée. Chupa chups toffee apple pie pie jelly. Marshmallow sesame snaps tiramisu jelly beans. Pastry croissant gummies. Candy canes gingerbread liquorice sesame snaps donut powder pie. Bonbon bonbon dragée croissant ice cream marzipan sesame snaps cake lemon drops. Chocolate bar gummi bears jujubes tiramisu sesame snaps cupcake chupa chups pastry. Cake pudding chupa chups gummi bears soufflé jelly-o gingerbread jelly beans apple pie. Marzipan sweet roll sesame snaps sweet roll pastry pie jelly beans. Sweet jelly beans wafer muffin jujubes biscuit halvah. Oat cake jelly sesame snaps danish. Liquorice lollipop wafer oat cake muffin tiramisu marzipan donut tart. Chupa chups sugar plum apple pie oat cake marshmallow macaroon. Bear claw candy canes chocolate cake. Halvah cotton candy sweet roll powder toffee cookie sesame snaps. Cupcake gingerbread toffee candy canes chocolate bar toffee lollipop gummi bears. Jelly-o cookie soufflé. Muffin pastry sweet sweet lemon drops gingerbread topping. Cake donut dragée icing tiramisu fruitcake dessert gingerbread wafer. Liquorice croissant oat cake gummies gummi bears cotton candy chupa chups dessert jelly-o. Donut biscuit toffee. Jelly beans cookie chocolate cake candy canes gingerbread. Powder candy canes brownie croissant pie soufflé. Tart soufflé candy powder lemon drops. Cake cake macaroon chocolate bar. Jujubes powder lemon drops tootsie roll carrot cake bonbon brownie. Tootsie roll dragée jelly beans. Carrot cake candy icing apple pie. Donut gummies lemon drops icing powder pastry tootsie roll. Gummi bears halvah sugar plum sweet roll apple pie marshmallow liquorice gingerbread";
-
-  const vendor = "Ceritanya ini vendor";
-  const vendorRating = 98.48;
-  const ratingAmount = 999;
-
-  const districtLocation = "Bandung Kidul";
-  const cityLocation = "BANDUNG";
   const ratingArray = {
-    1: 0,
-    2: 40,
-    3: 30,
-    4: 60,
-    5: 80,
+    1: one_ratio,
+    2: two_ratio,
+    3: three_ratio,
+    4: four_ratio,
+    5: five_ratio,
   };
   let totalRating = 0;
-  for (var rating in ratingArray) {
-    totalRating += ratingArray[rating];
+  for (var ratingInt in ratingArray) {
+    totalRating += ratingArray[ratingInt];
   }
   const ratingList = [
     {
       label: 5,
-      percentage: (ratingArray[5] * 100) / totalRating,
+      percentage:
+        (ratingArray[5] * 100) / (totalRating === 0 ? 1 : totalRating),
     },
     {
       label: 4,
-      percentage: (ratingArray[4] * 100) / totalRating,
+      percentage:
+        (ratingArray[4] * 100) / (totalRating === 0 ? 1 : totalRating),
     },
     {
       label: 3,
-      percentage: (ratingArray[3] * 100) / totalRating,
+      percentage:
+        (ratingArray[3] * 100) / (totalRating === 0 ? 1 : totalRating),
     },
     {
       label: 2,
-      percentage: (ratingArray[2] * 100) / totalRating,
+      percentage:
+        (ratingArray[2] * 100) / (totalRating === 0 ? 1 : totalRating),
     },
     {
       label: 1,
-      percentage: (ratingArray[1] * 100) / totalRating,
+      percentage:
+        (ratingArray[1] * 100) / (totalRating === 0 ? 1 : totalRating),
     },
   ];
 
@@ -104,8 +112,8 @@ const ProductInformation = () => {
           >
             Penilaian
           </Tab>
-          <Link
-            href="#review"
+          {/* <Link
+            href={`/product-details/${id}#review`}
             d={{ base: "flex", sm: "inherit" }}
             justifyContent="center"
             alignItems="center"
@@ -130,7 +138,7 @@ const ProductInformation = () => {
             >
               Ulasan
             </Button>
-          </Link>
+          </Link> */}
         </TabList>
 
         <TabPanels>
@@ -182,7 +190,7 @@ const ProductInformation = () => {
                   color="orange.400"
                   d="inline"
                 >
-                  {vendorRating}%
+                  {vendorRating}
                 </Text>
               </Box>
               <Box
@@ -207,15 +215,7 @@ const ProductInformation = () => {
                   fontSize="16px"
                   color="orange.400"
                 >
-                  {districtLocation},
-                </Text>
-                <Text
-                  className="secondaryFont"
-                  fontWeight="500"
-                  fontSize="16px"
-                  color="orange.400"
-                >
-                  {cityLocation}
+                  {vendors_address}
                 </Text>
               </Box>
             </Stack>
@@ -229,7 +229,10 @@ const ProductInformation = () => {
                 color="gray.600"
                 fontSize="14px"
               >
-                {productDescription}
+                {/* {products_description?.replace(/<[^>]+>/g, "")} */}
+                <div
+                  dangerouslySetInnerHTML={{ __html: products_description }}
+                />
               </Text>
               <Button
                 bg="none"
@@ -245,7 +248,7 @@ const ProductInformation = () => {
               </Button>
             </Box>
           </TabPanel>
-          <TabPanel id="ratingPanel">
+          <TabPanel id="ratingPanel" w="100%">
             <Box display="flex">
               <Center
                 w="40%"
@@ -263,12 +266,12 @@ const ProductInformation = () => {
                     as="h3"
                     size="2xl"
                   >
-                    {productRating.toFixed(2)}
+                    {Number(rating).toFixed(2)}
                   </Heading>
                   <Text display="inline"> dari 5</Text>
                 </Box>
                 <StarRatings
-                  rating={productRating}
+                  rating={Number(rating)}
                   starRatedColor="orange"
                   starDimension="24px"
                   starSpacing="2px"

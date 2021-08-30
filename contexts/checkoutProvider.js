@@ -1,44 +1,64 @@
-import { createContext, useContext, useState } from "react";
+import { useToast } from "@chakra-ui/toast";
+import { useRouter } from "next/router";
+import { parseCookies, setCookie, destroyCookie } from "nookies";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const CheckoutContext = createContext();
 
 export const CheckoutProvider = ({ children }) => {
-    const [namaPengirim, setnamaPengirim] = useState("")
-    const [nomorPengirim, setnomorPengirim] = useState("")
+  const [checkoutData, setCheckoutData] = useState({});
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
-    const [namaAwalPenerima, setnamaAwalPenerima] = useState("")
-    const [namaAkhirPenerima, setnamaAkhirPenerima] = useState("")
-    const [nomorPenerima, setnomorPenerima] = useState("")
-    const [negaraPenerima, setnegaraPenerima] = useState("")
-    const [provinsiPenerima, setprovinsiPenerima] = useState("")
-    const [kotaPenerima, setkotaPenerima] = useState("")
-    const [kecamatanPenerima, setkecamatanPenerima] = useState("")
-    const [kodePosPenerima, setkodePosPenerima] = useState(0)
-    const [alamatPenerima, setalamatPenerima] = useState("")
-    const [namaPenerima, setnamaPenerima] = useState(namaAwalPenerima + " " + namaAkhirPenerima)
+  const addCheckoutData = (data) => {
+    const dataLocal = localStorage.getItem("checkoutData");
+    const parsedDataLocal = dataLocal && JSON.parse(dataLocal);
+    const cookie = parseCookies();
 
-    const value = {
-        namaPengirim, setnamaPengirim,
-        nomorPengirim, setnomorPengirim,
-        namaAwalPenerima, setnamaAwalPenerima,
-        namaAkhirPenerima, setnamaAkhirPenerima,
-        nomorPenerima, setnomorPenerima,
-        negaraPenerima, setnegaraPenerima,
-        provinsiPenerima, setprovinsiPenerima,
-        kotaPenerima, setkotaPenerima,
-        kecamatanPenerima, setkecamatanPenerima,
-        kodePosPenerima, setkodePosPenerima,
-        alamatPenerima, setalamatPenerima,
-        namaPenerima, setnamaPenerima
+    if (parsedDataLocal?.userId !== cookie?.user_id) {
+      // destroyCookie(null, "checkoutData");
+      localStorage.removeItem("checkoutData");
     }
+    console.log(data, "DATA LOCAL");
+    localStorage.setItem("checkoutData", JSON.stringify(data));
 
-    return (
-        <CheckoutContext.Provider value={value}>
-            {children}
-        </CheckoutContext.Provider>
-    )
-}
+    // setCookie(null, "checkoutData", JSON.stringify(data), {
+    //   path: "/",
+    // });
+
+    setCheckoutData(data);
+  };
+
+  useEffect(() => {
+    const cookies = parseCookies();
+    const dataLocal = localStorage.getItem("checkoutData");
+    const parsedDataLocal = dataLocal && JSON.parse(dataLocal);
+
+    if (parsedDataLocal) {
+      if (parsedDataLocal.userId == JSON.parse(cookies.user_id)) {
+        setCheckoutData(parsedDataLocal);
+      } else {
+        // destroyCookie(null, "checkoutData");
+        localStorage.removeItem("checkoutData");
+      }
+    }
+  }, [router]);
+
+  const value = {
+    checkoutData,
+    setCheckoutData,
+    loading,
+    setLoading,
+    addCheckoutData,
+  };
+
+  return (
+    <CheckoutContext.Provider value={value}>
+      {children}
+    </CheckoutContext.Provider>
+  );
+};
 
 export const useCheckoutContext = () => {
-    return useContext(CheckoutContext)
-}
+  return useContext(CheckoutContext);
+};

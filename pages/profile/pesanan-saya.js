@@ -12,6 +12,8 @@ import {
   VStack,
   Spinner,
   useToast,
+  useDisclosure,
+  Link,
 } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -19,6 +21,8 @@ import { useContext } from "react";
 import { BiSearch } from "react-icons/bi";
 import { IoCopy } from "react-icons/io5";
 
+import { apiCancelOrder } from "../../api/CancelOrder";
+import { CancelOrder } from "../../components/CancelOrderModal";
 import { CardProfile } from "../../components/CardProfile";
 import Footer from "../../components/Footer";
 import { Layout } from "../../components/Layout";
@@ -119,8 +123,13 @@ const CardPesanan = ({
   dropShip,
   deliverer,
   totalPrice,
+  orderId,
+  parentId,
+  totalPriceAgent,
 }) => {
   const { width } = useWindowSize();
+  const { userData } = useAuthContext();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const date = datePurchased.split(" ")[0].split("-");
   const formatedDate = `${Number(date[2])} ${MONTH[Number(date[1])]} ${Number(
@@ -140,15 +149,23 @@ const CardPesanan = ({
         direction={{ base: "column", md: "row" }}
         w="full"
       >
-        <Button
-          mr="1rem"
-          color="white"
-          bg="orange.500"
-          alignSelf={{ base: "flex-start", md: "center" }}
-          mb={{ base: "1rem", md: "0" }}
+        <Link
+          _hover={{ textDecoration: "none" }}
+          target="_blank"
+          href={`${window.location.origin}/nota-pembayaran/${orderId}`}
         >
-          Cetak Nota
-        </Button>
+          {parentId == 0 && paymentStatus !== "Batal" && (
+            <Button
+              mr="1rem"
+              color="white"
+              bg="orange.500"
+              alignSelf={{ base: "flex-start", md: "center" }}
+              mb={{ base: "1rem", md: "0" }}
+            >
+              Cetak Nota
+            </Button>
+          )}
+        </Link>
         <Flex justifyContent="space-between" w="full" mb="0.5rem">
           <Flex alignItems="center">
             <Text fontSize="1rem" fontWeight="500" mr="0.5rem">
@@ -212,15 +229,27 @@ const CardPesanan = ({
         </GridItem>
       </Grid>
       <Divider />
-      <Flex w="full" justify="flex-end">
+      <Flex w="full" justify="flex-end" flexWrap="wrap" py="0.5rem">
         <Flex align="center">
           <Text color="gray.700" fontWeight="normal" mr="0.5rem">
-            Total Pesanan:
+            {totalPriceAgent === 0 ? "Total Price :" : "Harga Agen :"}
           </Text>
           <Text fontSize="1.2rem" fontWeight="bold">
-            {currencyFormat(String(totalPrice))}
+            {totalPriceAgent === 0
+              ? currencyFormat(String(totalPrice))
+              : currencyFormat(totalPriceAgent)}
           </Text>
         </Flex>
+        {totalPriceAgent !== 0 && (
+          <Flex ml="1rem" align="center">
+            <Text color="gray.700" fontWeight="normal" mr="0.5rem">
+              Harga Reseller :
+            </Text>
+            <Text fontSize="1.2rem" fontWeight="bold">
+              {currencyFormat(String(totalPrice))}
+            </Text>
+          </Flex>
+        )}
       </Flex>
       <Flex w="full" justify="flex-end">
         <Flex
@@ -238,16 +267,28 @@ const CardPesanan = ({
           >
             Lihat Detail Transaksi
           </Button>
-          {orderStatus === "Booking" && paymentStatus === "Pending" && (
-            <Button
-              bg="red.600"
-              color="white"
-              ml={width > 365 && "1rem"}
-              w={width < 365 ? "full" : "auto"}
-            >
-              Batalkan
-            </Button>
-          )}
+          {orderStatus === "Booking" &&
+            paymentStatus === "Pending" &&
+            parentId === 0 && (
+              <>
+                <Button
+                  bg="red.600"
+                  color="white"
+                  ml={width > 365 && "1rem"}
+                  w={width < 365 ? "full" : "auto"}
+                  onClick={onOpen}
+                >
+                  Batalkan
+                </Button>
+                <CancelOrder
+                  id={userData.id}
+                  isOpen={isOpen}
+                  onClose={onClose}
+                  orderNum={orderNum}
+                  orderId={orderId}
+                />
+              </>
+            )}
           {orderStatus === "Selesai" && (
             <Button
               bg="orange.500"
@@ -309,7 +350,7 @@ const PesananSayaDesktop = () => {
               )}
               <SearchBar />
             </Flex>
-            {!searchState && (
+            {!searchState && !loading && (
               <NextPrevPages
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
@@ -321,9 +362,14 @@ const PesananSayaDesktop = () => {
                 <Spinner />
               ) : (
                 data.map((dataPesanan, i) => {
+                  let totalPriceAgent = 0;
+                  if (dataPesanan.parent_id) {
+                    totalPriceAgent = dataPesanan.total_price_agent;
+                  }
                   return (
                     <CardPesanan
                       key={i}
+                      orderId={dataPesanan.orders_id}
                       orderNum={dataPesanan.orders_number}
                       datePurchased={dataPesanan.date_purchased}
                       orderStatus={dataPesanan.orders_status}
@@ -331,13 +377,14 @@ const PesananSayaDesktop = () => {
                       dropShip={dataPesanan.dropship_name}
                       deliverer={dataPesanan.delivery_name}
                       totalPrice={dataPesanan.total_price}
+                      parentId={dataPesanan.parent_id}
+                      totalPriceAgent={totalPriceAgent}
                     />
                   );
                 })
               )}
             </Box>
-            {console.log(searchState)}
-            {!searchState && (
+            {!searchState && !loading && (
               <Box w="full" mb="3rem">
                 <Pages
                   currentPage={currentPage}
@@ -392,12 +439,13 @@ const PesananSayaMobile = () => {
                   dropShip={dataPesanan.dropship_name}
                   deliverer={dataPesanan.delivery_name}
                   totalPrice={dataPesanan.total_price}
+                  parentId={dataPesanan.parent_id}
                 />
               );
             })
           )}
         </VStack>
-        {!searchState && (
+        {!searchState && !loading && (
           <Box w="full" mb="3rem">
             <Pages currentPage={currentPage} setCurrentPage={setCurrentPage} />
           </Box>
@@ -408,7 +456,7 @@ const PesananSayaMobile = () => {
 };
 
 const Pages = ({ currentPage, setCurrentPage }) => {
-  const { loading } = useMyOrderContext();
+  const { loading, lastPage } = useMyOrderContext();
 
   return (
     <>
@@ -435,6 +483,7 @@ const Pages = ({ currentPage, setCurrentPage }) => {
 };
 
 const NextPrevPages = ({ currentPage, setCurrentPage }) => {
+  const { lastPage } = useMyOrderContext();
   const { width } = useWindowSize();
   return (
     <Flex
@@ -456,15 +505,17 @@ const NextPrevPages = ({ currentPage, setCurrentPage }) => {
           Halaman Sebelumnya
         </Text>
       )}
-      <Text
-        cursor="pointer"
-        onClick={() => {
-          setCurrentPage((curr) => curr + 1);
-          window.scrollTo(0, 0);
-        }}
-      >
-        Halaman Selanjutnya
-      </Text>
+      {!(lastPage === currentPage) && (
+        <Text
+          cursor="pointer"
+          onClick={() => {
+            setCurrentPage((curr) => curr + 1);
+            window.scrollTo(0, 0);
+          }}
+        >
+          Halaman Selanjutnya
+        </Text>
+      )}
     </Flex>
   );
 };
@@ -477,6 +528,7 @@ const PesananSayaComponent = () => {
   return userData == null || data.length == 0 ? (
     <>
       <Navbar />
+      {console.log(userData)}
       <Box
         d="flex"
         w="100vw"

@@ -87,3 +87,10 @@
     width: 22.5rem;
   }
 }
+
+.slickButton {
+  opacity: 0.5;
+  &:hover {
+    opacity: 1;
+  }
+}

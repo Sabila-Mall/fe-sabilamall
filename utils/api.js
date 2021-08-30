@@ -5,6 +5,8 @@ export const isRequestSuccess = (response) => {
   if (response.status && statusCode.includes(response.status)) return true;
   if (response.success && statusCode.includes(response.success)) return true;
   if (response.found && statusCode.includes(response.found)) return true;
+
+  return false;
 };
 
 export const getImageUrl = (url) => IMAGE_HOST + url;

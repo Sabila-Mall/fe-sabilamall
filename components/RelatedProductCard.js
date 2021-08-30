@@ -2,7 +2,13 @@ import { Box, Flex, Text } from "@chakra-ui/layout";
 import { css } from "@emotion/react";
 import { IoHeartOutline } from "react-icons/io5";
 
-const RelatedProductCard = ({ name, isDiscount, discountAmount, price }) => {
+const RelatedProductCard = ({
+  name,
+  isDiscount,
+  discountAmount,
+  price,
+  image_path,
+}) => {
   const productDiscountPrice = (price * (100 - discountAmount)) / 100;
 
   const priceWithDot = (item) => {
@@ -26,7 +32,7 @@ const RelatedProductCard = ({ name, isDiscount, discountAmount, price }) => {
         justifyContent="center"
         flexDirection="column"
       >
-        <img layout="fill" src="/images/ProductDetail/products.svg" />
+        <img layout="fill" src={image_path} />
         <Box px="8px">
           <Text w="full" h="48px" as="h1" fontWeight="500" fontSize="1rem">
             {name}

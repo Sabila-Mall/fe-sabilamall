@@ -96,7 +96,7 @@ const Login = () => {
               className="primaryFont"
               align={{ base: "center", md: "start" }}
             >
-              Aplikasi Sabila Mall
+              Website Sabila Mall
             </Text>
 
             <FormControl>

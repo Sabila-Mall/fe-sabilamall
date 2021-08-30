@@ -16,23 +16,37 @@ export const MyOrderProvider = ({ children }) => {
   const [cacheData, setCacheData] = useState([]);
   const [searchCache, setSearchCache] = useState([]);
   const [searchState, setSearchState] = useState(false);
+  const [lastPage, setLastPage] = useState(0);
+  const [refetch, setRefetch] = useState(false);
 
   useEffect(() => {
     setLoading(true);
     if (userData != null) {
-      if (cacheData.length > currentPage - 1) {
-        setData(cacheData[currentPage - 1]);
-        setLoading(false);
-      } else {
+      if (refetch) {
         const d = apiGetOrder(userData?.id, currentPage);
         d.then((res) => {
-          setCacheData((curr) => [...curr, res.data]);
+          cacheData[currentPage - 1] = res.data;
           setData(res.data);
+        }).finally(() => {
+          setRefetch(false);
           setLoading(false);
         });
+      } else {
+        if (cacheData.length > currentPage - 1) {
+          setData(cacheData[currentPage - 1]);
+          setLoading(false);
+        } else {
+          const d = apiGetOrder(userData?.id, currentPage);
+          d.then((res) => {
+            setLastPage(res.last_page);
+            setCacheData((curr) => [...curr, res.data]);
+            setData(res.data);
+            setLoading(false);
+          });
+        }
       }
     }
-  }, [userData, currentPage]);
+  }, [userData, currentPage, refetch]);
 
   useEffect(() => {
     if (fetchOrder) {
@@ -71,6 +85,7 @@ export const MyOrderProvider = ({ children }) => {
     data,
     setData,
     loading,
+    setLoading,
     orderId,
     setOrderId,
     setFetchOrder,
@@ -79,6 +94,9 @@ export const MyOrderProvider = ({ children }) => {
     cacheData,
     searchState,
     setSearchState,
+    lastPage,
+    refetch,
+    setRefetch,
   };
 
   return (
