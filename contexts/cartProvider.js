@@ -209,8 +209,6 @@ export const CartProvider = ({ children }) => {
         getAllData()
     }, [userData]);
 
-
-    console.log(cartDataByVendor);
     return (
         <CartContext.Provider value={{
             cartData,
