@@ -1,9 +1,5 @@
 import { Box, Text, Input, Select, Textarea } from "@chakra-ui/react";
 
-// options wajib diisi kalau type-nya select
-// contohnya ada di file MyProfile.js
-// register itu fungsi dari react-hook-form
-
 const InputBoxAndLabel = ({
   register,
   text,
@@ -19,6 +15,7 @@ const InputBoxAndLabel = ({
   selectZone,
   disabled = false,
   error,
+  ...otherProps
 }) => (
   <Box mt={mt} key={text} w={w}>
     <Text
@@ -45,6 +42,7 @@ const InputBoxAndLabel = ({
         autoComplete="on"
         disabled={disabled}
         defaultValue={defaultValue}
+        {...otherProps}
       />
     )}
     {type === "select" && (
@@ -53,6 +51,7 @@ const InputBoxAndLabel = ({
         _focus={{ outline: "none" }}
         onChange={onChange}
         defaultValue={defaultValue}
+        {...otherProps}
       >
         <option
           value={defaultValueId}
@@ -88,6 +87,7 @@ const InputBoxAndLabel = ({
         _focus={{ outline: "none" }}
         autoComplete="on"
         defaultValue={defaultValue}
+        {...otherProps}
       />
     )}
     <Text fontSize="0.85rem" color="red.500" fontWeight="600">

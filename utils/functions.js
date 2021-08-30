@@ -107,10 +107,6 @@ export const calculateTimeLeft = (endTime) => {
   return timeLeft;
 };
 
-export const numberWithDot = (x) => {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-};
-
 export const calculateDiscountedPrice = (realPrice, discount) => {
   if (!discount) {
     return realPrice;
@@ -161,6 +157,10 @@ export const needForLogin = async (ctx) => {
   return {
     props: {},
   };
+};
+
+export const numberWithDot = (x) => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };
 
 export const currencyFormat = (amount) => {
