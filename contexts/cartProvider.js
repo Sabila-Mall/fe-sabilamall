@@ -1,4 +1,5 @@
 import { useToast } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
 
 import { addCart, apiGetCartByCustomerID, deleteCart, updateCartQuantity } from "../api/cart";
@@ -16,6 +17,7 @@ export const CartProvider = ({ children }) => {
     const [selectedPrice, setselectedPrice] = useState(0)
     const [selectedItem, setselectedItem] = useState([])
     const [cartDataByVendor, setcartDataByVendor] = useState([])
+    const router = useRouter()
 
     const { userData } = useAuthContext();
     const userId = userData?.id;
@@ -93,16 +95,21 @@ export const CartProvider = ({ children }) => {
         }
     }
 
-    const checkCheckout = () => {
+    const checkoutValidation = () => {
         if (selectedItem.length) {
-            console.log(selectedItem);
             let tempVendor = selectedItem[0].vendors_id
-            selectedItem.forEach(element => {
-                if (element.vendors_id != tempVendor) {
+
+            for (let i = 0; i < selectedItem.length; i++) {
+                if (selectedItem[i].vendors_id != tempVendor) {
                     errorToast("Vendor yang dipilih harus sama")
                     return;
                 }
-            });
+                tempVendor = selectedItem[i].vendors_id
+            }
+            router.push("/alamat-penerima")
+            console.log(selectedItem);
+            console.log(selectedPrice);
+            console.log(totalDiscount);
         }
     }
 
@@ -110,9 +117,7 @@ export const CartProvider = ({ children }) => {
         let tempData = selectedItem
         tempData.push(data)
         setselectedItem(tempData)
-        console.log(selectedItem);
         calculateTotalSelected(tempData)
-        checkCheckout()
     }
 
     const deleteFromCheckout = (data) => {
@@ -123,7 +128,6 @@ export const CartProvider = ({ children }) => {
                 tempData.push(element)
             }
         });
-        console.log(tempData);
         setselectedItem(tempData)
         calculateTotalSelected(tempData)
     }
@@ -212,7 +216,8 @@ export const CartProvider = ({ children }) => {
             addToCheckout,
             deleteFromCheckout,
             selectedPrice,
-            cartDataByVendor
+            cartDataByVendor,
+            checkoutValidation
         }} >
             {children}
         </CartContext.Provider>

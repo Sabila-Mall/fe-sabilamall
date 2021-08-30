@@ -4,11 +4,15 @@ import { css } from "@emotion/react";
 import { useCartContext } from "../contexts/cartProvider";
 
 export const CardCheckout = () => {
-  const { totalDiscount, selectedPrice } = useCartContext();
+  const { totalDiscount, selectedPrice, checkoutValidation } = useCartContext();
   const idr = Intl.NumberFormat("id-ID");
   // const subtotal = subTotal.replace(/\./g, "");
   // const disc = totalDiscount.replace(/\./g, "");
   const total = Number(selectedPrice) - Number(totalDiscount);
+
+  const handleCheckout = () => {
+    checkoutValidation()
+  }
   return (
     <Box
       width="full"
@@ -20,11 +24,11 @@ export const CardCheckout = () => {
       <Flex flexDirection="column" color="gray.500" fontWeight="500">
         <Flex my="6px" justifyContent="space-between">
           <Text fontWeight="700">Subtotal</Text>
-          <Text>Rp{selectedPrice}</Text>
+          <Text>Rp{idr.format(selectedPrice)}</Text>
         </Flex>
         {totalDiscount ? <Flex my="6px" justifyContent="space-between">
           <Text fontWeight="700">Diskon</Text>
-          <Text>-Rp{totalDiscount}</Text>
+          <Text>-Rp{idr.format(totalDiscount)}</Text>
         </Flex> : <></>}
 
         <Divider my="6px" />
@@ -40,6 +44,7 @@ export const CardCheckout = () => {
           bgColor="red.500"
           size="md"
           color="white"
+          onClick={() => { handleCheckout() }}
         >
           Proses ke Checkout
         </Button>

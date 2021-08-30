@@ -20,28 +20,24 @@ export const AddAmount = ({ product, mb }) => {
     let tempPrice = totalPrice
     let tempDiscount = totalDiscount
     if (event === "increase") {
-      if (stock - quantity <= 0) {
-        setquantity(stock);
-        updateQuantity(userId, product.customers_basket_id, quantity)
-      } else {
-        setquantity(quantity + 1);
+      if (stock - quantity > 0) {
+        const newQuantity = quantity + 1
         tempDiscount += Number(discount)
         settotalDiscount(tempDiscount)
-        tempPrice += Number(price)
+        tempPrice = Number(price)
         settotalPrice(tempPrice)
-        updateQuantity(userId, product.customers_basket_id, quantity)
+        updateQuantity(userId, product.customers_basket_id, newQuantity)
+        setquantity(newQuantity)
       }
     } else if (event === "decrease") {
       if (quantity > 1) {
-        setquantity(quantity - 1);
+        const newQuantity = quantity - 1
         tempDiscount -= Number(discount)
         settotalDiscount(tempDiscount)
-        tempPrice -= Number(price)
+        tempPrice = Number(price)
         settotalPrice(tempPrice)
-        updateQuantity(userId, product.customers_basket_id, quantity)
-      } else {
-        setquantity(1);
-        updateQuantity(userId, product.customers_basket_id, quantity)
+        updateQuantity(userId, product.customers_basket_id, newQuantity)
+        setquantity(newQuantity)
       }
     }
     console.log(totalPrice)

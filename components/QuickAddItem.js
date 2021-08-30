@@ -31,28 +31,24 @@ const QuickAddItem = ({ product, my }) => {
     let tempDiscount = totalDiscount
     let tempPrice = totalPrice
     if (event === "increase") {
-      if (stock - quantity <= 0) {
-        setquantity(stock);
-        updateQuantity(userId, product.customers_basket_id, quantity)
-      } else {
-        setquantity(quantity + 1);
+      if (stock - quantity > 0) {
+        const newQuantity = quantity + 1
         tempDiscount += Number(discount)
         settotalDiscount(tempDiscount)
         tempPrice = Number(price)
         settotalPrice(tempPrice)
-        updateQuantity(userId, product.customers_basket_id, quantity)
+        updateQuantity(userId, product.customers_basket_id, newQuantity)
+        setquantity(newQuantity)
       }
     } else if (event === "decrease") {
       if (quantity > 1) {
-        setquantity(quantity - 1);
+        const newQuantity = quantity - 1
         tempDiscount -= Number(discount)
         settotalDiscount(tempDiscount)
         tempPrice = Number(price)
         settotalPrice(tempPrice)
-        updateQuantity(userId, product.customers_basket_id, quantity)
-      } else {
-        setquantity(1);
-        updateQuantity(userId, product.customers_basket_id, quantity)
+        updateQuantity(userId, product.customers_basket_id, newQuantity)
+        setquantity(newQuantity)
       }
     }
     console.log(totalPrice)
@@ -156,14 +152,14 @@ const QuickAddItem = ({ product, my }) => {
               <IconButton
                 aria-label={"Add Item"}
                 icon={<IoAddCircleOutline size={"1.5rem"} />}
-                color={"gray.400"}
+                color={quantity === stock ? "gray.200" : "gray.400"}
                 variant={"ghost"}
                 _hover={{ cursor: "pointer" }}
                 onClick={() => handleModifyNumberOfItem("increase")}
               />
             </HStack>
             <Text fontSize={"1rem"} textColor={"gray.400"} className={"secondaryFont"}>
-              Rp{formatPrice(product.final_price)}
+              Rp{formatPrice(product.final_price * quantity)}
             </Text>
           </HStack>
         </VStack>

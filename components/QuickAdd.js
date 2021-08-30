@@ -14,6 +14,7 @@ import {
   Grid,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { useCartContext } from "../contexts/cartProvider";
 
@@ -26,7 +27,7 @@ import QuickAddListItem from "./QuickAddListItem";
  * @param onDrawerClose callback function yang dipanggil untuk close modal [dapatkan dari useDisclosure()]
  */
 const QuickAdd = ({ isDrawerOpen, onDrawerClose }) => {
-  const { loading, totalDiscount, selectedPrice } = useCartContext();
+  const { loading, totalDiscount, selectedPrice, checkoutValidation } = useCartContext();
 
   const size = useBreakpointValue({ base: "full", md: "md" });
 
@@ -36,6 +37,12 @@ const QuickAdd = ({ isDrawerOpen, onDrawerClose }) => {
       { style: "decimal", currency: "IDR" })
       .format(price);
   };
+
+  const router = useRouter()
+
+  const handleCheckout = () => {
+    checkoutValidation()
+  }
 
   return (
     <Drawer
@@ -94,6 +101,7 @@ const QuickAdd = ({ isDrawerOpen, onDrawerClose }) => {
               fontSize={"16px"}
               className={"primaryFont"}
               width={"full"}
+              onClick={() => handleCheckout()}
             >
               Checkout
             </Button>
