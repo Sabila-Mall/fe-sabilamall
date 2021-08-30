@@ -9,17 +9,16 @@ import { useAuthContext } from "./authProvider";
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-    const [tempData, settempData] = useState([])
     const [cartData, setcartData] = useState([]);
     const [loading, setloading] = useState(false);
     const [totalPrice, settotalPrice] = useState(0)
     const [totalDiscount, settotalDiscount] = useState(0)
     const [selectedPrice, setselectedPrice] = useState(0)
     const [selectedItem, setselectedItem] = useState([])
+    const [cartDataByVendor, setcartDataByVendor] = useState([])
 
     const { userData } = useAuthContext();
     const userId = userData?.id;
-    console.log(userId);
 
     const toast = useToast();
 
@@ -46,25 +45,34 @@ export const CartProvider = ({ children }) => {
         if (userId) {
             apiGetCartByCustomerID(userId)
                 .then((res) => {
-                    let tempCart = cartData
+                    let tempCart = []
                     let productIDs = []
 
+                    console.log(res);
 
-                    res.forEach(element => {
-                        console.log(element.keranjang);
-                        element.keranjang.forEach(item => {
+                    setcartDataByVendor(res)
 
-                            // check if data is duplicate
-                            if (productIDs.indexOf(item.products_id) === -1) {
-                                tempCart.push(item)
-                            }
-
-                            tempCart.forEach(cartItem => {
-                                productIDs.push(cartItem.products_id)
-                            })
+                    res.forEach(vendor => {
+                        vendor.keranjang.forEach(product => {
+                            tempCart.push(product)
                         });
-
                     });
+                    console.log(tempCart);
+
+                    // res.forEach(element => {
+                    //     element.keranjang.forEach(item => {
+
+                    //         // check if data is duplicate
+                    //         if (productIDs.indexOf(item.products_id) === -1) {
+                    //             tempCart.push(item)
+                    //         }
+
+                    //         tempCart.forEach(cartItem => {
+                    //             productIDs.push(cartItem.products_id)
+                    //         })
+                    //     });
+
+                    // });
 
                     let tempPrice = 0
                     let tempDiscount = 0
@@ -78,9 +86,7 @@ export const CartProvider = ({ children }) => {
 
                     settotalPrice(tempPrice)
                     settotalDiscount(tempDiscount)
-                    console.log(productIDs);
                     setcartData(tempCart)
-                    console.log(cartData);
 
                 })
                 .finally(() => setloading(false));
@@ -92,7 +98,7 @@ export const CartProvider = ({ children }) => {
         tempData.push(data)
         setselectedItem(tempData)
         console.log(selectedItem);
-        calculateTotalSelected()
+        calculateTotalSelected(tempData)
     }
 
     const deleteFromCheckout = (data) => {
@@ -105,14 +111,15 @@ export const CartProvider = ({ children }) => {
         });
         console.log(tempData);
         setselectedItem(tempData)
-        calculateTotalSelected()
+        calculateTotalSelected(tempData)
     }
 
-    const calculateTotalSelected = () => {
+    const calculateTotalSelected = (data) => {
         setselectedPrice(0)
-        if (selectedItem.length > 0) {
+        console.log(data);
+        if (data.length > 0) {
             let tempTotal = 0
-            selectedItem.forEach(element => {
+            data.forEach(element => {
                 tempTotal += element.final_price * element.customers_basket_quantity
             });
             setselectedPrice(tempTotal)
@@ -179,7 +186,6 @@ export const CartProvider = ({ children }) => {
         <CartContext.Provider value={{
             cartData,
             loading,
-            tempData,
             addCartItem,
             deleteCartItem,
             updateQuantity,
@@ -191,7 +197,8 @@ export const CartProvider = ({ children }) => {
             setselectedItem,
             addToCheckout,
             deleteFromCheckout,
-            selectedPrice
+            selectedPrice,
+            cartDataByVendor
         }} >
             {children}
         </CartContext.Provider>

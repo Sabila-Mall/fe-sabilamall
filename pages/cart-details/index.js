@@ -18,10 +18,7 @@ const path = [
 
 const cartDetails = () => {
 
-  const { cartData, loading } = useCartContext();
-  // const [priceValue, setpriceValue] = useState(totalPrice[0])
-  // console.log(totalPrice);
-  console.log(cartData.length);
+  const { cartData, loading, cartDataByVendor } = useCartContext();
 
   return (
     <Layout hasNavbar hasPadding hasBreadCrumb breadCrumbItem={path}>
@@ -48,11 +45,28 @@ const cartDetails = () => {
                     </Th>
                   </Tr>
                 </Thead>
-                {cartData.length ?
+                {cartDataByVendor.length ?
                   <Tbody>
-                    {cartData.map((el, index) => {
+                    {cartDataByVendor.map((el, index) => {
+                      console.log(cartData);
                       return (
-                        <TableContent product={el} />
+                        <>
+                          <Text
+                            className="secondaryFont"
+                            ml="1rem"
+                            fontSize="1rem"
+                            fontWeight="700"
+                            mt="1rem"
+                          >
+                            {el.vendors_name}
+                          </Text>
+                          {el.keranjang.map((elemenKeranjang, index) => {
+                            return (
+                              <TableContent product={elemenKeranjang} />
+                            )
+                          })}
+                        </>
+
                       )
                     })}
                   </Tbody> :

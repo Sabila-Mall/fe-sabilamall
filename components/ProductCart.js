@@ -2,7 +2,7 @@ import { Divider, Text } from "@chakra-ui/layout";
 import { VStack } from "@chakra-ui/layout";
 import { Flex, Box } from "@chakra-ui/layout";
 import { Checkbox, Image, Radio } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, createRef } from "react";
 import { IMAGE_HOST } from "../constants/api";
 import { useAuthContext } from "../contexts/authProvider";
 import { useCartContext } from "../contexts/cartProvider";
@@ -19,26 +19,26 @@ export const ProductCart = ({ isDiscount, product }) => {
   const productPath = product?.products_image_path
   const productPrice = product?.final_price
   const varian = product?.varian
-
+  let inputRef = createRef()
   const handleCheckbox = () => {
-    setisSelected(!isSelected)
-    if (isSelected) {
+    if (inputRef.current.checked) {
       addToCheckout(product)
     } else {
       deleteFromCheckout(product)
     }
   }
 
+
   console.log(product);
   return (
-    <Box width="100%" px={{ base: "1rem", md: 0 }} as="label" onClick={(e) => handleCheckbox()}>
+    <Box width="100%" px={{ base: "1rem", md: 0 }} as="label" onClick={() => handleCheckbox()}>
       <Flex
         alignItems="start"
         justifyContent={{ base: "center", md: "start" }}
         mb={{ base: "1.75rem", md: "0" }}
         justifyContent="flex-start"
       >
-        <Checkbox alignSelf="center" mr="20px"></Checkbox>
+        <Checkbox alignSelf="center" mr="20px" ref={inputRef}></Checkbox>
         <Flex
           flexDirection="column"
           justifyContent="center"

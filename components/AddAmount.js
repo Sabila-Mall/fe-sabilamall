@@ -78,6 +78,7 @@ export const AddAmount = ({ product }) => {
             w="5.5rem"
             h="2rem"
             placeholder={String(quantity)}
+            _placeholder={{ color: "black", opacity: "1" }}
           />
           <Box
             css={css`
