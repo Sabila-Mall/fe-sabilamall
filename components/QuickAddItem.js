@@ -148,6 +148,8 @@ const QuickAddItem = ({ product, my }) => {
                 textAlign={"center"}
                 borderColor={"gray.200"}
                 textColor={"gray.300"}
+                isDisabled={true}
+                _placeholder={{ color: "black", opacity: "1" }}
               />
               <IconButton
                 aria-label={"Add Item"}

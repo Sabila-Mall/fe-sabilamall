@@ -10,9 +10,7 @@ import { useCartContext } from "../contexts/cartProvider";
 import { CartPrice } from "./CartPrice";
 
 export const ProductCart = ({ isDiscount, product }) => {
-  const [isSelected, setisSelected] = useState(false)
   const { userData } = useAuthContext();
-  const userId = userData?.id;
   const { addToCheckout, deleteFromCheckout } = useCartContext();
 
   const productName = product?.products_name
