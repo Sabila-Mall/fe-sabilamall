@@ -19,7 +19,6 @@ const Search = () => {
       setLoading(true);
       getSearchResult(query)
         .then((res) => {
-          console.log(query);
           if (isRequestSuccess(res)) setData(res.data.data);
         })
         .finally(() => setLoading(false));

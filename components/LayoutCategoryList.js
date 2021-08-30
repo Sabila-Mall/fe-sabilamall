@@ -1,41 +1,43 @@
-import { Grid } from "@chakra-ui/react";
+import { Box, Grid, SkeletonCircle, SkeletonText } from "@chakra-ui/react";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
 
 import CardCategory from "./CardCategory";
+import { useRouter } from "next/router";
 
-const LayoutCategoryList = ({ isLoggedIn, category }) => {
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 3,
-  };
+const LayoutCategoryList = ({ isLoggedIn, data, loading }) => {
+  const router = useRouter();
 
   return (
-    <>
-      <Grid
-        templateColumns={
-          isLoggedIn
-            ? "repeat(7, 6rem)"
-            : { md: "repeat(7,6rem)", lg: "repeat(7, 8rem)" }
-        }
-        gap={isLoggedIn ? 4 : { md: 3, lg: 4 }}
-      >
-        {category.map((cat) => {
-          return (
-            <CardCategory
+    <Grid
+      templateColumns={
+        isLoggedIn
+          ? "repeat(7, 6rem)"
+          : { md: "repeat(7,6rem)", lg: "repeat(7, 8rem)" }
+      }
+      gap={isLoggedIn ? 4 : { md: 3, lg: 4 }}
+    >
+      {
+        data.map((each, index) =>
+          loading
+            ? <Box
+              width={isLoggedIn ? "6rem" : { md: "6rem", lg: "8rem" }}
+              height={isLoggedIn ? "6rem" : { md: "6rem", lg: "8rem" }}
+              boxShadow="md" bg="white" p="1rem" key={index} align="center"
+            >
+              <SkeletonCircle size="2rem" />
+              <SkeletonText mt="0.5rem" noOfLines={2} spacing="1" />
+            </Box>
+            : <CardCategory
               isLoggedIn={isLoggedIn}
-              icon={cat[0]}
-              name={cat[1]}
-              onClick={() => console.log(`redirect ke ${cat[1]}`)}
-              key={cat[1]}
-            />
-          );
-        })}
-      </Grid>
-    </>
+              icon={each.icon_path}
+              name={each.name}
+              onClick={() => router.push(`/daftar-produk?id=${each.id}&nama=${each.name}`)}
+              key={each.id}
+            />,
+        )
+      }
+    </Grid>
   );
 };
 
