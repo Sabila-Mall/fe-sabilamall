@@ -485,9 +485,6 @@ const Pages = ({ currentPage, setCurrentPage }) => {
 const NextPrevPages = ({ currentPage, setCurrentPage }) => {
   const { lastPage } = useMyOrderContext();
   const { width } = useWindowSize();
-  console.log(lastPage == currentPage);
-  console.log("last page: " + lastPage);
-  console.log("currentPage: " + currentPage);
   return (
     <Flex
       justifyContent={currentPage !== 1 ? "space-between" : "flex-end"}
