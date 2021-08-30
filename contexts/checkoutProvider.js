@@ -3,8 +3,6 @@ import { useRouter } from "next/router";
 import { parseCookies, setCookie, destroyCookie } from "nookies";
 import { createContext, useContext, useEffect, useState } from "react";
 
-import { useAuthContext } from "./authProvider";
-
 const CheckoutContext = createContext();
 
 export const CheckoutProvider = ({ children }) => {
@@ -13,27 +11,35 @@ export const CheckoutProvider = ({ children }) => {
   const router = useRouter();
 
   const addCheckoutData = (data) => {
-    const cookies = parseCookies();
-    if (cookies?.checkoutData?.userId !== cookies.user_id) {
-      destroyCookie(null, "checkoutData");
+    const dataLocal = localStorage.getItem("checkoutData");
+    const parsedDataLocal = dataLocal && JSON.parse(dataLocal);
+    const cookie = parseCookies();
+
+    if (parsedDataLocal?.userId !== cookie?.user_id) {
+      // destroyCookie(null, "checkoutData");
+      localStorage.removeItem("checkoutData");
     }
-    setCookie(null, "checkoutData", JSON.stringify(data), {
-      path: "/",
-    });
+    console.log(data, "DATA LOCAL");
+    localStorage.setItem("checkoutData", JSON.stringify(data));
+
+    // setCookie(null, "checkoutData", JSON.stringify(data), {
+    //   path: "/",
+    // });
 
     setCheckoutData(data);
   };
 
   useEffect(() => {
     const cookies = parseCookies();
+    const dataLocal = localStorage.getItem("checkoutData");
+    const parsedDataLocal = dataLocal && JSON.parse(dataLocal);
 
-    if (cookies?.checkoutData) {
-      if (
-        JSON.parse(cookies.checkoutData).userId == JSON.parse(cookies.user_id)
-      ) {
-        setCheckoutData(JSON.parse(cookies.checkoutData));
+    if (parsedDataLocal) {
+      if (parsedDataLocal.userId == JSON.parse(cookies.user_id)) {
+        setCheckoutData(parsedDataLocal);
       } else {
-        destroyCookie(null, "checkoutData");
+        // destroyCookie(null, "checkoutData");
+        localStorage.removeItem("checkoutData");
       }
     }
   }, [router]);

@@ -9,7 +9,6 @@ export const apiProvinsi = () => {
 };
 
 export const apiKota = (id) => {
-  console.log(id, "IDDD");
   return axios.post(HOST + "/api/location/get_cities", {
     city_zone_id: id,
   });

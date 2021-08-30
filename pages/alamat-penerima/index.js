@@ -248,7 +248,7 @@ const AlamatPenerima = () => {
     };
 
     provinsiPenerima && getKota();
-  }, [provinsiPenerima, kota]);
+  }, [provinsiPenerima]);
 
   useEffect(() => {
     const getKecamatan = () => {
@@ -268,7 +268,10 @@ const AlamatPenerima = () => {
         Number(provinsiPenerima?.split(" ")?.[0]),
       )
         .then((res) => {
-          setKodePos([...res.data.data]);
+          const postalCodeList = res.data?.data?.map((d) => d?.postal_code);
+          // console.log(postalCodeList, "POSTAL CODE");
+
+          setKodePos([...new Set(postalCodeList)]);
         })
         .catch((err) => console.error(err));
     };
@@ -346,8 +349,7 @@ const AlamatPenerima = () => {
           nomorPenerima: ponselPenerima,
         });
 
-        setRefetch(res);
-        clearInputPenerima();
+        router.push("/detail-pesanan");
       } catch (err) {
         ErrorToast("Gagal menambahkan alamat penerima");
       }
@@ -357,7 +359,7 @@ const AlamatPenerima = () => {
         saveToContext({
           ...ringkasan,
           userId,
-          dropshipper_id: res.address_id,
+          dropshipper_id: res.address_book_id,
           delivery_id: addressIdPenerima,
           namaPengirim: namaTextPengirim,
           nomorPengirim: ponselPengirim,
@@ -374,8 +376,7 @@ const AlamatPenerima = () => {
             .join(", "),
         });
 
-        setRefetch(res);
-        clearInputPengirim();
+        router.push("/alamat-penerima");
       } catch (err) {
         ErrorToast("Gagal menambahkan alamat pengirim");
       }
@@ -386,7 +387,7 @@ const AlamatPenerima = () => {
         saveToContext({
           ...ringkasan,
           userId,
-          dropshipper_id: res1.address_id,
+          dropshipper_id: res1.address_book_id,
           delivery_id: res2.address_id,
           namaPengirim: namaTextPengirim,
           nomorPengirim: ponselPengirim,
@@ -398,11 +399,7 @@ const AlamatPenerima = () => {
           nomorPenerima: ponselPenerima,
         });
 
-        // router.push("/alamat-penerima");
-        // router.reload(window.location.pathname);
-        setRefetch(res);
-        clearInputPengirim();
-        clearInputPenerima();
+        router.push("/alamat-penerima");
       } catch (err) {
         ErrorToast("Gagal menambahkan alamat pengirim / penerima");
       }
@@ -978,11 +975,8 @@ const AlamatPenerima = () => {
                             {kodePos &&
                               kodePos.map((data, index) => {
                                 return (
-                                  <option
-                                    key={data?.id || index}
-                                    value={data?.postal_code}
-                                  >
-                                    {data?.postal_code}
+                                  <option key={data || index} value={data}>
+                                    {data}
                                   </option>
                                 );
                               })}
@@ -1181,7 +1175,7 @@ const AlamatPenerima = () => {
                   fontWeight="500"
                   isTruncated
                 >
-                  Rp{0}
+                  Belum dihitung
                 </Text>
               </Box>
               <Divider orientation="horizontal" marginY="0.5rem" />
