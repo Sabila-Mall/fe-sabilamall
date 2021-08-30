@@ -9,108 +9,147 @@ import {
   ModalContent,
   ModalCloseButton,
   ModalOverlay,
-  ModalFooter,
   Grid,
   GridItem,
-  FormLabel,
-  Input,
   FormControl,
   useDisclosure,
   useMediaQuery,
-  Textarea,
-  Select,
   Button
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaPen } from "react-icons/fa";
 import InputBoxAndLabel from "./InputBoxAndLabel";
 
 import DeleteIcon from "./deleteIcon";
 import { useForm } from "react-hook-form";
+import { useAddressContext } from "../contexts/addressProvider";
+import { useAuthContext } from "../contexts/authProvider";
+import { apiKecamatan, apiKodePos, apiKota, apiProvinsi } from "../api/Zone";
 
 const AddressBoxReceiver = ({
-  name,
-  phoneNumber,
-  address,
-  city,
-  district,
-  province,
-  postalCode,
-  deleteAddress,
+  data
 }) => {
+
+  const [name, setname] = useState(data.firstname + " " + (data.lastname ? data.lastname : ""))
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isMobile] = useMediaQuery("(max-width: 48rem)")
   const { register, handleSubmit } = useForm();
-  const [receiverName, setreceiverName] = useState(name)
-  const [receiverPhoneNumber, setreceiverPhoneNumber] = useState(phoneNumber)
-  const [receiverAddress, setreceiverAddress] = useState(address)
-  const [receiverCity, setreceiverCity] = useState(city)
-  const [receiverDistrict, setreceiverDistrict] = useState(district)
-  const [receiverProvince, setreceiverProvince] = useState(province)
-  const [receiverPostalCode, setreceiverPostalCode] = useState(postalCode)
+
+  const { deleteItem, addItemPenerima } = useAddressContext();
+  const { userData } = useAuthContext()
+  const userId = userData?.id
+  const addressId = data?.address_id
+
+  const [provinceData, setprovinceData] = useState([])
+  const [cityData, setcityData] = useState([])
+  const [districtData, setdistrictData] = useState([])
+  const [postalCodeData, setpostalCodeData] = useState([])
+
+  const [provinceId, setProvinceId] = useState(null);
+  const [cityId, setCityId] = useState(null);
+  const [districtId, setdistrictId] = useState(null)
+  const [postalCodeId, setpostalCodeId] = useState(null)
+
+  useEffect(() => {
+    apiProvinsi()
+      .then((res) => {
+        const response = res.data.data;
+        setprovinceData(response);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (provinceId) {
+      apiKota(provinceId)
+        .then((res) => {
+          console.log(res);
+          const response = res.data.data;
+          setcityData(response);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [provinceId]);
+
+  useEffect(() => {
+    if (cityId) {
+      apiKecamatan(cityId)
+        .then((res) => {
+          const response = res.data.data;
+          console.log(response);
+          setdistrictData(response)
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    }
+  }, [cityId]);
+
+  useEffect(() => {
+    if (districtId) {
+      console.log(districtId);
+      apiKodePos(cityId, districtId, provinceId)
+        .then((res) => {
+          const response = res.data.data;
+          let temp = []
+          let tempPostalCode = []
+          response.forEach(element => {
+            if (!tempPostalCode.includes(element.postal_code)) {
+              temp.push(element)
+              tempPostalCode.push(element.postal_code)
+            }
+          });
+          console.log(response);
+          console.log(temp);
+          setpostalCodeData(temp)
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    }
+  }, [districtId]);
 
   const onSubmit = data => {
-    setreceiverName(data.name)
-    setreceiverPhoneNumber(data.phoneNumber)
-    setreceiverAddress(data.address)
-    setreceiverCity(data.city)
-    setreceiverDistrict(data.district)
-    setreceiverProvince(data.province)
-    setreceiverPostalCode(data.postalCode)
+    let firstname, lastname, phone, street, district, city, province, postalCode
+    if (data.name.split(" ").length > 1) {
+      firstname = data.name.split(" ").slice(0, data.name.split(" ").length - 1).join(" ")
+      lastname = data.name.split(" ")[data.name.split(" ").length - 1]
+    } else {
+      firstname = data.name
+      lastname = ""
+    }
+
+    setname(firstname + " " + lastname)
+    phone = data.phoneNumber
+    district = data.district
+    postalCode = data.postalCode
+    province = data.province
+    city = data.city
+    street = data.address
+
+    console.log(userId, firstname, lastname, phone, postalCode, city, district, province, street);
+
+    deleteItem(userId, addressId)
+    addItemPenerima(userId,
+      0,
+      1,
+      firstname,
+      lastname,
+      phone,
+      postalCode,
+      city,
+      district,
+      province,
+      street,
+      100,
+      "edit")
+    onClose()
   }
-
-  const provinceOptions = [{
-    value: "option1",
-    text: "option1"
-  },
-  {
-    value: "option2",
-    text: "option2"
-  },
-  {
-    value: "option3",
-    text: "option3"
-  }]
-
-  const cityOptions = [{
-    value: "option1",
-    text: "option1"
-  },
-  {
-    value: "option2",
-    text: "option2"
-  },
-  {
-    value: "option3",
-    text: "option3"
-  }]
-
-  const districtOptions = [{
-    value: "option1",
-    text: "option1"
-  },
-  {
-    value: "option2",
-    text: "option2"
-  },
-  {
-    value: "option3",
-    text: "option3"
-  }]
-
-  const postalCodeOptions = [{
-    value: "option1",
-    text: "option1"
-  },
-  {
-    value: "option2",
-    text: "option2"
-  },
-  {
-    value: "option3",
-    text: "option3"
-  }]
 
   return (
     <Box position="relative" p="16px" pb="0">
@@ -120,23 +159,23 @@ const AddressBoxReceiver = ({
           textAlign="right"
           display={{ base: "none", md: "block" }}
         >
-          <Text>{receiverName ? "Nama Lengkap" : ""}</Text>
-          <Text>{receiverPhoneNumber ? "Telepon" : ""}</Text>
-          <Text>{receiverAddress ? "Alamat" : ""}</Text>
+          <Text>{name ? "Nama Lengkap" : ""}</Text>
+          <Text>{data.phone ? "Telepon" : ""}</Text>
+          <Text>{data.street ? "Alamat" : ""}</Text>
         </Box>
         <Box ml={{ base: "0", md: "16px" }} maxW={{ base: "60%", md: "40%" }}>
-          <Text fontWeight="bold">{receiverName}</Text>
-          <Text>{receiverPhoneNumber}</Text>
-          <Text>{receiverAddress}</Text>
+          <Text fontWeight="bold">{data.firstname + " " + data.lastname}</Text>
+          <Text>{data.phone}</Text>
+          <Text>{data.street}</Text>
           <Text>
-            {(receiverCity ? receiverCity : "") +
-              (receiverCity && receiverProvince ? ", " : "") +
-              (receiverProvince ? receiverProvince : "")}
+            {((data.city_type && data.city_name) ? (data.city_type + " " + data.city_name) : "") +
+              ((data.city_type && data.city_name) && data.zone_name ? ", " : "") +
+              (data.zone_name ? data.zone_name : "")}
           </Text>
           <Text>
-            {(receiverDistrict ? receiverDistrict : "") +
-              (receiverDistrict && receiverPostalCode ? ", " : "") +
-              (receiverPostalCode ? receiverPostalCode : "")}
+            {(data.subdistrict_name ? data.subdistrict_name : "") +
+              (data.subdistrict_name && data.postcode ? ", " : "") +
+              (data.postcode ? data.postcode : "")}
           </Text>
         </Box>
       </Flex>
@@ -158,7 +197,7 @@ const AddressBoxReceiver = ({
         color="gray.500"
         cursor="pointer"
       >
-        <DeleteIcon deleteAddress={deleteAddress} />
+        <DeleteIcon data={data} />
       </Box>
       <Modal
         isOpen={isOpen}
@@ -213,7 +252,7 @@ const AddressBoxReceiver = ({
                     register={register}
                     text="Nama Lengkap"
                     name="name"
-                    defaultValue={receiverName}
+                    defaultValue={data.firstname + " " + (data.lastname || "")}
                   />
                 </GridItem>
                 <GridItem colSpan={isMobile ? 2 : 1}>
@@ -222,7 +261,7 @@ const AddressBoxReceiver = ({
                     text="Nomor Telepon"
                     name="phoneNumber"
                     type="tel"
-                    defaultValue={receiverPhoneNumber}
+                    defaultValue={data.phone}
                   />
                 </GridItem>
                 <GridItem colSpan={2}>
@@ -232,7 +271,7 @@ const AddressBoxReceiver = ({
                     mt={4}
                     text="Alamat Lengkap"
                     name="address"
-                    defaultValue={receiverAddress}
+                    defaultValue={data.street}
                   />
                 </GridItem>
                 <GridItem colSpan={isMobile ? 2 : 1}>
@@ -240,8 +279,12 @@ const AddressBoxReceiver = ({
                     register={register}
                     type="select"
                     text="Provinsi"
-                    options={provinceOptions}
+                    options={provinceData}
                     name="province"
+                    selectZone="province"
+                    onChange={(e) => setProvinceId(e.target.value)}
+                    defaultValue={data.zone_name}
+                    defaultValueId={data.zone_apicityid}
                   />
                 </GridItem>
                 <GridItem colSpan={isMobile ? 2 : 1}>
@@ -249,8 +292,12 @@ const AddressBoxReceiver = ({
                     register={register}
                     type="select"
                     text="Kota/Kabupaten"
-                    options={cityOptions}
+                    options={cityData}
                     name="city"
+                    selectZone="city"
+                    defaultValue={data.city_name}
+                    defaultValueId={data.city_id}
+                    onChange={(e) => setCityId(e.target.value)}
                   />
                 </GridItem>
                 <GridItem colSpan={isMobile ? 2 : 1}>
@@ -258,8 +305,12 @@ const AddressBoxReceiver = ({
                     register={register}
                     type="select"
                     text="Kecamatan"
-                    options={districtOptions}
+                    options={districtData}
                     name="district"
+                    selectZone="district"
+                    defaultValue={data.subdistrict_name}
+                    defaultValueId={data.subdistrict_id}
+                    onChange={(e) => setdistrictId(e.target.value)}
                   />
                 </GridItem>
                 <GridItem colSpan={isMobile ? 2 : 1}>
@@ -267,8 +318,12 @@ const AddressBoxReceiver = ({
                     register={register}
                     type="select"
                     text="Kode Pos"
-                    options={postalCodeOptions}
+                    options={postalCodeData}
                     name="postalCode"
+                    selectZone="postalCode"
+                    defaultValue={data.postcode}
+                    defaultValueId={data.postcode}
+                    onChange={(e) => setpostalCodeId(e.target.value)}
                   />
                 </GridItem>
               </Grid>
@@ -317,20 +372,29 @@ const AddressBoxReceiver = ({
 };
 
 const AddressBoxSender = ({
-  name,
-  phoneNumber,
-  deleteAddress,
+  data
 }) => {
-
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isMobile] = useMediaQuery("(max-width: 48rem)")
   const { register, handleSubmit } = useForm();
-  const [senderName, setsenderName] = useState(name)
-  const [senderPhoneNumber, setsenderPhoneNumber] = useState(phoneNumber)
+  const { deleteItem, addItemPengirim } = useAddressContext();
+  const { userData } = useAuthContext()
+  const userId = userData?.id
+  const addressId = data?.address_id
 
   const onSubmit = data => {
-    setsenderName(data.name)
-    setsenderPhoneNumber(data.phoneNumber)
+    let firstname, lastname, phone
+    if (data.name.split(" ").length > 1) {
+      firstname = data.name.split(" ").slice(0, data.name.split(" ").length - 1).join(" ")
+      lastname = data.name.split(" ")[data.name.split(" ").length - 1]
+    } else {
+      firstname = data.name
+      lastname = ""
+    }
+    phone = data.phoneNumber
+    deleteItem(userId, addressId)
+    addItemPengirim(userId, 0, 2, firstname, lastname, phone, "edit")
+    onClose();
   }
 
 
@@ -343,12 +407,12 @@ const AddressBoxSender = ({
           textAlign="right"
           display={{ base: "none", md: "block" }}
         >
-          <Text>{senderName ? "Nama Lengkap" : ""}</Text>
-          <Text>{senderPhoneNumber ? "Telepon" : ""}</Text>
+          <Text>{data.firstname + " " + (data.lastname || " ") ? "Nama Lengkap" : ""}</Text>
+          <Text>{data.phone ? "Telepon" : ""}</Text>
         </Box>
         <Box ml={{ base: "0", md: "16px" }} maxW={{ base: "60%", md: "40%" }}>
-          <Text fontWeight="bold">{senderName}</Text>
-          <Text>{senderPhoneNumber}</Text>
+          <Text fontWeight="bold">{data.firstname + " " + (data.lastname || " ")}</Text>
+          <Text>{data.phone}</Text>
         </Box>
       </Flex>
       <Divider mt="1rem" mb="0" />
@@ -369,7 +433,7 @@ const AddressBoxSender = ({
         color="gray.500"
         cursor="pointer"
       >
-        <DeleteIcon deleteAddress={deleteAddress} />
+        <DeleteIcon data={data} />
       </Box>
       <Modal
         isOpen={isOpen}
@@ -379,11 +443,11 @@ const AddressBoxSender = ({
       >
         {isMobile ? <></> : <ModalOverlay />}
         <ModalContent
-          p={isMobile ? "" : "50px"}
+          p={isMobile ? "0" : "50px"}
           pos="absolute"
           h={isMobile ? "calc(100% - 50px)" : "auto"}
           mt="50px"
-          top={isMobile ? "" : "calc(50% - 15rem)"}
+          top={isMobile ? "0" : "calc(50% - 15rem)"}
           borderRadius={isMobile ? "0" : "20px"}
           bgColor={isMobile ? "#F7FAFC" : "white"}
         >
@@ -394,8 +458,8 @@ const AddressBoxSender = ({
           )}
           <ModalCloseButton
             pos="absolute"
-            top="-15px"
-            right="-15px"
+            top={{ base: "0", md: "-15px" }}
+            right={{ base: "0", md: "-15px" }}
             borderRadius="50%"
             color="white"
             bg="red.600"
@@ -408,7 +472,7 @@ const AddressBoxSender = ({
                 register={register}
                 text="Nama Lengkap"
                 name="name"
-                defaultValue={senderName}
+                defaultValue={data.firstname + " " + (data.lastname || " ")}
               />
               <InputBoxAndLabel
                 register={register}
@@ -416,19 +480,22 @@ const AddressBoxSender = ({
                 name="phoneNumber"
                 type="tel"
                 mt={4}
-                defaultValue={senderPhoneNumber}
+                defaultValue={data.phone}
               />
               <Flex justify={isMobile ? "center" : "flex-end"}>
                 <Button
                   colorScheme="orange"
                   borderRadius="20px"
                   p="16px 64px"
-                  mt={isMobile ? "" : "1rem"}
+                  mt="1rem"
                   type="submit"
                   fontWeight="700"
                   className="primaryFont"
                   fontSize="14px"
-                  w={{ base: "100%", md: "50%" }}
+                  w={{ base: "calc(100% - 56px)", md: "180px" }}
+                  position={{ base: "fixed", md: "relative" }}
+                  bottom={{ base: "28px", md: "0" }}
+                  mx={{ base: "28px", md: "0" }}
                 >
                   Update
                 </Button>

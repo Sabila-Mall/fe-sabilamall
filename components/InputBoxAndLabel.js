@@ -13,7 +13,10 @@ const InputBoxAndLabel = ({
   type,
   options,
   defaultValue,
+  defaultValueId,
   required = true,
+  onChange,
+  selectZone,
   disabled = false,
   error,
 }) => (
@@ -48,15 +51,31 @@ const InputBoxAndLabel = ({
       <Select
         {...register(name, { required: required })}
         _focus={{ outline: "none" }}
+        onChange={onChange}
         defaultValue={defaultValue}
       >
+        <option
+          value={defaultValueId}
+          selected={true}
+          disabled={true}
+          hidden={true}
+        >
+          {defaultValue}
+        </option>
         {options.map((option, index) => (
           <option
-            key={option.value}
-            value={option.value}
-            defaultValue={index === 0 && "selected"}
+            value={
+              (selectZone === "city" && option.city_id) ||
+              (selectZone === "province" && option.zone_apicityid) ||
+              (selectZone === "district" && option.subdistrict_id) ||
+              (selectZone === "postalCode" && option.postal_code)
+            }
+            style={{ color: "black" }}
           >
-            {option.text}
+            {(selectZone === "postalCode" && option.postal_code) ||
+              (selectZone === "district" && option.subdistrict_name) ||
+              (selectZone === "city" && option.city_name) ||
+              (selectZone === "province" && option.zone_name)}
           </option>
         ))}
       </Select>

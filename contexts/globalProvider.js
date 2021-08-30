@@ -1,6 +1,7 @@
 import { ChakraProvider } from "@chakra-ui/react";
 
 import { SMPayPointProvider } from "./SMPayPointProvider";
+import { AddressProvider } from "./addressProvider";
 import { AuthProvider } from "./authProvider";
 import { CheckoutProvider } from "./checkoutProvider";
 import { HomepageProvider } from "./homepageProvider";
@@ -13,7 +14,9 @@ export const GlobalProvider = ({ children }) => {
         <SMPayPointProvider>
           <HomepageProvider>
             <CheckoutProvider>
-              <WishlistProvider>{children}</WishlistProvider>
+              <AddressProvider>
+                <WishlistProvider>{children}</WishlistProvider>
+              </AddressProvider>
             </CheckoutProvider>
           </HomepageProvider>
         </SMPayPointProvider>
