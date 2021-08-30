@@ -32,14 +32,13 @@ import {
 import { IoHomeSharp, IoReceiptSharp } from "react-icons/io5";
 
 import { productList } from "../constants/dummyData";
-import { icons } from "../constants/navbarConstant";
 import { useAuthContext } from "../contexts/authProvider";
 import styles from "../styles/Navbar.module.scss";
 import { setBadgeColor } from "../utils/functions";
 import QuickAdd from "./QuickAdd";
 import Sidebar from "./Sidebar";
 
-const NavbarBottom = ({ onDrawerOpen, isLoggedIn }) => {
+export const NavbarBottom = ({ onDrawerOpen, isLoggedIn }) => {
   const router = useRouter();
   return (
     <Box
@@ -49,35 +48,72 @@ const NavbarBottom = ({ onDrawerOpen, isLoggedIn }) => {
       display={{ base: "flex", md: "none" }}
     >
       <Box className={styles.boxIcon} onClick={() => router.push("/")}>
-        <Icon as={IoHomeSharp} className={styles.navbarIcon} />
-        <Text className={styles.boxIconText}>Beranda</Text>
+        <Icon
+          as={IoHomeSharp}
+          className={styles.navbarIcon}
+          color={router.pathname === "/" ? "orange.400" : "gray.500"}
+        />
+        <Text
+          className={styles.boxIconText}
+          color={router.pathname === "/" ? "orange.400" : "gray.500"}
+        >
+          Beranda
+        </Text>
       </Box>
       <Box
         className={styles.boxIcon}
         onClick={isLoggedIn ? onDrawerOpen : () => router.push("/login")}
       >
-        <Icon as={IoCart} className={styles.navbarIcon} />
-        <Text className={styles.boxIconText}>Keranjang</Text>
+        <Icon as={IoCart} className={styles.navbarIcon} color="gray.500" />
+        <Text color="gray.500" className={styles.boxIconText}>
+          Keranjang
+        </Text>
       </Box>
       <Box
         className={styles.boxIcon}
-        onClick={
+        onClick={() =>
           isLoggedIn
             ? router.push("/profile/pesanan-saya")
-            : () => router.push("/login")
+            : router.push("/login")
         }
       >
-        <Icon as={IoReceiptSharp} className={styles.navbarIcon} />
-        <Text className={styles.boxIconText}>Pesanan</Text>
+        <Icon
+          as={IoReceiptSharp}
+          className={styles.navbarIcon}
+          color={
+            router.pathname === "/profile/pesanan-saya"
+              ? "orange.400"
+              : "gray.500"
+          }
+        />
+        <Text
+          className={styles.boxIconText}
+          color={
+            router.pathname === "/profile/pesanan-saya"
+              ? "orange.400"
+              : "gray.500"
+          }
+        >
+          Pesanan
+        </Text>
       </Box>
       <Box
         className={styles.boxIcon}
-        onClick={
-          isLoggedIn ? router.push("/profile") : () => router.push("/login")
+        onClick={() =>
+          isLoggedIn ? router.push("/profile") : router.push("/login")
         }
       >
-        <Icon as={FaUser} className={styles.navbarIcon} />
-        <Text className={styles.boxIconText}>Akun</Text>
+        <Icon
+          as={FaUser}
+          className={styles.navbarIcon}
+          color={router.pathname === "/profile" ? "orange.400" : "gray.500"}
+        />
+        <Text
+          className={styles.boxIconText}
+          color={router.pathname === "/profile" ? "orange.400" : "gray.500"}
+        >
+          Akun
+        </Text>
       </Box>
     </Box>
   );
@@ -96,47 +132,63 @@ const Overlay = ({ isSearched, isMainMenu, handleClickOverlay }) => (
   />
 );
 
-const SearchedElement = ({ isSearched, setIsSearched }) => (
-  <Box
-    className={styles.boxSearch}
-    display={{ base: "flex", md: "none" }}
-    zIndex={isSearched ? "6" : "-6"}
-    w={isSearched ? "100vw" : "128px"}
-    bg={isSearched ? "white" : "transparent"}
-  >
-    <Icon
-      as={BsChevronLeft}
-      onClick={() => setIsSearched(false)}
-      mr="12px"
-      w="20px"
-      h="20px"
-      _hover={{ cursor: "pointer" }}
-      display={isSearched ? "block" : "none"}
-    />
-    <InputGroup borderColor="white">
-      <InputLeftElement
-        children={<Icon as={IoSearch} className={styles.navbarIcon} />}
-        transition="all 0.8s"
-        display={isSearched ? "flex" : "none"}
-        alignItems="center"
+const SearchedElement = ({ isSearched, setIsSearched }) => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      if (searchQuery) router.push(`/search?q=${searchQuery}`);
+    }
+  }
+
+  return (
+    <Box
+      className={styles.boxSearch}
+      display={{ base: "flex", md: "none" }}
+      zIndex={isSearched ? "6" : "-6"}
+      w={isSearched ? "100vw" : "128px"}
+      bg={isSearched ? "white" : "transparent"}
+    >
+      <Icon
+        as={BsChevronLeft}
+        onClick={() => setIsSearched(false)}
+        mr="12px"
+        w="20px"
+        h="20px"
+        _hover={{ cursor: "pointer" }}
+        display={isSearched ? "block" : "none"}
       />
-      <Input
-        type="text"
-        placeholder="Cari di toko..."
-        bg={isSearched ? "gray.100" : "transparent"}
-        pl={isSearched ? "45px" : "0"}
-        w={isSearched ? "100%" : "0"}
-        visibility={isSearched ? "visible" : "hidden"}
-        borderRadius="12px"
-        borderWidth="0"
-        transition="width 0.8s, padding-left 0.8s,  background-color 0s, visibility 0s"
-      />
-    </InputGroup>
-  </Box>
-);
+      <InputGroup borderColor="white">
+        <InputLeftElement
+          children={<Icon as={IoSearch} className={styles.navbarIcon} />}
+          transition="all 0.8s"
+          display={isSearched ? "flex" : "none"}
+          alignItems="center"
+          onClick={() => {if (searchQuery) router.push(`/search?q=${searchQuery}`)}}
+        />
+        <Input
+          type="text"
+          placeholder="Cari di toko..."
+          bg={isSearched ? "gray.100" : "transparent"}
+          pl={isSearched ? "45px" : "0"}
+          w={isSearched ? "100%" : "0"}
+          visibility={isSearched ? "visible" : "hidden"}
+          borderRadius="12px"
+          borderWidth="0"
+          transition="width 0.8s, padding-left 0.8s,  background-color 0s, visibility 0s"
+          value={searchQuery}
+          onChange={(event) => setSearchQuery(event.target.value)}
+          onKeyDown={(event) => handleKeyDown(event)}
+        />
+      </InputGroup>
+    </Box>
+  );
+};
 
 const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
   const { userData, loading, logout } = useAuthContext();
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const router = useRouter();
 
   return loading ? (
@@ -144,8 +196,9 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
   ) : (
     <Grid
       templateColumns={{
-        base: "repeat(3, 1fr)",
-        md: isLoggedIn ? "repeat(5,1fr)" : "repeat(4,1fr)",
+        base: "repeat(3, 1.3rem)",
+        sm: "repeat(3, 2rem)",
+        md: isLoggedIn ? "repeat(4, 2.75rem) 6rem" : "repeat(3, 3rem) 6rem",
       }}
       w="auto"
       columnGap={{ base: 6, md: 0 }}
@@ -154,11 +207,16 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
       <Icon
         as={IoSearch}
         className={styles.navbarIcon}
+        color="gray.500"
         onClick={() => setIsSearched(true)}
         display={{ base: "block", md: "none" }}
       />
       <Link href="/" w="fit-content">
-        <Icon as={IoNotifications} className={styles.navbarIcon} />
+        <Icon
+          as={IoNotifications}
+          className={styles.navbarIcon}
+          color="gray.500"
+        />
       </Link>
       <Box
         w="fit-content"
@@ -167,10 +225,14 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
           isLoggedIn ? () => onDrawerOpen() : () => router.push("/login")
         }
       >
-        <Icon as={IoCart} className={styles.navbarIcon} />
+        <Icon as={IoCart} className={styles.navbarIcon} color="gray.500" />
       </Box>
       <Link href={isLoggedIn ? "/wishlist" : "/login"} w="fit-content">
-        <Icon as={IoHeartSharp} className={styles.navbarIcon} />
+        <Icon
+          as={IoHeartSharp}
+          className={styles.navbarIcon}
+          color="gray.500"
+        />
       </Link>
       <Box
         w="fit-content"
@@ -179,14 +241,49 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
       >
         {isLoggedIn ? (
           <Menu>
-            <MenuButton as={FaUser} className={styles.navbarIcon} />
-            <MenuList
-              zIndex="popover"
-              position="relative"
-              right="12rem"
-              top="2rem"
-            >
-              <MenuItem icon={<BiUser />}>Profil</MenuItem>
+            <MenuButton>
+              <Flex align="center" _hover={{ cursor: "pointer" }}>
+                <Icon
+                  as={FaUser}
+                  className={styles.navbarIcon}
+                  color="gray.500"
+                />
+                <Box
+                  w="fit-content"
+                  display={{ base: "none", md: "block" }}
+                  fontSize="12px"
+                  ml="1rem"
+                >
+                  <Text
+                    fontWeight="bold"
+                    isTruncated
+                    maxWidth="16ch"
+                    overflow="hidden"
+                  >
+                    {userData?.first_name} {userData?.last_name}
+                  </Text>
+                  <Flex w="full" justify="space-between">
+                    <Text mr=".7rem">{userData?.memberid}</Text>
+                    <Box
+                      bg={setBadgeColor(userData?.user_level)}
+                      color="white"
+                      px=".4rem"
+                      py=".1rem"
+                      borderRadius="30px"
+                    >
+                      {userData?.user_level}
+                    </Box>
+                  </Flex>
+                </Box>
+              </Flex>
+            </MenuButton>
+            <MenuList zIndex="popover">
+              <MenuItem
+                icon={<BiUser />}
+                onClick={() => router.push("/profile")}
+              >
+                Profil
+              </MenuItem>
               <MenuItem
                 icon={<Icon as={BiLogOut} color="red.400" />}
                 color="red.400"
@@ -211,29 +308,6 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
           </Flex>
         )}
       </Box>
-      {isLoggedIn && (
-        <Box
-          w="fit-content"
-          display={{ base: "none", md: "block" }}
-          fontSize="12px"
-        >
-          <Text fontWeight="bold" isTruncated maxWidth="16ch" overflow="hidden">
-            {userData?.first_name} {userData?.last_name}
-          </Text>
-          <Flex w="full" justify="space-between">
-            <Text mr=".7rem">{userData?.memberid}</Text>
-            <Box
-              bg={setBadgeColor(userData?.user_level)}
-              color="white"
-              px=".4rem"
-              py=".1rem"
-              borderRadius="30px"
-            >
-              {userData?.user_level}
-            </Box>
-          </Flex>
-        </Box>
-      )}
     </Grid>
   );
 };
@@ -247,6 +321,16 @@ const Navbar = () => {
   const isDrawerOpen = drawerDisclosure.isOpen;
   const onDrawerOpen = drawerDisclosure.onOpen;
   const onDrawerClose = drawerDisclosure.onClose;
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      if (searchQuery) router.push(`/search?q=${searchQuery}`);
+    }
+  }
+
 
   const navbarEl = useRef(null);
 
@@ -296,7 +380,7 @@ const Navbar = () => {
           </Link>
           <InputGroup
             mx={isLoggedIn ? { base: "15px", xl: "30px" } : "30px"}
-            w={{ base: "100%", lg: "60vw", xl: "70vw" }}
+            w="100%"
             // minW={{ base: "auto", xl: "70vw" }}
             display={{ base: "none", md: "block" }}
           >
@@ -313,6 +397,7 @@ const Navbar = () => {
                   }}
                   color="orange.400"
                   ml="17px"
+                  onClick={() => {if (searchQuery) router.push(`/search?q=${searchQuery}`)}}
                 />
               }
             />
@@ -324,6 +409,9 @@ const Navbar = () => {
               bg="gray.100"
               pl="55px"
               focusBorderColor="gray.100"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              onKeyDown={(event) => handleKeyDown(event)}
             />
           </InputGroup>
         </Box>
@@ -351,12 +439,8 @@ const Navbar = () => {
         setIsMainMenu={setIsMainMenu}
         isMainMenu={isMainMenu}
       />
-      <NavbarBottom onDrawerOpen={onDrawerOpen} />
-      <QuickAdd
-        products={productList}
-        onDrawerClose={onDrawerClose}
-        isDrawerOpen={isDrawerOpen}
-      />
+      <NavbarBottom onDrawerOpen={onDrawerOpen} isLoggedIn={isLoggedIn} />
+      <QuickAdd onDrawerClose={onDrawerClose} isDrawerOpen={isDrawerOpen} />
     </>
   );
 };

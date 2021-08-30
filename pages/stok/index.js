@@ -55,6 +55,14 @@ const Stok = () => {
     if (brandId != 0) {
       apiGetProductBrand(brandId).then((res) => {
         let d = res.data.data.data;
+        if (typeof d === "object") {
+          const key = Object.keys(d);
+          let temp = [];
+          key.map((k) => {
+            temp.push(d[k]);
+          });
+          d = temp;
+        }
         if (d.length != 0) {
           setProducts(true);
           d.map((product) => {
@@ -137,7 +145,7 @@ const Stok = () => {
                   );
                 })
               ) : (
-                <option key={"loading"} value={"loading"}>
+                <option key={"loading"} disabled value={"loading"}>
                   {"Loading..."}
                 </option>
               )}
@@ -185,7 +193,9 @@ const Stok = () => {
                 }
               })
             ) : !firstTime && products ? (
-              <Spinner />
+              <Box w="full" display="flex" justifyContent="center">
+                <Spinner />
+              </Box>
             ) : (
               !products && <h1>Tidak ada produk</h1>
             )}

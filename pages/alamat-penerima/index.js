@@ -31,6 +31,7 @@ import { FiChevronRight } from "react-icons/fi";
 import { apiKecamatan, apiKodePos, apiKota, apiProvinsi } from "../../api/Zone";
 import { addAddress, getAddress } from "../../api/address";
 import { getMyCart } from "../../api/cart";
+import CheckoutSummary from "../../components/CheckoutSummary";
 import Footer from "../../components/Footer";
 import { Layout } from "../../components/Layout";
 import Loading from "../../components/Loading";
@@ -341,7 +342,7 @@ const AlamatPenerima = () => {
           delivery_id: res.address_id,
           namaPengirim,
           nomorPengirim,
-          namaPenerima: namaAwalPenerima + namaAkhirPenerima,
+          namaPenerima: namaAwalPenerima + " " + namaAkhirPenerima,
           provinsiPenerima: provinsiPenerima?.split(" ")?.[1],
           kotaPenerima: kotaPenerima?.split(" ")?.[1],
           kecamatanPenerima: kecamatanPenerima?.split(" ")?.[1],
@@ -391,7 +392,7 @@ const AlamatPenerima = () => {
           delivery_id: res2.address_id,
           namaPengirim: namaTextPengirim,
           nomorPengirim: ponselPengirim,
-          namaPenerima: namaAwalPenerima + namaAkhirPenerima,
+          namaPenerima: namaAwalPenerima + " " + namaAkhirPenerima,
           provinsiPenerima: provinsiPenerima?.split(" ")?.[1],
           kotaPenerima: kotaPenerima?.split(" ")?.[1],
           kecamatanPenerima: kecamatanPenerima?.split(" ")?.[1],
@@ -477,7 +478,7 @@ const AlamatPenerima = () => {
           flexDir={{ base: "column-reverse", lg: "row" }}
         >
           <Box
-            w={{ base: "100%", lg: "65%" }}
+            w={{ base: "100%", lg: "70%" }}
             d={{ base: "flex", lg: "inline" }}
             flexDir={{ base: "column", lg: "row" }}
             alignItems={{ base: "center", lg: "stretch" }}
@@ -1035,7 +1036,7 @@ const AlamatPenerima = () => {
               </Box>
             </Box>
           </Box>
-          <Box w={{ base: "100%", lg: "30%" }}>
+          <Box w={{ base: "100%", lg: "25%" }}>
             <Box
               w="100%"
               border="1px solid"

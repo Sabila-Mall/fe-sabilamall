@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
       if (document.cookie.indexOf("user_id") !== -1) {
         setIsLoggedIn(true);
         setLoading(true);
-        apiGetUserProfile(userId)
+        apiGetUserProfile(userId.user_id)
           .then((res) => {
             const response = res.data;
             if (isRequestSuccess(response)) {

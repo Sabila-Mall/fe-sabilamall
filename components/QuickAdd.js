@@ -23,7 +23,7 @@ import QuickAddListItem from "./QuickAddListItem";
  * @param isDrawerOpen stattus drawer sekarang apakah sedang terbuka atau tidak [dapatkan dari useDisclosure()]
  * @param onDrawerClose callback function yang dipanggil untuk close modal [dapatkan dari useDisclosure()]
  */
-const QuickAdd = ({ products, isDrawerOpen, onDrawerClose }) => {
+const QuickAdd = ({ isDrawerOpen, onDrawerClose }) => {
   const total = "99.999.999";
   const size = useBreakpointValue({ base: "full", md: "md" });
 
@@ -47,7 +47,7 @@ const QuickAdd = ({ products, isDrawerOpen, onDrawerClose }) => {
           </DrawerHeader>
 
           <DrawerBody px={"2rem"}>
-            <QuickAddListItem products={products} />
+            <QuickAddListItem products={[]} />
           </DrawerBody>
 
           <DrawerFooter borderTopWidth={"1px"} flexDirection={"column"}>

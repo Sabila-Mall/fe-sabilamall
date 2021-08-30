@@ -9,6 +9,7 @@ const UpgradeAccountPage = () => {
     <>
       <UpgradeAccountMobile />
       <ProfileDesktop
+        cardProfileText={"Akun Saya"}
         section="Upgrade Akun"
         element={<UpgradeAccount isMobile={false} />}
       />

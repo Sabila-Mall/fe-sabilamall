@@ -1,22 +1,10 @@
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-} from "@chakra-ui/breadcrumb";
-import { Image } from "@chakra-ui/image";
 import { Box, Flex, Text } from "@chakra-ui/layout";
 import {
   Button,
   Checkbox,
-  Circle,
-  Divider,
-  Editable,
-  EditableInput,
-  EditablePreview,
   Grid,
   Heading,
   HStack,
-  IconButton,
   Input,
   InputGroup,
   InputLeftAddon,
@@ -27,531 +15,304 @@ import {
   Select,
   SimpleGrid,
   Spacer,
-  Square,
-  Stack,
   StackDivider,
   Textarea,
-  useEditableControls,
+  useOutsideClick,
   VStack,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { useRef, useState } from "react";
-import { IoCreateOutline, IoChevronForward } from "react-icons/io5";
+import { useForm } from "react-hook-form";
 
+import CheckoutBreadcrumb from "../../components/CheckoutBreadcrumb";
+import CheckoutProduct from "../../components/CheckoutProduct";
+import CheckoutStepper from "../../components/CheckoutStepper";
+import CheckoutSummary from "../../components/CheckoutSummary";
 import Footer from "../../components/Footer";
 import { Layout } from "../../components/Layout";
 import Navbar from "../../components/Navbar";
 import { Stepper } from "../../components/Stepper";
+import {
+  dataPenerima,
+  dataPengirim,
+  daftarJasaPengiriman,
+  daftarMetodePembayaran,
+  daftarProduk,
+} from "../../constants/dummyData";
 import { useCheckoutContext } from "../../contexts/checkoutProvider";
 import { useWindowSize } from "../../hooks/useWindowSize";
-import styles from "../../styles/Footer.module.scss";
+import {
+  formatNumber,
+  formatPhoneNumber,
+  isEmpty,
+} from "../../utils/functions";
 
-// Helper function
-
-export const formatNumber = (number) => {
-  return number.toLocaleString("id-ID");
-};
-
-const formatPhoneNumber = (phoneNumber) => {
-  return (
-    phoneNumber.slice(0, 4) +
-    "-" +
-    phoneNumber.slice(4, 8) +
-    "-" +
-    phoneNumber.slice(7, 11)
-  );
-};
-
-const isEmpty = (obj) => {
-  for (const key in obj) {
-    if (obj.hasOwnProperty(key)) return false;
-  }
-  return true;
-};
-
-// Just a placeholder function for checking if the voucher is valid
-const checkVoucher = (voucherName, setVoucher) => {
-  if (voucherName === "GRATISONGKIR2021") {
-    setVoucher({
-      nama: voucherName,
-      harga: 4000,
-    });
-  } else {
-    setVoucher({});
-  }
-};
-
-// Dummmy data
-const dataPengirim = {
-  nama: "Tatang Sutarman",
-  nomorHandphone: "085555555555",
-};
-
-const dataPenerima = {
-  nama: "Hendra Setiawan Indradjaja ",
-  nomorHandphone: "085555555555",
-  alamat:
-    "Jl Kb Kacang Grand Indonesia Shopping Town East Mall Lt Ground 30, TANGERANG - CILEDUG, BANTEN, 15148",
-};
-
-export const listProduk = [
-  {
-    gambar: "/images/produk.svg",
-    nama: "Nama Produk Croissant",
-    deskripsi: "Lengan panjang, merah cabe, XXXXXL",
-    berat: 1000,
-    diskon: 99,
-    harga: 99999999,
-    jumlah: 999,
-  },
-  {
-    gambar: "/images/produk.svg",
-    nama: "Nama Produk Croissant",
-    deskripsi: "Lengan panjang, merah cabe, XXXXXL",
-    berat: 1000,
-    diskon: 99,
-    harga: 99999999,
-    jumlah: 999,
-  },
-  {
-    gambar: "/images/produk.svg",
-    nama: "Nama Produk Croissant",
-    deskripsi: "Lengan panjang, merah cabe, XXXXXL",
-    berat: 1000,
-    diskon: 99,
-    harga: 99999999,
-    jumlah: 999,
-  },
-];
-
-const listJasaPengiriman = [
-  {
-    id: "jne",
-    nama: "JNE JTR",
-    estimasi: "1 - 2",
-    harga: 99999,
-  },
-  {
-    id: "sicepat",
-    nama: "SICEPAT",
-    estimasi: "1 - 2",
-    harga: 99999,
-  },
-  {
-    id: "pos",
-    nama: "POS INDONESIA",
-    estimasi: "1 - 2",
-    harga: 99999,
-  },
-];
-
-const listMetodePembayaran = [
-  {
-    id: "bank",
-    nama: "Transfer Bank",
-    biaya: 4000,
-  },
-  {
-    id: "deposit",
-    nama: "Deposit",
-    biaya: 3000,
-  },
-  {
-    id: "cod",
-    nama: "Cash On Delivery (COD)",
-    biaya: 20,
-  },
-  {
-    id: "gopay",
-    nama: "Go-Pay",
-    biaya: 4000,
-  },
-  {
-    id: "alfamart",
-    nama: "Alfamart",
-    biaya: 10000,
-  },
-];
-
-const dataSummary = {
-  jumlah: 9999999,
-  berat: 1000000,
-  subtotal: 99999999,
-  diskon: 99999999,
-  pengiriman: 99999999,
-  tambahan: 4000,
-  voucher: 99999999,
-};
-
-// Separated each section into component
-
-function EditableControls({ ref }) {
-  const { getEditButtonProps } = useEditableControls();
-
-  return (
-    <IconButton
-      icon={<IoCreateOutline />}
-      variant={"ghost"}
-      ref={ref}
-      {...getEditButtonProps()}
-    />
-  );
-}
-
-const InputAddNote = () => {
-  const { getEditButtonProps } = useEditableControls();
-
-  return (
-    <Box {...getEditButtonProps()}>
-      <EditablePreview />
-      <EditableInput color="black" />
-    </Box>
-  );
-};
-
-export const Produk = ({ produk, resi }) => {
-  const { width } = useWindowSize();
-  const isSmartphone = width < 768;
-  const editNoteEl = useRef(null);
-  return (
-    <Grid
-      gridTemplateColumns={{
-        base: "repeat(2, 1fr)",
-        md: "3fr 1fr 1fr 1fr",
-      }}
-      gridTemplateRows={{
-        base: `1fr fit-content(1fr) fit-content(1fr)`,
-        md: `1fr`,
-      }}
-      gridTemplateAreas={{
-        base: `'barang barang' 'jumlah harga' 'subtotal subtotal'`,
-        md: `'barang harga jumlah subtotal'`,
-      }}
-      rowGap={"0.25rem"}
-    >
-      <Box gridArea={"barang"}>
-        <HStack spacing={"1rem"} align={"start"}>
-          <Image
-            src={produk.gambar}
-            alt="Gambar produk"
-            borderRadius={"0.625rem"}
-            boxSize={"3rem"}
-          />
-          <Box>
-            <Heading color={"gray.700"} isTruncated fontSize={"1rem"}>
-              {produk.nama}
-            </Heading>
-            <Text color={"gray.500"}>{produk.deskripsi}</Text>
-            <Text color={"gray.500"}>
-              Berat: {formatNumber(produk.berat)}gr
-            </Text>
-          </Box>
-        </HStack>
-        {!resi && (
-          <Editable
-            className={styles.secondaryFont}
-            color={"gray.400"}
-            fontSize={"0.75rem"}
-            defaultValue="Tambah catatan"
-            isPreviewFocusable={false}
-          >
-            <HStack spacing={"0.25rem"}>
-              <EditableControls ref={editNoteEl} />
-              <InputAddNote />
-            </HStack>
-          </Editable>
-        )}
-      </Box>
-      <Box
-        gridArea={"harga"}
-        justifySelf={{ base: "self-end", md: "self-start" }}
-        alignSelf={{ md: "center" }}
-      >
-        <Stack
-          spacing={"0.25rem"}
-          align={"flex-end"}
-          direction={{ base: "row-reverse", md: "column" }}
-        >
-          <Box textAlign={{ base: "right", lg: "left" }}>
-            <Text fontSize={"0.75rem"} as={"s"} color={"gray.400"}>
-              Rp{formatNumber(produk.harga)}
-            </Text>
-            <Text color={"gray.700"}>Rp{formatNumber(produk.harga)}</Text>
-          </Box>
-          <Square
-            color={"white"}
-            bg={"red.500"}
-            borderRadius={"0.25rem"}
-            px={"0.5rem"}
-            py={"0.25rem"}
-            fontSize={{ base: "0.5rem", md: "0.875rem" }}
-          >
-            Diskon {produk.diskon}%
-          </Square>
-        </Stack>
-      </Box>
-
-      <HStack
-        gridArea={"jumlah"}
-        alignSelf={{ base: "self-end", md: "center" }}
-        justifySelf={{ md: "center" }}
-      >
-        {isSmartphone && <Text>Jumlah:</Text>}
-        <Text color={"gray.500"}>{formatNumber(produk.jumlah)}</Text>
-      </HStack>
-      <HStack
-        fontWeight={resi && 700}
-        gridArea={"subtotal"}
-        justify={"space-between"}
-        justifySelf={{ md: "center" }}
-      >
-        {isSmartphone && <Text>Subtotal:</Text>}
-        <Text color={"gray.700"}>
-          Rp{formatNumber(produk.jumlah * produk.harga)}
-        </Text>
-      </HStack>
-    </Grid>
-  );
-};
-
-const RingkasanPesanan = () => {
+/**
+ * @param {Object} dataPengirim
+ *  @param {string} dataPengirim.nama Nama lengkap pengirim
+ *  @param {string} dataPengirim.nomorHandphone Nomor handphone pengirim
+ * @param {Object} dataPenerima
+ *  @param {string} dataPenerima.nama Nama lengkap penerima
+ *  @param {string} dataPenerima.nomorHandphone Nomor handphone penerima
+ *  @param {string} dataPenerima.alamat Alamat penerima
+ * @param {CheckoutProduct[]} daftarProduk
+ */
+const RingkasanPesanan = ({ dataPengirim, dataPenerima, daftarProduk }) => {
   const { width } = useWindowSize();
   const isSmartphone = width < 768;
 
+  const router = useRouter();
+
   return (
-    <Box>
-      <Heading
-        as={"h3"}
-        fontSize={"1.5rem"}
-        mb={"1rem"}
-        className={styles.primaryFont}
-      >
+    <>
+      <Heading as="h3" fontSize="1.5rem" mb="1rem" className="primaryFont">
         Ringkasan Pesanan
       </Heading>
-      <SimpleGrid spacing={"1rem"} columns={{ base: 1, md: 2 }} mb={"1rem"}>
+      <SimpleGrid spacing="1rem" columns={{ base: 1, md: 2 }} mb="1rem">
         <Box
-          padding={"1rem"}
-          borderRadius={"0.5rem"}
-          border={"1px"}
-          borderColor={"gray.300"}
+          padding="1rem"
+          borderRadius="0.5rem"
+          border="1px"
+          borderColor="gray.300"
         >
-          <Flex justify={"space-between"} mb={"1.5rem"}>
-            <Text fontSize={"1.25rem"} className={styles.primaryFont}>
+          <Flex justify="space-between" mb="1.5rem">
+            <Text fontSize="1.25rem" className="primaryFont" fontWeight="bold">
               Data Pengirim
             </Text>
-            <Button variant="outline" color={"gray.400"} size={"sm"}>
+            <Button
+              variant="outline"
+              color="gray.400"
+              size="sm"
+              onClick={() => router.push("/alamat-penerima")}
+            >
               Ubah
             </Button>
           </Flex>
 
-          <Text fontWeight={"bold"} className={styles.primaryFont}>
+          <Text fontWeight="bold" className="primaryFont">
             {dataPengirim.nama}
           </Text>
-          <Text className={styles.primaryFont} fontWeight={"normal"}>
+          <Text className="primaryFont" fontWeight="normal">
             {formatPhoneNumber(dataPengirim.nomorHandphone)}
           </Text>
         </Box>
 
         <Box
-          padding={"1rem"}
-          borderRadius={"0.5rem"}
-          border={"1px"}
-          borderColor={"gray.300"}
+          padding="1rem"
+          borderRadius="0.5rem"
+          border="1px"
+          borderColor="gray.300"
         >
-          <Flex justify={"space-between"} mb={"1.5rem"}>
-            <Text fontSize={"1.25rem"} className={styles.primaryFont}>
+          <Flex justify="space-between" mb="1.5rem">
+            <Text fontSize="1.25rem" className="primaryFont" fontWeight="bold">
               Data Penerima
             </Text>
-            <Button variant="outline" color={"gray.400"} size={"sm"}>
+            <Button
+              variant="outline"
+              color="gray.400"
+              size="sm"
+              onClick={() => router.push("/alamat-penerima")}
+            >
               Ubah
             </Button>
           </Flex>
 
-          <Text fontWeight={"bold"} className={styles.primaryFont}>
+          <Text fontWeight="bold" className="primaryFont">
             {dataPenerima.nama}
           </Text>
-          <Text className={styles.primaryFont} fontWeight={"normal"}>
+          <Text className="primaryFont" fontWeight="normal">
             {formatPhoneNumber(dataPenerima.nomorHandphone)}
           </Text>
 
-          <Spacer h={"0.5rem"} />
+          <Spacer h="0.5rem" />
 
-          <Text className={styles.secondaryFont}>{dataPenerima.alamat}</Text>
+          <Text className="secondaryFont">{dataPenerima.alamat}</Text>
         </Box>
       </SimpleGrid>
-      <Stack
-        className={styles.secondaryFont}
-        direction={"column"}
-        borderRadius={"0.5rem"}
+      <VStack
+        className="secondaryFont"
+        borderRadius="0.5rem"
         borderWidth={{ base: "0px", md: "1px" }}
         borderColor="gray.300"
         padding={{ base: "0rem", md: "1rem" }}
         spacing={{ base: "1rem", md: "0.875rem" }}
         divider={<StackDivider borderColor="gray.200" />}
+        align="stretch"
       >
         {!isSmartphone && (
           <Grid
-            gridTemplateColumns={"3fr 1fr 1fr 1fr"}
-            className={styles.primaryFont}
+            gridTemplateColumns="3fr 1fr 1fr 1fr"
+            className="primaryFont"
+            fontWeight="bold"
+            w="full"
+            alignSelf="stretch"
           >
             <Text>Produk</Text>
             <Text>Harga Satuan</Text>
-            <Text textAlign={"center"}>Jumlah</Text>
-            <Text textAlign={"center"}>Subtotal</Text>
+            <Text textAlign="center">Jumlah</Text>
+            <Text textAlign="center">Subtotal</Text>
           </Grid>
         )}
-        {listProduk.map((produk, index) => (
-          <Produk produk={produk} key={index} />
+        {daftarProduk.map((produk) => (
+          <CheckoutProduct key={produk.id} {...produk} />
         ))}
-      </Stack>
-    </Box>
-  );
-};
-
-const JasaPengiriman = ({ idJasaPengiriman }) => {
-  const jasa = listJasaPengiriman.find((e) => e.id === idJasaPengiriman);
-  return (
-    <>
-      <Flex direction={"column"}>
-        <Text className={styles.primaryFont}>{jasa.nama}</Text>
-        <Text className={styles.secondaryFont}>
-          Estimasi {jasa.estimasi} hari
-        </Text>
-      </Flex>
-
-      <Text className={styles.secondaryFont}>
-        Rp. {formatNumber(jasa.harga)}
-      </Text>
+      </VStack>
     </>
   );
 };
 
-const Pengiriman = ({ beratTotal }) => {
-  const [idJasaPengiriman, setIdJasaPengiriman] = useState("");
-
+/**
+ * @param {int} beratTotal Berat total semua produk
+ * @param {Object[]} daftarJasaPengiriman
+ *  @param {string} daftarJasaPengiriman[].id Id jasa pengiriman buat value di select
+ *  @param {string} daftarJasaPengiriman[].nama Nama jasa pengiriman buat yg ditampilin di select
+ * @param {Object} pengirman Object pengiriman
+ *  @param {string} pengiriman.nama Nama pengiriman
+ *  @param {string} pengiriman.estimasi Estimasi pengiriman dalam hari (Misal. "1-2")
+ *  @param {int} pengiriman.harga Harga pengiriman
+ * @param {function} setPengiriman Function buat ngubah pengiriman
+ */
+const Pengiriman = ({
+  beratTotal,
+  daftarJasaPengiriman,
+  pengiriman,
+  handler,
+}) => {
   return (
-    <Box>
-      <Heading
-        as={"h3"}
-        mb={"1rem"}
-        fontSize={"1.5rem"}
-        className={styles.primaryFont}
-      >
+    <>
+      <Heading as="h3" mb="1rem" fontSize="1.5rem" className="primaryFont">
         Pengiriman
       </Heading>
       <SimpleGrid
         columns={{ base: 1, md: 2 }}
-        spacing={"2rem"}
-        padding={"1rem"}
-        borderRadius={"0.5rem"}
-        border={"1px"}
-        borderColor={"gray.300"}
+        spacing="2rem"
+        padding="1rem"
+        borderRadius="0.5rem"
+        border="1px"
+        borderColor="gray.300"
       >
-        <Flex direction={"column"}>
-          <HStack className={styles.primaryFont} color={"gray.600"}>
-            <Text>Total berat:</Text>
-            <Text fontWeight={"normal"}>{formatNumber(beratTotal)} gr</Text>
+        <Flex direction="column">
+          <HStack className="primaryFont" color="gray.600">
+            <Text fontWeight="bold">Total berat:</Text>
+            <Text fontWeight="normal">{formatNumber(beratTotal)} gr</Text>
           </HStack>
           <Select
-            className={styles.secondaryFont}
+            className="secondaryFont"
             placeholder="Pilih jasa pengiriman"
             onChange={(event) => {
-              setIdJasaPengiriman(event.target.value);
+              handler(event.target.value);
             }}
           >
-            {listJasaPengiriman.map((jasa, index) => (
+            {daftarJasaPengiriman.map((jasa, index) => (
               <option value={jasa.id} key={index}>
                 {jasa.nama}
               </option>
             ))}
           </Select>
         </Flex>
-        <Flex justify={"space-between"}>
-          {idJasaPengiriman && (
-            <JasaPengiriman idJasaPengiriman={idJasaPengiriman} />
+        <Flex justify="space-between">
+          {!isEmpty(pengiriman) && (
+            <>
+              <Flex direction={"column"}>
+                <Text className="primaryFont" fontWeight="bold">
+                  {pengiriman.nama}
+                </Text>
+                <Text className="secondaryFont">
+                  Estimasi {pengiriman.estimasi} hari
+                </Text>
+              </Flex>
+
+              <Text className="secondaryFont">
+                Rp. {formatNumber(pengiriman.harga)}
+              </Text>
+            </>
           )}
         </Flex>
       </SimpleGrid>
-    </Box>
+    </>
   );
 };
 
-const CatatanPesanan = () => {
+const CatatanPesanan = ({ setCatatanPesanan }) => {
+  const ref = useRef();
+  const { register, getValues } = useForm();
+
+  useOutsideClick({
+    ref: ref,
+    handler: () => setCatatanPesanan(getValues("catatan-pesanan")),
+  });
+
   return (
-    <Box>
-      <Heading
-        as={"h3"}
-        mb={"1rem"}
-        fontSize={"1.5rem"}
-        className={styles.primaryFont}
-      >
+    <>
+      <Heading as="h3" mb="1rem" fontSize="1.5rem" className="primaryFont">
         Catatan Pesanan
       </Heading>
       <Textarea
-        className={styles.secondaryFont}
+        ref={ref}
+        className="secondaryFont"
         placeholder="Tuliskan catatan untuk penjual"
+        {...register("catatan-pesanan")}
       />
-    </Box>
+    </>
   );
 };
 
-const MetodePembayaran = () => {
-  const [biaya, setBiaya] = useState("");
-  const [isCod, setCod] = useState(false);
-
-  const metodePembayaranCOD = () => (
-    <InputGroup className={styles.secondaryFont}>
-      <InputLeftAddon children="Diskon Pelanggan" />
-      <NumberInput
-        defaultValue={biaya}
-        min={0}
-        max={100}
-        allowMouseWheel
-        textAlign={"right"}
-      >
-        <NumberInputField textAlign={"right"} />
-      </NumberInput>
-      <InputRightAddon children="%" />
-    </InputGroup>
-  );
-
+/**
+ *
+ * @param{Object[]} daftarMetodePembayaran
+ *  @param {string} daftarMetodePembayaran[].id Id metode pembayaran buat value di select
+ *  @param {string} daftarMetodePembayaran[].nama Nama metode pembayaran buat yg ditampilin di select
+ * @param {Object} metodePembayaran Object metode pembayaran
+ *  @param {string} metodePembayaran.nama Nama metode pembayaran
+ *  @param {int} metodePembayaran.biaya Harga metode pembayaran
+ *  @param {boolean} metodePembayaran.isCod Status apakah metode pembayaran menggunakan COD
+ *  @param {int} metodePembayaran.diskon Diskon metode pembayaran (hanya berlaku untuk cod)
+ * @param {function} setPengiriman Function buat ngubah metode pembayaran
+ */
+const MetodePembayaran = ({
+  metodePembayaran,
+  handler,
+  daftarMetodePembayaran,
+}) => {
   return (
-    <VStack spacing={"1rem"} align={"stretch"}>
-      <Heading as={"h3"} fontSize={"1.5rem"} className={styles.primaryFont}>
+    <VStack spacing="1rem" align="stretch">
+      <Heading as="h3" fontSize="1.5rem" className="primaryFont">
         Metode Pembayaran
       </Heading>
       <Select
-        className={styles.secondaryFont}
+        className="secondaryFont"
         placeholder="Pilih metode pembayaran"
-        onChange={(event) => {
-          const idMetodePembayaran = event.target.value;
-          if (idMetodePembayaran === "cod") {
-            setCod(true);
-          } else {
-            const metode = listMetodePembayaran.find(
-              (element) => element.id === idMetodePembayaran,
-            );
-            setBiaya(formatNumber(metode.biaya));
-          }
-        }}
+        onChange={(event) => handler(event.target.value)}
       >
-        {listMetodePembayaran.map((metode, index) => (
+        {daftarMetodePembayaran.map((metode, index) => (
           <option value={metode.id} key={index}>
             {metode.nama}
           </option>
         ))}
       </Select>
-      {biaya && (
-        <Flex
-          justify={"space-between"}
-          color={"gray.600"}
-          className={styles.primaryFont}
-        >
-          {isCod ? (
-            metodePembayaranCOD()
+      {!isEmpty(metodePembayaran) && (
+        <Flex justify="space-between" color="gray.600" className="primaryFont">
+          {metodePembayaran.isCod ? (
+            <InputGroup className="secondaryFont">
+              <InputLeftAddon children="Diskon Pelanggan" />
+              <NumberInput
+                defaultValue={metodePembayaran.diskon}
+                min={0}
+                max={100}
+                allowMouseWheel
+                textAlign="right"
+                isDisabled={true}
+              >
+                <NumberInputField textAlign="right" />
+              </NumberInput>
+              <InputRightAddon children="%" />
+            </InputGroup>
           ) : (
             <>
-              <Text>Biaya Tambahan:</Text>
-              <Text>Rp{biaya}</Text>
+              <Text fontWeight="bold">Biaya Tambahan:</Text>
+              <Text fontWeight="bold">
+                Rp{formatNumber(metodePembayaran.biaya)}
+              </Text>
             </>
           )}
         </Flex>
@@ -560,58 +321,68 @@ const MetodePembayaran = () => {
   );
 };
 
-const VoucherResult = ({ nama, harga }) => {
-  return (
-    <Box
-      padding={"1rem"}
-      borderRadius={"0.5rem"}
-      border={"1px"}
-      borderColor={"orange.200"}
-      bg={"orange.50"}
-      color={"orange.500"}
-      className={styles.primaryFont}
-    >
-      <HStack justify={"space-between"}>
-        <Box>
-          <Text color={"orange.700"} fontSize={"0.75rem"} fontWeight={"normal"}>
-            Voucher berhasil di klaim!
-          </Text>
-          <Text>{nama}</Text>
-        </Box>
-        <Text>Rp{formatNumber(harga)}</Text>
-      </HStack>
-    </Box>
-  );
-};
+const Voucher = ({ voucher, setVoucher }) => {
+  const { register, handleSubmit } = useForm();
 
-const Voucher = () => {
-  const [voucher, setVoucher] = useState({});
-  const [value, setValue] = useState("");
+  const checkVoucher = (voucher) => {
+    // Handle logic untuk ngecek apa vouchernya valid atau engga
+    return voucher === "GRATISONGKIR21";
+  };
+
+  const onSubmit = (input) => {
+    if (checkVoucher(input.voucher)) {
+      // Kalo voucher valid, ambil nama voucher sama harga vouchernya
+      // Ganti juga nama sama harganya di setValue
+      setVoucher({ nama: input.voucher, harga: 10000 });
+    } else {
+      // Kalo vouchernya ga valid set voucher jadi empty object,
+      // penting buat logic nampilin banner vouchernya
+      setVoucher({});
+    }
+  };
+
   return (
-    <VStack spacing={"1rem"} align={"stretch"}>
-      <Heading as={"h3"} fontSize={"1.5rem"} className={styles.primaryFont}>
+    <VStack spacing="1rem" align="stretch">
+      <Heading as="h3" fontSize="1.5rem" className="primaryFont">
         Voucher
       </Heading>
       <InputGroup>
         <Input
-          value={value}
-          onChange={(event) => setValue(event.target.value)}
-          className={styles.secondaryFont}
+          className="secondaryFont"
           placeholder="Masukan kode voucher"
+          {...register("voucher")}
         />
-        <InputRightElement w={"4rem"}>
+        <InputRightElement w="4rem">
           <Button
-            className={styles.secondaryFont}
-            fontWeight={"normal"}
-            fontSize={"0.875rem"}
-            onClick={() => checkVoucher(value, setVoucher)}
+            className="secondaryFont"
+            fontWeight="normal"
+            fontSize="0.875rem"
+            onClick={handleSubmit(onSubmit)}
           >
             Klaim
           </Button>
         </InputRightElement>
       </InputGroup>
       {!isEmpty(voucher) && (
-        <VoucherResult nama={voucher.nama} harga={voucher.harga} />
+        <Box
+          padding="1rem"
+          borderRadius="0.5rem"
+          border="1px"
+          borderColor="orange.200"
+          bg="orange.50"
+          color="orange.500"
+          className="primaryFont"
+        >
+          <HStack justify="space-between">
+            <Box fontWeight="bold">
+              <Text color="orange.700" fontSize="0.75rem" fontWeight="bold">
+                Voucher berhasil di klaim!
+              </Text>
+              <Text>{voucher.nama}</Text>
+            </Box>
+            <Text fontWeight="bold">Rp{formatNumber(voucher.harga)}</Text>
+          </HStack>
+        </Box>
       )}
     </VStack>
   );
@@ -620,12 +391,13 @@ const Voucher = () => {
 const Confirmation = () => {
   return (
     <Box
-      padding={"1rem"}
-      borderRadius={"0.5rem"}
-      border={"1px"}
-      borderColor={"gray.300"}
+      padding="1rem"
+      borderRadius="0.5rem"
+      border="1px"
+      mb="1.5rem"
+      borderColor="gray.300"
     >
-      <Checkbox defaultIsChecked colorScheme={"red"} isRequired>
+      <Checkbox defaultIsChecked colorScheme="red">
         Saya menyetujui bahwa biaya pengiriman bersifat final. Apabila terjadi
         selisih maka tidak ada penagihan/pengembalian.
       </Checkbox>
@@ -633,188 +405,153 @@ const Confirmation = () => {
   );
 };
 
-const Summary = ({ data }) => {
-  return (
-    <VStack
-      padding={"1rem"}
-      align={"stretch"}
-      borderRadius={"0.5rem"}
-      border={"1px"}
-      borderColor={"gray.300"}
-      className={styles.primaryFont}
-      spacing={"0.75rem"}
-      divider={<StackDivider borderColor="gray.200" />}
-      maxW={{ xl: "25%" }}
-      w={"full"}
-      position={{ base: "relative", lg: "sticky" }}
-      top={{ base: "0", lg: "6rem" }}
-    >
-      <VStack spacing={"0.625rem"} align={"stretch"} color={"gray.500"}>
-        <Heading
-          className={styles.primaryFont}
-          fontSize={"1.125rem"}
-          color={"gray.700"}
-        >
-          Ringkasan
-        </Heading>
-        <Flex justify={"space-between"}>
-          <Text>Jumlah</Text>
-          <Text className={styles.secondaryFont}>
-            {formatNumber(data.jumlah)} pcs
-          </Text>
-        </Flex>
-        <Flex justify={"space-between"}>
-          <Text>Berat</Text>
-          <Text className={styles.secondaryFont}>
-            {formatNumber(data.berat)} gr
-          </Text>
-        </Flex>
-      </VStack>
-
-      <VStack spacing={"0.625rem"} align={"stretch"} color={"gray.500"}>
-        <Heading
-          className={styles.primaryFont}
-          fontSize={"1.125rem"}
-          color={"gray.700"}
-        >
-          Pembayaran
-        </Heading>
-        <Flex justify={"space-between"}>
-          <Text>Subtotal</Text>
-          <Text className={styles.secondaryFont}>
-            Rp{formatNumber(data.subtotal)}
-          </Text>
-        </Flex>
-        <Flex justify={"space-between"}>
-          <Text>Pengiriman</Text>
-          <Text className={styles.secondaryFont}>
-            Rp{formatNumber(data.pengiriman)}
-          </Text>
-        </Flex>
-        {data.tambahan !== 0 && (
-          <Flex justify={"space-between"}>
-            <Text>Tambahan</Text>
-            <Text className={styles.secondaryFont}>
-              Rp{formatNumber(data.tambahan)}
-            </Text>
-          </Flex>
-        )}
-        {data.diskon !== 0 && (
-          <Flex justify={"space-between"}>
-            <Text>Diskon</Text>
-            <Text className={styles.secondaryFont}>
-              -Rp{formatNumber(data.diskon)}
-            </Text>
-          </Flex>
-        )}
-        {data.voucher !== 0 && (
-          <Flex justify={"space-between"}>
-            <Text>Voucher</Text>
-            <Text className={styles.secondaryFont}>
-              -Rp{formatNumber(data.voucher)}
-            </Text>
-          </Flex>
-        )}
-      </VStack>
-
-      <VStack align={"stretch"} spacing={"1.125rem"}>
-        <Flex justify={"space-between"}>
-          <Text color={"gray.500"}>Total</Text>
-          <Text color={"orange.400"} className={styles.secondaryFont}>
-            Rp
-            {formatNumber(
-              data.subtotal +
-                data.pengiriman +
-                data.tambahan -
-                data.diskon -
-                data.voucher,
-            )}
-          </Text>
-        </Flex>
-
-        <Button bg={"red.500"} color={"white"}>
-          Pesan Sekarang
-        </Button>
-      </VStack>
-    </VStack>
-  );
-};
-
-const path = [
-  {
-    name: "Checkout",
-    link: "/alamat-penerima",
-    isOnPage: false,
-  },
-  {
-    name: "Detail Pesanan",
-    link: "/detail-pesanan",
-    isOnPage: true,
-  },
-];
-
 const DetailPesanan = () => {
   const { width } = useWindowSize();
   const isSmartphone = width < 768;
   const isTablet = width < 1024;
-  
+
+  const isDesktop = width >= 1024;
+  const router = useRouter();
+
+  const [catatanPesanan, setCatatanPesanan] = useState("");
+  const [pengiriman, setPengiriman] = useState({});
+  const [metodePembayaran, setMetodePembayaran] = useState({});
+  const [voucher, setVoucher] = useState({});
+  const [persetujuan, setPersetujuan] = useState(false);
+
+  const onSubmit = () => {
+    // Values udah berisi semua input yang dimasukin user dalam bentuk object
+    // Buat liat bentuknya bisa di cek di console
+    console.log("CATATAN PESANAN", catatanPesanan);
+    console.log("PENGIRIMAN", pengiriman);
+    console.log("METODE PEMBAYARAN", metodePembayaran);
+    console.log("VOUCHER", voucher);
+  };
+
+  const handleSelectedPengirman = (selected) => {
+    // Ambil data tegantung id pengiriman yg dipilih, setPengiriman ke data yg didapet dari server
+    if (selected === "") {
+      setPengiriman({});
+    } else {
+      setPengiriman({
+        nama: selected,
+        estimasi: "1-2",
+        harga: 9000,
+      });
+    }
+  };
+  const handleSelectedMetodePembayaran = (selected) => {
+    // Ambil data tergantung metode pembayaran yg dipilih, terus pake setMetodePembayaran
+    // Kalo misalkan metode pembayaran cod, setCod ubah jadi true
+
+    if (selected === "cod") {
+      setMetodePembayaran({
+        nama: selected,
+        biaya: 99000,
+        isCod: true,
+        diskon: 10,
+      });
+    } else if (selected === "") {
+      setMetodePembayaran({});
+    } else {
+      setMetodePembayaran({
+        nama: selected,
+        biaya: 99000,
+        isCod: false,
+        diskon: 10,
+      });
+    }
+  };
 
   return (
-    <Layout hasNavbar hasPadding sticky hasBreadCrumb breadCrumbItem={path}>
-      <Stack
-        align={"start"}
-        direction={{ base: "column", md: "row" }}
-        spacing={{ md: "1.5rem" }}
+    <Layout hasNavbar>
+      <Flex
+        as="main"
+        direction="column"
+        alignItems="center"
+        marginTop={{ base: "2rem", md: "3rem" }}
       >
-        <Box>
-          <Stepper step={2} />
-          <VStack
-            divider={<StackDivider borderColor="gray.200" />}
-            spacing={"1.5rem"}
-            align={"stretch"}
-            my={"2rem"}
+        <CheckoutBreadcrumb
+          breadCrumbText="Detail Pesanan"
+          breadCrumbLink="/detail-pesanan"
+        />
+        <CheckoutStepper currentStep={2} />
+        <Box
+          w={{ base: "90vw", lg: "80vw" }}
+          mt="2rem"
+          display="flex"
+          justifyContent="space-between"
+          flexDir={{ base: "column", lg: "row" }}
+        >
+          <Box
+            w={{ base: "100%", lg: "70%" }}
+            display={{ base: "flex", lg: "inline" }}
+            flexDir={{ base: "column", lg: "row" }}
+            alignItems={{ base: "center", lg: "stretch" }}
+            mb="2rem"
           >
-            <RingkasanPesanan />
-            <Pengiriman beratTotal={999} />
-            <CatatanPesanan />
-
-            <SimpleGrid spacing={"1.5rem"} columns={{ base: 1, md: 2 }}>
-              <MetodePembayaran />
-              <Voucher />
-            </SimpleGrid>
-
-            <VStack align={"stretch"} spacing={"1.5rem"}>
+            <VStack
+              w="100%"
+              spacing="1.5rem"
+              align="stretch"
+              divider={<StackDivider borderColor="gray.200" />}
+            >
+              <RingkasanPesanan
+                dataPengirim={dataPengirim}
+                dataPenerima={dataPenerima}
+                daftarProduk={daftarProduk}
+              />
+              <Pengiriman
+                pengiriman={pengiriman}
+                handler={handleSelectedPengirman}
+                beratTotal={999}
+                daftarJasaPengiriman={daftarJasaPengiriman}
+              />
+              <CatatanPesanan setCatatanPesanan={setCatatanPesanan} />
+              <SimpleGrid spacing="1.5rem" columns={{ base: 1, md: 2 }}>
+                <MetodePembayaran
+                  metodePembayaran={metodePembayaran}
+                  handler={handleSelectedMetodePembayaran}
+                  daftarMetodePembayaran={daftarMetodePembayaran}
+                />
+                <Voucher voucher={voucher} setVoucher={setVoucher} />
+              </SimpleGrid>
               <Confirmation />
-
-              {(isSmartphone || isTablet) && <Summary data={dataSummary} />}
-
-              <Flex justify={"space-between"}>
+              <Flex justify="space-between">
                 <Button
-                  className={styles.primaryFont}
-                  borderColor={"gray.500"}
-                  variant={"outline"}
-                  color={"gray.500"}
+                  className="primaryFont"
+                  borderColor="gray.500"
+                  variant="outline"
+                  color="gray.500"
                   flexGrow={{ base: 1, xl: 0 }}
-                  marginRight={{ lg: "1rem" }}
+                  onClick={() => router.push("/alamat-penerima")}
                 >
                   Sebelumnya
                 </Button>
-                {!isSmartphone && !isTablet && (
+                {isDesktop && (
                   <Button
-                    className={styles.primaryFont}
-                    bg={"red.500"}
-                    color={"white"}
+                    className="primaryFont"
+                    bg="red.500"
+                    color="white"
+                    onClick={onSubmit}
                   >
                     Pesan Sekarang
                   </Button>
                 )}
               </Flex>
             </VStack>
-          </VStack>
+          </Box>
+          <CheckoutSummary
+            jumlah={9999999}
+            berat={1000000}
+            subtotal={99999999}
+            pengiriman={pengiriman.harga}
+            tambahan={4000}
+            diskon={99999999}
+            voucher={voucher.harga}
+          />
         </Box>
-
-        {!isSmartphone && !isTablet && <Summary data={dataSummary} />}
-      </Stack>
+      </Flex>
     </Layout>
   );
 };

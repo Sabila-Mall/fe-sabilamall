@@ -1,4 +1,5 @@
 import { Box, Image, Text, Icon } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { IoHeartOutline, IoTimeSharp, IoHeart } from "react-icons/io5";
 
@@ -7,32 +8,13 @@ import { useAuthContext } from "../contexts/authProvider";
 import { useWishlistContext } from "../contexts/wishlistProvider";
 import styles from "../styles/Product.module.scss";
 import { getImageUrl } from "../utils/api";
+import { calculateTimeLeft, numberWithDot } from "../utils/functions";
 
 // import { BsFilter } from "react-icons/bs";
 
 // discount masukin angkanya aja, misalnya
 // kalau diskonnya 10%, masukin 10 aja
 // kalau gaada diskon, gak usah dimasukin angka
-
-const calculateTimeLeft = (endTime) => {
-  let difference = +endTime - +new Date();
-  let timeLeft = {};
-
-  if (difference > 0) {
-    timeLeft = {
-      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-      minutes: Math.floor((difference / 1000 / 60) % 60),
-      seconds: Math.floor((difference / 1000) % 60),
-    };
-  }
-
-  return timeLeft;
-};
-
-const numberWithDot = (x) => {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-};
 
 const CardProduct = ({
   image_path,
@@ -45,6 +27,7 @@ const CardProduct = ({
   liked_customers_id,
   isWishlist = false,
 }) => {
+  const router = useRouter();
   const [imageHeight, setImageHeight] = useState(144);
   const realPriceString = numberWithDot(price.replace(/\.(.*?[0]{1,2})/g, ""));
   const priceAfterDiscount = discount
@@ -55,12 +38,12 @@ const CardProduct = ({
   const [liked, setLiked] = useState(isWishlist);
   const { addItem, deleteItem } = useWishlistContext();
   const handleClickWishlist = () => {
-    setLiked((prev) => !prev);
     if (liked) {
       deleteItem(liked_products_id, liked_customers_id);
     } else {
       addItem(liked_products_id, liked_customers_id);
     }
+    setLiked((prev) => !prev);
   };
 
   useEffect(() => {
@@ -85,6 +68,7 @@ const CardProduct = ({
       bg="white"
       className={responsive ? "card-product-responsive" : "card-product"}
       cursor="pointer"
+      onClick={() => router.push(`/product-details/${liked_products_id}`)}
     >
       <Box
         bg="white"
@@ -95,6 +79,7 @@ const CardProduct = ({
         flexDirection="column"
         alignItems="start"
         borderRadius="8px"
+        // h="21rem"
       >
         <Box
           h={`${imageHeight}px`}
@@ -175,7 +160,8 @@ const CardProduct = ({
           >
             <Text>Rp {priceAfterDiscount ?? realPriceString}</Text>
             <Icon
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 handleClickWishlist();
                 // setLiked((prev) => !prev)
               }}

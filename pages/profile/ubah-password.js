@@ -9,6 +9,7 @@ const UbahPassword = () => {
     <>
       <ChangePasswordMobile />
       <ProfileDesktop
+        cardProfileText={"Akun Saya"}
         section="Ubah Password"
         element={<ChangePassword isMobile={false} />}
       />
