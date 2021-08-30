@@ -1,5 +1,5 @@
-import { Flex, HStack, IconButton, Input, Text, VStack, Image } from "@chakra-ui/react";
-import { useState } from "react";
+import { Flex, HStack, IconButton, Input, Text, VStack, Image, Checkbox } from "@chakra-ui/react";
+import { createRef, useState } from "react";
 import { IoAddCircleOutline, IoRemoveCircleOutline, IoTrash } from "react-icons/io5";
 import { IMAGE_HOST } from "../constants/api";
 import { useAuthContext } from "../contexts/authProvider";
@@ -12,11 +12,12 @@ const formatPrice = (price) => {
     .format(price);
 };
 
-const QuickAddItem = ({ product }) => {
+const QuickAddItem = ({ product, my }) => {
   const { userData } = useAuthContext();
   const userId = userData?.id;
-  const { updateQuantity, deleteCartItem, totalPrice, settotalPrice, totalDiscount, settotalDiscount } = useCartContext();
+  const { addToCheckout, deleteFromCheckout, updateQuantity, deleteCartItem, totalPrice, settotalPrice, totalDiscount, settotalDiscount } = useCartContext();
   // console.log(priceValue);
+
 
   console.log(product);
 
@@ -64,40 +65,52 @@ const QuickAddItem = ({ product }) => {
     deleteCartItem(userId, productId)
   }
 
+  let inputRef = createRef()
+  const handleCheckbox = () => {
+    if (inputRef.current.checked) {
+      addToCheckout(product)
+    } else {
+      deleteFromCheckout(product)
+    }
+  }
+
   return (
-    <VStack align={"start"} w={"full"}>
-      <HStack align={"top"} justify={"space-between"} spacing={"1rem"} w={"full"}>
-        <HStack spacing={"1rem"}>
-          <Image
-            src={IMAGE_HOST + product.products_image_path}
-            alt="Product Image"
-            w={"3rem"} h={"3rem"}
-          />
+    <VStack align={"start"} w={"full"} my={my}>
+      <HStack as="label" onClick={() => handleCheckbox()} align={"top"} justify={"space-between"} spacing={"1rem"} w={"full"}>
+        <Flex>
+          <Checkbox w="min-content" ref={inputRef}></Checkbox>
+          <HStack spacing={"1rem"} ml="1rem">
+            <Image
+              src={IMAGE_HOST + product.products_image_path}
+              alt="Product Image"
+              w={"3rem"} h={"3rem"}
+            />
 
-          <VStack flexDirection={"column"} align={"start"}>
-            <Text
-              noOfLines={1}
-              fontSize={"1rem"}
-              className={"secondaryFont"}
-            >
-              {product.products_name}
-            </Text>
-            {product.discount ? <Flex
-              backgroundColor={"red.500"}
-              borderRadius={"0.25rem"}
-              px={"0.5rem"}
-              py={"0.25rem"}
-              fontSize={"0.6rem"}
-              textColor={"white"}
-              align={"center"}
-              justify={"center"}
-              className={"secondaryFont"}
-            >
-              Diskon {product.discount}%
-            </Flex> : <></>}
+            <VStack flexDirection={"column"} align={"start"}>
+              <Text
+                noOfLines={1}
+                fontSize={"1rem"}
+                className={"secondaryFont"}
+              >
+                {product.products_name}
+              </Text>
+              {product.discount ? <Flex
+                backgroundColor={"red.500"}
+                borderRadius={"0.25rem"}
+                px={"0.5rem"}
+                py={"0.25rem"}
+                fontSize={"0.6rem"}
+                textColor={"white"}
+                align={"center"}
+                justify={"center"}
+                className={"secondaryFont"}
+              >
+                Diskon {product.discount}%
+              </Flex> : <></>}
 
-          </VStack>
-        </HStack>
+            </VStack>
+          </HStack>
+        </Flex>
 
         <IconButton
           justifySelf={"end"}

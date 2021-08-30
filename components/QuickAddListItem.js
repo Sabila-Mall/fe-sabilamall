@@ -6,15 +6,31 @@ import { useCartContext } from "../contexts/cartProvider";
 
 const QuickAddListItem = () => {
 
-  const { cartData, loading } = useCartContext();
-  console.log(cartData);
-  if (cartData.length > 0) {
+  const { cartDataByVendor, loading } = useCartContext();
+  if (cartDataByVendor.length > 0) {
     return (
       <VStack spacing={6} divider={<StackDivider borderColor="gray.200" />} align={"start"}>
         {loading ? <Grid placeItems="center"><Spinner /></Grid> :
-          cartData && cartData.map((product, index) => {
+          cartDataByVendor && cartDataByVendor.map((el, index) => {
             return (
-              <QuickAddItem key={index} product={product} />
+              <>
+                <Text
+                  className="secondaryFont"
+                  fontSize="1rem"
+                  fontWeight="700"
+                  mb="1rem"
+                >
+                  {el.vendors_name}
+                </Text>
+                {el.keranjang.map((elemenKeranjang, index) => {
+                  return (
+                    <>
+                      <QuickAddItem key={index} product={elemenKeranjang} my="1rem" />
+                    </>
+
+                  )
+                })}
+              </>
             )
           }
           )}
