@@ -5,7 +5,12 @@ import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 
 export const CartPrice = ({ isDiscount, price }) => {
   const idr = Intl.NumberFormat("id-ID");
-  // price = Number(price.replace(/\./g, ""));
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat(
+      "id-ID",
+      { style: "decimal", currency: "IDR" })
+      .format(price);
+  };
   return (
     <>
       {isDiscount ? (
@@ -26,7 +31,7 @@ export const CartPrice = ({ isDiscount, price }) => {
                 fontWeight="500"
                 my={{ md: "0.5rem" }}
               >
-                Rp99.999.999
+                {`Rp${formatPrice(price)}`}
               </Text>
               <Box
                 w={{ lg: "6rem" }}
@@ -50,7 +55,7 @@ export const CartPrice = ({ isDiscount, price }) => {
         </>
       ) : (
         <Text fontSize="1.1rem" mb="12px">
-          Rp99.999.999
+          {`Rp${formatPrice(price)}`}
         </Text>
       )}
     </>

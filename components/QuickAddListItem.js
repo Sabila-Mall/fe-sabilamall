@@ -1,15 +1,37 @@
-import { Button, DrawerCloseButton, Flex, Icon, StackDivider, Text, VStack } from "@chakra-ui/react";
+import { Button, DrawerCloseButton, Icon, StackDivider, Text, VStack } from "@chakra-ui/react";
 import React from "react";
 import QuickAddItem from "./QuickAddItem";
 import { AiOutlineArrowLeft } from "react-icons/ai";
+import { useCartContext } from "../contexts/cartProvider";
 
-const QuickAddListItem = ({ products }) => {
-  if (products.length > 0) {
+const QuickAddListItem = () => {
+
+  const { cartDataByVendor, loading } = useCartContext();
+  if (cartDataByVendor.length > 0) {
     return (
       <VStack spacing={6} divider={<StackDivider borderColor="gray.200" />} align={"start"}>
-        {products.map((product, index) =>
-          <QuickAddItem key={index} product={product} />,
-        )}
+        {loading ? <Grid placeItems="center"><Spinner /></Grid> :
+          cartDataByVendor && cartDataByVendor.map((el, index) => {
+            return (
+              <>
+                <Text
+                  className="secondaryFont"
+                  fontSize="1rem"
+                  fontWeight="700"
+                  mb="1rem"
+                >
+                  {el.vendors_name}
+                </Text>
+                {el.keranjang.map((elemenKeranjang, index) => {
+                  return (
+                    <QuickAddItem key={index} product={elemenKeranjang} my="1rem" />
+
+                  )
+                })}
+              </>
+            )
+          }
+          )}
       </VStack>
     );
   } else {
