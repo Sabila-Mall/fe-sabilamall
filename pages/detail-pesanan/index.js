@@ -57,6 +57,7 @@ import {
  */
 
 const RingkasanPesanan = ({ daftarProduk }) => {
+
   const { width } = useWindowSize();
   const isSmartphone = width < 768;
 
@@ -72,6 +73,17 @@ const RingkasanPesanan = ({ daftarProduk }) => {
     kodePosPenerima,
     alamatPenerima,
   } = useCheckoutContext();
+  let totalPrice = 0, totalQuantity = 0, totalDiscount = 0, totalWeight = 0
+
+  if (typeof window !== 'undefined') {
+    const checkoutData = JSON.parse(localStorage.getItem("selectedProduct"))
+    if (checkoutData) {
+      totalPrice = checkoutData.total_price
+      totalQuantity = checkoutData.quantity
+      totalWeight = checkoutData.weight
+      totalDiscount = checkoutData.discount
+    }
+  }
   return (
     <>
       <Heading as="h3" fontSize="1.5rem" mb="1rem" className="primaryFont">
@@ -181,7 +193,15 @@ const RingkasanPesanan = ({ daftarProduk }) => {
  *  @param {int} pengiriman.harga Harga pengiriman
  * @param {function} setPengiriman Function buat ngubah pengiriman
  */
-const Pengiriman = ({ beratTotal, kurir, pengiriman, handler }) => {
+const Pengiriman = ({ kurir, pengiriman, handler }) => {
+  let totalPrice = 0, totalQuantity = 0, totalDiscount = 0, totalWeight = 0
+
+  if (typeof window !== 'undefined') {
+    const checkoutData = JSON.parse(localStorage.getItem("selectedProduct"))
+    if (checkoutData) {
+      totalWeight = checkoutData.weight
+    }
+  }
   return (
     <>
       <Heading as="h3" mb="1rem" fontSize="1.5rem" className="primaryFont">
@@ -198,7 +218,7 @@ const Pengiriman = ({ beratTotal, kurir, pengiriman, handler }) => {
         <Flex direction="column">
           <HStack className="primaryFont" color="gray.600">
             <Text fontWeight="bold">Total berat:</Text>
-            <Text fontWeight="normal">{formatNumber(beratTotal)} gr</Text>
+            <Text fontWeight="normal">{formatNumber(totalWeight)} gr</Text>
           </HStack>
           <Select
             className="secondaryFont"
@@ -532,6 +552,18 @@ const DetailPesanan = () => {
     setMetodePembayaran(temp);
   };
 
+  let totalPrice = 0, totalQuantity = 0, totalDiscount = 0, totalWeight = 0
+
+  if (typeof window !== 'undefined') {
+    const checkoutData = JSON.parse(localStorage.getItem("selectedProduct"))
+    if (checkoutData) {
+      totalPrice = checkoutData.total_price
+      totalQuantity = checkoutData.quantity
+      totalWeight = checkoutData.weight
+      totalDiscount = checkoutData.discount
+    }
+  }
+
   return (
     <Layout hasNavbar>
       <Flex
@@ -609,12 +641,12 @@ const DetailPesanan = () => {
             </VStack>
           </Box>
           <CheckoutSummary
-            jumlah={9999999}
-            berat={1000000}
-            subtotal={99999999}
+            jumlah={totalQuantity}
+            berat={totalWeight}
+            subtotal={totalPrice}
             pengiriman={pengiriman.harga}
             tambahan={4000}
-            diskon={99999999}
+            diskon={totalDiscount}
             voucher={voucher.harga}
           />
         </Box>
