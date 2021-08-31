@@ -21,27 +21,25 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
+import { getKurir, getPaymentMethod, apiPlaceOrder } from "../../api/Order";
 import CheckoutBreadcrumb from "../../components/CheckoutBreadcrumb";
 import CheckoutProduct from "../../components/CheckoutProduct";
 import CheckoutStepper from "../../components/CheckoutStepper";
 import CheckoutSummary from "../../components/CheckoutSummary";
-import Footer from "../../components/Footer";
 import { Layout } from "../../components/Layout";
-import Navbar from "../../components/Navbar";
-import { Stepper } from "../../components/Stepper";
 import {
   dataPenerima,
   dataPengirim,
-  daftarJasaPengiriman,
   daftarMetodePembayaran,
   daftarProduk,
 } from "../../constants/dummyData";
 import { useCheckoutContext } from "../../contexts/checkoutProvider";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import {
+  filterObject,
   formatNumber,
   formatPhoneNumber,
   isEmpty,
@@ -57,12 +55,23 @@ import {
  *  @param {string} dataPenerima.alamat Alamat penerima
  * @param {CheckoutProduct[]} daftarProduk
  */
-const RingkasanPesanan = ({ dataPengirim, dataPenerima, daftarProduk }) => {
+
+const RingkasanPesanan = ({ daftarProduk }) => {
   const { width } = useWindowSize();
   const isSmartphone = width < 768;
 
   const router = useRouter();
-
+  const {
+    namaPengirim,
+    nomorPengirim,
+    namaPenerima,
+    nomorPenerima,
+    provinsiPenerima,
+    kotaPenerima,
+    kecamatanPenerima,
+    kodePosPenerima,
+    alamatPenerima,
+  } = useCheckoutContext();
   return (
     <>
       <Heading as="h3" fontSize="1.5rem" mb="1rem" className="primaryFont">
@@ -90,10 +99,10 @@ const RingkasanPesanan = ({ dataPengirim, dataPenerima, daftarProduk }) => {
           </Flex>
 
           <Text fontWeight="bold" className="primaryFont">
-            {dataPengirim.nama}
+            {namaPengirim}
           </Text>
           <Text className="primaryFont" fontWeight="normal">
-            {formatPhoneNumber(dataPengirim.nomorHandphone)}
+            {formatPhoneNumber(nomorPengirim)}
           </Text>
         </Box>
 
@@ -118,15 +127,15 @@ const RingkasanPesanan = ({ dataPengirim, dataPenerima, daftarProduk }) => {
           </Flex>
 
           <Text fontWeight="bold" className="primaryFont">
-            {dataPenerima.nama}
+            {namaPenerima}
           </Text>
           <Text className="primaryFont" fontWeight="normal">
-            {formatPhoneNumber(dataPenerima.nomorHandphone)}
+            {formatPhoneNumber(nomorPenerima)}
           </Text>
 
           <Spacer h="0.5rem" />
 
-          <Text className="secondaryFont">{dataPenerima.alamat}</Text>
+          <Text className="secondaryFont">{alamatPenerima}</Text>
         </Box>
       </SimpleGrid>
       <VStack
@@ -166,18 +175,13 @@ const RingkasanPesanan = ({ dataPengirim, dataPenerima, daftarProduk }) => {
  * @param {Object[]} daftarJasaPengiriman
  *  @param {string} daftarJasaPengiriman[].id Id jasa pengiriman buat value di select
  *  @param {string} daftarJasaPengiriman[].nama Nama jasa pengiriman buat yg ditampilin di select
- * @param {Object} pengirman Object pengiriman
+ * @param {Object} pengiriman Object pengiriman
  *  @param {string} pengiriman.nama Nama pengiriman
  *  @param {string} pengiriman.estimasi Estimasi pengiriman dalam hari (Misal. "1-2")
  *  @param {int} pengiriman.harga Harga pengiriman
  * @param {function} setPengiriman Function buat ngubah pengiriman
  */
-const Pengiriman = ({
-  beratTotal,
-  daftarJasaPengiriman,
-  pengiriman,
-  handler,
-}) => {
+const Pengiriman = ({ beratTotal, kurir, pengiriman, handler }) => {
   return (
     <>
       <Heading as="h3" mb="1rem" fontSize="1.5rem" className="primaryFont">
@@ -203,9 +207,9 @@ const Pengiriman = ({
               handler(event.target.value);
             }}
           >
-            {daftarJasaPengiriman.map((jasa, index) => (
-              <option value={jasa.id} key={index}>
-                {jasa.nama}
+            {kurir.map((jasa, index) => (
+              <option value={jasa.name} key={index}>
+                {jasa.name}
               </option>
             ))}
           </Select>
@@ -218,7 +222,7 @@ const Pengiriman = ({
                   {pengiriman.nama}
                 </Text>
                 <Text className="secondaryFont">
-                  Estimasi {pengiriman.estimasi} hari
+                  Estimasi {pengiriman.estimasi}
                 </Text>
               </Flex>
 
@@ -272,7 +276,8 @@ const CatatanPesanan = ({ setCatatanPesanan }) => {
 const MetodePembayaran = ({
   metodePembayaran,
   handler,
-  daftarMetodePembayaran,
+  handleDiskonPengiriman,
+  paymentMethod,
 }) => {
   return (
     <VStack spacing="1rem" align="stretch">
@@ -284,9 +289,9 @@ const MetodePembayaran = ({
         placeholder="Pilih metode pembayaran"
         onChange={(event) => handler(event.target.value)}
       >
-        {daftarMetodePembayaran.map((metode, index) => (
-          <option value={metode.id} key={index}>
-            {metode.nama}
+        {paymentMethod.map((method, index) => (
+          <option value={method.method} key={index}>
+            {method.name}
           </option>
         ))}
       </Select>
@@ -301,7 +306,8 @@ const MetodePembayaran = ({
                 max={100}
                 allowMouseWheel
                 textAlign="right"
-                isDisabled={true}
+                onChange={(e) => handleDiskonPengiriman(e)}
+              // isDisabled={true}
               >
                 <NumberInputField textAlign="right" />
               </NumberInput>
@@ -388,7 +394,7 @@ const Voucher = ({ voucher, setVoucher }) => {
   );
 };
 
-const Confirmation = () => {
+const Confirmation = ({ setPersetujuan }) => {
   return (
     <Box
       padding="1rem"
@@ -397,7 +403,11 @@ const Confirmation = () => {
       mb="1.5rem"
       borderColor="gray.300"
     >
-      <Checkbox defaultIsChecked colorScheme="red">
+      <Checkbox
+        defaultIsChecked={false}
+        colorScheme="red"
+        onChange={(e) => setPersetujuan(e.target.checked)}
+      >
         Saya menyetujui bahwa biaya pengiriman bersifat final. Apabila terjadi
         selisih maka tidak ada penagihan/pengembalian.
       </Checkbox>
@@ -407,11 +417,10 @@ const Confirmation = () => {
 
 const DetailPesanan = () => {
   const { width } = useWindowSize();
-  const isSmartphone = width < 768;
-  const isTablet = width < 1024;
-
   const isDesktop = width >= 1024;
   const router = useRouter();
+
+  const { checkoutData, setOrderNumber, setSubtotal } = useCheckoutContext();
 
   const [catatanPesanan, setCatatanPesanan] = useState("");
   const [pengiriman, setPengiriman] = useState({});
@@ -419,9 +428,56 @@ const DetailPesanan = () => {
   const [voucher, setVoucher] = useState({});
   const [persetujuan, setPersetujuan] = useState(false);
 
+  const [kurir, setKurir] = useState([]);
+  const [paymentMethod, setPaymentMethod] = useState([]);
+  const [paymentDesc, setPaymentDesc] = useState("");
+
+  useEffect(() => {
+    getKurir()
+      .then((res) => {
+        setKurir(res.data.data.kurirIndonesia.services);
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
+  useEffect(() => {
+    getPaymentMethod()
+      .then((res) => {
+        setPaymentMethod(res.data.data);
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
   const onSubmit = () => {
     // Values udah berisi semua input yang dimasukin user dalam bentuk object
     // Buat liat bentuknya bisa di cek di console
+    console.log("CATATAN PESANAN", catatanPesanan);
+    console.log("PENGIRIMAN", pengiriman);
+    console.log("METODE PEMBAYARAN", metodePembayaran);
+    console.log("VOUCHER", voucher);
+
+    apiPlaceOrder(
+      checkoutData.vendors_id,
+      // checkoutData.basket, // tanya abduh
+      pengiriman.destination,
+      checkoutData.userId,
+      checkoutData.delivery_id,
+      checkoutData.dropshipper_id,
+      metodePembayaran.payment_method,
+      false,
+      0,
+      0,
+      catatanPesanan,
+      "1.0.2",
+      "",
+      0,
+    )
+      .then((res) => {
+        setOrderNumber(res.data.orders_number);
+        setSubtotal(res.data.subtotal);
+        router.push("/invoice");
+      })
+      .catch((err) => console.error(err));
   };
 
   const handleSelectedPengirman = (selected) => {
@@ -429,10 +485,12 @@ const DetailPesanan = () => {
     if (selected === "") {
       setPengiriman({});
     } else {
+      const tempPengiriman = kurir.filter((data) => data.name === selected)[0];
       setPengiriman({
-        nama: selected,
-        estimasi: "1-2",
-        harga: 9000,
+        nama: tempPengiriman.name,
+        estimasi: tempPengiriman.destination.split("|")[2],
+        harga: tempPengiriman.rate,
+        destination: tempPengiriman.destination,
       });
     }
   };
@@ -440,23 +498,38 @@ const DetailPesanan = () => {
     // Ambil data tergantung metode pembayaran yg dipilih, terus pake setMetodePembayaran
     // Kalo misalkan metode pembayaran cod, setCod ubah jadi true
 
+    const tempPayment = paymentMethod.filter(
+      (data) => data.method === selected,
+    )[0];
     if (selected === "cod") {
       setMetodePembayaran({
-        nama: selected,
-        biaya: 99000,
+        nama: tempPayment.name,
+        biaya: tempPayment?.payment_cost_amount
+          ? tempPayment.payment_cost_amount
+          : "0",
         isCod: true,
         diskon: 10,
+        payment_method: tempPayment?.payment_method,
       });
     } else if (selected === "") {
       setMetodePembayaran({});
     } else {
       setMetodePembayaran({
-        nama: selected,
-        biaya: 99000,
+        nama: tempPayment.name,
+        biaya: tempPayment?.payment_cost_amount
+          ? tempPayment.payment_cost_amount
+          : "0",
         isCod: false,
         diskon: 10,
+        payment_method: tempPayment?.payment_method,
       });
     }
+  };
+
+  const handleDiskonPengiriman = (diskon) => {
+    let temp = metodePembayaran;
+    temp.diskon = diskon;
+    setMetodePembayaran(temp);
   };
 
   return (
@@ -492,27 +565,24 @@ const DetailPesanan = () => {
               align="stretch"
               divider={<StackDivider borderColor="gray.200" />}
             >
-              <RingkasanPesanan
-                dataPengirim={dataPengirim}
-                dataPenerima={dataPenerima}
-                daftarProduk={daftarProduk}
-              />
+              <RingkasanPesanan daftarProduk={daftarProduk} />
               <Pengiriman
                 pengiriman={pengiriman}
                 handler={handleSelectedPengirman}
                 beratTotal={999}
-                daftarJasaPengiriman={daftarJasaPengiriman}
+                kurir={kurir}
               />
               <CatatanPesanan setCatatanPesanan={setCatatanPesanan} />
               <SimpleGrid spacing="1.5rem" columns={{ base: 1, md: 2 }}>
                 <MetodePembayaran
                   metodePembayaran={metodePembayaran}
                   handler={handleSelectedMetodePembayaran}
-                  daftarMetodePembayaran={daftarMetodePembayaran}
+                  paymentMethod={paymentMethod}
+                  handleDiskonPengiriman={handleDiskonPengiriman}
                 />
                 <Voucher voucher={voucher} setVoucher={setVoucher} />
               </SimpleGrid>
-              <Confirmation />
+              <Confirmation setPersetujuan={setPersetujuan} />
               <Flex justify="space-between">
                 <Button
                   className="primaryFont"
@@ -530,6 +600,7 @@ const DetailPesanan = () => {
                     bg="red.500"
                     color="white"
                     onClick={onSubmit}
+                    disabled={!persetujuan}
                   >
                     Pesan Sekarang
                   </Button>

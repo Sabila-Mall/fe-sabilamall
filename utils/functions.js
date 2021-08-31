@@ -41,11 +41,11 @@ export const formatNumber = (amount) => {
 
 export const formatPhoneNumber = (phoneNumber) => {
   return (
-    phoneNumber.slice(0, 4) +
+    phoneNumber?.slice(0, 4) +
     "-" +
-    phoneNumber.slice(4, 8) +
+    phoneNumber?.slice(4, 8) +
     "-" +
-    phoneNumber.slice(7, 11)
+    phoneNumber?.slice(7, 11)
   );
 };
 

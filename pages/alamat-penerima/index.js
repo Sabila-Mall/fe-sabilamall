@@ -36,6 +36,7 @@ import Footer from "../../components/Footer";
 import { Layout } from "../../components/Layout";
 import Loading from "../../components/Loading";
 import Navbar from "../../components/Navbar";
+import { useCheckoutContext } from "../../contexts/checkoutProvider";
 import { Stepper } from "../../components/Stepper";
 import { ErrorToast, SuccessToast } from "../../components/Toast";
 import { useAuthContext } from "../../contexts/authProvider";
@@ -84,11 +85,9 @@ const AlamatPenerima = () => {
   const [nomorPengirim, setNomorPengirim] = useState("");
   const [addressIdPengirim, setAddressIdPengirim] = useState(null);
 
-  const [namaTextPengirim, setNamaTextPengirim] = useState("");
   const [ponselPengirim, setPonselPengirim] = useState("");
 
   const [namaPenerima, setNamaPenerima] = useState("");
-  const [nomorPenerima, setNomorPenerima] = useState("");
   const [alamatPenerima, setAlamatPenerima] = useState("");
   const [addressIdPenerima, setAddressIdPenerima] = useState(null);
 
@@ -116,7 +115,6 @@ const AlamatPenerima = () => {
   const [kecamatanPenerima, setKecamatanPenerima] = useState("");
   const [kodePosPenerima, setKodePosPenerima] = useState("");
   const [ponselPenerima, setPonselPenerima] = useState("");
-  const [alamatTextPenerima, setAlamatTextPenerima] = useState("");
 
   const clearInputPenerima = () => {
     setNamaAwalPenerima("");
@@ -301,7 +299,6 @@ const AlamatPenerima = () => {
 
   const penerimaRadioHandler = (e) => {
     setNamaPenerima(dataPenerima[e].nama);
-    setNomorPenerima(dataPenerima[e].nomor);
     setAlamatPenerima(dataPenerima[e].alamat);
     setAddressIdPenerima(dataPenerima[e].address_id);
     setAddressPenerima({
@@ -443,14 +440,14 @@ const AlamatPenerima = () => {
 
   const handleDisable = () => {
     if (pengirimCurrentTab == 0 && penerimaCurrentTab == 0) {
-      if (namaPengirim !== "" && namaPenerima !== "") {
+      if (namaPengirimInput !== "" && namaPenerima !== "") {
         return false;
       } else {
         return true;
       }
     } else if (pengirimCurrentTab == 0 && penerimaCurrentTab == 1) {
       if (
-        namaPengirim !== "" &&
+        namaPengirimInput !== "" &&
         namaAwalPenerima !== "" &&
         namaAkhirPenerima !== "" &&
         negaraPenerima !== "" &&
@@ -459,7 +456,7 @@ const AlamatPenerima = () => {
         kecamatanPenerima !== "" &&
         kodePosPenerima !== "" &&
         ponselPenerima !== "" &&
-        alamatTextPenerima !== ""
+        alamatPenerima !== ""
       ) {
         return false;
       } else {
@@ -467,7 +464,7 @@ const AlamatPenerima = () => {
       }
     } else if (pengirimCurrentTab == 1 && penerimaCurrentTab == 0) {
       if (
-        namaTextPengirim !== "" &&
+        namaPengirimInput !== "" &&
         ponselPengirim !== "" &&
         namaPenerima !== ""
       ) {
@@ -477,7 +474,7 @@ const AlamatPenerima = () => {
       }
     } else {
       if (
-        namaTextPengirim !== "" &&
+        namaPengirimInput !== "" &&
         ponselPengirim !== "" &&
         namaAwalPenerima !== "" &&
         namaAkhirPenerima !== "" &&
@@ -487,7 +484,7 @@ const AlamatPenerima = () => {
         kecamatanPenerima !== "" &&
         kodePosPenerima !== "" &&
         ponselPenerima !== "" &&
-        alamatTextPenerima !== ""
+        alamatPenerima !== ""
       ) {
         return false;
       } else {
@@ -511,7 +508,7 @@ const AlamatPenerima = () => {
           flexDir={{ base: "column-reverse", lg: "row" }}
         >
           <Box
-            w={{ base: "100%", lg: "70%" }}
+            w={{ base: "100%", lg: "65%" }}
             d={{ base: "flex", lg: "inline" }}
             flexDir={{ base: "column", lg: "row" }}
             alignItems={{ base: "center", lg: "stretch" }}
@@ -662,7 +659,7 @@ const AlamatPenerima = () => {
                           placeholder="Masukkan nama pengirim"
                           marginTop="0.5rem"
                           fontSize="sm"
-                          onChange={(e) => setNamaTextPengirim(e.target.value)}
+                          onChange={(e) => setNamaPengirimInput(e.target.value)}
                         />
                       </Box>
                       <Box w={{ base: "100%", lg: "47.5%" }}>
@@ -796,7 +793,7 @@ const AlamatPenerima = () => {
                                     >
                                       <Text>{data.nama}</Text>
                                       <Text>{data.nomor}</Text>
-                                      <Text>{data.alamat}</Text>
+                                      <Text>{`${data.alamat}, ${data.kecamatan}, ${data.kota}, ${data.provinsi} ${data.kodePos}`}</Text>
                                     </Box>
                                   </Box>
                                 );
@@ -1047,7 +1044,7 @@ const AlamatPenerima = () => {
                       marginTop="0.5rem"
                       resize="none"
                       fontSize="sm"
-                      onChange={(e) => setAlamatTextPenerima(e.target.value)}
+                      onChange={(e) => setAlamatPenerima(e.target.value)}
                     />
                   </TabPanel>
                 </TabPanels>
@@ -1062,14 +1059,14 @@ const AlamatPenerima = () => {
                   marginBottom="2rem"
                   marginRight={{ base: "0rem", lg: "1rem" }}
                   isDisabled={handleDisable()}
-                  onClick={(e) => handleSubmit(e)}
+                  onClick={(e) => { handleSubmit(e); router.push("/detail-pesanan") }}
                 >
                   Lanjutkan
                 </Button>
               </Box>
             </Box>
           </Box>
-          <Box w={{ base: "100%", lg: "25%" }}>
+          <Box w={{ base: "100%", lg: "30%" }}>
             <Box
               w="100%"
               border="1px solid"
