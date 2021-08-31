@@ -30,7 +30,7 @@ const CardProduct = ({
 }) => {
   const router = useRouter();
   const { isLoggedIn, userData } = useAuthContext();
-
+  const { wishlistData } = useWishlistContext();
   const [imageHeight, setImageHeight] = useState(144);
   const realPriceString = numberWithDot(price.replace(/\.(.*?[0]{1,2})/g, ""));
   const priceAfterDiscount = discount
@@ -38,7 +38,20 @@ const CardProduct = ({
     : null;
   const timeLeft = endTime && calculateTimeLeft(endTime);
 
-  const [liked, setLiked] = useState(isLiked === "1");
+  const [liked, setLiked] = useState(
+    wishlistData?.length > 0
+      ? wishlistData?.map((e) => e.id).includes(liked_products_id)
+      : false,
+  );
+
+  useEffect(() => {
+    setLiked(
+      wishlistData?.length > 0
+        ? wishlistData?.map((e) => e.id).includes(liked_products_id)
+        : false,
+    );
+  }, [wishlistData]);
+
   const { addItem, deleteItem } = useWishlistContext();
   const handleClickWishlist = () => {
     if (liked) {
