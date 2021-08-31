@@ -31,7 +31,6 @@ const ProductReview = ({ reviewed_customers }) => {
     for (let i = numberOfStars; i < 5; i++) {
       ret.push(<Icon key={i} aria-label={"Star rating"} as={IoStar} />);
     }
-    console.log(ret);
     return ret;
   };
 

@@ -44,6 +44,44 @@ export const apiGetUserProfile = (id) => {
   });
 };
 
+export const apiUbahProfileSaya = (
+  id,
+  firstName,
+  lastName,
+  phone,
+  gender,
+  birthDate,
+  users_ktp,
+) => {
+  return axios.post(HOST + "/api/user/ubah_profile", {
+    user_id: id,
+    first_name: firstName,
+    last_name: lastName,
+    phone: phone,
+    gender: gender,
+    dob: birthDate,
+    users_ktp: users_ktp,
+  });
+};
+
+export const apiEditProfile = (
+  id,
+  firstName,
+  lastName,
+  email,
+  gender,
+  birthDate,
+) => {
+  return axios.post(HOST + "/api/user/ubah_profile", {
+    user_id: id,
+    first_name: firstName,
+    last_name: lastName,
+    email: email,
+    gender: gender,
+    dob: birthDate,
+  });
+};
+
 export const saveUserIdToCookies = (userId) => {
   nookies.set(null, "user_id", userId, {
     maxAge: 30 * 24 * 60 * 60,

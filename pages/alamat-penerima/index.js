@@ -199,7 +199,6 @@ const AlamatPenerima = () => {
 
       getAddress({ customers_id: userId, address_book_type: 1 })
         .then((res) => {
-          console.log(res, "RESSSSS");
           setDataPenerima(
             res && Array.isArray(res)
               ? [
@@ -222,7 +221,6 @@ const AlamatPenerima = () => {
 
       getMyCart(userId)
         .then((res) => {
-          // console.log(res, "RSSSS");
           let pcs = 0;
           let weight = 0;
           let subTotal = 0;
@@ -284,7 +282,6 @@ const AlamatPenerima = () => {
       )
         .then((res) => {
           const postalCodeList = res.data?.data?.map((d) => d?.postal_code);
-          // console.log(postalCodeList, "POSTAL CODE");
 
           setKodePos([...new Set(postalCodeList)]);
         })

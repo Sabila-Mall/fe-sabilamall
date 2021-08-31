@@ -140,7 +140,7 @@ const SearchedElement = ({ isSearched, setIsSearched }) => {
     if (event.key === "Enter") {
       if (searchQuery) router.push(`/search?q=${searchQuery}`);
     }
-  }
+  };
 
   return (
     <Box
@@ -165,7 +165,9 @@ const SearchedElement = ({ isSearched, setIsSearched }) => {
           transition="all 0.8s"
           display={isSearched ? "flex" : "none"}
           alignItems="center"
-          onClick={() => {if (searchQuery) router.push(`/search?q=${searchQuery}`)}}
+          onClick={() => {
+            if (searchQuery) router.push(`/search?q=${searchQuery}`);
+          }}
         />
         <Input
           type="text"
@@ -302,7 +304,7 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
             _hover={{ cursor: "pointer" }}
             onClick={() => router.push("/login")}
           >
-            <Icon as={FaUser} className={styles.navbarIcon} />
+            <Icon as={FaUser} color="gray.500" className={styles.navbarIcon} />
             <Spacer w="1rem" />
             <Text>Masuk</Text>
           </Flex>
@@ -329,8 +331,7 @@ const Navbar = () => {
     if (event.key === "Enter") {
       if (searchQuery) router.push(`/search?q=${searchQuery}`);
     }
-  }
-
+  };
 
   const navbarEl = useRef(null);
 
@@ -397,7 +398,9 @@ const Navbar = () => {
                   }}
                   color="orange.400"
                   ml="17px"
-                  onClick={() => {if (searchQuery) router.push(`/search?q=${searchQuery}`)}}
+                  onClick={() => {
+                    if (searchQuery) router.push(`/search?q=${searchQuery}`);
+                  }}
                 />
               }
             />

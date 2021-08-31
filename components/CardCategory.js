@@ -1,4 +1,5 @@
-import { Icon, Text, Box, Img } from "@chakra-ui/react";
+import { Text, Box, Img } from "@chakra-ui/react";
+import { IMAGE_HOST } from "../constants/api";
 
 const CardCategory = ({ isLoggedIn, icon, name, onClick }) => {
   return (
@@ -14,24 +15,13 @@ const CardCategory = ({ isLoggedIn, icon, name, onClick }) => {
       alignItems="center"
       onClick={onClick}
     >
-      {name !== "Fashion Muslim" && (
-        <Icon
-          as={icon}
-          color="red.600"
-          boxSize="2rem"
-          marginTop={isLoggedIn ? "0.8rem" : { md: "1rem", lg: "2rem" }}
-          marginBottom="0.5rem"
-        />
-      )}
-      {name == "Fashion Muslim" && (
-        <Img
-          src={icon}
-          color="red.600"
-          boxSize="2rem"
-          marginTop={isLoggedIn ? "0.8rem" : { md: "1rem", lg: "2rem" }}
-          marginBottom="0.5rem"
-        />
-      )}
+      <Img
+        src={IMAGE_HOST + icon}
+        color="red.600"
+        boxSize="2rem"
+        marginTop={isLoggedIn ? "0.8rem" : { md: "1rem", lg: "2rem" }}
+        marginBottom="0.5rem"
+      />
       <Text
         className="secondaryFont"
         fontSize={isLoggedIn ? "0.7rem" : { md: "0.6rem", lg: "0.8rem" }}

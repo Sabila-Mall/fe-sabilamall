@@ -107,10 +107,6 @@ export const calculateTimeLeft = (endTime) => {
   return timeLeft;
 };
 
-export const numberWithDot = (x) => {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-};
-
 export const calculateDiscountedPrice = (realPrice, discount) => {
   if (!discount) {
     return realPrice;
@@ -163,9 +159,28 @@ export const needForLogin = async (ctx) => {
   };
 };
 
+export const numberWithDot = (x) => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+};
+
 export const currencyFormat = (amount) => {
   return new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
   }).format(amount);
+};
+
+/**
+ * date: MM/DD/YYYY
+ */
+export const dateFormat = (date) => {
+  return `${new Date(date).getFullYear()}-${
+    new Date(date).getMonth() + 1 < 10
+      ? "0" + (new Date(date).getMonth() + 1).toString()
+      : new Date(date).getMonth() + 1
+  }-${
+    new Date(date).getDate() < 10
+      ? "0" + new Date(date).getDate().toString()
+      : new Date(date).getDate()
+  }`;
 };

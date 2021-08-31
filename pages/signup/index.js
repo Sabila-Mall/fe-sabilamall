@@ -100,7 +100,6 @@ const SignUp = () => {
   }, [city]);
 
   useEffect(() => {
-    console.log(passwordPattern.test(password));
     if (password?.length >= 8 && passwordPattern.test(password)) {
       setValidatePass({ length: true, alphanumeric: true });
     } else if (passwordPattern.test(password)) {
@@ -153,7 +152,6 @@ const SignUp = () => {
         });
       });
   };
-  console.log(validatePass);
   return (
     <Layout noFooter>
       <Center maxW="100vw" minH="100vh" mb="5rem">
@@ -492,7 +490,14 @@ const SignUp = () => {
               >
                 Sudah punya akun?{" "}
                 <b>
-                  <Link href="/login">Masuk</Link>
+                  <Link href="/login">
+                    <Text
+                      _hover={{ textDecor: "underline", cursor: "pointer" }}
+                      display="inline-block"
+                    >
+                      Masuk
+                    </Text>
+                  </Link>
                 </b>
               </Text>
               <Text

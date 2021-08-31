@@ -47,7 +47,7 @@ export const SMCard = ({ sm, w }) => (
             textAlign="center"
             color="gray.900"
           >
-            {index ? item.value : `RP. ${item.value}`}
+            {index ? item.value : `${item.value}`}
           </Text>
         </Box>
       </Box>
@@ -55,7 +55,7 @@ export const SMCard = ({ sm, w }) => (
   </Flex>
 );
 
-export const CardProfile = ({ sm, cardProfileText }) => {
+export const CardProfile = ({ sm, cardProfileText, userData }) => {
   const router = useRouter();
   const profileMenu = [
     { text: "Akun Saya", icon: FaUser, path: "/profile" },
@@ -78,17 +78,24 @@ export const CardProfile = ({ sm, cardProfileText }) => {
     >
       <Flex align="center" direction="column">
         <Avatar
+          color="white"
           size="xl"
-          name="Udin"
-          src="https://akcdn.detik.net.id/community/media/visual/2021/05/17/lionel-messi.jpeg?w=700&q=90"
+          background="blue.800"
+          name={`${userData?.first_name}${userData?.last_name && " "}
+          ${userData?.last_name}`}
+          src={userData?.avatar}
         />
         <Text
           fontWeight="700"
           lineHeight="18.2px"
           className="primaryFont"
           my="8px"
+          textAlign="center"
+          px="8px"
         >
-          Messi GOAT
+          {userData?.first_name}
+          {userData?.last_name && " "}
+          {userData?.last_name}
         </Text>
         <Text
           fontWeight="500"
@@ -96,13 +103,17 @@ export const CardProfile = ({ sm, cardProfileText }) => {
           lineHeight="21px"
           className="secondaryFont"
         >
-          messigoat@biyac.com
+          {userData?.email}
         </Text>
         <Box display="flex" alignItems="center" mt="8px">
           <Text fontSize="0.9rem" mr="1rem">
-            123456
+            {userData?.memberid}
           </Text>
-          <ButtonStatusUser text="Reguler" />
+          <ButtonStatusUser
+            text={`${userData?.user_level
+              .charAt(0)
+              .toUpperCase()}${userData?.user_level.slice(1)}`}
+          />
         </Box>
       </Flex>
       <Box px="10px" mt="50px">

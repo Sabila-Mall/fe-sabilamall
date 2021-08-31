@@ -422,10 +422,6 @@ const DetailPesanan = () => {
   const onSubmit = () => {
     // Values udah berisi semua input yang dimasukin user dalam bentuk object
     // Buat liat bentuknya bisa di cek di console
-    console.log("CATATAN PESANAN", catatanPesanan);
-    console.log("PENGIRIMAN", pengiriman);
-    console.log("METODE PEMBAYARAN", metodePembayaran);
-    console.log("VOUCHER", voucher);
   };
 
   const handleSelectedPengirman = (selected) => {
