@@ -38,14 +38,12 @@ export const WishlistProvider = ({ children }) => {
   };
 
   const deleteItem = (liked_products_id, liked_customers_id) => {
-    console.log(liked_customers_id);
     const dataBefore = [...wishlistData];
     setWishlistData(
       wishlistData.filter((item) => item.id != liked_products_id),
     );
     deleteWishlist({ liked_products_id, liked_customers_id })
       .then((res) => {
-        console.log(res);
         if (isRequestSuccess(res)) {
           successToast("Berhasil menghapus produk dari wishlist");
         } else {

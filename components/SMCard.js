@@ -1,25 +1,132 @@
-import { Box, Circle, Text, Center, Square, Icon } from "@chakra-ui/react";
+import {
+  Box,
+  Center,
+  Circle,
+  Divider,
+  Flex,
+  HStack,
+  Icon,
+  Skeleton,
+  Spinner,
+  Square,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { FaHistory } from "react-icons/fa";
 import { IoIosAddCircle } from "react-icons/io";
+import { useEffect, useState } from "react";
+import { getLeaderboard, getProfile, getRanking } from "../api/SMCard";
+import { isRequestSuccess } from "../utils/api";
+import { formatNumber } from "../utils/functions";
+import { useAuthContext } from "../contexts/authProvider";
+import { useRouter } from "next/router";
+import { useToast } from "@chakra-ui/toast";
 
 const SMCard = ({ width }) => {
+  const { userData } = useAuthContext();
+  const userId = userData?.id;
+  const memberId = userData?.memberid;
+
+  const router = useRouter();
+
+  const [leaderboard, setLeaderboard] = useState({
+    data: new Array(5).fill(0),
+    loading: true,
+  });
+  const [ranking, setRanking] = useState({
+    data: 0,
+    loading: true,
+  });
+  const [SMPoint, setSMPoint] = useState({
+    data: 0,
+    loading: true,
+  });
+  const [SMPay, setSMPay] = useState({
+    data: 0,
+    loading: true,
+  });
+
+  const toast = useToast();
+  const errorToast = (errMessage) => {
+    toast({
+      position: "top",
+      title: errMessage,
+      status: "error",
+      isClosable: true,
+    });
+  };
+
+  useEffect(() => {
+    getLeaderboard()
+      .then(res => {
+        if (isRequestSuccess(res.data)) {
+          setLeaderboard({
+            data: res.data.data ?? [],
+            loading: false,
+          });
+        } else {
+          throw "Gagal mendapatkan leaderboard";
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        errorToast(err);
+        setLeaderboard({ data: [], loading: false });
+      });
+  }, []);
+
+  useEffect(() => {
+    if (memberId) {
+      getRanking(memberId)
+        .then(res => {
+          if (isRequestSuccess(res.data)) {
+            setRanking({
+              data: res.data.data[0].ranking ?? [],
+              loading: false,
+            });
+          } else {
+            throw "Gagal mendapatkan ranking";
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          errorToast(err);
+          setRanking({ data: 0, loading: false });
+        });
+    }
+  }, [memberId]);
+
+  useEffect(() => {
+    if (userId) {
+      getProfile(userId)
+        .then(res => {
+          if (isRequestSuccess(res.data)) {
+            setSMPay({
+              data: res.data.memberdeposit ?? 0,
+              loading: false,
+            });
+
+            setSMPoint({
+              data: res.data.smpoint ?? 0,
+              loading: false,
+            });
+          } else {
+            throw "Gagal mendapatkan profile user";
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          errorToast(err);
+          setSMPay({ data: 0, loading: false });
+          setSMPoint({ data: 0, loading: false });
+        });
+    }
+  }, [userId]);
+
   return (
-    <Box pt="3.5rem" w={width} h="18.5rem" borderRadius="lg" mb="1rem">
-      <Center
-        bg="gray.50"
-        w="100%"
-        h="32%"
-        borderTopLeftRadius="lg"
-        borderTopRightRadius="lg"
-      >
-        <Center
-          h="3rem"
-          w="60%"
-          borderRight="1px"
-          borderRightColor="gray.400"
-          d="flex"
-          flexDirection="row"
-        >
+    <Box pt="3.5rem" w={width} h="22rem" mb="1rem">
+      <Center bg="gray.50" w="full" h="32%" borderTopRadius="lg">
+        <Center w="60%">
           <Box marginRight={{ base: "0.3rem", sm: "0.6rem" }} ml="0.6rem">
             <Text
               color="red.600"
@@ -29,13 +136,16 @@ const SMCard = ({ width }) => {
             >
               SM Pay
             </Text>
-            <Text
-              className="secondaryFont"
-              fontWeight="500"
-              fontSize="0.875rem"
-            >
-              Rp. 100.000.000
-            </Text>
+            {
+              SMPay.loading ? <Spinner />
+                : <Text
+                  className="secondaryFont"
+                  fontWeight="500"
+                  fontSize="0.875rem"
+                >
+                  Rp {formatNumber(SMPay.data)}
+                </Text>
+            }
           </Box>
           <Box marginLeft={{ base: "0.3rem", sm: "0.7rem" }}>
             <Text
@@ -46,16 +156,20 @@ const SMCard = ({ width }) => {
             >
               SM Point
             </Text>
-            <Text
-              className="secondaryFont"
-              fontWeight="500"
-              fontSize="0.875rem"
-            >
-              5
-            </Text>
+            {
+              SMPoint.loading ? <Spinner />
+                : <Text
+                  className="secondaryFont"
+                  fontWeight="500"
+                  fontSize="0.875rem"
+                >
+                  {SMPoint.data}
+                </Text>
+            }
           </Box>
         </Center>
-        <Center w="40%" h="2rem">
+        <Divider orientation="vertical" h="3.5rem" borderRight="1px" color="gray.400" />
+        <Center w="40%">
           <Square
             size={{ base: "2.8rem", sm: "3rem" }}
             marginRight={{ base: "0.3rem", sm: "0.7rem" }}
@@ -66,6 +180,7 @@ const SMCard = ({ width }) => {
               as={IoIosAddCircle}
               color="red.600"
               boxSize={{ base: "1.8rem", sm: "2rem" }}
+              onClick={() => router.push("/top-up")}
             />
             <Text
               fontSize="0.75rem"
@@ -88,6 +203,7 @@ const SMCard = ({ width }) => {
               marginTop="0.1rem"
               boxSize={{ base: "1.6rem", sm: "1.8rem" }}
               marginBottom="0.1rem"
+              onClick={() => router.push("/riwayat")}
             />
             <Text
               fontSize="0.75rem"
@@ -100,103 +216,54 @@ const SMCard = ({ width }) => {
           </Square>
         </Center>
       </Center>
-      <Box
-        w="100%"
-        h="68%"
-        bg="red.600"
-        borderBottomLeftRadius="lg"
-        borderBottomRightRadius="lg"
-        d="flex"
-        flexDirection="row"
-        justifyContent="center"
-      >
-        <Box
-          w="40%"
-          h="100%"
-          borderBottomLeftRadius="lg"
-          d="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Circle
-            bg="white"
-            size="8rem"
-            d="flex"
-            flexDirection="column"
-            className="secondaryFont"
-            shadow="xl"
-          >
-            <Text fontSize="0.875rem" fontWeight="500">
-              Ranking Saya
-            </Text>
-            <Text fontSize="1.5rem" fontWeight="500">
-              368
-            </Text>
-          </Circle>
-        </Box>
-        <Center
-          w={{ base: "50%", md: "60%" }}
-          h="100%"
-          borderBottomRightRadius="lg"
+      <HStack p="1rem" w="full" h="68%" bg="red.600" borderBottomRadius="lg">
+        <Circle
+          bg="white"
           flexDirection="column"
-          color="white"
-          fontSize="0.9rem"
+          className="secondaryFont"
+          shadow="xl"
+          size={{ base: "8rem", md: "9rem" }}
+          maxW="40%" maxH="full"
         >
+          <Text fontSize="0.875rem" fontWeight="500">
+            Ranking Saya
+          </Text>
+          {
+            ranking.loading ? <Spinner />
+              : <Text fontSize="1.5rem" fontWeight="500">
+                {formatNumber(ranking.data)}
+              </Text>
+          }
+        </Circle>
+        <VStack color="white" fontSize="0.9rem" w="60%">
           <Text fontWeight="700" className="primaryFont">
             Leaderboard
           </Text>
-          <Box
-            w="70%"
-            d="flex"
-            flexDirection="column"
-            justifyContent="space-between"
+          <VStack
+            justify="space-between"
             fontSize="0.8rem"
             fontWeight="500"
             className="secondaryFont"
+            spacing="0.3rem"
+            w="full"
           >
-            <Box h="20%" w="100%" d="flex" justifyContent="space-between">
-              <Text w="60%" minW="20px" isTruncated>
-                1. Siapa
-              </Text>
-              <Text w="40%" minW="20px" align="right" isTruncated>
-                1495 poin
-              </Text>
-            </Box>
-            <Box h="20%" w="100%" d="flex" justifyContent="space-between">
-              <Text w="60%" minW="20px" isTruncated>
-                2. Siapa lagi
-              </Text>
-              <Text w="40%" minW="20px" align="right" isTruncated>
-                397 poin
-              </Text>
-            </Box>
-            <Box h="20%" w="100%" d="flex" justifyContent="space-between">
-              <Text w="60%" minW="20px" isTruncated>
-                3. lagi lagi
-              </Text>
-              <Text w="40%" minW="20px" align="right" isTruncated>
-                376 poin
-              </Text>
-            </Box>
-            <Box h="20%" w="100%" d="flex" justifyContent="space-between">
-              <Text w="60%" minW="20px" isTruncated>
-                4. terus
-              </Text>
-              <Text w="40%" minW="20px" align="right" isTruncated>
-                289 poin
-              </Text>
-            </Box>
-            <Box h="20%" w="100%" d="flex" justifyContent="space-between">
-              <Text w="60%" minW="20px" isTruncated>
-                5. lagilagilagilagilagilagi
-              </Text>
-              <Text w="40%" minW="20px" align="right" isTruncated>
-                123 poin
-              </Text>
-            </Box>
-          </Box>
-        </Center>
-      </Box>
+            {
+              leaderboard.data.map((each, index) =>
+                <Skeleton isLoaded={!leaderboard.loading} key={index} w="full" justify="space-between" h="20px">
+                  <Flex>
+                    <Text w="70%" isTruncated>
+                      {index + 1}. {each.membername}
+                    </Text>
+                    <Text w="30%" isTruncated>
+                      {each.smpoint} poin
+                    </Text>
+                  </Flex>
+                </Skeleton>,
+              )
+            }
+          </VStack>
+        </VStack>
+      </HStack>
     </Box>
   );
 };

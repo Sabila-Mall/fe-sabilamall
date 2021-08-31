@@ -16,102 +16,129 @@ import {
   FormControl,
   Grid,
   GridItem,
+  Spinner,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { IoIosAddCircle } from "react-icons/io";
 
+import { apiKecamatan, apiKodePos, apiKota, apiProvinsi } from "../api/Zone";
+import { useAddressContext } from "../contexts/addressProvider";
+import { useAuthContext } from "../contexts/authProvider";
 import AddressBoxReceiver from "./AddressBox";
 import InputBoxAndLabel from "./InputBoxAndLabel";
 
-const ReceiverAddresses = ({ addresses, isMobile }) => {
-  const [addressList, setAddressList] = useState(addresses);
+const ReceiverAddresses = ({ isMobile }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { register, handleSubmit } = useForm();
+  const { addressDataPenerima, loading, addItemPenerima } = useAddressContext();
+  const { userData } = useAuthContext();
+  const userId = userData?.id;
 
-  const deleteAddress = (phone) => {
-    let outputList = [];
-    for (let i = 0; i < addressList.length; i++) {
-      if (addressList[i].phoneNumber !== phone) {
-        console.log(addressList[i].phoneNumber);
-        outputList.push(addressList[i]);
-      }
+  const [provinceData, setprovinceData] = useState([]);
+  const [cityData, setcityData] = useState([]);
+  const [districtData, setdistrictData] = useState([]);
+  const [postalCodeData, setpostalCodeData] = useState([]);
+
+  const [provinceId, setProvinceId] = useState(null);
+  const [cityId, setCityId] = useState(null);
+  const [districtId, setdistrictId] = useState(null);
+  const [postalCodeId, setpostalCodeId] = useState(null);
+
+  const [tempName, settempName] = useState("");
+  const [tempPhone, settempPhone] = useState(null);
+  const [tempAddress, settempAddress] = useState("");
+
+  useEffect(() => {
+    apiProvinsi()
+      .then((res) => {
+        const response = res.data.data;
+        setprovinceData(response);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (provinceId) {
+      apiKota(provinceId)
+        .then((res) => {
+          const response = res.data.data;
+          setcityData(response);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }
-    console.log(outputList);
-  };
+  }, [provinceId]);
+
+  useEffect(() => {
+    if (cityId) {
+      apiKecamatan(cityId)
+        .then((res) => {
+          const response = res.data.data;
+          setdistrictData(response);
+        })
+        .catch((err) => {});
+    }
+  }, [cityId]);
+
+  useEffect(() => {
+    if (districtId) {
+      apiKodePos(cityId, districtId, provinceId)
+        .then((res) => {
+          const response = res.data.data;
+          setpostalCodeData(response);
+        })
+        .catch((err) => {});
+    }
+  }, [districtId]);
 
   const onSubmit = (data) => {
-    const tempAddress = {
-      name: data.name,
-      phoneNumber: data.phoneNumber,
-      address: data.address,
-      city: data.city,
-      district: data.district,
-      province: data.province,
-      postalCode: data.postalCode,
-    };
-    console.log(tempAddress);
+    let firstname, lastname, phone, address;
+    phone = data.phoneNumber;
+    address = data.address;
+    if (data.name.trim().split(" ").length > 1) {
+      firstname = data.name
+        .split(" ")
+        .slice(0, data.name.split(" ").length - 1)
+        .join(" ");
+      lastname = data.name.split(" ")[data.name.split(" ").length - 1];
+      onClose();
+    } else {
+      firstname = data.name;
+      onClose();
+    }
+    addItemPenerima(
+      userId,
+      0,
+      1,
+      firstname,
+      lastname,
+      phone,
+      postalCodeId,
+      cityId,
+      districtId,
+      provinceId,
+      address,
+      100,
+      "add",
+    );
+
+    onClose();
+
+    setProvinceId(null);
+    settempAddress("");
+    settempName("");
+    settempPhone(null);
+    setCityId(null);
+    setcityData([]);
+    setdistrictData([]);
+    setdistrictId(null);
+    setpostalCodeData([]);
+    setpostalCodeId(null);
   };
-
-  const provinceOptions = [
-    {
-      value: "option1",
-      text: "option1",
-    },
-    {
-      value: "option2",
-      text: "option2",
-    },
-    {
-      value: "option3",
-      text: "option3",
-    },
-  ];
-
-  const cityOptions = [
-    {
-      value: "option1",
-      text: "option1",
-    },
-    {
-      value: "option2",
-      text: "option2",
-    },
-    {
-      value: "option3",
-      text: "option3",
-    },
-  ];
-
-  const districtOptions = [
-    {
-      value: "option1",
-      text: "option1",
-    },
-    {
-      value: "option2",
-      text: "option2",
-    },
-    {
-      value: "option3",
-      text: "option3",
-    },
-  ];
-
-  const postalCodeOptions = [
-    {
-      value: "option1",
-      text: "option1",
-    },
-    {
-      value: "option2",
-      text: "option2",
-    },
-    {
-      value: "option3",
-      text: "option3",
-    },
-  ];
 
   return (
     <Box pt="1rem" pb={isMobile ? "36px" : ""}>
@@ -133,6 +160,7 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
           color="orange.500"
           p="11px 38px"
           display={{ base: "none", md: "block" }}
+          onClick={onOpen}
         >
           <Flex align="center">
             <IoIosAddCircle fontSize="1rem" />
@@ -141,7 +169,6 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
               fontWeight="700"
               fontSize="0.875rem"
               lineHeight="100%"
-              onClick={onOpen}
               ml="0.2rem"
             >
               Tambah
@@ -151,23 +178,20 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
       </Flex>
       <Divider mt="0.5rem" />
       <Stack>
-        {addressList.map((address) => {
-          return (
-            <Box key={address.phoneNumber}>
-              <AddressBoxReceiver
-                name={address.name}
-                phoneNumber={address.phoneNumber}
-                address={address.fullAddress}
-                district={address.district}
-                province={address.province}
-                postalCode={address.postalCode}
-                city={address.city}
-                editAddress={onOpen}
-                deleteAddress={() => deleteAddress(address.phoneNumber)}
-              />
-            </Box>
-          );
-        })}
+        {loading ? (
+          <Grid placeItems="center">
+            <Spinner />
+          </Grid>
+        ) : (
+          addressDataPenerima &&
+          addressDataPenerima.map((address, index) => {
+            return (
+              <Box key={index}>
+                <AddressBoxReceiver data={address} />
+              </Box>
+            );
+          })
+        )}
         {isMobile ? (
           <Button
             borderColor="orange.500"
@@ -246,6 +270,8 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
                     register={register}
                     text="Nama Lengkap"
                     name="name"
+                    defaultValue={tempName}
+                    onChange={(e) => settempName(e.target.value)}
                   />
                 </GridItem>
                 <GridItem colSpan={isMobile ? 2 : 1}>
@@ -254,6 +280,8 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
                     text="Nomor Telepon"
                     name="phoneNumber"
                     type="tel"
+                    defaultValue={tempPhone}
+                    onChange={(e) => settempPhone(e.target.value)}
                   />
                 </GridItem>
                 <GridItem colSpan={2}>
@@ -263,6 +291,8 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
                     mt={4}
                     text="Alamat Lengkap"
                     name="address"
+                    defaultValue={tempAddress}
+                    onChange={(e) => settempAddress(e.target.value)}
                   />
                 </GridItem>
                 <GridItem colSpan={isMobile ? 2 : 1}>
@@ -270,8 +300,12 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
                     register={register}
                     type="select"
                     text="Provinsi"
-                    options={provinceOptions}
+                    options={provinceData}
                     name="province"
+                    selectZone="province"
+                    onChange={(e) => {
+                      setProvinceId(e.target.value);
+                    }}
                   />
                 </GridItem>
                 <GridItem colSpan={isMobile ? 2 : 1}>
@@ -279,7 +313,9 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
                     register={register}
                     type="select"
                     text="Kota/Kabupaten"
-                    options={cityOptions}
+                    options={cityData}
+                    selectZone="city"
+                    onChange={(e) => setCityId(e.target.value)}
                     name="city"
                   />
                 </GridItem>
@@ -288,7 +324,9 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
                     register={register}
                     type="select"
                     text="Kecamatan"
-                    options={districtOptions}
+                    options={districtData}
+                    selectZone="district"
+                    onChange={(e) => setdistrictId(e.target.value)}
                     name="district"
                   />
                 </GridItem>
@@ -297,7 +335,11 @@ const ReceiverAddresses = ({ addresses, isMobile }) => {
                     register={register}
                     type="select"
                     text="Kode Pos"
-                    options={postalCodeOptions}
+                    onChange={(e) => {
+                      setpostalCodeId(e.target.value);
+                    }}
+                    options={postalCodeData}
+                    selectZone="postalCode"
                     name="postalCode"
                   />
                 </GridItem>

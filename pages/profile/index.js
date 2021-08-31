@@ -1,12 +1,14 @@
 import MyProfile from "../../components/MyProfile";
 import ProfileDesktop from "../../components/ProfileDesktop";
 import ProfileMobile from "../../components/ProfileMobile";
+import { useSmPayPointContext } from "../../contexts/SMPayPointProvider";
 import { needForLogin } from "../../utils/functions";
 
 const Profile = () => {
+  const { smPoint, smPay } = useSmPayPointContext();
   const sm = [
-    { text: "SM Pay", value: "100.000.000" },
-    { text: "SM Point", value: 5 },
+    { text: "SM Pay", value: smPay },
+    { text: "SM Point", value: smPoint },
   ];
   return (
     <>

@@ -12,9 +12,14 @@ import {
 } from "@chakra-ui/react";
 
 import { FaTrashAlt } from "react-icons/fa";
-
-const DeleteIcon = ({ deleteAddress }) => {
+import { useAddressContext } from "../contexts/addressProvider";
+const DeleteIcon = ({ data }) => {
+    const { deleteItem } = useAddressContext()
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const deleteAddress = (userId, addressId) => {
+        deleteItem(userId, addressId, "delete")
+        onClose()
+    }
     return (
         <Box pos="absolute" left={0} h={{ base: "16px", md: "24px" }}>
             <FaTrashAlt onClick={onOpen} />
@@ -55,7 +60,7 @@ const DeleteIcon = ({ deleteAddress }) => {
                                     fontWeight="700"
                                     className="primaryFont"
                                     fontSize="14px"
-                                    onClick={deleteAddress}
+                                    onClick={() => deleteAddress(data?.user_id, data?.address_id)}
                                     _hover={{ bgColor: "red.700" }}>
                                     Hapus
                                 </Button>

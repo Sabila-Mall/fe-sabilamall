@@ -73,6 +73,24 @@ export const filterObject = (rawObj, allowed) => {
   return filtered;
 };
 
+export const extractName = (name) => {
+  if (!name) return;
+
+  const splittedName = name.split(" ");
+  const firstname = splittedName[0];
+
+  if (splittedName.length === 1) {
+    return {
+      firstname,
+      lastname: "",
+    };
+  }
+
+  const lastname = splittedName.slice(1).join(" ");
+
+  return { firstname, lastname };
+};
+
 export const calculateTimeLeft = (endTime) => {
   let difference = +endTime - +new Date();
   let timeLeft = {};
@@ -87,10 +105,6 @@ export const calculateTimeLeft = (endTime) => {
   }
 
   return timeLeft;
-};
-
-export const numberWithDot = (x) => {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };
 
 export const calculateDiscountedPrice = (realPrice, discount) => {
@@ -145,9 +159,28 @@ export const needForLogin = async (ctx) => {
   };
 };
 
+export const numberWithDot = (x) => {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+};
+
 export const currencyFormat = (amount) => {
   return new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
   }).format(amount);
+};
+
+/**
+ * date: MM/DD/YYYY
+ */
+export const dateFormat = (date) => {
+  return `${new Date(date).getFullYear()}-${
+    new Date(date).getMonth() + 1 < 10
+      ? "0" + (new Date(date).getMonth() + 1).toString()
+      : new Date(date).getMonth() + 1
+  }-${
+    new Date(date).getDate() < 10
+      ? "0" + new Date(date).getDate().toString()
+      : new Date(date).getDate()
+  }`;
 };

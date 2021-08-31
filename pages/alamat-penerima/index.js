@@ -22,110 +22,55 @@ import {
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { default as NextLink } from "next/link";
+import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 import { BiSearch } from "react-icons/bi";
 import { FiChevronRight } from "react-icons/fi";
 
+import { apiKecamatan, apiKodePos, apiKota, apiProvinsi } from "../../api/Zone";
+import { addAddress, getAddress } from "../../api/address";
+import { getMyCart } from "../../api/cart";
 import CheckoutSummary from "../../components/CheckoutSummary";
 import Footer from "../../components/Footer";
 import { Layout } from "../../components/Layout";
+import Loading from "../../components/Loading";
 import Navbar from "../../components/Navbar";
 import { Stepper } from "../../components/Stepper";
+import { ErrorToast, SuccessToast } from "../../components/Toast";
+import { useAuthContext } from "../../contexts/authProvider";
+import { useCheckoutContext } from "../../contexts/checkoutProvider";
+import { extractName, numberWithDot } from "../../utils/functions";
 
-const path = [
-  {
-    name: "Checkout",
-    link: "/alamat-penerima",
-    isOnPage: false,
-  },
-  {
-    name: "Alamat Penerima",
-    link: "/alamat-penerima",
-    isOnPage: true,
-  },
-];
-
-const dataPengirim = [
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-  },
-];
-
-const dataPenerima = [
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-    alamat:
-      "Jl. Margonda Raya, Pondok Cina, Kecamatan Beji, Kota Depok, Jawa Barat 16424",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-    alamat:
-      "Jl. Margonda Raya, Pondok Cina, Kecamatan Beji, Kota Depok, Jawa Barat 16424",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-    alamat:
-      "Jl. Margonda Raya, Pondok Cina, Kecamatan Beji, Kota Depok, Jawa Barat 16424",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-    alamat:
-      "Jl. Margonda Raya, Pondok Cina, Kecamatan Beji, Kota Depok, Jawa Barat 16424",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-    alamat:
-      "Jl. Margonda Raya, Pondok Cina, Kecamatan Beji, Kota Depok, Jawa Barat 16424",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-    alamat:
-      "Jl. Margonda Raya, Pondok Cina, Kecamatan Beji, Kota Depok, Jawa Barat 16424",
-  },
-  {
-    nama: "Ariq",
-    nomor: "081122334455",
-    alamat:
-      "Jl. Margonda Raya, Pondok Cina, Kecamatan Beji, Kota Depok, Jawa Barat 16424",
-  },
-];
 const AlamatPenerima = () => {
-  const negara = ["Indonesia", "Malaysia", "Singapore"];
-  const provinsi = ["DKI Jakarta", "Jawa Barat", "Jawa Tengah"];
-  const kota = ["Bandung", "Jakarta Barat", "Jakarta Utara"];
-  const kecamatan = ["Kedoya Utara", "Kedoya Barat", "Kedoya Tenggara"];
-  const kodePos = ["18181", "27272", "89898"];
+  const { userData } = useAuthContext();
+  const { addCheckoutData } = useCheckoutContext();
+  const userId = userData?.id;
+  const router = useRouter();
+  // const userId = 6089;
+  const [dataPengirim, setDataPengirim] = useState(null);
+  const [dataPenerima, setDataPenerima] = useState(null);
+  const [provinsi, setProvinsi] = useState([]);
+  const [kota, setKota] = useState([]);
+  const [kecamatan, setKecamatan] = useState([]);
+  const [kodePos, setKodePos] = useState([]);
+
+  const negara = ["Indonesia"];
+
+  const path = [
+    {
+      name: "Checkout",
+      link: "/alamat-penerima",
+      isOnPage: false,
+    },
+    {
+      name: "Alamat Penerima",
+      link: "/alamat-penerima",
+      isOnPage: true,
+    },
+  ];
+
+  const [refetch, setRefetch] = useState(null);
 
   const [pengirimCurrentTab, setPengirimCurrentTab] = useState(0);
   const [penerimaCurrentTab, setPenerimaCurrentTab] = useState(0);
@@ -134,7 +79,8 @@ const AlamatPenerima = () => {
   const [penerimaSearch, setPenerimaSearch] = useState("");
 
   const [namaPengirim, setNamaPengirim] = useState("");
-  const [alamatPengirim, setAlamatPengirim] = useState("");
+  const [nomorPengirim, setNomorPengirim] = useState("");
+  const [addressIdPengirim, setAddressIdPengirim] = useState(null);
 
   const [namaTextPengirim, setNamaTextPengirim] = useState("");
   const [ponselPengirim, setPonselPengirim] = useState("");
@@ -142,6 +88,15 @@ const AlamatPenerima = () => {
   const [namaPenerima, setNamaPenerima] = useState("");
   const [nomorPenerima, setNomorPenerima] = useState("");
   const [alamatPenerima, setAlamatPenerima] = useState("");
+  const [addressIdPenerima, setAddressIdPenerima] = useState(null);
+
+  const [ringkasan, setRingkasan] = useState({
+    pcs: 0,
+    weight: 0,
+    subTotal: 0,
+    discount: 0,
+    vendors_id: null,
+  });
 
   const [namaAwalPenerima, setNamaAwalPenerima] = useState("");
   const [namaAkhirPenerima, setNamaAkhirPenerima] = useState("");
@@ -153,28 +108,298 @@ const AlamatPenerima = () => {
   const [ponselPenerima, setPonselPenerima] = useState("");
   const [alamatTextPenerima, setAlamatTextPenerima] = useState("");
 
+  const clearInputPenerima = () => {
+    setNamaAwalPenerima("");
+    setNamaAkhirPenerima("");
+    setNegaraPenerima("");
+    setProvinsiPenerima("");
+    setKotaPenerima("");
+    setKecamatanPenerima("");
+    setKodePosPenerima("");
+    setPonselPenerima("");
+    setAlamatTextPenerima("");
+  };
+
+  const clearInputPengirim = () => {
+    setNamaTextPengirim("");
+    setPonselPengirim("");
+  };
+
+  const addAddressPengirim = async () => {
+    try {
+      const res = await addAddress({
+        entry_firstname: extractName(namaTextPengirim)?.firstname,
+        entry_lastname: extractName(namaTextPengirim)?.lastname,
+        entry_phone: ponselPengirim,
+        address_book_type: 2,
+        customers_id: userId,
+        is_default: 0,
+      });
+      SuccessToast("Berhasil menambahkan alamat pengirim");
+
+      return res;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+  const addAddressPenerima = async () => {
+    try {
+      const res = await addAddress({
+        entry_firstname: namaAwalPenerima,
+        entry_lastname: namaAkhirPenerima,
+        entry_phone: ponselPenerima,
+        entry_country_id: 100,
+        entry_zone_id: Number(provinsiPenerima?.split(" ")?.[0]),
+        entry_city: Number(kotaPenerima?.split(" ")?.[0]),
+        entry_district: Number(kecamatanPenerima?.split(" ")?.[0]),
+        entry_postcode: Number(kodePosPenerima),
+        address_book_type: 1,
+        customers_id: userId,
+        is_default: 0,
+        entry_street_address: alamatTextPenerima,
+      });
+
+      SuccessToast("Berhasil menambahkan alamat penerima");
+      return res;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+  useEffect(() => {
+    const getDataPengirim = () => {
+      getAddress({ customers_id: userId, address_book_type: 2 })
+        .then((res) => {
+          setDataPengirim(
+            res
+              ? [
+                  ...res?.map((d) => ({
+                    nama: d.firstname + " " + d.lastname,
+                    nomor: d.phone,
+                    ...d,
+                  })),
+                ]
+              : [],
+          );
+        })
+        .catch(() => setDataPengirim([]));
+
+      apiProvinsi().then((res) => {
+        setProvinsi([...res.data.data]);
+      });
+
+      getAddress({ customers_id: userId, address_book_type: 1 })
+        .then((res) => {
+          setDataPenerima(
+            res && Array.isArray(res)
+              ? [
+                  ...res?.map((d) => ({
+                    nama: d.firstname + " " + d.lastname,
+                    nomor: d.phone,
+                    alamat: `${d.street}, ${d.subdistrict_name}, ${d.city_name}, ${d.zone_name}`,
+                    address_id: d.address_id,
+                  })),
+                ]
+              : [],
+          );
+        })
+        .catch(() => setDataPenerima([]));
+
+      getMyCart(userId)
+        .then((res) => {
+          let pcs = 0;
+          let weight = 0;
+          let subTotal = 0;
+          let discount = 0;
+          res?.forEach((d) => {
+            pcs += d?.keranjang?.length;
+            d.keranjang.forEach((k) => {
+              weight += Number(k.products_weight);
+              subTotal += Number(k.products_price);
+              discount +=
+                (JSON.parse(k.customers_discount_schema)[k.customers_level] /
+                  100) *
+                Number(k.products_price);
+            });
+          });
+          const d = {
+            pcs,
+            weight,
+            subTotal,
+            discount,
+            vendors_id: res?.[0]?.vendors_id,
+          };
+          setRingkasan({ ...d });
+        })
+        .catch(() => console.error("err"));
+    };
+
+    userId && getDataPengirim();
+  }, [userId, refetch]);
+
+  useEffect(() => {
+    const getKota = () => {
+      apiKota(Number(provinsiPenerima?.split(" ")?.[0]))
+        .then((res) => {
+          setKota([...res.data.data]);
+        })
+        .catch(() => setKota([]));
+    };
+
+    provinsiPenerima && getKota();
+  }, [provinsiPenerima]);
+
+  useEffect(() => {
+    const getKecamatan = () => {
+      apiKecamatan(Number(kotaPenerima?.split(" ")?.[0])).then((res) => {
+        setKecamatan([...res.data.data]);
+      });
+    };
+
+    kotaPenerima && getKecamatan();
+  }, [kotaPenerima]);
+
+  useEffect(() => {
+    const getKodePos = () => {
+      apiKodePos(
+        Number(kotaPenerima?.split(" ")?.[0]),
+        Number(kecamatanPenerima?.split(" ")?.[0]),
+        Number(provinsiPenerima?.split(" ")?.[0]),
+      )
+        .then((res) => {
+          const postalCodeList = res.data?.data?.map((d) => d?.postal_code);
+
+          setKodePos([...new Set(postalCodeList)]);
+        })
+        .catch((err) => console.error(err));
+    };
+
+    kecamatanPenerima && getKodePos();
+  }, [kecamatanPenerima]);
+
   const pengirimRadioHandler = (e) => {
     setNamaPengirim(dataPengirim[e].nama);
-    setAlamatPengirim(dataPengirim[e].alamat);
+    setNomorPengirim(dataPengirim[e].nomor);
+    setAddressIdPengirim(dataPengirim[e].address_id);
   };
 
   const penerimaRadioHandler = (e) => {
     setNamaPenerima(dataPenerima[e].nama);
     setNomorPenerima(dataPenerima[e].nomor);
     setAlamatPenerima(dataPenerima[e].alamat);
+    setAddressIdPenerima(dataPenerima[e].address_id);
   };
 
-  const handleSubmit = (e) => {
+  const saveToContext = (data) => {
+    try {
+      addCheckoutData(data);
+    } catch {}
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (handleDisable()) return;
+
+    const splittedAlamatPenerima = alamatPenerima.split(", ");
 
     if (pengirimCurrentTab == 0 && penerimaCurrentTab == 0) {
-      console.log("submit type 0");
+      try {
+        saveToContext({
+          ...ringkasan,
+          userId,
+          dropshipper_id: addressIdPengirim,
+          delivery_id: addressIdPenerima,
+          namaPengirim,
+          nomorPengirim,
+          namaPenerima,
+          nomorPenerima,
+          provinsiPenerima:
+            splittedAlamatPenerima[splittedAlamatPenerima.length - 1],
+          kotaPenerima:
+            splittedAlamatPenerima[splittedAlamatPenerima.length - 2],
+          kecamatanPenerima:
+            splittedAlamatPenerima[splittedAlamatPenerima.length - 3],
+          jalanPenerima: splittedAlamatPenerima
+            .slice(0, splittedAlamatPenerima.length - 3)
+            .join(", "),
+        });
+        router.push("/detail-pesanan");
+      } catch (err) {
+        console.error(err);
+      }
     } else if (pengirimCurrentTab == 0 && penerimaCurrentTab == 1) {
-      console.log("submit type 1");
+      try {
+        const res = await addAddressPenerima();
+        saveToContext({
+          ...ringkasan,
+          userId,
+          dropshipper_id: addressIdPengirim,
+          delivery_id: res.address_id,
+          namaPengirim,
+          nomorPengirim,
+          namaPenerima: namaAwalPenerima + " " + namaAkhirPenerima,
+          provinsiPenerima: provinsiPenerima?.split(" ")?.[1],
+          kotaPenerima: kotaPenerima?.split(" ")?.[1],
+          kecamatanPenerima: kecamatanPenerima?.split(" ")?.[1],
+          jalanPenerima: alamatTextPenerima,
+          nomorPenerima: ponselPenerima,
+        });
+
+        router.push("/detail-pesanan");
+      } catch (err) {
+        ErrorToast("Gagal menambahkan alamat penerima");
+      }
     } else if (pengirimCurrentTab == 1 && penerimaCurrentTab == 0) {
-      console.log("submit type 2");
+      try {
+        const res = await addAddressPengirim();
+        saveToContext({
+          ...ringkasan,
+          userId,
+          dropshipper_id: res.address_book_id,
+          delivery_id: addressIdPenerima,
+          namaPengirim: namaTextPengirim,
+          nomorPengirim: ponselPengirim,
+          namaPenerima,
+          nomorPenerima,
+          provinsiPenerima:
+            splittedAlamatPenerima[splittedAlamatPenerima.length - 1],
+          kotaPenerima:
+            splittedAlamatPenerima[splittedAlamatPenerima.length - 2],
+          kecamatanPenerima:
+            splittedAlamatPenerima[splittedAlamatPenerima.length - 3],
+          jalanPenerima: splittedAlamatPenerima
+            .slice(0, splittedAlamatPenerima.length - 3)
+            .join(", "),
+        });
+
+        router.push("/detail-pesanan");
+      } catch (err) {
+        ErrorToast("Gagal menambahkan alamat pengirim");
+      }
     } else {
-      console.log("submit type 3");
+      try {
+        const res1 = await addAddressPengirim();
+        const res2 = await addAddressPenerima();
+        saveToContext({
+          ...ringkasan,
+          userId,
+          dropshipper_id: res1.address_book_id,
+          delivery_id: res2.address_id,
+          namaPengirim: namaTextPengirim,
+          nomorPengirim: ponselPengirim,
+          namaPenerima: namaAwalPenerima + " " + namaAkhirPenerima,
+          provinsiPenerima: provinsiPenerima?.split(" ")?.[1],
+          kotaPenerima: kotaPenerima?.split(" ")?.[1],
+          kecamatanPenerima: kecamatanPenerima?.split(" ")?.[1],
+          jalanPenerima: alamatTextPenerima,
+          nomorPenerima: ponselPenerima,
+        });
+
+        router.push("/detail-pesanan");
+      } catch (err) {
+        ErrorToast("Gagal menambahkan alamat pengirim / penerima");
+      }
     }
   };
 
@@ -232,6 +457,9 @@ const AlamatPenerima = () => {
       }
     }
   };
+
+  if (!Array.isArray(dataPenerima) || !Array.isArray(dataPengirim))
+    return <Loading />;
 
   return (
     <Layout hasNavbar hasBreadCrumb breadCrumbItem={path} hasPadding sticky>
@@ -639,8 +867,11 @@ const AlamatPenerima = () => {
                             {provinsi &&
                               provinsi.map((data, index) => {
                                 return (
-                                  <option key={index} value={data}>
-                                    {data}
+                                  <option
+                                    key={index}
+                                    value={`${data.zone_apicityid} ${data.zone_name}`}
+                                  >
+                                    {data.zone_name}
                                   </option>
                                 );
                               })}
@@ -674,8 +905,11 @@ const AlamatPenerima = () => {
                             {kota &&
                               kota.map((data, index) => {
                                 return (
-                                  <option key={index} value={data}>
-                                    {data}
+                                  <option
+                                    key={index}
+                                    value={`${data.city_id} ${data.city_name}`}
+                                  >
+                                    {data.city_name}
                                   </option>
                                 );
                               })}
@@ -700,8 +934,11 @@ const AlamatPenerima = () => {
                             {kecamatan &&
                               kecamatan.map((data, index) => {
                                 return (
-                                  <option key={index} value={data}>
-                                    {data}
+                                  <option
+                                    key={data?.subdistrict_id || index}
+                                    value={`${data?.subdistrict_id} ${data?.subdistrict_name}`}
+                                  >
+                                    {data?.subdistrict_name}
                                   </option>
                                 );
                               })}
@@ -735,7 +972,7 @@ const AlamatPenerima = () => {
                             {kodePos &&
                               kodePos.map((data, index) => {
                                 return (
-                                  <option key={index} value={data}>
+                                  <option key={data || index} value={data}>
                                     {data}
                                   </option>
                                 );
@@ -834,7 +1071,7 @@ const AlamatPenerima = () => {
                   fontWeight="500"
                   isTruncated
                 >
-                  9.999.999 pcs
+                  {ringkasan.pcs} pcs
                 </Text>
               </Box>
               <Box
@@ -857,7 +1094,7 @@ const AlamatPenerima = () => {
                   fontWeight="500"
                   isTruncated
                 >
-                  1.000.000 gr
+                  {ringkasan.weight} gr
                 </Text>
               </Box>
               <Divider orientation="horizontal" marginY="0.5rem" />
@@ -889,7 +1126,7 @@ const AlamatPenerima = () => {
                   fontWeight="500"
                   isTruncated
                 >
-                  Rp99.999.999
+                  Rp{numberWithDot(ringkasan.subTotal)}
                 </Text>
               </Box>
               <Box
@@ -912,7 +1149,7 @@ const AlamatPenerima = () => {
                   fontWeight="500"
                   isTruncated
                 >
-                  Rp99.999.999
+                  Rp{numberWithDot(ringkasan.discount)}
                 </Text>
               </Box>
               <Box
@@ -935,7 +1172,7 @@ const AlamatPenerima = () => {
                   fontWeight="500"
                   isTruncated
                 >
-                  Rp99.999.999
+                  Belum dihitung
                 </Text>
               </Box>
               <Divider orientation="horizontal" marginY="0.5rem" />
@@ -960,7 +1197,7 @@ const AlamatPenerima = () => {
                   fontSize="1.25rem"
                   isTruncated
                 >
-                  Rp99.999.999
+                  Rp{numberWithDot(ringkasan.subTotal - ringkasan.discount)}
                 </Text>
               </Box>
             </Box>

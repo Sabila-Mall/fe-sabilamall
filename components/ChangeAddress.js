@@ -1,54 +1,10 @@
-import { Box, Divider, Stack } from "@chakra-ui/react";
+import { Box, Stack } from "@chakra-ui/react";
 
 import NavbarProfile from "./NavbarProfile";
 import ReceiverAddresses from "./ReceiverAddresses";
 import SenderAddresses from "./SenderAddresses";
 
 export const ChangeAddress = ({ isMobile }) => {
-  let receiverAddresses = [
-    {
-      name: "Farahhhhhhhhhh",
-      phoneNumber: "012345678",
-      fullAddress: "Jl depok blok AA no. 17",
-      district: "Sukmajaya",
-      city: "Kota Depok",
-      province: "Jawa Barat",
-      postalCode: "16417",
-      key: "012345678",
-    },
-    {
-      name: "Farahhhhhhhhhh",
-      phoneNumber: "088888888888",
-      fullAddress: "Jl depok blok AA no. 17",
-      district: "Sukmajaya",
-      city: "Kota Depok",
-      province: "Jawa Barat",
-      postalCode: "16417",
-      key: "088888888888",
-    },
-    {
-      name: "Farahhhhhhhhhh",
-      phoneNumber: "000000000",
-      fullAddress: "Jl depok blok AA no. 17",
-      district: "Sukmajaya",
-      city: "Kota Depok",
-      province: "Jawa Barat",
-      postalCode: "16417",
-      key: "000000000",
-    },
-  ];
-
-  let senderAddresses = [
-    {
-      name: "Farahhhhh",
-      phoneNumber: "0888888888",
-    },
-    {
-      name: "Farahhhhhhh",
-      phoneNumber: "0888888887",
-    },
-  ];
-
   return (
     <Box
       bgColor={isMobile ? "gray.50" : "white"}
@@ -64,7 +20,7 @@ export const ChangeAddress = ({ isMobile }) => {
         bgColor="white"
       >
         <Stack dir="column">
-          <SenderAddresses isMobile={isMobile} addresses={senderAddresses} />
+          <SenderAddresses isMobile={isMobile} />
         </Stack>
       </Box>
       <Box
@@ -77,7 +33,7 @@ export const ChangeAddress = ({ isMobile }) => {
         bgColor="white"
         mb="1rem"
       >
-        <ReceiverAddresses addresses={receiverAddresses} isMobile={isMobile} />
+        <ReceiverAddresses isMobile={isMobile} />
       </Box>
     </Box>
   );

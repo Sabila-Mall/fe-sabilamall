@@ -112,33 +112,6 @@ const ProductInformation = ({
           >
             Penilaian
           </Tab>
-          {/* <Link
-            href={`/product-details/${id}#review`}
-            d={{ base: "flex", sm: "inherit" }}
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Button
-              _selected={{
-                color: "orange.500",
-                borderBottomColor: "orange.400",
-              }}
-              _focus={{ boxShadow: "none" }}
-              p="12px 20px"
-              borderRadius="0"
-              _hover={{
-                boxShadow: "none",
-                color: "orange.400",
-                borderBottom: "2px solid #F6AD55",
-                transform: "translateY(2px)",
-              }}
-              className="secondaryFont"
-              fontWeight="500"
-              bg="white"
-            >
-              Ulasan
-            </Button>
-          </Link> */}
         </TabList>
 
         <TabPanels>
@@ -148,13 +121,17 @@ const ProductInformation = ({
             w="100%"
             id="informationPanel"
           >
-            <Stack spacing="24px" direction="row" w="100%">
+            <Stack
+              spacing="24px"
+              direction={{ base: "column", md: "row" }}
+              w="100%"
+            >
               <Box
                 border="1px"
                 borderColor="gray.200"
                 borderRadius="8px"
                 py="10px"
-                w="110%"
+                w="100%"
                 pl="0.7rem"
                 pr="0"
               >

@@ -14,32 +14,40 @@ import {
   FormControl,
   Stack,
   Divider,
+  Grid,
+  Spinner,
 } from "@chakra-ui/react";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoIosAddCircle } from "react-icons/io";
 
+import { useAddressContext } from "../contexts/addressProvider";
+import { useAuthContext } from "../contexts/authProvider";
 import { AddressBoxSender } from "./AddressBox";
 import InputBoxAndLabel from "./InputBoxAndLabel";
 
-const SenderAddresses = ({ isMobile, addresses }) => {
-  const [addressList, setAddressList] = useState(addresses);
+const SenderAddresses = ({ isMobile }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { register, handleSubmit } = useForm();
+  const { addressDataPengirim, loading, addItemPengirim } = useAddressContext();
+  const { userData } = useAuthContext();
+  const userId = userData?.id;
 
-  const deleteAddress = (phone) => {
-    let outputList = [];
-    for (let i = 0; i < addressList.length; i++) {
-      if (addressList[i].phoneNumber !== phone) {
-        console.log(addressList[i].phoneNumber);
-        outputList.push(addressList[i]);
-      }
-    }
-    console.log(outputList);
-  };
   const onSubmit = (data) => {
-    const tempAddress = { name: data.name, phoneNumber: data.phoneNumber };
-    console.log(tempAddress);
+    let firstname, lastname, phone;
+    phone = data.phoneNumber;
+    if (data.name.trim().split(" ").length > 1) {
+      firstname = data.name
+        .split(" ")
+        .slice(0, data.name.split(" ").length - 1)
+        .join(" ");
+      lastname = data.name.split(" ")[data.name.split(" ").length - 1];
+      addItemPengirim(userId, 0, 2, firstname, lastname, phone, "add");
+      onClose();
+    } else {
+      firstname = data.name;
+      addItemPengirim(userId, 0, 2, firstname, " ", phone, "add");
+      onClose();
+    }
   };
 
   return (
@@ -79,18 +87,20 @@ const SenderAddresses = ({ isMobile, addresses }) => {
         </Button>
       </Flex>
       <Divider mt="0.5rem" />
-      {addressList.map((address) => {
-        return (
-          <Box key={address.phoneNumber}>
-            <AddressBoxSender
-              name={address.name}
-              phoneNumber={address.phoneNumber}
-              editAddress={onOpen}
-              deleteAddress={() => deleteAddress(address.phoneNumber)}
-            />
-          </Box>
-        );
-      })}
+      {loading ? (
+        <Grid placeItems="center">
+          <Spinner />
+        </Grid>
+      ) : (
+        addressDataPengirim &&
+        addressDataPengirim.map((address, index) => {
+          return (
+            <Box key={index}>
+              <AddressBoxSender data={address} />
+            </Box>
+          );
+        })
+      )}
       <Modal
         isOpen={isOpen}
         onClose={onClose}
@@ -115,8 +125,8 @@ const SenderAddresses = ({ isMobile, addresses }) => {
           )}
           <ModalCloseButton
             pos="absolute"
-            top="-15px"
-            right="-15px"
+            top={{ base: "0", md: "-15px" }}
+            right={{ base: "0", md: "-15px" }}
             borderRadius="50%"
             color="white"
             bg="red.600"
@@ -134,7 +144,7 @@ const SenderAddresses = ({ isMobile, addresses }) => {
                 register={register}
                 text="Nomor Telepon"
                 name="phoneNumber"
-                type="number"
+                type="tel"
                 mt={4}
               />
               <Flex
@@ -152,9 +162,12 @@ const SenderAddresses = ({ isMobile, addresses }) => {
                   fontWeight="700"
                   className="primaryFont"
                   fontSize="14px"
-                  w={{ base: "100%", md: "50%" }}
+                  w={{ base: "calc(100% - 56px)", md: "180px" }}
+                  position={{ base: "fixed", md: "relative" }}
+                  bottom={{ base: "28px", md: "auto" }}
+                  mx={{ base: "28px", md: "0" }}
                 >
-                  Update
+                  Tambah
                 </Button>
               </Flex>
             </FormControl>

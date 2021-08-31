@@ -16,11 +16,22 @@ import {
   SimpleGrid,
   Spacer,
   StackDivider,
-  Textarea, useOutsideClick,
+  Textarea,
+  useOutsideClick,
   VStack,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
 
+import CheckoutBreadcrumb from "../../components/CheckoutBreadcrumb";
+import CheckoutProduct from "../../components/CheckoutProduct";
+import CheckoutStepper from "../../components/CheckoutStepper";
+import CheckoutSummary from "../../components/CheckoutSummary";
+import Footer from "../../components/Footer";
+import { Layout } from "../../components/Layout";
+import Navbar from "../../components/Navbar";
+import { Stepper } from "../../components/Stepper";
 import {
   dataPenerima,
   dataPengirim,
@@ -28,19 +39,13 @@ import {
   daftarMetodePembayaran,
   daftarProduk,
 } from "../../constants/dummyData";
+import { useCheckoutContext } from "../../contexts/checkoutProvider";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import {
   formatNumber,
   formatPhoneNumber,
   isEmpty,
 } from "../../utils/functions";
-import { useRouter } from "next/router";
-import CheckoutSummary from "../../components/CheckoutSummary";
-import CheckoutBreadcrumb from "../../components/CheckoutBreadcrumb";
-import CheckoutStepper from "../../components/CheckoutStepper";
-import { Layout } from "../../components/Layout";
-import CheckoutProduct from "../../components/CheckoutProduct";
-import { useForm } from "react-hook-form";
 
 /**
  * @param {Object} dataPengirim
@@ -60,12 +65,7 @@ const RingkasanPesanan = ({ dataPengirim, dataPenerima, daftarProduk }) => {
 
   return (
     <>
-      <Heading
-        as="h3"
-        fontSize="1.5rem"
-        mb="1rem"
-        className="primaryFont"
-      >
+      <Heading as="h3" fontSize="1.5rem" mb="1rem" className="primaryFont">
         Ringkasan Pesanan
       </Heading>
       <SimpleGrid spacing="1rem" columns={{ base: 1, md: 2 }} mb="1rem">
@@ -80,7 +80,9 @@ const RingkasanPesanan = ({ dataPengirim, dataPenerima, daftarProduk }) => {
               Data Pengirim
             </Text>
             <Button
-              variant="outline" color="gray.400" size="sm"
+              variant="outline"
+              color="gray.400"
+              size="sm"
               onClick={() => router.push("/alamat-penerima")}
             >
               Ubah
@@ -106,7 +108,9 @@ const RingkasanPesanan = ({ dataPengirim, dataPenerima, daftarProduk }) => {
               Data Penerima
             </Text>
             <Button
-              variant="outline" color="gray.400" size="sm"
+              variant="outline"
+              color="gray.400"
+              size="sm"
               onClick={() => router.push("/alamat-penerima")}
             >
               Ubah
@@ -168,16 +172,15 @@ const RingkasanPesanan = ({ dataPengirim, dataPenerima, daftarProduk }) => {
  *  @param {int} pengiriman.harga Harga pengiriman
  * @param {function} setPengiriman Function buat ngubah pengiriman
  */
-const Pengiriman = ({ beratTotal, daftarJasaPengiriman, pengiriman, handler }) => {
-
+const Pengiriman = ({
+  beratTotal,
+  daftarJasaPengiriman,
+  pengiriman,
+  handler,
+}) => {
   return (
     <>
-      <Heading
-        as="h3"
-        mb="1rem"
-        fontSize="1.5rem"
-        className="primaryFont"
-      >
+      <Heading as="h3" mb="1rem" fontSize="1.5rem" className="primaryFont">
         Pengiriman
       </Heading>
       <SimpleGrid
@@ -211,7 +214,9 @@ const Pengiriman = ({ beratTotal, daftarJasaPengiriman, pengiriman, handler }) =
           {!isEmpty(pengiriman) && (
             <>
               <Flex direction={"column"}>
-                <Text className="primaryFont" fontWeight="bold">{pengiriman.nama}</Text>
+                <Text className="primaryFont" fontWeight="bold">
+                  {pengiriman.nama}
+                </Text>
                 <Text className="secondaryFont">
                   Estimasi {pengiriman.estimasi} hari
                 </Text>
@@ -228,23 +233,23 @@ const Pengiriman = ({ beratTotal, daftarJasaPengiriman, pengiriman, handler }) =
   );
 };
 
-const CatatanPesanan = ({setCatatanPesanan}) => {
-  const ref = useRef()
-  const {register, getValues} = useForm();
+const CatatanPesanan = ({ setCatatanPesanan }) => {
+  const ref = useRef();
+  const { register, getValues } = useForm();
 
   useOutsideClick({
     ref: ref,
-    handler: () => setCatatanPesanan(getValues("catatan-pesanan"))
-  })
+    handler: () => setCatatanPesanan(getValues("catatan-pesanan")),
+  });
 
   return (
     <>
-      <Heading as="h3" mb="1rem" fontSize="1.5rem" className="primaryFont"
-      >
+      <Heading as="h3" mb="1rem" fontSize="1.5rem" className="primaryFont">
         Catatan Pesanan
       </Heading>
       <Textarea
-        ref={ref} className="secondaryFont"
+        ref={ref}
+        className="secondaryFont"
         placeholder="Tuliskan catatan untuk penjual"
         {...register("catatan-pesanan")}
       />
@@ -264,7 +269,11 @@ const CatatanPesanan = ({setCatatanPesanan}) => {
  *  @param {int} metodePembayaran.diskon Diskon metode pembayaran (hanya berlaku untuk cod)
  * @param {function} setPengiriman Function buat ngubah metode pembayaran
  */
-const MetodePembayaran = ({ metodePembayaran, handler, daftarMetodePembayaran }) => {
+const MetodePembayaran = ({
+  metodePembayaran,
+  handler,
+  daftarMetodePembayaran,
+}) => {
   return (
     <VStack spacing="1rem" align="stretch">
       <Heading as="h3" fontSize="1.5rem" className="primaryFont">
@@ -282,11 +291,7 @@ const MetodePembayaran = ({ metodePembayaran, handler, daftarMetodePembayaran })
         ))}
       </Select>
       {!isEmpty(metodePembayaran) && (
-        <Flex
-          justify="space-between"
-          color="gray.600"
-          className="primaryFont"
-        >
+        <Flex justify="space-between" color="gray.600" className="primaryFont">
           {metodePembayaran.isCod ? (
             <InputGroup className="secondaryFont">
               <InputLeftAddon children="Diskon Pelanggan" />
@@ -317,7 +322,7 @@ const MetodePembayaran = ({ metodePembayaran, handler, daftarMetodePembayaran })
 };
 
 const Voucher = ({ voucher, setVoucher }) => {
-  const {register, handleSubmit} = useForm();
+  const { register, handleSubmit } = useForm();
 
   const checkVoucher = (voucher) => {
     // Handle logic untuk ngecek apa vouchernya valid atau engga
@@ -386,7 +391,10 @@ const Voucher = ({ voucher, setVoucher }) => {
 const Confirmation = () => {
   return (
     <Box
-      padding="1rem" borderRadius="0.5rem" border="1px" mb="1.5rem"
+      padding="1rem"
+      borderRadius="0.5rem"
+      border="1px"
+      mb="1.5rem"
       borderColor="gray.300"
     >
       <Checkbox defaultIsChecked colorScheme="red">
@@ -399,6 +407,9 @@ const Confirmation = () => {
 
 const DetailPesanan = () => {
   const { width } = useWindowSize();
+  const isSmartphone = width < 768;
+  const isTablet = width < 1024;
+
   const isDesktop = width >= 1024;
   const router = useRouter();
 
@@ -411,16 +422,12 @@ const DetailPesanan = () => {
   const onSubmit = () => {
     // Values udah berisi semua input yang dimasukin user dalam bentuk object
     // Buat liat bentuknya bisa di cek di console
-    console.log("CATATAN PESANAN", catatanPesanan);
-    console.log("PENGIRIMAN", pengiriman);
-    console.log("METODE PEMBAYARAN", metodePembayaran);
-    console.log("VOUCHER", voucher);
   };
 
   const handleSelectedPengirman = (selected) => {
     // Ambil data tegantung id pengiriman yg dipilih, setPengiriman ke data yg didapet dari server
     if (selected === "") {
-      setPengiriman({})
+      setPengiriman({});
     } else {
       setPengiriman({
         nama: selected,
@@ -455,15 +462,20 @@ const DetailPesanan = () => {
   return (
     <Layout hasNavbar>
       <Flex
-        as="main" direction="column" alignItems="center"
+        as="main"
+        direction="column"
+        alignItems="center"
         marginTop={{ base: "2rem", md: "3rem" }}
       >
         <CheckoutBreadcrumb
-          breadCrumbText="Detail Pesanan" breadCrumbLink="/detail-pesanan"
+          breadCrumbText="Detail Pesanan"
+          breadCrumbLink="/detail-pesanan"
         />
         <CheckoutStepper currentStep={2} />
         <Box
-          w={{ base: "90vw", lg: "80vw" }} mt="2rem" display="flex"
+          w={{ base: "90vw", lg: "80vw" }}
+          mt="2rem"
+          display="flex"
           justifyContent="space-between"
           flexDir={{ base: "column", lg: "row" }}
         >
@@ -475,7 +487,9 @@ const DetailPesanan = () => {
             mb="2rem"
           >
             <VStack
-              w="100%" spacing="1.5rem" align="stretch"
+              w="100%"
+              spacing="1.5rem"
+              align="stretch"
               divider={<StackDivider borderColor="gray.200" />}
             >
               <RingkasanPesanan
@@ -512,7 +526,9 @@ const DetailPesanan = () => {
                 </Button>
                 {isDesktop && (
                   <Button
-                    className="primaryFont" bg="red.500" color="white"
+                    className="primaryFont"
+                    bg="red.500"
+                    color="white"
                     onClick={onSubmit}
                   >
                     Pesan Sekarang

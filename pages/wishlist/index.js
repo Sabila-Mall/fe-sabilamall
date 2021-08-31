@@ -7,6 +7,7 @@ import {
   Flex,
   Spinner,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useState } from "react";
 
@@ -30,6 +31,7 @@ const path = [
 const Wishlist = () => {
   const { userData } = useAuthContext();
   const userId = userData?.id;
+  const router = useRouter();
   const { wishlistData: data, loading } = useWishlistContext();
 
   return (
@@ -127,7 +129,7 @@ const Wishlist = () => {
                     color="white"
                     _hover={{ bg: "red.600" }}
                     isFullWidth
-                    onClick={() => console.log("pencet")}
+                    onClick={() => router.push("/")}
                     marginTop="1.5rem"
                   >
                     Mulai Belanja

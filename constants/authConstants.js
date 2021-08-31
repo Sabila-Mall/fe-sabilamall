@@ -3,12 +3,16 @@ export const USER_FIELDS = [
   "first_name",
   "last_name",
   "email",
+  "gender",
+  "phone",
+  "dob",
   "memberid",
   "role_id",
   "user_level",
   "user_name",
   "smpoint",
   "avatar",
+  "users_ktp",
 ];
 
 export const AUTH_RESPONSE_STATUS = {

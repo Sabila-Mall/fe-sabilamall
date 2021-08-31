@@ -1,4 +1,4 @@
-import { Box, Image, Text, Icon } from "@chakra-ui/react";
+import { Box, Image, Text, Icon, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { IoHeartOutline, IoTimeSharp, IoHeart } from "react-icons/io5";
@@ -26,8 +26,11 @@ const CardProduct = ({
   responsive,
   liked_customers_id,
   isWishlist = false,
+  isLiked,
 }) => {
   const router = useRouter();
+  const { isLoggedIn, userData } = useAuthContext();
+  const { wishlistData } = useWishlistContext();
   const [imageHeight, setImageHeight] = useState(144);
   const realPriceString = numberWithDot(price.replace(/\.(.*?[0]{1,2})/g, ""));
   const priceAfterDiscount = discount
@@ -35,13 +38,26 @@ const CardProduct = ({
     : null;
   const timeLeft = endTime && calculateTimeLeft(endTime);
 
-  const [liked, setLiked] = useState(isWishlist);
+  const [liked, setLiked] = useState(
+    wishlistData?.length > 0
+      ? wishlistData?.map((e) => e.id).includes(liked_products_id)
+      : false,
+  );
+
+  useEffect(() => {
+    setLiked(
+      wishlistData?.length > 0
+        ? wishlistData?.map((e) => e.id).includes(liked_products_id)
+        : false,
+    );
+  }, [wishlistData]);
+
   const { addItem, deleteItem } = useWishlistContext();
   const handleClickWishlist = () => {
     if (liked) {
-      deleteItem(liked_products_id, liked_customers_id);
+      deleteItem(liked_products_id, userData?.id);
     } else {
-      addItem(liked_products_id, liked_customers_id);
+      addItem(liked_products_id, userData?.id);
     }
     setLiked((prev) => !prev);
   };
@@ -119,56 +135,60 @@ const CardProduct = ({
               </Text>
             </Box>
           )}
-          <Box className={styles.productName} mb="8px">
-            <Text fontSize="16px" fontWeight="500" lineHeight="24px">
-              {name.toUpperCase()}
-            </Text>
-          </Box>
-          {discount && (
-            <Box
-              w="100%"
-              h="18px"
-              display="flex"
-              alignItems="center"
-              fontSize="12px"
-              fontWeight="500"
-              lineHeight="18px"
-              mb="8px"
-            >
-              <Text as="del" color="gray.500">{`Rp ${realPriceString}`}</Text>
-              <Text
-                ml="9px"
-                h="100%"
-                bg="red.200"
-                p="2px"
-                borderRadius="4px"
-                color="red.700"
+          <Flex direction="column" justifyContent="flex-start" height="4.8rem">
+            <Box className={styles.productName} mb="8px">
+              <Text fontSize="16px" fontWeight="500" lineHeight="24px">
+                {name.toUpperCase()}
+              </Text>
+            </Box>
+            {discount && (
+              <Box
+                w="100%"
+                h="18px"
                 display="flex"
                 alignItems="center"
-              >{`${discount}%`}</Text>
+                fontSize="12px"
+                fontWeight="500"
+                lineHeight="18px"
+                mb="8px"
+              >
+                <Text as="del" color="gray.500">{`Rp ${realPriceString}`}</Text>
+                <Text
+                  ml="9px"
+                  h="100%"
+                  bg="red.200"
+                  p="2px"
+                  borderRadius="4px"
+                  color="red.700"
+                  display="flex"
+                  alignItems="center"
+                >{`${discount}%`}</Text>
+              </Box>
+            )}
+            <Box
+              className={styles.primaryFont}
+              w="100%"
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              fontWeight="700"
+              fontSize="16px"
+              lineHeight="20.8px"
+            >
+              <Text>Rp {priceAfterDiscount ?? realPriceString}</Text>
+              {isLoggedIn && (
+                <Icon
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleClickWishlist();
+                    // setLiked((prev) => !prev)
+                  }}
+                  as={liked ? IoHeart : IoHeartOutline}
+                  color={liked ? "red.500" : "black"}
+                ></Icon>
+              )}
             </Box>
-          )}
-          <Box
-            className={styles.primaryFont}
-            w="100%"
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-            fontWeight="700"
-            fontSize="16px"
-            lineHeight="20.8px"
-          >
-            <Text>Rp {priceAfterDiscount ?? realPriceString}</Text>
-            <Icon
-              onClick={(e) => {
-                e.stopPropagation();
-                handleClickWishlist();
-                // setLiked((prev) => !prev)
-              }}
-              as={liked ? IoHeart : IoHeartOutline}
-              color={liked ? "red.500" : "black"}
-            ></Icon>
-          </Box>
+          </Flex>
         </Box>
       </Box>
     </Box>
