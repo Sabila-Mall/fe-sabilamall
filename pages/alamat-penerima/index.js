@@ -22,29 +22,30 @@ import {
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
-import { default as NextLink } from "next/link";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { BiSearch } from "react-icons/bi";
-import { FiChevronRight } from "react-icons/fi";
 
 import { apiKecamatan, apiKodePos, apiKota, apiProvinsi } from "../../api/Zone";
 import { addAddress, getAddressByUserId } from "../../api/address";
 import { getMyCart } from "../../api/cart";
-import CheckoutSummary from "../../components/CheckoutSummary";
-import Footer from "../../components/Footer";
 import { Layout } from "../../components/Layout";
 import Loading from "../../components/Loading";
-import Navbar from "../../components/Navbar";
-import { useCheckoutContext } from "../../contexts/checkoutProvider";
 import { Stepper } from "../../components/Stepper";
 import { ErrorToast, SuccessToast } from "../../components/Toast";
+import { useAddressContext } from "../../contexts/addressProvider";
 import { useAuthContext } from "../../contexts/authProvider";
+import { useCheckoutContext } from "../../contexts/checkoutProvider";
 import { extractName, numberWithDot } from "../../utils/functions";
 
 const AlamatPenerima = () => {
   const { userData } = useAuthContext();
   const { addCheckoutData } = useCheckoutContext();
+  const {
+    addressDataPenerima,
+    addressDataPengirim,
+    loading: loadingAddress,
+  } = useAddressContext();
   const userId = userData?.id;
   const router = useRouter();
   // const userId = 6089;
@@ -70,15 +71,18 @@ const AlamatPenerima = () => {
     },
   ];
 
-  let totalPrice = 0, totalQuantity = 0, totalDiscount = 0, totalWeight = 0
+  let totalPrice = 0,
+    totalQuantity = 0,
+    totalDiscount = 0,
+    totalWeight = 0;
 
-  if (typeof window !== 'undefined') {
-    const checkoutData = JSON.parse(localStorage.getItem("selectedProduct"))
+  if (typeof window !== "undefined") {
+    const checkoutData = JSON.parse(localStorage.getItem("selectedProduct"));
     if (checkoutData) {
-      totalPrice = checkoutData.total_price
-      totalQuantity = checkoutData.quantity
-      totalWeight = checkoutData.weight
-      totalDiscount = checkoutData.discount
+      totalPrice = checkoutData.total_price;
+      totalQuantity = checkoutData.quantity;
+      totalWeight = checkoutData.weight;
+      totalDiscount = checkoutData.discount;
     }
   }
 
@@ -100,14 +104,6 @@ const AlamatPenerima = () => {
   const [alamatPenerima, setAlamatPenerima] = useState("");
   const [addressIdPenerima, setAddressIdPenerima] = useState(null);
 
-  const [ringkasan, setRingkasan] = useState({
-    pcs: 0,
-    weight: 0,
-    subTotal: 0,
-    discount: 0,
-    vendors_id: null,
-  });
-
   const [addressPenerima, setAddressPenerima] = useState({
     city_id: null,
     zone_id: null,
@@ -124,7 +120,7 @@ const AlamatPenerima = () => {
   const [kecamatanPenerima, setKecamatanPenerima] = useState("");
   const [kodePosPenerima, setKodePosPenerima] = useState("");
   const [ponselPenerima, setPonselPenerima] = useState("");
-  const [namaPengirimInput, setNamaPengirimInput] = useState("")
+  const [namaPengirimInput, setNamaPengirimInput] = useState("");
 
   const clearInputPenerima = () => {
     setNamaAwalPenerima("");
@@ -187,79 +183,43 @@ const AlamatPenerima = () => {
 
   useEffect(() => {
     const getDataPengirim = () => {
-      getAddressByUserId({ customers_id: userId, address_book_type: 2 })
-        .then((res) => {
-          setDataPengirim(
-            res
-              ? [
-                ...res?.map((d) => ({
-                  nama: d.firstname + " " + d.lastname,
-                  nomor: d.phone,
-                  ...d,
-                })),
-              ]
-              : [],
-          );
-        })
-        .catch(() => setDataPengirim([]));
+      setDataPengirim(
+        addressDataPengirim
+          ? [
+              ...addressDataPengirim?.map((d) => ({
+                nama: d.firstname + " " + d.lastname ?? "",
+                nomor: d.phone,
+                ...d,
+              })),
+            ]
+          : [],
+      );
+
+      setDataPenerima(
+        addressDataPenerima && Array.isArray(addressDataPenerima)
+          ? [
+              ...addressDataPenerima?.map((d) => ({
+                nama: d.firstname + " " + d.lastname,
+                nomor: d.phone,
+                alamat: `${d.street}, ${d.subdistrict_name}, ${d.city_name}, ${d.zone_name}`,
+                address_id: d.address_id,
+                city_id: d.zone_apicityid,
+                zone_id: d.zone_id,
+                subdistrict_id: d.subdistrict_id,
+                postcode: d.postcode,
+                district_id: d.district,
+              })),
+            ]
+          : [],
+      );
 
       apiProvinsi().then((res) => {
         setProvinsi([...res.data.data]);
       });
-
-      getAddressByUserId({ customers_id: userId, address_book_type: 1 })
-        .then((res) => {
-          setDataPenerima(
-            res && Array.isArray(res)
-              ? [
-                ...res?.map((d) => ({
-                  nama: d.firstname + " " + d.lastname,
-                  nomor: d.phone,
-                  alamat: `${d.street}, ${d.subdistrict_name}, ${d.city_name}, ${d.zone_name}`,
-                  address_id: d.address_id,
-                  city_id: d.zone_apicityid,
-                  zone_id: d.zone_id,
-                  subdistrict_id: d.subdistrict_id,
-                  postcode: d.postcode,
-                  district_id: d.district,
-                })),
-              ]
-              : [],
-          );
-        })
-        .catch(() => setDataPenerima([]));
-
-      getMyCart(userId)
-        .then((res) => {
-          let pcs = 0;
-          let weight = 0;
-          let subTotal = 0;
-          let discount = 0;
-          res?.forEach((d) => {
-            pcs += d?.keranjang?.length;
-            d.keranjang.forEach((k) => {
-              weight += Number(k.products_weight);
-              subTotal += Number(k.products_price);
-              discount +=
-                (JSON.parse(k.customers_discount_schema)[k.customers_level] /
-                  100) *
-                Number(k.products_price);
-            });
-          });
-          const d = {
-            pcs,
-            weight,
-            subTotal,
-            discount,
-            vendors_id: res?.[0]?.vendors_id,
-          };
-          setRingkasan({ ...d });
-        })
-        .catch(() => console.error("err"));
     };
 
     userId && getDataPengirim();
-  }, [userId, refetch]);
+  }, [userId, loadingAddress]);
 
   useEffect(() => {
     const getKota = () => {
@@ -336,7 +296,6 @@ const AlamatPenerima = () => {
     if (pengirimCurrentTab == 0 && penerimaCurrentTab == 0) {
       try {
         saveToContext({
-          ...ringkasan,
           userId,
           dropshipper_id: addressIdPengirim,
           delivery_id: addressIdPenerima,
@@ -367,7 +326,6 @@ const AlamatPenerima = () => {
       try {
         const res = await addAddressPenerima();
         saveToContext({
-          ...ringkasan,
           userId,
           dropshipper_id: addressIdPengirim,
           delivery_id: res.address_id,
@@ -394,7 +352,6 @@ const AlamatPenerima = () => {
       try {
         const res = await addAddressPengirim();
         saveToContext({
-          ...ringkasan,
           userId,
           dropshipper_id: res.address_book_id,
           delivery_id: addressIdPenerima,
@@ -426,7 +383,6 @@ const AlamatPenerima = () => {
         const res1 = await addAddressPengirim();
         const res2 = await addAddressPenerima();
         saveToContext({
-          ...ringkasan,
           userId,
           dropshipper_id: res1.address_book_id,
           delivery_id: res2.address_id,
@@ -1069,7 +1025,10 @@ const AlamatPenerima = () => {
                   marginBottom="2rem"
                   marginRight={{ base: "0rem", lg: "1rem" }}
                   isDisabled={handleDisable()}
-                  onClick={(e) => { handleSubmit(e); router.push("/detail-pesanan") }}
+                  onClick={(e) => {
+                    handleSubmit(e);
+                    router.push("/detail-pesanan");
+                  }}
                 >
                   Lanjutkan
                 </Button>
