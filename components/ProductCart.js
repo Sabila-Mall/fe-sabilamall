@@ -1,25 +1,38 @@
-import { Input } from "@chakra-ui/input";
 import { Divider, Text } from "@chakra-ui/layout";
-import { HStack } from "@chakra-ui/layout";
 import { VStack } from "@chakra-ui/layout";
 import { Flex, Box } from "@chakra-ui/layout";
-import Image from "next/image";
-import { useState } from "react";
-import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
-import { IoTrash } from "react-icons/io5";
-import { RiPencilFill } from "react-icons/ri";
+import { Checkbox, Image, Radio } from "@chakra-ui/react";
+import { useState, createRef } from "react";
+import { IMAGE_HOST } from "../constants/api";
+import { useAuthContext } from "../contexts/authProvider";
+import { useCartContext } from "../contexts/cartProvider";
 
 import { CartPrice } from "./CartPrice";
 
-export const ProductCart = ({ isDiscount, price }) => {
+export const ProductCart = ({ isDiscount, product }) => {
+  const { userData } = useAuthContext();
+  const { addToCheckout, deleteFromCheckout } = useCartContext();
+
+  const productName = product?.products_name
+  const productPath = product?.products_image_path
+  const productPrice = product?.final_price
+  const varian = product?.varian
+  let inputRef = createRef()
+  const handleCheckbox = () => {
+    if (inputRef.current.checked) {
+      addToCheckout(product)
+    } else {
+      deleteFromCheckout(product)
+    }
+  }
   return (
-    <Box width="100%" px={{ base: "1rem", md: 0 }}>
+    <Box width="100%" px={{ base: "1rem", md: 0 }} as="label" onClick={() => handleCheckbox()}>
       <Flex
         alignItems="start"
         justifyContent={{ base: "center", md: "start" }}
-        mb={{ base: "1.75rem", md: "0" }}
         justifyContent="flex-start"
       >
+        <Checkbox alignSelf="center" mr="20px" ref={inputRef}></Checkbox>
         <Flex
           flexDirection="column"
           justifyContent="center"
@@ -34,7 +47,7 @@ export const ProductCart = ({ isDiscount, price }) => {
             <Image
               layout="fill"
               quality={100}
-              src="/images/cart/cartimage.svg"
+              src={IMAGE_HOST + productPath}
             />
           </Box>
         </Flex>
@@ -45,25 +58,22 @@ export const ProductCart = ({ isDiscount, price }) => {
           fontWeight="500"
         >
           <Text as="h1" isTruncated mb="8px">
-            Nama Produk Croissant Jujubes asdadasdadadasd
+            {productName}
           </Text>
           <VStack spacing="3px" alignItems="start" mb="1rem">
-            <Text color="gray.500" fontSize="14px">
-              Varian : Lengan Panjang
-            </Text>
-            <Text color="gray.500" fontSize="14px">
-              Warna : Merah Cabe
-            </Text>
-            <Text color="gray.500" fontSize="14px">
-              Ukuran : XXXXXXXL
-            </Text>
+            {varian && varian.map((el, index) => {
+              return (
+                <Text color="gray.500" fontSize="14px">
+                  {`${el.products_options_name} : ${el.products_options_values_name}`}
+                </Text>
+              )
+            })}
           </VStack>
           <Box display={{ md: "none" }}>
-            <CartPrice isDiscount={isDiscount} price={price} />
+            <CartPrice isDiscount={isDiscount} price={productPrice} />
           </Box>
         </Flex>
       </Flex>
-      <Divider display={{ md: "none" }} />
     </Box>
   );
 };

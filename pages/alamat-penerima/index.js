@@ -29,7 +29,7 @@ import { BiSearch } from "react-icons/bi";
 import { FiChevronRight } from "react-icons/fi";
 
 import { apiKecamatan, apiKodePos, apiKota, apiProvinsi } from "../../api/Zone";
-import { addAddress, getAddress } from "../../api/address";
+import { addAddress, getAddressByUserId } from "../../api/address";
 import { getMyCart } from "../../api/cart";
 import CheckoutSummary from "../../components/CheckoutSummary";
 import Footer from "../../components/Footer";
@@ -177,7 +177,7 @@ const AlamatPenerima = () => {
 
   useEffect(() => {
     const getDataPengirim = () => {
-      getAddress({ customers_id: userId, address_book_type: 2 })
+      getAddressByUserId({ customers_id: userId, address_book_type: 2 })
         .then((res) => {
           setDataPengirim(
             res
@@ -197,7 +197,7 @@ const AlamatPenerima = () => {
         setProvinsi([...res.data.data]);
       });
 
-      getAddress({ customers_id: userId, address_book_type: 1 })
+      getAddressByUserId({ customers_id: userId, address_book_type: 1 })
         .then((res) => {
           setDataPenerima(
             res && Array.isArray(res)
