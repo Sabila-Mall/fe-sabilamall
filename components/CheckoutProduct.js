@@ -14,6 +14,7 @@ import { Box, Text } from "@chakra-ui/layout";
 import { formatNumber } from "../utils/functions";
 import { IoCreateOutline } from "react-icons/io5";
 import { IMAGE_HOST } from "../constants/api";
+import { useState } from "react";
 
 const EditableControls = () => {
   const { getEditButtonProps } = useEditableControls();
@@ -29,6 +30,7 @@ const EditableControls = () => {
 
 
 const CheckoutProduct = ({ product }) => {
+  const [notes, setnotes] = useState("")
   const { width } = useWindowSize();
   const isSmartphone = width < 768;
 
@@ -40,12 +42,17 @@ const CheckoutProduct = ({ product }) => {
   const varian = product?.varian
   const jumlah = product.customers_basket_quantity
 
-  let deskripsi = ""
+  let deskripsiArray = []
+  let deskripsi
 
   if (varian) {
     varian.forEach(element => {
-      deskripsi += element.products_options_values_name
+      deskripsiArray.push(element.products_options_values_name)
     });
+  }
+
+  if (deskripsiArray.length) {
+    deskripsi = deskripsiArray.join(", ")
   }
 
   const realPrice = discount === 0 ? harga : (harga * (100 - discount)) / 100;
@@ -97,7 +104,7 @@ const CheckoutProduct = ({ product }) => {
               <EditableControls />
               <Box>
                 <EditablePreview />
-                <EditableInput color="black" />
+                <EditableInput color="black" onChange={(e) => setnotes(e.target.value)} />
               </Box>
             </HStack>
           </Editable>

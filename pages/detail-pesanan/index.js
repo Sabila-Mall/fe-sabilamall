@@ -192,7 +192,7 @@ const RingkasanPesanan = ({ daftarProduk }) => {
  * @param {function} setPengiriman Function buat ngubah pengiriman
  */
 const Pengiriman = ({ kurir, pengiriman, handler }) => {
-  let totalPrice = 0, totalQuantity = 0, totalDiscount = 0, totalWeight = 0
+  let totalWeight = 0
 
   if (typeof window !== 'undefined') {
     const checkoutData = JSON.parse(localStorage.getItem("selectedProduct"))
