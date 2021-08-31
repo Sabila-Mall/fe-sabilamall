@@ -1,4 +1,4 @@
-import { Box, Image, Text, Icon } from "@chakra-ui/react";
+import { Box, Image, Text, Icon, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { IoHeartOutline, IoTimeSharp, IoHeart } from "react-icons/io5";
@@ -122,58 +122,60 @@ const CardProduct = ({
               </Text>
             </Box>
           )}
-          <Box className={styles.productName} mb="8px">
-            <Text fontSize="16px" fontWeight="500" lineHeight="24px">
-              {name.toUpperCase()}
-            </Text>
-          </Box>
-          {discount && (
-            <Box
-              w="100%"
-              h="18px"
-              display="flex"
-              alignItems="center"
-              fontSize="12px"
-              fontWeight="500"
-              lineHeight="18px"
-              mb="8px"
-            >
-              <Text as="del" color="gray.500">{`Rp ${realPriceString}`}</Text>
-              <Text
-                ml="9px"
-                h="100%"
-                bg="red.200"
-                p="2px"
-                borderRadius="4px"
-                color="red.700"
+          <Flex direction="column" justifyContent="flex-start" height="4.8rem">
+            <Box className={styles.productName} mb="8px">
+              <Text fontSize="16px" fontWeight="500" lineHeight="24px">
+                {name.toUpperCase()}
+              </Text>
+            </Box>
+            {discount && (
+              <Box
+                w="100%"
+                h="18px"
                 display="flex"
                 alignItems="center"
-              >{`${discount}%`}</Text>
-            </Box>
-          )}
-          <Box
-            className={styles.primaryFont}
-            w="100%"
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-            fontWeight="700"
-            fontSize="16px"
-            lineHeight="20.8px"
-          >
-            <Text>Rp {priceAfterDiscount ?? realPriceString}</Text>
-            {isLoggedIn && (
-              <Icon
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleClickWishlist();
-                  // setLiked((prev) => !prev)
-                }}
-                as={liked ? IoHeart : IoHeartOutline}
-                color={liked ? "red.500" : "black"}
-              ></Icon>
+                fontSize="12px"
+                fontWeight="500"
+                lineHeight="18px"
+                mb="8px"
+              >
+                <Text as="del" color="gray.500">{`Rp ${realPriceString}`}</Text>
+                <Text
+                  ml="9px"
+                  h="100%"
+                  bg="red.200"
+                  p="2px"
+                  borderRadius="4px"
+                  color="red.700"
+                  display="flex"
+                  alignItems="center"
+                >{`${discount}%`}</Text>
+              </Box>
             )}
-          </Box>
+            <Box
+              className={styles.primaryFont}
+              w="100%"
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              fontWeight="700"
+              fontSize="16px"
+              lineHeight="20.8px"
+            >
+              <Text>Rp {priceAfterDiscount ?? realPriceString}</Text>
+              {isLoggedIn && (
+                <Icon
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleClickWishlist();
+                    // setLiked((prev) => !prev)
+                  }}
+                  as={liked ? IoHeart : IoHeartOutline}
+                  color={liked ? "red.500" : "black"}
+                ></Icon>
+              )}
+            </Box>
+          </Flex>
         </Box>
       </Box>
     </Box>
