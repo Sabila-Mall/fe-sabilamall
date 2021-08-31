@@ -98,6 +98,14 @@ const AlamatPenerima = () => {
     vendors_id: null,
   });
 
+  const [addressPenerima, setAddressPenerima] = useState({
+    city_id: null,
+    zone_id: null,
+    district_id: null,
+    subdistrict_id: null,
+    postcode: null,
+  });
+
   const [namaAwalPenerima, setNamaAwalPenerima] = useState("");
   const [namaAkhirPenerima, setNamaAkhirPenerima] = useState("");
   const [negaraPenerima, setNegaraPenerima] = useState("");
@@ -191,6 +199,7 @@ const AlamatPenerima = () => {
 
       getAddress({ customers_id: userId, address_book_type: 1 })
         .then((res) => {
+          console.log(res, "RESSSSS");
           setDataPenerima(
             res && Array.isArray(res)
               ? [
@@ -199,6 +208,11 @@ const AlamatPenerima = () => {
                     nomor: d.phone,
                     alamat: `${d.street}, ${d.subdistrict_name}, ${d.city_name}, ${d.zone_name}`,
                     address_id: d.address_id,
+                    city_id: d.zone_apicityid,
+                    zone_id: d.zone_id,
+                    subdistrict_id: d.subdistrict_id,
+                    postcode: d.postcode,
+                    district_id: d.district,
                   })),
                 ]
               : [],
@@ -291,6 +305,12 @@ const AlamatPenerima = () => {
     setNomorPenerima(dataPenerima[e].nomor);
     setAlamatPenerima(dataPenerima[e].alamat);
     setAddressIdPenerima(dataPenerima[e].address_id);
+    setAddressPenerima({
+      city_id: dataPenerima[e].city_id,
+      zone_id: dataPenerima[e].zone_id,
+      subdistrict_id: dataPenerima[e].subdistrict_id,
+      postcode: dataPenerima[e].postcode,
+    });
   };
 
   const saveToContext = (data) => {
@@ -314,6 +334,11 @@ const AlamatPenerima = () => {
           userId,
           dropshipper_id: addressIdPengirim,
           delivery_id: addressIdPenerima,
+          city_id: addressPenerima.city_id,
+          zone_id: addressPenerima.zone_id,
+          subdistrict_id: addressPenerima.subdistrict_id,
+          subdistrict_id: addressPenerima.subdistrict_id,
+          postcode: addressPenerima.postcode,
           namaPengirim,
           nomorPengirim,
           namaPenerima,
@@ -342,6 +367,11 @@ const AlamatPenerima = () => {
           delivery_id: res.address_id,
           namaPengirim,
           nomorPengirim,
+          zone_id: Number(provinsiPenerima?.split(" ")?.[0]),
+          city_id: Number(kotaPenerima?.split(" ")?.[0]),
+          district_id: Number(kecamatanPenerima?.split(" ")?.[0]),
+          subdistrict_id: null,
+          postcode: Number(kodePosPenerima),
           namaPenerima: namaAwalPenerima + " " + namaAkhirPenerima,
           provinsiPenerima: provinsiPenerima?.split(" ")?.[1],
           kotaPenerima: kotaPenerima?.split(" ")?.[1],
@@ -364,6 +394,10 @@ const AlamatPenerima = () => {
           delivery_id: addressIdPenerima,
           namaPengirim: namaTextPengirim,
           nomorPengirim: ponselPengirim,
+          city_id: addressPenerima.city_id,
+          zone_id: addressPenerima.zone_id,
+          subdistrict_id: addressPenerima.subdistrict_id,
+          postcode: addressPenerima.postcode,
           namaPenerima,
           nomorPenerima,
           provinsiPenerima:
