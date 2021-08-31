@@ -64,7 +64,6 @@ const ReceiverAddresses = ({ isMobile }) => {
     if (provinceId) {
       apiKota(provinceId)
         .then((res) => {
-          console.log(res);
           const response = res.data.data;
           setcityData(response);
         })
@@ -79,27 +78,20 @@ const ReceiverAddresses = ({ isMobile }) => {
       apiKecamatan(cityId)
         .then((res) => {
           const response = res.data.data;
-          console.log(response);
           setdistrictData(response);
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     }
   }, [cityId]);
 
   useEffect(() => {
     if (districtId) {
-      console.log(districtId);
       apiKodePos(cityId, districtId, provinceId)
         .then((res) => {
           const response = res.data.data;
-          console.log(response);
           setpostalCodeData(response);
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     }
   }, [districtId]);
 
@@ -118,17 +110,6 @@ const ReceiverAddresses = ({ isMobile }) => {
       firstname = data.name;
       onClose();
     }
-    console.log(
-      userId,
-      firstname,
-      lastname,
-      phone,
-      postalCodeId,
-      cityId,
-      districtId,
-      provinceId,
-      address,
-    );
     addItemPenerima(
       userId,
       0,
@@ -324,7 +305,6 @@ const ReceiverAddresses = ({ isMobile }) => {
                     selectZone="province"
                     onChange={(e) => {
                       setProvinceId(e.target.value);
-                      console.log(provinceId);
                     }}
                   />
                 </GridItem>
@@ -357,7 +337,6 @@ const ReceiverAddresses = ({ isMobile }) => {
                     text="Kode Pos"
                     onChange={(e) => {
                       setpostalCodeId(e.target.value);
-                      console.log(e.target.value);
                     }}
                     options={postalCodeData}
                     selectZone="postalCode"

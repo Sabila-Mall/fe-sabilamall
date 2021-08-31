@@ -8,9 +8,7 @@ export const getAddressByUserId = async (user_id, type) => {
       customers_id: user_id,
       address_book_type: type,
     });
-    console.log(res);
     const data = await res.data?.data;
-    console.log(data);
     return data;
   } catch (err) {
     throw new Error(err);
@@ -23,7 +21,6 @@ export const deleteAddress = async (dataPost) => {
       HOST + "/api/alamat/delete_shipping_address",
       dataPost,
     );
-    console.log(res);
     const data = await res.data;
     return data;
   } catch (err) {
@@ -37,7 +34,6 @@ export const addAddress = async (dataPost) => {
       HOST + "/api/alamat/add_shipping_address",
       dataPost,
     );
-    console.log(res);
     const data = await res?.data;
     return data;
   } catch (err) {

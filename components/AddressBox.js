@@ -14,42 +14,41 @@ import {
   FormControl,
   useDisclosure,
   useMediaQuery,
-  Button
+  Button,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
-import { FaPen } from "react-icons/fa";
-import InputBoxAndLabel from "./InputBoxAndLabel";
-
-import DeleteIcon from "./deleteIcon";
 import { useForm } from "react-hook-form";
+import { FaPen } from "react-icons/fa";
+
+import { apiKecamatan, apiKodePos, apiKota, apiProvinsi } from "../api/Zone";
 import { useAddressContext } from "../contexts/addressProvider";
 import { useAuthContext } from "../contexts/authProvider";
-import { apiKecamatan, apiKodePos, apiKota, apiProvinsi } from "../api/Zone";
+import InputBoxAndLabel from "./InputBoxAndLabel";
+import DeleteIcon from "./deleteIcon";
 
-const AddressBoxReceiver = ({
-  data
-}) => {
-
-  const [name, setname] = useState(data.firstname + " " + (data.lastname ? data.lastname : ""))
+const AddressBoxReceiver = ({ data }) => {
+  const [name, setname] = useState(
+    data.firstname + " " + (data.lastname ? data.lastname : ""),
+  );
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isMobile] = useMediaQuery("(max-width: 48rem)")
+  const [isMobile] = useMediaQuery("(max-width: 48rem)");
   const { register, handleSubmit } = useForm();
 
   const { deleteItem, addItemPenerima } = useAddressContext();
-  const { userData } = useAuthContext()
-  const userId = userData?.id
-  const addressId = data?.address_id
+  const { userData } = useAuthContext();
+  const userId = userData?.id;
+  const addressId = data?.address_id;
 
-  const [provinceData, setprovinceData] = useState([])
-  const [cityData, setcityData] = useState([])
-  const [districtData, setdistrictData] = useState([])
-  const [postalCodeData, setpostalCodeData] = useState([])
+  const [provinceData, setprovinceData] = useState([]);
+  const [cityData, setcityData] = useState([]);
+  const [districtData, setdistrictData] = useState([]);
+  const [postalCodeData, setpostalCodeData] = useState([]);
 
   const [provinceId, setProvinceId] = useState(null);
   const [cityId, setCityId] = useState(null);
-  const [districtId, setdistrictId] = useState(null)
-  const [postalCodeId, setpostalCodeId] = useState(null)
+  const [districtId, setdistrictId] = useState(null);
+  const [postalCodeId, setpostalCodeId] = useState(null);
 
   useEffect(() => {
     apiProvinsi()
@@ -66,7 +65,6 @@ const AddressBoxReceiver = ({
     if (provinceId) {
       apiKota(provinceId)
         .then((res) => {
-          console.log(res);
           const response = res.data.data;
           setcityData(response);
         })
@@ -81,61 +79,62 @@ const AddressBoxReceiver = ({
       apiKecamatan(cityId)
         .then((res) => {
           const response = res.data.data;
-          console.log(response);
-          setdistrictData(response)
+          setdistrictData(response);
         })
-        .catch((err) => {
-          console.log(err);
-        })
+        .catch((err) => {});
     }
   }, [cityId]);
 
   useEffect(() => {
     if (districtId) {
-      console.log(districtId);
       apiKodePos(cityId, districtId, provinceId)
         .then((res) => {
           const response = res.data.data;
-          let temp = []
-          let tempPostalCode = []
-          response.forEach(element => {
+          let temp = [];
+          let tempPostalCode = [];
+          response.forEach((element) => {
             if (!tempPostalCode.includes(element.postal_code)) {
-              temp.push(element)
-              tempPostalCode.push(element.postal_code)
+              temp.push(element);
+              tempPostalCode.push(element.postal_code);
             }
           });
-          console.log(response);
-          console.log(temp);
-          setpostalCodeData(temp)
+          setpostalCodeData(temp);
         })
-        .catch((err) => {
-          console.log(err);
-        })
+        .catch((err) => {});
     }
   }, [districtId]);
 
-  const onSubmit = data => {
-    let firstname, lastname, phone, street, district, city, province, postalCode
+  const onSubmit = (data) => {
+    let firstname,
+      lastname,
+      phone,
+      street,
+      district,
+      city,
+      province,
+      postalCode;
     if (data.name.split(" ").length > 1) {
-      firstname = data.name.split(" ").slice(0, data.name.split(" ").length - 1).join(" ")
-      lastname = data.name.split(" ")[data.name.split(" ").length - 1]
-    } else {
       firstname = data.name
-      lastname = ""
+        .split(" ")
+        .slice(0, data.name.split(" ").length - 1)
+        .join(" ");
+      lastname = data.name.split(" ")[data.name.split(" ").length - 1];
+    } else {
+      firstname = data.name;
+      lastname = "";
     }
 
-    setname(firstname + " " + lastname)
-    phone = data.phoneNumber
-    district = data.district
-    postalCode = data.postalCode
-    province = data.province
-    city = data.city
-    street = data.address
+    setname(firstname + " " + lastname);
+    phone = data.phoneNumber;
+    district = data.district;
+    postalCode = data.postalCode;
+    province = data.province;
+    city = data.city;
+    street = data.address;
 
-    console.log(userId, firstname, lastname, phone, postalCode, city, district, province, street);
-
-    deleteItem(userId, addressId)
-    addItemPenerima(userId,
+    deleteItem(userId, addressId);
+    addItemPenerima(
+      userId,
       0,
       1,
       firstname,
@@ -147,9 +146,10 @@ const AddressBoxReceiver = ({
       province,
       street,
       100,
-      "edit")
-    onClose()
-  }
+      "edit",
+    );
+    onClose();
+  };
 
   return (
     <Box position="relative" p="16px" pb="0">
@@ -168,8 +168,10 @@ const AddressBoxReceiver = ({
           <Text>{data.phone}</Text>
           <Text>{data.street}</Text>
           <Text>
-            {((data.city_type && data.city_name) ? (data.city_type + " " + data.city_name) : "") +
-              ((data.city_type && data.city_name) && data.zone_name ? ", " : "") +
+            {(data.city_type && data.city_name
+              ? data.city_type + " " + data.city_name
+              : "") +
+              (data.city_type && data.city_name && data.zone_name ? ", " : "") +
               (data.zone_name ? data.zone_name : "")}
           </Text>
           <Text>
@@ -199,11 +201,7 @@ const AddressBoxReceiver = ({
       >
         <DeleteIcon data={data} />
       </Box>
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        size={isMobile ? "6xl" : "5xl"}
-      >
+      <Modal isOpen={isOpen} onClose={onClose} size={isMobile ? "6xl" : "5xl"}>
         {isMobile ? <></> : <ModalOverlay />}
         <ModalContent
           borderRadius={isMobile ? "0" : "20px"}
@@ -371,33 +369,32 @@ const AddressBoxReceiver = ({
   );
 };
 
-const AddressBoxSender = ({
-  data
-}) => {
+const AddressBoxSender = ({ data }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isMobile] = useMediaQuery("(max-width: 48rem)")
+  const [isMobile] = useMediaQuery("(max-width: 48rem)");
   const { register, handleSubmit } = useForm();
   const { deleteItem, addItemPengirim } = useAddressContext();
-  const { userData } = useAuthContext()
-  const userId = userData?.id
-  const addressId = data?.address_id
+  const { userData } = useAuthContext();
+  const userId = userData?.id;
+  const addressId = data?.address_id;
 
-  const onSubmit = data => {
-    let firstname, lastname, phone
+  const onSubmit = (data) => {
+    let firstname, lastname, phone;
     if (data.name.split(" ").length > 1) {
-      firstname = data.name.split(" ").slice(0, data.name.split(" ").length - 1).join(" ")
-      lastname = data.name.split(" ")[data.name.split(" ").length - 1]
-    } else {
       firstname = data.name
-      lastname = ""
+        .split(" ")
+        .slice(0, data.name.split(" ").length - 1)
+        .join(" ");
+      lastname = data.name.split(" ")[data.name.split(" ").length - 1];
+    } else {
+      firstname = data.name;
+      lastname = "";
     }
-    phone = data.phoneNumber
-    deleteItem(userId, addressId)
-    addItemPengirim(userId, 0, 2, firstname, lastname, phone, "edit")
+    phone = data.phoneNumber;
+    deleteItem(userId, addressId);
+    addItemPengirim(userId, 0, 2, firstname, lastname, phone, "edit");
     onClose();
-  }
-
-
+  };
 
   return (
     <Box position="relative" p="16px" pb="0">
@@ -407,11 +404,17 @@ const AddressBoxSender = ({
           textAlign="right"
           display={{ base: "none", md: "block" }}
         >
-          <Text>{data.firstname + " " + (data.lastname || " ") ? "Nama Lengkap" : ""}</Text>
+          <Text>
+            {data.firstname + " " + (data.lastname || " ")
+              ? "Nama Lengkap"
+              : ""}
+          </Text>
           <Text>{data.phone ? "Telepon" : ""}</Text>
         </Box>
         <Box ml={{ base: "0", md: "16px" }} maxW={{ base: "60%", md: "40%" }}>
-          <Text fontWeight="bold">{data.firstname + " " + (data.lastname || " ")}</Text>
+          <Text fontWeight="bold">
+            {data.firstname + " " + (data.lastname || " ")}
+          </Text>
           <Text>{data.phone}</Text>
         </Box>
       </Flex>
@@ -504,7 +507,7 @@ const AddressBoxSender = ({
           </ModalBody>
         </ModalContent>
       </Modal>
-    </Box >
+    </Box>
   );
 };
 

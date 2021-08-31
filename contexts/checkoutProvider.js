@@ -19,7 +19,6 @@ export const CheckoutProvider = ({ children }) => {
       // destroyCookie(null, "checkoutData");
       localStorage.removeItem("checkoutData");
     }
-    console.log(data, "DATA LOCAL");
     localStorage.setItem("checkoutData", JSON.stringify(data));
 
     // setCookie(null, "checkoutData", JSON.stringify(data), {

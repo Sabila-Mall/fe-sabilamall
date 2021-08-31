@@ -528,7 +528,6 @@ const PesananSayaComponent = () => {
   return userData == null || data.length == 0 ? (
     <>
       <Navbar />
-      {console.log(userData)}
       <Box
         d="flex"
         w="100vw"

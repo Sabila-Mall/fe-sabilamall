@@ -22,11 +22,8 @@ const MyProfile = () => {
 
   const { userData } = useAuthContext();
 
-  console.log(userData);
-
   useEffect(() => {
     if (userData?.id) {
-      console.log(userData);
       setValue("firstName", userData?.first_name, { shouldValidate: true });
       setValue("lastName", userData?.last_name, { shouldValidate: true });
       setValue("gender", userData?.gender, { shouldValidate: true });
@@ -39,7 +36,6 @@ const MyProfile = () => {
   }, [userData]);
 
   const onSubmit = (values) => {
-    console.log("masuk MyProfile component");
     const { birthDate, firstName, gender, users_ktp, lastName, phone } = values;
     const dateObject = new Date(birthDate);
     const tempBirthDate = userData?.dob
@@ -47,7 +43,6 @@ const MyProfile = () => {
       : `${
           dateObject.getMonth() + 1
         }/${dateObject.getDate()}/${dateObject.getFullYear()}`;
-    console.log(tempBirthDate);
     setLoading(true);
     apiUbahProfileSaya(
       userData?.id,

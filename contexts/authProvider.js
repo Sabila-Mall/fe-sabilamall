@@ -33,7 +33,6 @@ export const AuthProvider = ({ children }) => {
               const finalData = filterObject(response, USER_FIELDS);
               setUserData({ ...tempData, ...finalData });
             } else {
-              console.log(res);
             }
           })
           .finally(() => setLoading(false));

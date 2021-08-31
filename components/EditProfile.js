@@ -25,7 +25,6 @@ export const EditProfile = ({ isMobile }) => {
 
   useEffect(() => {
     if (userData?.id) {
-      console.log(userData);
       setValue("firstName", userData?.first_name, { shouldValidate: true });
       setValue("lastName", userData?.last_name, { shouldValidate: true });
       setValue("gender", userData?.gender, { shouldValidate: true });
@@ -45,7 +44,6 @@ export const EditProfile = ({ isMobile }) => {
       : `${
           dateObject.getMonth() + 1
         }/${dateObject.getDate()}/${dateObject.getFullYear()}`;
-    console.log(tempBirthDate);
     setLoading(true);
     apiUbahProfileSaya(
       userData?.id,

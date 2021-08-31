@@ -208,7 +208,6 @@ const AlamatPenerima = () => {
 
       getMyCart(userId)
         .then((res) => {
-          // console.log(res, "RSSSS");
           let pcs = 0;
           let weight = 0;
           let subTotal = 0;
@@ -270,7 +269,6 @@ const AlamatPenerima = () => {
       )
         .then((res) => {
           const postalCodeList = res.data?.data?.map((d) => d?.postal_code);
-          // console.log(postalCodeList, "POSTAL CODE");
 
           setKodePos([...new Set(postalCodeList)]);
         })
@@ -296,9 +294,7 @@ const AlamatPenerima = () => {
   const saveToContext = (data) => {
     try {
       addCheckoutData(data);
-    } catch {
-      console.log("EERRRRR");
-    }
+    } catch {}
   };
 
   const handleSubmit = async (e) => {
@@ -400,7 +396,6 @@ const AlamatPenerima = () => {
           nomorPenerima: ponselPenerima,
         });
 
-        // console.log(provinsiPenerima, "PROOOOVVV");
         router.push("/detail-pesanan");
       } catch (err) {
         ErrorToast("Gagal menambahkan alamat pengirim / penerima");

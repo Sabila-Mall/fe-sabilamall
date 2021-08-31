@@ -29,7 +29,6 @@ const CardProduct = ({
   isLiked,
 }) => {
   const router = useRouter();
-  console.log(isLiked);
   const { isLoggedIn, userData } = useAuthContext();
 
   const [imageHeight, setImageHeight] = useState(144);
