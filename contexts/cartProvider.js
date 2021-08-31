@@ -112,6 +112,7 @@ export const CartProvider = ({ children }) => {
 
     const checkoutValidation = () => {
         if (selectedItem.length) {
+            localStorage.setItem("selectedProduct", [])
             let tempVendor = selectedItem[0].vendors_id
             let tempWeight = 0
             let tempQuantity = 0
@@ -130,6 +131,17 @@ export const CartProvider = ({ children }) => {
                 tempQuantity += element.customers_basket_quantity
             });
 
+            const checkoutData = {
+                weight: tempWeight,
+                quantity: tempQuantity,
+                products: selectedItem,
+                discount: totalDiscount,
+                total_price: selectedPrice
+            }
+
+            localStorage.setItem("selectedProduct", JSON.stringify(checkoutData))
+            const local = localStorage.getItem("selectedProduct")
+            console.log(JSON.parse(local));
             console.log(tempWeight);
             console.log(tempQuantity);
             setselectedQuantity(tempQuantity)

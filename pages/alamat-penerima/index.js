@@ -40,14 +40,11 @@ import { useCheckoutContext } from "../../contexts/checkoutProvider";
 import { Stepper } from "../../components/Stepper";
 import { ErrorToast, SuccessToast } from "../../components/Toast";
 import { useAuthContext } from "../../contexts/authProvider";
-import { useCheckoutContext } from "../../contexts/checkoutProvider";
 import { extractName, numberWithDot } from "../../utils/functions";
-import { useCartContext } from "../../contexts/cartProvider";
 
 const AlamatPenerima = () => {
   const { userData } = useAuthContext();
   const { addCheckoutData } = useCheckoutContext();
-  const { selectedQuantity, selectedPrice, totalDiscount, selectedWeight } = useCartContext()
   const userId = userData?.id;
   const router = useRouter();
   // const userId = 6089;
@@ -72,6 +69,18 @@ const AlamatPenerima = () => {
       isOnPage: true,
     },
   ];
+
+  let totalPrice = 0, totalQuantity = 0, totalDiscount = 0, totalWeight = 0
+
+  if (typeof window !== 'undefined') {
+    const checkoutData = JSON.parse(localStorage.getItem("selectedProduct"))
+    if (checkoutData) {
+      totalPrice = checkoutData.total_price
+      totalQuantity = checkoutData.quantity
+      totalWeight = checkoutData.weight
+      totalDiscount = checkoutData.discount
+    }
+  }
 
   const [refetch, setRefetch] = useState(null);
 
@@ -115,6 +124,7 @@ const AlamatPenerima = () => {
   const [kecamatanPenerima, setKecamatanPenerima] = useState("");
   const [kodePosPenerima, setKodePosPenerima] = useState("");
   const [ponselPenerima, setPonselPenerima] = useState("");
+  const [namaPengirimInput, setNamaPengirimInput] = useState("")
 
   const clearInputPenerima = () => {
     setNamaAwalPenerima("");
@@ -1106,7 +1116,7 @@ const AlamatPenerima = () => {
                   fontWeight="500"
                   isTruncated
                 >
-                  {selectedQuantity} pcs
+                  {totalQuantity} pcs
                 </Text>
               </Box>
               <Box
@@ -1129,7 +1139,7 @@ const AlamatPenerima = () => {
                   fontWeight="500"
                   isTruncated
                 >
-                  {selectedWeight} gr
+                  {totalWeight} gr
                 </Text>
               </Box>
               <Divider orientation="horizontal" marginY="0.5rem" />
@@ -1161,7 +1171,7 @@ const AlamatPenerima = () => {
                   fontWeight="500"
                   isTruncated
                 >
-                  Rp{numberWithDot(selectedPrice)}
+                  Rp{numberWithDot(totalPrice)}
                 </Text>
               </Box>
               <Box
@@ -1232,7 +1242,7 @@ const AlamatPenerima = () => {
                   fontSize="1.25rem"
                   isTruncated
                 >
-                  Rp{numberWithDot(selectedPrice - totalDiscount)}
+                  Rp{numberWithDot(totalPrice - totalDiscount)}
                 </Text>
               </Box>
             </Box>
