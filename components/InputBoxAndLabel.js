@@ -53,30 +53,42 @@ const InputBoxAndLabel = ({
         defaultValue={defaultValue}
         {...otherProps}
       >
-        <option
-          value={defaultValueId}
-          selected={true}
-          disabled={true}
-          hidden={true}
-        >
-          {defaultValue}
-        </option>
-        {options.map((option, index) => (
+        {selectZone && (
           <option
-            value={
-              (selectZone === "city" && option.city_id) ||
-              (selectZone === "province" && option.zone_apicityid) ||
-              (selectZone === "district" && option.subdistrict_id) ||
-              (selectZone === "postalCode" && option.postal_code)
-            }
-            style={{ color: "black" }}
+            value={defaultValueId}
+            selected={true}
+            disabled={true}
+            hidden={true}
           >
-            {(selectZone === "postalCode" && option.postal_code) ||
-              (selectZone === "district" && option.subdistrict_name) ||
-              (selectZone === "city" && option.city_name) ||
-              (selectZone === "province" && option.zone_name)}
+            {defaultValue}
           </option>
-        ))}
+        )}
+        {selectZone
+          ? options.map((option, index) => (
+              <option
+                value={
+                  (selectZone === "city" && option.city_id) ||
+                  (selectZone === "province" && option.zone_apicityid) ||
+                  (selectZone === "district" && option.subdistrict_id) ||
+                  (selectZone === "postalCode" && option.postal_code)
+                }
+                style={{ color: "black" }}
+              >
+                {(selectZone === "postalCode" && option.postal_code) ||
+                  (selectZone === "district" && option.subdistrict_name) ||
+                  (selectZone === "city" && option.city_name) ||
+                  (selectZone === "province" && option.zone_name)}
+              </option>
+            ))
+          : options.map((option, index) => (
+              <option
+                key={option.value}
+                value={option.value}
+                defaultValue={index === 0 && "selected"}
+              >
+                {option.text}
+              </option>
+            ))}
       </Select>
     )}
     {type === "textarea" && (
