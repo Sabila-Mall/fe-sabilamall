@@ -13,6 +13,7 @@ import {
 import { Box, Text } from "@chakra-ui/layout";
 import { formatNumber } from "../utils/functions";
 import { IoCreateOutline } from "react-icons/io5";
+import { IMAGE_HOST } from "../constants/api";
 
 const EditableControls = () => {
   const { getEditButtonProps } = useEditableControls();
@@ -26,23 +27,28 @@ const EditableControls = () => {
   );
 };
 
-/**
- * @param {string} id Id produk
- * @param {string} gambar Source path dari gambar produk
- * @param {string} nama Nama gambar
- * @param {string} deskripsi Deskripsi produk
- * @param {int} berat Berat produk
- * @param {int} diskon Diskon produk
- * @param {int} harga Harga produk
- * @param {int} jumlah Jumlah produk yang tersedia
- */
 
-
-const CheckoutProduct = ({ gambar, nama, deskripsi, berat, diskon, harga, jumlah }) => {
+const CheckoutProduct = ({ product }) => {
   const { width } = useWindowSize();
   const isSmartphone = width < 768;
 
-  const realPrice = diskon === 0 ? harga : (harga * (100 - diskon)) / 100;
+  const gambarURL = product.products_image_path_medium
+  const discount = Number(product.products_discount)
+  const berat = Number(product.products_weight)
+  const harga = Number(product.products_price)
+  const nama = product.products_name
+  const varian = product?.varian
+  const jumlah = product.customers_basket_quantity
+
+  let deskripsi = ""
+
+  if (varian) {
+    varian.forEach(element => {
+      deskripsi += element.products_options_values_name
+    });
+  }
+
+  const realPrice = discount === 0 ? harga : (harga * (100 - discount)) / 100;
 
   return (
     <Grid
@@ -64,7 +70,7 @@ const CheckoutProduct = ({ gambar, nama, deskripsi, berat, diskon, harga, jumlah
       <Box gridArea={"barang"}>
         <HStack spacing={"1rem"} align={"start"}>
           <Image
-            src={gambar}
+            src={IMAGE_HOST + gambarURL}
             alt="Gambar produk"
             borderRadius={"0.625rem"}
             boxSize={"3rem"}
@@ -109,7 +115,7 @@ const CheckoutProduct = ({ gambar, nama, deskripsi, berat, diskon, harga, jumlah
         >
           <Box textAlign={{ base: "right", lg: "left" }}>
             {
-              diskon !== 0 &&
+              discount !== 0 &&
               <Text fontSize={"0.75rem"} as={"s"} color={"gray.400"}>
                 Rp{formatNumber(harga)}
               </Text>
@@ -117,7 +123,7 @@ const CheckoutProduct = ({ gambar, nama, deskripsi, berat, diskon, harga, jumlah
             <Text color={"gray.700"}>Rp{formatNumber(realPrice)}</Text>
           </Box>
           {
-            diskon !== 0 &&
+            discount !== 0 &&
             <Square
               color={"white"}
               bg={"red.500"}
@@ -126,7 +132,7 @@ const CheckoutProduct = ({ gambar, nama, deskripsi, berat, diskon, harga, jumlah
               py={"0.25rem"}
               fontSize={{ base: "0.5rem", md: "0.875rem" }}
             >
-              Diskon {diskon}%
+              Diskon {discount}%
             </Square>
           }
         </Stack>

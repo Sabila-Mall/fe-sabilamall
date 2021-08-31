@@ -73,15 +73,13 @@ const RingkasanPesanan = ({ daftarProduk }) => {
     kodePosPenerima,
     alamatPenerima,
   } = useCheckoutContext();
-  let totalPrice = 0, totalQuantity = 0, totalDiscount = 0, totalWeight = 0
+
+  let products = [];
 
   if (typeof window !== 'undefined') {
     const checkoutData = JSON.parse(localStorage.getItem("selectedProduct"))
     if (checkoutData) {
-      totalPrice = checkoutData.total_price
-      totalQuantity = checkoutData.quantity
-      totalWeight = checkoutData.weight
-      totalDiscount = checkoutData.discount
+      products = checkoutData.products
     }
   }
   return (
@@ -174,8 +172,8 @@ const RingkasanPesanan = ({ daftarProduk }) => {
             <Text textAlign="center">Subtotal</Text>
           </Grid>
         )}
-        {daftarProduk.map((produk) => (
-          <CheckoutProduct key={produk.id} {...produk} />
+        {products.map((produk) => (
+          <CheckoutProduct key={produk.customers_basket_id} product={produk} />
         ))}
       </VStack>
     </>
