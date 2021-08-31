@@ -17,6 +17,8 @@ export const CartProvider = ({ children }) => {
     const [selectedPrice, setselectedPrice] = useState(0)
     const [selectedItem, setselectedItem] = useState([])
     const [cartDataByVendor, setcartDataByVendor] = useState([])
+    const [selectedWeight, setselectedWeight] = useState(0)
+    const [selectedQuantity, setselectedQuantity] = useState(0)
     const router = useRouter()
 
     const { userData } = useAuthContext();
@@ -111,6 +113,8 @@ export const CartProvider = ({ children }) => {
     const checkoutValidation = () => {
         if (selectedItem.length) {
             let tempVendor = selectedItem[0].vendors_id
+            let tempWeight = 0
+            let tempQuantity = 0
 
             for (let i = 0; i < selectedItem.length; i++) {
                 if (selectedItem[i].vendors_id != tempVendor) {
@@ -120,6 +124,16 @@ export const CartProvider = ({ children }) => {
                 tempVendor = selectedItem[i].vendors_id
             }
             router.push("/alamat-penerima")
+
+            selectedItem.forEach(element => {
+                tempWeight += element.products_weight * element.customers_basket_quantity
+                tempQuantity += element.customers_basket_quantity
+            });
+
+            console.log(tempWeight);
+            console.log(tempQuantity);
+            setselectedQuantity(tempQuantity)
+            setselectedWeight(tempWeight)
             console.log(selectedItem);
             console.log(selectedPrice);
             console.log(totalDiscount);
@@ -226,7 +240,9 @@ export const CartProvider = ({ children }) => {
             deleteFromCheckout,
             selectedPrice,
             cartDataByVendor,
-            checkoutValidation
+            checkoutValidation,
+            selectedWeight,
+            selectedQuantity
         }} >
             {children}
         </CartContext.Provider>

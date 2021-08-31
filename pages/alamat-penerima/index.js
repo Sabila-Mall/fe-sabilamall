@@ -41,10 +41,12 @@ import { ErrorToast, SuccessToast } from "../../components/Toast";
 import { useAuthContext } from "../../contexts/authProvider";
 import { useCheckoutContext } from "../../contexts/checkoutProvider";
 import { extractName, numberWithDot } from "../../utils/functions";
+import { useCartContext } from "../../contexts/cartProvider";
 
 const AlamatPenerima = () => {
   const { userData } = useAuthContext();
   const { addCheckoutData } = useCheckoutContext();
+  const { selectedQuantity, selectedPrice, totalDiscount, selectedWeight } = useCartContext()
   const userId = userData?.id;
   const router = useRouter();
   // const userId = 6089;
@@ -182,12 +184,12 @@ const AlamatPenerima = () => {
           setDataPengirim(
             res
               ? [
-                  ...res?.map((d) => ({
-                    nama: d.firstname + " " + d.lastname,
-                    nomor: d.phone,
-                    ...d,
-                  })),
-                ]
+                ...res?.map((d) => ({
+                  nama: d.firstname + " " + d.lastname,
+                  nomor: d.phone,
+                  ...d,
+                })),
+              ]
               : [],
           );
         })
@@ -202,18 +204,18 @@ const AlamatPenerima = () => {
           setDataPenerima(
             res && Array.isArray(res)
               ? [
-                  ...res?.map((d) => ({
-                    nama: d.firstname + " " + d.lastname,
-                    nomor: d.phone,
-                    alamat: `${d.street}, ${d.subdistrict_name}, ${d.city_name}, ${d.zone_name}`,
-                    address_id: d.address_id,
-                    city_id: d.zone_apicityid,
-                    zone_id: d.zone_id,
-                    subdistrict_id: d.subdistrict_id,
-                    postcode: d.postcode,
-                    district_id: d.district,
-                  })),
-                ]
+                ...res?.map((d) => ({
+                  nama: d.firstname + " " + d.lastname,
+                  nomor: d.phone,
+                  alamat: `${d.street}, ${d.subdistrict_name}, ${d.city_name}, ${d.zone_name}`,
+                  address_id: d.address_id,
+                  city_id: d.zone_apicityid,
+                  zone_id: d.zone_id,
+                  subdistrict_id: d.subdistrict_id,
+                  postcode: d.postcode,
+                  district_id: d.district,
+                })),
+              ]
               : [],
           );
         })
@@ -1107,7 +1109,7 @@ const AlamatPenerima = () => {
                   fontWeight="500"
                   isTruncated
                 >
-                  {ringkasan.pcs} pcs
+                  {selectedQuantity} pcs
                 </Text>
               </Box>
               <Box
@@ -1130,7 +1132,7 @@ const AlamatPenerima = () => {
                   fontWeight="500"
                   isTruncated
                 >
-                  {ringkasan.weight} gr
+                  {selectedWeight} gr
                 </Text>
               </Box>
               <Divider orientation="horizontal" marginY="0.5rem" />
@@ -1162,7 +1164,7 @@ const AlamatPenerima = () => {
                   fontWeight="500"
                   isTruncated
                 >
-                  Rp{numberWithDot(ringkasan.subTotal)}
+                  Rp{numberWithDot(selectedPrice)}
                 </Text>
               </Box>
               <Box
@@ -1185,7 +1187,7 @@ const AlamatPenerima = () => {
                   fontWeight="500"
                   isTruncated
                 >
-                  Rp{numberWithDot(ringkasan.discount)}
+                  Rp{numberWithDot(totalDiscount)}
                 </Text>
               </Box>
               <Box
@@ -1233,7 +1235,7 @@ const AlamatPenerima = () => {
                   fontSize="1.25rem"
                   isTruncated
                 >
-                  Rp{numberWithDot(ringkasan.subTotal - ringkasan.discount)}
+                  Rp{numberWithDot(selectedPrice - totalDiscount)}
                 </Text>
               </Box>
             </Box>
