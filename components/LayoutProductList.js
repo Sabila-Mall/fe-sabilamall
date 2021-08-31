@@ -20,25 +20,29 @@ import {
 } from "@chakra-ui/react";
 import { IoArrowDown, IoChevronDown, IoFilterOutline } from "react-icons/io5";
 
+import { useAuthContext } from "../contexts/authProvider";
 import styles from "../styles/Product.module.scss";
 import CardProduct from "./CardProduct";
 
 const px = { base: "1rem", md: "1.5rem", lg: "3rem", xl: "50px" };
 
-const LayoutProductList = ({ data, loading, handleLoadMore, handleFilter, sorting = true, title = true }) => {
+const LayoutProductList = ({
+  data,
+  loading,
+  handleLoadMore,
+  handleFilter,
+  sorting = true,
+  title = true,
+}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const { userData } = useAuthContext();
   function handleFilterWrapper(filter) {
     onClose();
     handleFilter(filter);
   }
 
   return (
-    <Box
-      bg="white"
-      pb="100px"
-      px={px}
-    >
+    <Box bg="white" pb="100px" px={px}>
       <Box
         className={styles.secondaryFont}
         mb="32px"
@@ -47,8 +51,7 @@ const LayoutProductList = ({ data, loading, handleLoadMore, handleFilter, sortin
         justifyContent="space-between"
         pr={{ lg: "40px" }}
       >
-        {
-          title &&
+        {title && (
           <Heading
             className={styles.primaryFont}
             color={"black"}
@@ -58,7 +61,7 @@ const LayoutProductList = ({ data, loading, handleLoadMore, handleFilter, sortin
           >
             Semua Produk
           </Heading>
-        }
+        )}
 
         <Icon
           onClick={onOpen}
@@ -66,25 +69,44 @@ const LayoutProductList = ({ data, loading, handleLoadMore, handleFilter, sortin
           fontSize="24px"
           display={{ base: "block", md: "none", lg: "none" }}
         />
-        <Modal isOpen={isOpen} onClose={onClose} isCentered={true} size="sm" motionPreset="slideInBottom">
+        <Modal
+          isOpen={isOpen}
+          onClose={onClose}
+          isCentered={true}
+          size="sm"
+          motionPreset="slideInBottom"
+        >
           <ModalOverlay />
           <ModalContent>
             <ModalBody>
               <VStack align="start" spacing="1rem" justify="center">
                 <Box onClick={() => handleFilterWrapper("")}>Paling Sesuai</Box>
-                <Box onClick={() => handleFilterWrapper("atoz")}>Urutkan (A-Z)</Box>
-                <Box onClick={() => handleFilterWrapper("ztoa")}>Urutkan (Z-A)</Box>
-                <Box onClick={() => handleFilterWrapper("hightolow")}>Harga (Tertinggi-Terendah)</Box>
-                <Box onClick={() => handleFilterWrapper("lowtohigh")}>Harga (Terendah-Tertinggi)</Box>
-                <Box onClick={() => handleFilterWrapper("topseller")}>Top Seller</Box>
-                <Box onClick={() => handleFilterWrapper("mostliked")}>Paling Disukai</Box>
-                <Box onClick={() => handleFilterWrapper("specials")}>Produk Spesial</Box>
+                <Box onClick={() => handleFilterWrapper("atoz")}>
+                  Urutkan (A-Z)
+                </Box>
+                <Box onClick={() => handleFilterWrapper("ztoa")}>
+                  Urutkan (Z-A)
+                </Box>
+                <Box onClick={() => handleFilterWrapper("hightolow")}>
+                  Harga (Tertinggi-Terendah)
+                </Box>
+                <Box onClick={() => handleFilterWrapper("lowtohigh")}>
+                  Harga (Terendah-Tertinggi)
+                </Box>
+                <Box onClick={() => handleFilterWrapper("topseller")}>
+                  Top Seller
+                </Box>
+                <Box onClick={() => handleFilterWrapper("mostliked")}>
+                  Paling Disukai
+                </Box>
+                <Box onClick={() => handleFilterWrapper("specials")}>
+                  Produk Spesial
+                </Box>
               </VStack>
             </ModalBody>
           </ModalContent>
         </Modal>
-        {
-          sorting &&
+        {sorting && (
           <Menu display={{ base: "none", md: "block" }}>
             <MenuButton
               px={4}
@@ -101,17 +123,33 @@ const LayoutProductList = ({ data, loading, handleLoadMore, handleFilter, sortin
               Urutkan Berdasarkan <Icon ml="30px" as={IoChevronDown} />
             </MenuButton>
             <MenuList>
-              <MenuItem onClick={() => handleFilter("")}>Paling Sesuai</MenuItem>
-              <MenuItem onClick={() => handleFilter("atoz")}>Urutkan (A-Z)</MenuItem>
-              <MenuItem onClick={() => handleFilter("ztoa")}>Urutkan (Z-A)</MenuItem>
-              <MenuItem onClick={() => handleFilter("hightolow")}>Harga (Tertinggi-Terendah)</MenuItem>
-              <MenuItem onClick={() => handleFilter("lowtohigh")}>Harga (Terendah-Tertinggi)</MenuItem>
-              <MenuItem onClick={() => handleFilter("topseller")}>Top Seller</MenuItem>
-              <MenuItem onClick={() => handleFilter("mostliked")}>Paling Disukai</MenuItem>
-              <MenuItem onClick={() => handleFilter("specials")}>Produk Spesial</MenuItem>
+              <MenuItem onClick={() => handleFilter("")}>
+                Paling Sesuai
+              </MenuItem>
+              <MenuItem onClick={() => handleFilter("atoz")}>
+                Urutkan (A-Z)
+              </MenuItem>
+              <MenuItem onClick={() => handleFilter("ztoa")}>
+                Urutkan (Z-A)
+              </MenuItem>
+              <MenuItem onClick={() => handleFilter("hightolow")}>
+                Harga (Tertinggi-Terendah)
+              </MenuItem>
+              <MenuItem onClick={() => handleFilter("lowtohigh")}>
+                Harga (Terendah-Tertinggi)
+              </MenuItem>
+              <MenuItem onClick={() => handleFilter("topseller")}>
+                Top Seller
+              </MenuItem>
+              <MenuItem onClick={() => handleFilter("mostliked")}>
+                Paling Disukai
+              </MenuItem>
+              <MenuItem onClick={() => handleFilter("specials")}>
+                Produk Spesial
+              </MenuItem>
             </MenuList>
           </Menu>
-        }
+        )}
       </Box>
       <Grid
         w="100%"
@@ -127,27 +165,28 @@ const LayoutProductList = ({ data, loading, handleLoadMore, handleFilter, sortin
         columnGap={2}
         rowGap={4}
       >
-        {
-          data.data.map((item, index) =>
-            loading
-              ? <Box
-                key={index} bg="white"
-                borderRadius="8px" border="1px solid #CBD5E0"
-              >
-                <Skeleton h="10rem" />
-                <Box padding="1.5rem">
-                  <SkeletonText noOfLines={2} mb="1rem" />
-                  <SkeletonText noOfLines={1} />
-                </Box>
+        {data.data.map((item, index) =>
+          loading ? (
+            <Box
+              key={index}
+              bg="white"
+              borderRadius="8px"
+              border="1px solid #CBD5E0"
+            >
+              <Skeleton h="10rem" />
+              <Box padding="1.5rem">
+                <SkeletonText noOfLines={2} mb="1rem" />
+                <SkeletonText noOfLines={1} />
               </Box>
-              : <Box key={item.id}>
-                <CardProduct  {...item} responsive={true} />
-              </Box>,
-          )
-        }
+            </Box>
+          ) : (
+            <Box key={item.id}>
+              <CardProduct {...item} responsive={true} />
+            </Box>
+          ),
+        )}
       </Grid>
-      {
-        data.currentPage !== data.lastPage &&
+      {data.currentPage !== data.lastPage && (
         <Center mt="1rem">
           <Button
             variant="outline"
@@ -162,7 +201,7 @@ const LayoutProductList = ({ data, loading, handleLoadMore, handleFilter, sortin
             Lihat Lebih Banyak <Icon as={IoArrowDown} ml=".5rem" />
           </Button>
         </Center>
-      }
+      )}
     </Box>
   );
 };

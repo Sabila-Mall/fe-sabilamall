@@ -1,20 +1,25 @@
+import {
+  Box,
+  Divider,
+  Flex,
+  Heading,
+  Skeleton,
+  SkeletonText,
+} from "@chakra-ui/react";
 import { useState } from "react";
-import { useWindowSize } from "../hooks/useWindowSize";
-import { Box, Divider, Flex, Heading, Skeleton, SkeletonText } from "@chakra-ui/react";
-import styles from "../styles/Product.module.scss";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import Slider from "react-slick";
+
+import { useAuthContext } from "../contexts/authProvider";
+import { useWindowSize } from "../hooks/useWindowSize";
+import styles from "../styles/Product.module.scss";
 import CardProduct from "./CardProduct";
 
 const px = { base: "1rem", md: "1.5rem", lg: "3rem", xl: "50px" };
 
-const LayoutSaleProducts = ({
-                              data,
-                              loading,
-                              headingText,
-                              hasBackground,
-                            }) => {
+const LayoutSaleProducts = ({ data, loading, headingText, hasBackground }) => {
   const [display, setDisplay] = useState("none");
+  const { userData } = useAuthContext();
   const { width } = useWindowSize();
   let ref = null;
 
@@ -79,12 +84,14 @@ const LayoutSaleProducts = ({
             {...settings}
           >
             {data.map((item, index) =>
-              loading
-                ?
+              loading ? (
                 <Flex key={index}>
                   <Box
-                    key={index} bg="white" mr="1rem"
-                    borderRadius="8px" border="1px solid #CBD5E0"
+                    key={index}
+                    bg="white"
+                    mr="1rem"
+                    borderRadius="8px"
+                    border="1px solid #CBD5E0"
                   >
                     <Skeleton h="12rem" />
                     <Box padding="1.5rem">
@@ -93,7 +100,9 @@ const LayoutSaleProducts = ({
                     </Box>
                   </Box>
                 </Flex>
-                : <CardProduct key={item.id} {...item} />,
+              ) : (
+                <CardProduct key={item.id} {...item} />
+              ),
             )}
           </Slider>
         </Box>
@@ -149,5 +158,6 @@ const LayoutSaleProducts = ({
 
 export default LayoutSaleProducts;
 
-{/*<CardProduct key={item.id} {...item} />*/
+{
+  /*<CardProduct key={item.id} {...item} />*/
 }

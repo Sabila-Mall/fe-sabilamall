@@ -26,8 +26,12 @@ const CardProduct = ({
   responsive,
   liked_customers_id,
   isWishlist = false,
+  isLiked,
 }) => {
   const router = useRouter();
+  console.log(isLiked);
+  const { isLoggedIn, userData } = useAuthContext();
+
   const [imageHeight, setImageHeight] = useState(144);
   const realPriceString = numberWithDot(price.replace(/\.(.*?[0]{1,2})/g, ""));
   const priceAfterDiscount = discount
@@ -35,13 +39,13 @@ const CardProduct = ({
     : null;
   const timeLeft = endTime && calculateTimeLeft(endTime);
 
-  const [liked, setLiked] = useState(isWishlist);
+  const [liked, setLiked] = useState(isLiked === "1");
   const { addItem, deleteItem } = useWishlistContext();
   const handleClickWishlist = () => {
     if (liked) {
-      deleteItem(liked_products_id, liked_customers_id);
+      deleteItem(liked_products_id, userData?.id);
     } else {
-      addItem(liked_products_id, liked_customers_id);
+      addItem(liked_products_id, userData?.id);
     }
     setLiked((prev) => !prev);
   };
@@ -159,15 +163,17 @@ const CardProduct = ({
             lineHeight="20.8px"
           >
             <Text>Rp {priceAfterDiscount ?? realPriceString}</Text>
-            <Icon
-              onClick={(e) => {
-                e.stopPropagation();
-                handleClickWishlist();
-                // setLiked((prev) => !prev)
-              }}
-              as={liked ? IoHeart : IoHeartOutline}
-              color={liked ? "red.500" : "black"}
-            ></Icon>
+            {isLoggedIn && (
+              <Icon
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleClickWishlist();
+                  // setLiked((prev) => !prev)
+                }}
+                as={liked ? IoHeart : IoHeartOutline}
+                color={liked ? "red.500" : "black"}
+              ></Icon>
+            )}
           </Box>
         </Box>
       </Box>

@@ -78,7 +78,9 @@ export const CardProfile = ({ sm, cardProfileText, userData }) => {
     >
       <Flex align="center" direction="column">
         <Avatar
+          color="white"
           size="xl"
+          background="blue.800"
           name={`${userData?.first_name}${userData?.last_name && " "}
           ${userData?.last_name}`}
           src={userData?.avatar}

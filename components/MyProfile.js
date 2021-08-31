@@ -22,7 +22,7 @@ const MyProfile = () => {
 
   const { userData } = useAuthContext();
 
-  console.log(errors);
+  console.log(userData);
 
   useEffect(() => {
     if (userData?.id) {

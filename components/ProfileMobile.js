@@ -82,6 +82,8 @@ const ProfileMobile = () => {
                 >
                   <Avatar
                     size="lg"
+                    background="blue.800"
+                    color="white"
                     name={`${userData?.first_name}${userData?.last_name && " "}
                     ${userData?.last_name}`}
                     src={userData?.avatar}
