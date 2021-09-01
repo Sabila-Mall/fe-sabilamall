@@ -109,7 +109,7 @@ export const ProductCart = ({ isDiscount, product }) => {
         className="secondaryFont"
         color={"gray.400"}
         fontSize={"0.75rem"}
-        defaultValue={product?.customers_basket_notes || ""}
+        defaultValue={product?.customers_basket_notes || "tambahkan Catatan"}
         isPreviewFocusable={false}
       >
         <HStack spacing={"0.25rem"}>
