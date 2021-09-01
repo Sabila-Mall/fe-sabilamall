@@ -451,7 +451,17 @@ const DetailPesanan = () => {
   const [paymentDesc, setPaymentDesc] = useState("");
 
   useEffect(() => {
-    getKurir()
+    getKurir(
+      userData?.id,
+      // postcode,
+      city_id,
+      zone_id,
+      subDistrict_id,
+      subSubDistrict_id,
+      weight,
+      vendor_id,
+      vendor_origin,
+    )
       .then((res) => {
         setKurir(res.data.data.kurirIndonesia.services);
       })
