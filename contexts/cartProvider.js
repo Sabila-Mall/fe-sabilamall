@@ -2,7 +2,7 @@ import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
 
-import { addCart, apiGetCartByCustomerID, deleteCart, updateCartQuantity } from "../api/cart";
+import { addCart, apiGetCartByCustomerID, deleteCart, editCartNotes, updateCartQuantity } from "../api/cart";
 import { isRequestSuccess } from "../utils/api";
 import { useAuthContext } from "./authProvider";
 
@@ -188,6 +188,23 @@ export const CartProvider = ({ children }) => {
 
     }
 
+    const editCartItemNotes = async (customers_id, customers_basket_id, customers_basket_notes) => {
+        editCartNotes({ customers_id, customers_basket_id, customers_basket_notes })
+            .then((res) => {
+                console.log(res);
+                if (isRequestSuccess(res)) {
+                    successToast("Berhasil menambahkan catatan produk")
+                    getAllData()
+                } else {
+                    errorToast("Gagal menambahkan catatan produk")
+                    getAllData()
+                }
+            })
+            .catch(() => {
+                errorToast("Gagal menambahkan catatan produk")
+            })
+    }
+
     const addCartItem = async (customers_id, user_level, products_id, quantity, option_id, option_values_id) => {
         addCart({ customers_id, user_level, products_id, quantity, option_id, option_values_id })
             .then((res) => {
@@ -258,7 +275,8 @@ export const CartProvider = ({ children }) => {
             cartDataByVendor,
             checkoutValidation,
             selectedWeight,
-            selectedQuantity
+            selectedQuantity,
+            editCartItemNotes
         }} >
             {children}
         </CartContext.Provider>

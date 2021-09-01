@@ -1,36 +1,19 @@
 import { useWindowSize } from "../hooks/useWindowSize";
 import {
-  Editable, EditableInput,
-  EditablePreview,
   Grid,
   Heading,
   HStack,
-  IconButton, Image,
+  Image,
   Square,
   Stack,
-  useEditableControls,
 } from "@chakra-ui/react";
 import { Box, Text } from "@chakra-ui/layout";
 import { formatNumber } from "../utils/functions";
 import { IoCreateOutline } from "react-icons/io5";
 import { IMAGE_HOST } from "../constants/api";
-import { useState } from "react";
-
-const EditableControls = () => {
-  const { getEditButtonProps } = useEditableControls();
-
-  return (
-    <IconButton
-      icon={<IoCreateOutline />}
-      variant={"ghost"}
-      {...getEditButtonProps()}
-    />
-  );
-};
 
 
 const CheckoutProduct = ({ product }) => {
-  const [notes, setnotes] = useState("")
   const { width } = useWindowSize();
   const isSmartphone = width < 768;
 
@@ -92,23 +75,6 @@ const CheckoutProduct = ({ product }) => {
             </Text>
           </Box>
         </HStack>
-        {
-          <Editable
-            className="secondaryFont"
-            color={"gray.400"}
-            fontSize={"0.75rem"}
-            defaultValue="Tambah catatan"
-            isPreviewFocusable={false}
-          >
-            <HStack spacing={"0.25rem"}>
-              <EditableControls />
-              <Box>
-                <EditablePreview />
-                <EditableInput color="black" onChange={(e) => setnotes(e.target.value)} />
-              </Box>
-            </HStack>
-          </Editable>
-        }
       </Box>
       <Box
         gridArea={"harga"}

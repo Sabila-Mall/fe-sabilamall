@@ -1,21 +1,27 @@
-import { Divider, Text } from "@chakra-ui/layout";
-import { VStack } from "@chakra-ui/layout";
+import { Text } from "@chakra-ui/layout";
+import { VStack, HStack } from "@chakra-ui/layout";
 import { Flex, Box } from "@chakra-ui/layout";
-import { Checkbox, Image, Radio } from "@chakra-ui/react";
-import { useState, createRef } from "react";
+import { Checkbox, IconButton, Image } from "@chakra-ui/react";
+import { Editable, EditableInput, EditablePreview, useEditableControls } from "@chakra-ui/react"
+import { useState, createRef, useRef, useEffect } from "react";
 import { IMAGE_HOST } from "../constants/api";
 import { useAuthContext } from "../contexts/authProvider";
 import { useCartContext } from "../contexts/cartProvider";
+import { IoCreateOutline } from "react-icons/io5";
 
 import { CartPrice } from "./CartPrice";
-
 export const ProductCart = ({ isDiscount, product }) => {
   const { userData } = useAuthContext();
-  const { addToCheckout, deleteFromCheckout } = useCartContext();
+  const userId = userData?.id
+  const { addToCheckout, deleteFromCheckout, editCartItemNotes } = useCartContext();
 
   const productName = product?.products_name
   const productPath = product?.products_image_path
   const productPrice = product?.final_price
+  const customerBasket = product?.customers_basket_id
+
+  const focusOut = useRef(null)
+
   const varian = product?.varian
   let inputRef = createRef()
   const handleCheckbox = () => {
@@ -25,12 +31,36 @@ export const ProductCart = ({ isDiscount, product }) => {
       deleteFromCheckout(product)
     }
   }
+
+  useEffect(() => {
+    const onFocusOut = (event) => {
+      console.log(userId, customerBasket);
+      editCartItemNotes(userId, customerBasket, event.target.value)
+    }
+    focusOut.current.addEventListener("focusout", onFocusOut)
+    return () => {
+      focusOut.current?.removeEventListener("focusout", onFocusOut)
+    }
+  }, [])
+
+  const EditableControls = () => {
+    const { getEditButtonProps } = useEditableControls();
+
+    return (
+      <IconButton
+        icon={<IoCreateOutline />}
+        variant={"ghost"}
+        {...getEditButtonProps()}
+      />
+    );
+  };
   return (
-    <Box width="100%" px={{ base: "1rem", md: 0 }} as="label" onClick={() => handleCheckbox()}>
+    <Box width="100%" px={{ base: "1rem", md: 0 }} onClick={() => handleCheckbox()}>
       <Flex
         alignItems="start"
         justifyContent={{ base: "center", md: "start" }}
         justifyContent="flex-start"
+        as="label"
       >
         <Checkbox alignSelf="center" mr="20px" ref={inputRef}></Checkbox>
         <Flex
@@ -45,7 +75,7 @@ export const ProductCart = ({ isDiscount, product }) => {
             h={{ base: "5em", sm: "8em", md: "6em" }}
           >
             <Image
-              layout="fill"
+              h="100%"
               quality={100}
               src={IMAGE_HOST + productPath}
             />
@@ -74,6 +104,22 @@ export const ProductCart = ({ isDiscount, product }) => {
           </Box>
         </Flex>
       </Flex>
+      <Editable
+        mt="0.75rem"
+        className="secondaryFont"
+        color={"gray.400"}
+        fontSize={"0.75rem"}
+        defaultValue={product?.customers_basket_notes || ""}
+        isPreviewFocusable={false}
+      >
+        <HStack spacing={"0.25rem"}>
+          <EditableControls />
+          <Box>
+            <EditablePreview />
+            <EditableInput color="black" ref={focusOut} />
+          </Box>
+        </HStack>
+      </Editable>
     </Box>
   );
 };

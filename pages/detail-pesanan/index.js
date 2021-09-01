@@ -63,18 +63,8 @@ const RingkasanPesanan = ({ daftarProduk }) => {
 
   const router = useRouter();
   const {
-    namaPengirim,
-    nomorPengirim,
-    namaPenerima,
-    nomorPenerima,
-    provinsiPenerima,
-    kotaPenerima,
-    kecamatanPenerima,
-    kodePosPenerima,
-    alamatPenerima,
     checkoutData
   } = useCheckoutContext();
-  console.log(checkoutData);
 
   let products = [];
 
@@ -661,28 +651,27 @@ const DetailPesanan = () => {
                 <Voucher voucher={voucher} setVoucher={setVoucher} />
               </SimpleGrid>
               <Confirmation setPersetujuan={setPersetujuan} />
-              <Flex justify="space-between">
+              <Flex justify="space-between" direction={{ base: "column", md: "row" }}>
                 <Button
                   className="primaryFont"
                   borderColor="gray.500"
                   variant="outline"
                   color="gray.500"
-                  flexGrow={{ base: 1, xl: 0 }}
+                  // flexGrow={{ base: 1, xl: 0 }}
                   onClick={() => router.push("/alamat-penerima")}
                 >
                   Sebelumnya
                 </Button>
-                {isDesktop && (
-                  <Button
-                    className="primaryFont"
-                    bg="red.500"
-                    color="white"
-                    onClick={onSubmit}
-                    disabled={!persetujuan}
-                  >
-                    Pesan Sekarang
-                  </Button>
-                )}
+                <Button
+                  mt={{ base: "1rem", md: "0" }}
+                  className="primaryFont"
+                  bg="red.500"
+                  color="white"
+                  onClick={onSubmit}
+                  disabled={!persetujuan}
+                >
+                  Pesan Sekarang
+                </Button>
               </Flex>
             </VStack>
           </Box>
