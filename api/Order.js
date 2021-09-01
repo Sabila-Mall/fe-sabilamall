@@ -51,37 +51,20 @@ export const getKurir = (
   vendorId,
   vendorOrigin,
 ) => {
-  return axios.post(
-    HOST + "/api/shipping/get_all_shipping",
-    // {
-    //   customers_id: customerId,
-    //   countries_id: 100,
-    //   postcode: postCode,
-    //   city_id: cityId,
-    //   zone_id: zoneId,
-    //   subdistrict_id: subDistrictId,
-    //   subsubdistrict_id: subSubDistrictId,
-    //   language_id: 1,
-    //   currency_code: "IDR",
-    //   weight: weight,
-    //   vendors_id: vendorId,
-    //   vendors_origin: vendorOrigin,
-    // },
-    {
-      customers_id: 3,
-      countries_id: 100,
-      postcode: 16918,
-      city_id: 78,
-      zone_id: 190,
-      subdistrict_id: 1028,
-      subsubdistrict_id: 8188,
-      language_id: 1,
-      currency_code: "IDR",
-      weight: 200,
-      vendors_id: 939,
-      vendors_origin: 115,
-    },
-  );
+  return axios.post(HOST + "/api/shipping/get_all_shipping", {
+    customers_id: customerId,
+    countries_id: 100,
+    postcode: postCode,
+    city_id: cityId,
+    zone_id: zoneId,
+    subdistrict_id: subDistrictId,
+    subsubdistrict_id: subSubDistrictId,
+    language_id: 1,
+    currency_code: "IDR",
+    weight: weight,
+    vendors_id: vendorId,
+    vendors_origin: vendorOrigin,
+  });
 };
 
 export const getPaymentMethod = (
@@ -93,10 +76,10 @@ export const getPaymentMethod = (
 ) => {
   return axios.post(HOST + "/api/payment/get_payment_method", {
     language_id: "1",
-    vendors_id: ["703"],
-    users_id: "859",
-    productsjenis: ["reguler"],
-    totalorder: "15000",
-    kurir: "SiCepat - Reg",
+    vendors_id: [`${vendors_id}`],
+    users_id: `${users_id}`,
+    productsjenis: [`${products_jenis}`],
+    totalorder: `${totalorder}`,
+    kurir: kurir,
   });
 };

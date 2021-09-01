@@ -470,7 +470,13 @@ const DetailPesanan = () => {
   }, []);
 
   useEffect(() => {
-    getPaymentMethod()
+    getPaymentMethod(
+      // vendors_id, ini dari abduh
+      userData?.id,
+      // products_jenis, ini dari abduh
+      // totalorder, ini dari abduh
+      pengiriman.name,
+    )
       .then((res) => {
         setPaymentMethod(res.data.data);
       })
