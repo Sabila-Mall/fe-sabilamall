@@ -510,7 +510,7 @@ const DetailPesanan = () => {
     console.log(weight, vendors_id, vendor_origin, totalOrder, products_jenis);
 
     apiPlaceOrder(
-      checkoutData.vendors_id,
+      vendors_id,
       arrayOfCustomerBasket,
       pengiriman.destination,
       checkoutData.userId,

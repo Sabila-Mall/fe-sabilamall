@@ -4,7 +4,6 @@ import { IoCopyOutline } from "react-icons/io5";
 import { Layout } from "../../components/Layout";
 import { useCheckoutContext } from "../../contexts/checkoutProvider";
 import { copyToClipboard, currencyFormat } from "../../utils/functions";
-import { currencyFormat } from "../../utils/functions";
 
 const path = [
   {
