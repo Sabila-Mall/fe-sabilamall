@@ -72,14 +72,16 @@ const RingkasanPesanan = ({ daftarProduk }) => {
     kecamatanPenerima,
     kodePosPenerima,
     alamatPenerima,
+    checkoutData
   } = useCheckoutContext();
+  console.log(checkoutData);
 
   let products = [];
 
   if (typeof window !== "undefined") {
-    const checkoutData = JSON.parse(localStorage.getItem("selectedProduct"));
-    if (checkoutData) {
-      products = checkoutData.products;
+    const localCheckout = JSON.parse(localStorage.getItem("selectedProduct"));
+    if (localCheckout) {
+      products = localCheckout.products;
     }
   }
   return (
@@ -109,10 +111,10 @@ const RingkasanPesanan = ({ daftarProduk }) => {
           </Flex>
 
           <Text fontWeight="bold" className="primaryFont">
-            {namaPengirim}
+            {checkoutData.namaPengirim}
           </Text>
           <Text className="primaryFont" fontWeight="normal">
-            {formatPhoneNumber(nomorPengirim)}
+            {formatPhoneNumber(checkoutData.nomorPengirim)}
           </Text>
         </Box>
 
@@ -137,15 +139,20 @@ const RingkasanPesanan = ({ daftarProduk }) => {
           </Flex>
 
           <Text fontWeight="bold" className="primaryFont">
-            {namaPenerima}
+            {checkoutData.namaPenerima}
           </Text>
           <Text className="primaryFont" fontWeight="normal">
-            {formatPhoneNumber(nomorPenerima)}
+            {formatPhoneNumber(checkoutData.nomorPenerima)}
           </Text>
 
           <Spacer h="0.5rem" />
 
-          <Text className="secondaryFont">{alamatPenerima}</Text>
+          <Text className="secondaryFont">{(checkoutData.jalanPenerima ? checkoutData.jalanPenerima : "")
+            + (checkoutData.kecamatanPenerima ? `, ${checkoutData.kecamatanPenerima}` : "")
+            + (checkoutData.kotaPenerima ? `, ${checkoutData.kotaPenerima}` : "")
+            + (checkoutData.provinsiPenerima ? `, ${checkoutData.provinsiPenerima}` : "")
+            + (checkoutData.postcode ? `, ${checkoutData.postcode}` : "")
+          }</Text>
         </Box>
       </SimpleGrid>
       <VStack
@@ -325,7 +332,7 @@ const MetodePembayaran = ({
                 allowMouseWheel
                 textAlign="right"
                 onChange={(e) => handleDiskonPengiriman(e)}
-                // isDisabled={true}
+              // isDisabled={true}
               >
                 <NumberInputField textAlign="right" />
               </NumberInput>
@@ -452,12 +459,23 @@ const DetailPesanan = () => {
   const [paymentDesc, setPaymentDesc] = useState("");
 
   let arrayOfCustomerBasket = []
-  const products = JSON.parse(localStorage.getItem("selectedProduct"))
-  if (products.products) {
-    products.products.forEach(element => {
-      arrayOfCustomerBasket.push(element.customers_basket_id)
-    });
+  let weight, vendors_id, vendor_origin, totalOrder, products_jenis
+
+  if (typeof window !== "undefined") {
+    const products = JSON.parse(localStorage.getItem("selectedProduct"))
+    const productItems = products.products
+    if (productItems) {
+      productItems.forEach(element => {
+        arrayOfCustomerBasket.push(element.customers_basket_id)
+      });
+      weight = products.weight
+      totalOrder = products.total_price
+      vendors_id = productItems[0].vendors_id
+      vendor_origin = productItems[0].vendors_origin
+      products_jenis = productItems[0].products_jenis
+    }
   }
+
 
   useEffect(() => {
     getKurir(
@@ -467,9 +485,9 @@ const DetailPesanan = () => {
       checkoutData?.zone_id,
       checkoutData?.district_id,
       checkoutData?.subdistrict_id,
-      // weight, ini dari abduh
-      // vendor_id, ini dari abduh
-      // vendor_origin, ini dari abduh
+      weight,
+      vendors_id,
+      vendor_origin,
     )
       .then((res) => {
         setKurir(res.data.data.kurirIndonesia.services);
@@ -479,10 +497,10 @@ const DetailPesanan = () => {
 
   useEffect(() => {
     getPaymentMethod(
-      // vendors_id, ini dari abduh
+      vendors_id,
       userData?.id,
-      // products_jenis, ini dari abduh
-      // totalorder, ini dari abduh
+      products_jenis,
+      totalOrder,
       pengiriman.name,
     )
       .then((res) => {
@@ -499,6 +517,7 @@ const DetailPesanan = () => {
     console.log("METODE PEMBAYARAN", metodePembayaran);
     console.log("VOUCHER", voucher);
     console.log("PRODUCT BASKET", arrayOfCustomerBasket);
+    console.log(weight, vendors_id, vendor_origin, totalOrder, products_jenis);
 
     apiPlaceOrder(
       checkoutData.vendors_id,
