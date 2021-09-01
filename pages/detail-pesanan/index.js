@@ -36,6 +36,7 @@ import {
   daftarMetodePembayaran,
   daftarProduk,
 } from "../../constants/dummyData";
+import { useAuthContext } from "../../contexts/authProvider";
 import { useCheckoutContext } from "../../contexts/checkoutProvider";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import {
@@ -57,7 +58,6 @@ import {
  */
 
 const RingkasanPesanan = ({ daftarProduk }) => {
-
   const { width } = useWindowSize();
   const isSmartphone = width < 768;
 
@@ -76,10 +76,10 @@ const RingkasanPesanan = ({ daftarProduk }) => {
 
   let products = [];
 
-  if (typeof window !== 'undefined') {
-    const checkoutData = JSON.parse(localStorage.getItem("selectedProduct"))
+  if (typeof window !== "undefined") {
+    const checkoutData = JSON.parse(localStorage.getItem("selectedProduct"));
     if (checkoutData) {
-      products = checkoutData.products
+      products = checkoutData.products;
     }
   }
   return (
@@ -192,12 +192,12 @@ const RingkasanPesanan = ({ daftarProduk }) => {
  * @param {function} setPengiriman Function buat ngubah pengiriman
  */
 const Pengiriman = ({ kurir, pengiriman, handler }) => {
-  let totalWeight = 0
+  let totalWeight = 0;
 
-  if (typeof window !== 'undefined') {
-    const checkoutData = JSON.parse(localStorage.getItem("selectedProduct"))
+  if (typeof window !== "undefined") {
+    const checkoutData = JSON.parse(localStorage.getItem("selectedProduct"));
     if (checkoutData) {
-      totalWeight = checkoutData.weight
+      totalWeight = checkoutData.weight;
     }
   }
   return (
@@ -325,7 +325,7 @@ const MetodePembayaran = ({
                 allowMouseWheel
                 textAlign="right"
                 onChange={(e) => handleDiskonPengiriman(e)}
-              // isDisabled={true}
+                // isDisabled={true}
               >
                 <NumberInputField textAlign="right" />
               </NumberInput>
@@ -438,6 +438,7 @@ const DetailPesanan = () => {
   const isDesktop = width >= 1024;
   const router = useRouter();
 
+  const { userData } = useAuthContext();
   const { checkoutData, setOrderNumber, setSubtotal } = useCheckoutContext();
 
   const [catatanPesanan, setCatatanPesanan] = useState("");
@@ -459,7 +460,17 @@ const DetailPesanan = () => {
   }
 
   useEffect(() => {
-    getKurir()
+    getKurir(
+      userData?.id,
+      checkoutData?.postcode,
+      checkoutData?.city_id,
+      checkoutData?.zone_id,
+      checkoutData?.district_id,
+      checkoutData?.subdistrict_id,
+      // weight, ini dari abduh
+      // vendor_id, ini dari abduh
+      // vendor_origin, ini dari abduh
+    )
       .then((res) => {
         setKurir(res.data.data.kurirIndonesia.services);
       })
@@ -467,7 +478,13 @@ const DetailPesanan = () => {
   }, []);
 
   useEffect(() => {
-    getPaymentMethod()
+    getPaymentMethod(
+      // vendors_id, ini dari abduh
+      userData?.id,
+      // products_jenis, ini dari abduh
+      // totalorder, ini dari abduh
+      pengiriman.name,
+    )
       .then((res) => {
         setPaymentMethod(res.data.data);
       })
@@ -559,15 +576,18 @@ const DetailPesanan = () => {
     setMetodePembayaran(temp);
   };
 
-  let totalPrice = 0, totalQuantity = 0, totalDiscount = 0, totalWeight = 0
+  let totalPrice = 0,
+    totalQuantity = 0,
+    totalDiscount = 0,
+    totalWeight = 0;
 
-  if (typeof window !== 'undefined') {
-    const checkoutData = JSON.parse(localStorage.getItem("selectedProduct"))
+  if (typeof window !== "undefined") {
+    const checkoutData = JSON.parse(localStorage.getItem("selectedProduct"));
     if (checkoutData) {
-      totalPrice = checkoutData.total_price
-      totalQuantity = checkoutData.quantity
-      totalWeight = checkoutData.weight
-      totalDiscount = checkoutData.discount
+      totalPrice = checkoutData.total_price;
+      totalQuantity = checkoutData.quantity;
+      totalWeight = checkoutData.weight;
+      totalDiscount = checkoutData.discount;
     }
   }
 
