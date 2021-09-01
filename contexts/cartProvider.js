@@ -19,6 +19,7 @@ export const CartProvider = ({ children }) => {
     const [cartDataByVendor, setcartDataByVendor] = useState([])
     const [selectedWeight, setselectedWeight] = useState(0)
     const [selectedQuantity, setselectedQuantity] = useState(0)
+    const [selectedDiscount, setselectedDiscount] = useState(0)
     const router = useRouter()
 
     const { userData } = useAuthContext();
@@ -117,6 +118,7 @@ export const CartProvider = ({ children }) => {
             let tempJenis = selectedItem[0].products_jenis
             let tempWeight = 0
             let tempQuantity = 0
+            let tempDiscount = 0
 
             for (let i = 0; i < selectedItem.length; i++) {
                 if (selectedItem[i].vendors_id != tempVendor) {
@@ -133,26 +135,25 @@ export const CartProvider = ({ children }) => {
             selectedItem.forEach(element => {
                 tempWeight += element.products_weight * element.customers_basket_quantity
                 tempQuantity += element.customers_basket_quantity
+                if (element.products_discount) {
+                    tempDiscount += Number(element.products_discount) * element.customers_basket_quantity
+                }
             });
 
             const checkoutData = {
                 weight: tempWeight,
                 quantity: tempQuantity,
                 products: selectedItem,
-                discount: totalDiscount,
+                discount: tempDiscount,
                 total_price: selectedPrice
             }
 
             localStorage.setItem("selectedProduct", JSON.stringify(checkoutData))
-            const local = localStorage.getItem("selectedProduct")
-            console.log(JSON.parse(local));
-            console.log(tempWeight);
-            console.log(tempQuantity);
             setselectedQuantity(tempQuantity)
             setselectedWeight(tempWeight)
-            console.log(selectedItem);
-            console.log(selectedPrice);
-            console.log(totalDiscount);
+            setselectedDiscount(tempDiscount)
+            console.log(tempDiscount);
+            console.log(checkoutData);
         }
     }
 
@@ -161,6 +162,7 @@ export const CartProvider = ({ children }) => {
         tempData.push(data)
         setselectedItem(tempData)
         calculateTotalSelected(tempData)
+        calculateTotalDiscount(tempData)
     }
 
     const deleteFromCheckout = (data) => {
@@ -173,6 +175,7 @@ export const CartProvider = ({ children }) => {
         });
         setselectedItem(tempData)
         calculateTotalSelected(tempData)
+        calculateTotalDiscount(tempData)
     }
 
     const calculateTotalSelected = (data) => {
@@ -185,7 +188,17 @@ export const CartProvider = ({ children }) => {
             });
             setselectedPrice(tempTotal)
         }
+    }
 
+    const calculateTotalDiscount = (data) => {
+        setselectedDiscount(0)
+        if (data.length > 0) {
+            let tempTotal = 0
+            data.forEach(element => {
+                tempTotal += element.products_discount * element.customers_basket_quantity
+            });
+            setselectedDiscount(tempTotal)
+        }
     }
 
     const editCartItemNotes = async (customers_id, customers_basket_id, customers_basket_notes) => {
@@ -276,7 +289,8 @@ export const CartProvider = ({ children }) => {
             checkoutValidation,
             selectedWeight,
             selectedQuantity,
-            editCartItemNotes
+            editCartItemNotes,
+            selectedDiscount
         }} >
             {children}
         </CartContext.Provider>
