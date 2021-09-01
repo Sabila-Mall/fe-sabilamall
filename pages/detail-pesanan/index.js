@@ -450,6 +450,14 @@ const DetailPesanan = () => {
   const [paymentMethod, setPaymentMethod] = useState([]);
   const [paymentDesc, setPaymentDesc] = useState("");
 
+  let arrayOfCustomerBasket = []
+  const products = JSON.parse(localStorage.getItem("selectedProduct"))
+  if (products.products) {
+    products.products.forEach(element => {
+      arrayOfCustomerBasket.push(element.customers_basket_id)
+    });
+  }
+
   useEffect(() => {
     getKurir()
       .then((res) => {
@@ -473,10 +481,11 @@ const DetailPesanan = () => {
     console.log("PENGIRIMAN", pengiriman);
     console.log("METODE PEMBAYARAN", metodePembayaran);
     console.log("VOUCHER", voucher);
+    console.log("PRODUCT BASKET", arrayOfCustomerBasket);
 
     apiPlaceOrder(
       checkoutData.vendors_id,
-      // checkoutData.basket, // tanya abduh
+      arrayOfCustomerBasket,
       pengiriman.destination,
       checkoutData.userId,
       checkoutData.delivery_id,
