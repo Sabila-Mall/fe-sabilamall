@@ -114,12 +114,16 @@ export const CartProvider = ({ children }) => {
         if (selectedItem.length) {
             localStorage.setItem("selectedProduct", [])
             let tempVendor = selectedItem[0].vendors_id
+            let tempJenis = selectedItem[0].products_jenis
             let tempWeight = 0
             let tempQuantity = 0
 
             for (let i = 0; i < selectedItem.length; i++) {
                 if (selectedItem[i].vendors_id != tempVendor) {
                     errorToast("Vendor yang dipilih harus sama")
+                    return;
+                } else if (selectedItem[i].products_jenis != tempJenis) {
+                    errorToast("Jenis pembelian yang dipilih harus sama")
                     return;
                 }
                 tempVendor = selectedItem[i].vendors_id
