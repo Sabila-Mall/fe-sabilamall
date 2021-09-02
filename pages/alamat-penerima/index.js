@@ -45,6 +45,7 @@ const AlamatPenerima = () => {
     addressDataPenerima,
     addressDataPengirim,
     loading: loadingAddress,
+    getAllData,
   } = useAddressContext();
   console.log(addressDataPenerima, "ADD PENERIMA");
   const userId = userData?.id;
@@ -71,6 +72,16 @@ const AlamatPenerima = () => {
       isOnPage: true,
     },
   ];
+
+  if (
+    typeof window !== "undefined" &&
+    !JSON.parse(localStorage.getItem("selectedProduct"))
+  )
+    router.push("/404");
+
+  useEffect(() => {
+    getAllData();
+  }, []);
 
   let totalPrice = 0,
     totalQuantity = 0,
@@ -105,7 +116,7 @@ const AlamatPenerima = () => {
   const [nomorPenerima, setNomorPenerima] = useState("");
 
   const [loadingPage, setLoadingPage] = useState(true);
-
+  const [loadingAdding, setLoadingAdding] = useState(false);
   const [addressPenerima, setAddressPenerima] = useState({
     city_id: null,
     zone_id: null,
@@ -126,6 +137,7 @@ const AlamatPenerima = () => {
 
   const addAddressPengirim = async () => {
     try {
+      setLoadingAdding(true);
       const res = await addAddress({
         entry_firstname: extractName(namaPengirimInput)?.firstname,
         entry_lastname: extractName(namaPengirimInput)?.lastname,
@@ -134,6 +146,7 @@ const AlamatPenerima = () => {
         customers_id: userId,
         is_default: 0,
       });
+      setLoadingAdding(false);
       SuccessToast("Berhasil menambahkan alamat pengirim");
 
       return res;
@@ -145,6 +158,7 @@ const AlamatPenerima = () => {
 
   const addAddressPenerima = async () => {
     try {
+      setLoadingAdding(true);
       const res = await addAddress({
         entry_firstname: namaAwalPenerima,
         entry_lastname: namaAkhirPenerima,
@@ -159,7 +173,7 @@ const AlamatPenerima = () => {
         is_default: 0,
         entry_street_address: alamatPenerima,
       });
-
+      setLoadingAdding(false);
       SuccessToast("Berhasil menambahkan alamat penerima");
       return res;
     } catch (err) {
@@ -1034,6 +1048,7 @@ const AlamatPenerima = () => {
                   marginBottom="2rem"
                   marginRight={{ base: "0rem", lg: "1rem" }}
                   isDisabled={handleDisable()}
+                  isLoading={loadingAdding}
                   onClick={(e) => {
                     handleSubmit(e);
                   }}

@@ -126,7 +126,7 @@ export const CartProvider = ({ children }) => {
           tempCart.forEach((element) => {
             const price = element.final_price;
             const quantity = element.customers_basket_quantity;
-            const discount = element.products_discount;
+            const discount = element.customers_discount;
             tempPrice += price * quantity;
             tempDiscount += discount * quantity;
           });
@@ -172,9 +172,9 @@ export const CartProvider = ({ children }) => {
         tempWeight +=
           element.products_weight * element.customers_basket_quantity;
         tempQuantity += element.customers_basket_quantity;
-        if (element.products_discount) {
+        if (element.customers_discount) {
           tempDiscount +=
-            Number(element.products_discount) *
+            Number(element.customers_discount) *
             element.customers_basket_quantity;
         }
       });

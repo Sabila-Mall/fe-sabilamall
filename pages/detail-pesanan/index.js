@@ -19,6 +19,7 @@ import {
   Textarea,
   useOutsideClick,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useRef, useState, useEffect } from "react";
@@ -40,6 +41,7 @@ import { useAuthContext } from "../../contexts/authProvider";
 import { useCheckoutContext } from "../../contexts/checkoutProvider";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import {
+  currencyFormat,
   filterObject,
   formatNumber,
   formatPhoneNumber,
@@ -57,14 +59,12 @@ import {
  * @param {CheckoutProduct[]} daftarProduk
  */
 
-const RingkasanPesanan = ({ daftarProduk }) => {
+const RingkasanPesanan = () => {
   const { width } = useWindowSize();
   const isSmartphone = width < 768;
 
   const router = useRouter();
-  const {
-    checkoutData
-  } = useCheckoutContext();
+  const { checkoutData } = useCheckoutContext();
 
   let products = [];
 
@@ -72,6 +72,7 @@ const RingkasanPesanan = ({ daftarProduk }) => {
     const localCheckout = JSON.parse(localStorage.getItem("selectedProduct"));
     if (localCheckout) {
       products = localCheckout.products;
+      console.log(products);
     }
   }
   return (
@@ -137,12 +138,19 @@ const RingkasanPesanan = ({ daftarProduk }) => {
 
           <Spacer h="0.5rem" />
 
-          <Text className="secondaryFont">{(checkoutData.jalanPenerima ? checkoutData.jalanPenerima : "")
-            + (checkoutData.kecamatanPenerima ? `, ${checkoutData.kecamatanPenerima}` : "")
-            + (checkoutData.kotaPenerima ? `, ${checkoutData.kotaPenerima}` : "")
-            + (checkoutData.provinsiPenerima ? `, ${checkoutData.provinsiPenerima}` : "")
-            + (checkoutData.postcode ? `, ${checkoutData.postcode}` : "")
-          }</Text>
+          <Text className="secondaryFont">
+            {(checkoutData.jalanPenerima ? checkoutData.jalanPenerima : "") +
+              (checkoutData.kecamatanPenerima
+                ? `, ${checkoutData.kecamatanPenerima}`
+                : "") +
+              (checkoutData.kotaPenerima
+                ? `, ${checkoutData.kotaPenerima}`
+                : "") +
+              (checkoutData.provinsiPenerima
+                ? `, ${checkoutData.provinsiPenerima}`
+                : "") +
+              (checkoutData.postcode ? `, ${checkoutData.postcode}` : "")}
+          </Text>
         </Box>
       </SimpleGrid>
       <VStack
@@ -304,11 +312,16 @@ const MetodePembayaran = ({
         placeholder="Pilih metode pembayaran"
         onChange={(event) => handler(event.target.value)}
       >
-        {paymentMethod.map((method, index) => (
-          <option value={method.method} key={index}>
-            {method.name}
-          </option>
-        ))}
+        {console.log(paymentMethod)}
+        {paymentMethod.map((method, index) => {
+          return (
+            <option value={method.method} key={index}>
+              {method.method === "deposit"
+                ? `${method.name} (${currencyFormat(method.memberdeposit)})`
+                : method.name}
+            </option>
+          );
+        })}
       </Select>
       {!isEmpty(metodePembayaran) && (
         <Flex justify="space-between" color="gray.600" className="primaryFont">
@@ -322,7 +335,7 @@ const MetodePembayaran = ({
                 allowMouseWheel
                 textAlign="right"
                 onChange={(e) => handleDiskonPengiriman(e)}
-              // isDisabled={true}
+                // isDisabled={true}
               >
                 <NumberInputField textAlign="right" />
               </NumberInput>
@@ -448,24 +461,25 @@ const DetailPesanan = () => {
   const [paymentMethod, setPaymentMethod] = useState([]);
   const [paymentDesc, setPaymentDesc] = useState("");
 
-  let arrayOfCustomerBasket = []
-  let weight, vendors_id, vendor_origin, totalOrder, products_jenis
+  const toast = useToast();
+
+  let arrayOfCustomerBasket = [];
+  let weight, vendors_id, vendor_origin, totalOrder, products_jenis;
 
   if (typeof window !== "undefined") {
-    const products = JSON.parse(localStorage.getItem("selectedProduct"))
-    const productItems = products.products
+    const products = JSON.parse(localStorage.getItem("selectedProduct"));
+    const productItems = products.products;
     if (productItems) {
-      productItems.forEach(element => {
-        arrayOfCustomerBasket.push(element.customers_basket_id)
+      productItems.forEach((element) => {
+        arrayOfCustomerBasket.push(element.customers_basket_id);
       });
-      weight = products.weight
-      totalOrder = products.total_price
-      vendors_id = productItems[0].vendors_id
-      vendor_origin = productItems[0].vendors_origin
-      products_jenis = productItems[0].products_jenis
+      weight = products.weight;
+      totalOrder = products.total_price;
+      vendors_id = productItems[0].vendors_id;
+      vendor_origin = productItems[0].vendors_origin;
+      products_jenis = productItems[0].products_jenis;
     }
   }
-
 
   useEffect(() => {
     getKurir(
@@ -498,40 +512,6 @@ const DetailPesanan = () => {
       })
       .catch((err) => console.error(err));
   }, []);
-
-  const onSubmit = () => {
-    // Values udah berisi semua input yang dimasukin user dalam bentuk object
-    // Buat liat bentuknya bisa di cek di console
-    console.log("CATATAN PESANAN", catatanPesanan);
-    console.log("PENGIRIMAN", pengiriman);
-    console.log("METODE PEMBAYARAN", metodePembayaran);
-    console.log("VOUCHER", voucher);
-    console.log("PRODUCT BASKET", arrayOfCustomerBasket);
-    console.log(weight, vendors_id, vendor_origin, totalOrder, products_jenis);
-
-    apiPlaceOrder(
-      vendors_id,
-      arrayOfCustomerBasket,
-      pengiriman.destination,
-      checkoutData.userId,
-      checkoutData.delivery_id,
-      checkoutData.dropshipper_id,
-      metodePembayaran.payment_method,
-      false,
-      0,
-      0,
-      catatanPesanan,
-      "1.0.2",
-      "",
-      0,
-    )
-      .then((res) => {
-        setOrderNumber(res.data.orders_number);
-        setSubtotal(res.data.subtotal);
-        router.push("/invoice");
-      })
-      .catch((err) => console.error(err));
-  };
 
   const handleSelectedPengirman = (selected) => {
     // Ambil data tegantung id pengiriman yg dipilih, setPengiriman ke data yg didapet dari server
@@ -600,6 +580,51 @@ const DetailPesanan = () => {
     }
   }
 
+  const onSubmit = () => {
+    // Values udah berisi semua input yang dimasukin user dalam bentuk object
+    // Buat liat bentuknya bisa di cek di console
+    console.log("CATATAN PESANAN", catatanPesanan);
+    console.log("PENGIRIMAN", pengiriman);
+    console.log("METODE PEMBAYARAN", metodePembayaran);
+    console.log("VOUCHER", voucher);
+    console.log("PRODUCT BASKET", arrayOfCustomerBasket);
+    console.log(weight, vendors_id, vendor_origin, totalOrder, products_jenis);
+
+    if (
+      totalPrice + pengiriman.harga - diskon <=
+      paymentMethod.filter((e) => e.method === "deposit")[0].memberdeposit
+    ) {
+      toast({
+        title: "Saldo SM Pay tidak mencukupi",
+        position: "top",
+        status: "error",
+      });
+    } else {
+      apiPlaceOrder(
+        vendors_id,
+        arrayOfCustomerBasket,
+        pengiriman.destination,
+        checkoutData.userId,
+        checkoutData.delivery_id,
+        checkoutData.dropshipper_id,
+        metodePembayaran.payment_method,
+        false,
+        0,
+        0,
+        catatanPesanan,
+        "1.0.2",
+        "",
+        0,
+      )
+        .then((res) => {
+          setOrderNumber(res.data.orders_number);
+          setSubtotal(res.data.subtotal);
+          router.push("/invoice");
+        })
+        .catch((err) => console.error(err));
+    }
+  };
+
   return (
     <Layout hasNavbar>
       <Flex
@@ -651,7 +676,10 @@ const DetailPesanan = () => {
                 <Voucher voucher={voucher} setVoucher={setVoucher} />
               </SimpleGrid>
               <Confirmation setPersetujuan={setPersetujuan} />
-              <Flex justify="space-between" direction={{ base: "column", md: "row" }}>
+              <Flex
+                justify="space-between"
+                direction={{ base: "column", md: "row" }}
+              >
                 <Button
                   className="primaryFont"
                   borderColor="gray.500"
@@ -679,8 +707,8 @@ const DetailPesanan = () => {
             jumlah={totalQuantity}
             berat={totalWeight}
             subtotal={totalPrice}
+            tambahan={0}
             pengiriman={pengiriman.harga}
-            tambahan={4000}
             diskon={totalDiscount}
             voucher={voucher.harga}
           />

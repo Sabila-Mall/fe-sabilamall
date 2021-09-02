@@ -1,41 +1,34 @@
-import { useWindowSize } from "../hooks/useWindowSize";
-import {
-  Grid,
-  Heading,
-  HStack,
-  Image,
-  Square,
-  Stack,
-} from "@chakra-ui/react";
 import { Box, Text } from "@chakra-ui/layout";
-import { formatNumber } from "../utils/functions";
+import { Grid, Heading, HStack, Image, Square, Stack } from "@chakra-ui/react";
 import { IoCreateOutline } from "react-icons/io5";
-import { IMAGE_HOST } from "../constants/api";
 
+import { IMAGE_HOST } from "../constants/api";
+import { useWindowSize } from "../hooks/useWindowSize";
+import { formatNumber } from "../utils/functions";
 
 const CheckoutProduct = ({ product }) => {
   const { width } = useWindowSize();
   const isSmartphone = width < 768;
 
-  const gambarURL = product.products_image_path_medium
-  const discount = Number(product.products_discount)
-  const berat = Number(product.products_weight)
-  const harga = Number(product.products_price)
-  const nama = product.products_name
-  const varian = product?.varian
-  const jumlah = product.customers_basket_quantity
+  const gambarURL = product.products_image_path_medium;
+  const discount = Number(product.customers_discount);
+  const berat = Number(product.products_weight);
+  const harga = Number(product.products_discount);
+  const nama = product.products_name;
+  const varian = product?.varian;
+  const jumlah = product.customers_basket_quantity;
 
-  let deskripsiArray = []
-  let deskripsi
+  let deskripsiArray = [];
+  let deskripsi;
 
   if (varian) {
-    varian.forEach(element => {
-      deskripsiArray.push(element.products_options_values_name)
+    varian.forEach((element) => {
+      deskripsiArray.push(element.products_options_values_name);
     });
   }
 
   if (deskripsiArray.length) {
-    deskripsi = deskripsiArray.join(", ")
+    deskripsi = deskripsiArray.join(", ");
   }
 
   const realPrice = discount === 0 ? harga : (harga * (100 - discount)) / 100;
@@ -69,7 +62,9 @@ const CheckoutProduct = ({ product }) => {
             <Heading color="gray.700" isTruncated fontSize="1rem" mb="0.25rem">
               {nama}
             </Heading>
-            <Text color="gray.500" fontSize="0.875rem" isTruncated>{deskripsi}</Text>
+            <Text color="gray.500" fontSize="0.875rem" isTruncated>
+              {deskripsi}
+            </Text>
             <Text color="gray.500" fontSize="0.875rem">
               Berat: {formatNumber(berat)}gr
             </Text>
@@ -87,16 +82,14 @@ const CheckoutProduct = ({ product }) => {
           direction={{ base: "row-reverse", md: "column" }}
         >
           <Box textAlign={{ base: "right", lg: "left" }}>
-            {
-              discount !== 0 &&
+            {discount !== 0 && (
               <Text fontSize={"0.75rem"} as={"s"} color={"gray.400"}>
                 Rp{formatNumber(harga)}
               </Text>
-            }
+            )}
             <Text color={"gray.700"}>Rp{formatNumber(realPrice)}</Text>
           </Box>
-          {
-            discount !== 0 &&
+          {discount !== 0 && (
             <Square
               color={"white"}
               bg={"red.500"}
@@ -107,7 +100,7 @@ const CheckoutProduct = ({ product }) => {
             >
               Diskon {discount}%
             </Square>
-          }
+          )}
         </Stack>
       </Box>
 
@@ -126,9 +119,7 @@ const CheckoutProduct = ({ product }) => {
         justifySelf={{ md: "center" }}
       >
         {isSmartphone && <Text>Subtotal:</Text>}
-        <Text color={"gray.700"}>
-          Rp{formatNumber(jumlah * harga)}
-        </Text>
+        <Text color={"gray.700"}>Rp{formatNumber(jumlah * harga)}</Text>
       </HStack>
     </Grid>
   );
