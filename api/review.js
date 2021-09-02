@@ -11,10 +11,6 @@ export const getReviewProduct = async (dataPost) => {
       ...dataPost,
     });
 
-    console.log(res, "RESSS");
-
-    if (!isRequestSuccess(res.data)) throw new Error();
-
     const data = await res.data?.data;
     return data;
   } catch (err) {

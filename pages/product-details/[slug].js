@@ -61,7 +61,7 @@ const ProductDetails = () => {
 
         const stockData = Object.entries(resStock);
         let quantity = 0;
-        console.log("TESSS 1");
+
         stockData.forEach((d) => {
           d?.[1]?.forEach((ds) => {
             if (ds.stock && ds.ukuran !== "" && ds.stock > 0) {
@@ -69,15 +69,14 @@ const ProductDetails = () => {
             }
           });
         });
-        console.log("TESSS 2");
+
         setQuantity(quantity);
 
         const resReview = await getReviewProduct(dataPostReview);
-        console.log("TESSS 3");
+
         setReviewedCustomers(resReview?.reviewed_customers?.data);
       } catch (e) {
-        console.log(e.message, "ERRRRR");
-        // router.push("/404");
+        router.push("/404");
       } finally {
         setLoading(false);
       }
