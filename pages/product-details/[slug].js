@@ -28,9 +28,9 @@ const ProductDetails = () => {
   const [stocks, setStocks] = useState(null);
   const [reviewedCustomers, setReviewedCustomers] = useState([]);
   const [id, setId] = useState(null);
-  const router = useRouter();
 
-  const slug = router.query.id;
+  const router = useRouter();
+  const slug = router.query.slug;
 
   useEffect(() => {
     setLoading(true);
@@ -47,14 +47,21 @@ const ProductDetails = () => {
       try {
         const resProductDetails = await getProductDetail(dataPost);
         setData(resProductDetails);
-        setId(resProductDetails.products_id);
+        setId(Number(resProductDetails?.products_id));
+
+        const dataPostReview = {
+          customers_id: isLoggedIn ? userId : null,
+          products_id: Number(resProductDetails?.products_id),
+        };
+
         const resStock = await checkStock({
-          products_id: resProductDetails.products_id,
+          products_id: Number(resProductDetails?.products_id),
         });
         setStocks(resStock);
 
         const stockData = Object.entries(resStock);
         let quantity = 0;
+
         stockData.forEach((d) => {
           d?.[1]?.forEach((ds) => {
             if (ds.stock && ds.ukuran !== "" && ds.stock > 0) {
@@ -62,12 +69,14 @@ const ProductDetails = () => {
             }
           });
         });
+
         setQuantity(quantity);
 
-        const resReview = await getReviewProduct(dataPost);
+        const resReview = await getReviewProduct(dataPostReview);
+
         setReviewedCustomers(resReview?.reviewed_customers?.data);
       } catch (e) {
-        console.error(e);
+        router.push("/404");
       } finally {
         setLoading(false);
       }
