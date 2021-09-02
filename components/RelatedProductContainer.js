@@ -28,9 +28,10 @@ const RelatedProductContainer = ({ related_products, customers_id }) => {
         mt="16px"
         overflowX="auto"
       >
-        {related_products.map(({ id, ...product }, i) => (
+        {related_products.map(({ id, isLiked, ...product }, i) => (
           <CardProduct
             {...product}
+            isWishlist={isLiked == 1}
             key={id}
             id={id}
             // responsive={true}

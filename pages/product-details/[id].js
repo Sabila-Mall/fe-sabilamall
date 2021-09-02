@@ -38,10 +38,21 @@ const ProductDetails = () => {
     setStocks(null);
 
     const getData = async () => {
-      const dataPost = {
-        products_id: Number(id),
+      let dataPost = {
         customers_id: isLoggedIn ? userId : null,
       };
+      if (isNan(id)) {
+        dataPost = {
+          products_id: id,
+          ...dataPost,
+        };
+      } else {
+        dataPost = {
+          products_id: Number(id),
+          ...dataPost,
+        };
+      }
+
       try {
         const resProductDetails = await getProductDetail(dataPost);
         setData(resProductDetails);
