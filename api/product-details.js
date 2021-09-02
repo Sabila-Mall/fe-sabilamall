@@ -3,10 +3,10 @@ import axios from "axios";
 import { HOST } from "../constants/api";
 import { isRequestSuccess } from "../utils/api";
 
-export const getProductDetail = async ({ products_id, customers_id }) => {
+export const getProductDetail = async ({ products_slug, customers_id }) => {
   try {
     const res = await axios.post(HOST + "/api/product/get_products", {
-      products_id,
+      products_slug,
       customers_id,
       language_id: 1,
     });
