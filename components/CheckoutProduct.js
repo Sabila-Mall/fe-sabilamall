@@ -1,11 +1,10 @@
 import { Box, Text } from "@chakra-ui/layout";
-import { Grid, Heading, HStack, Image, Square, Stack } from "@chakra-ui/react";
+import { Grid, Heading, HStack, Image, Square, Stack, Editable, EditableInput, EditablePreview, useEditableControls, IconButton } from "@chakra-ui/react";
 import { IoCreateOutline } from "react-icons/io5";
 
 import { IMAGE_HOST } from "../constants/api";
 import { useWindowSize } from "../hooks/useWindowSize";
 import { formatNumber } from "../utils/functions";
-
 const CheckoutProduct = ({ product }) => {
   const { width } = useWindowSize();
   const isSmartphone = width < 768;
@@ -13,10 +12,11 @@ const CheckoutProduct = ({ product }) => {
   const gambarURL = product.products_image_path_medium;
   const discount = Number(product.customers_discount);
   const berat = Number(product.products_weight);
-  const harga = Number(product.products_discount);
+  const harga = Number(product.final_price);
   const nama = product.products_name;
   const varian = product?.varian;
   const jumlah = product.customers_basket_quantity;
+  const catatan = product.customers_basket_notes
 
   let deskripsiArray = [];
   let deskripsi;
@@ -32,6 +32,18 @@ const CheckoutProduct = ({ product }) => {
   }
 
   const realPrice = discount === 0 ? harga : (harga * (100 - discount)) / 100;
+
+  const EditableControls = () => {
+    const { getEditButtonProps } = useEditableControls();
+
+    return (
+      <IconButton
+        icon={<IoCreateOutline />}
+        variant={"ghost"}
+        {...getEditButtonProps()}
+      />
+    );
+  };
 
   return (
     <Grid
@@ -70,6 +82,24 @@ const CheckoutProduct = ({ product }) => {
             </Text>
           </Box>
         </HStack>
+        {catatan && <Editable
+          mt="0.75rem"
+          className="secondaryFont"
+          color={"gray.400"}
+          fontSize={"0.75rem"}
+          isDisabled={true}
+          isPreviewFocusable={false}
+          placeholder={catatan}
+        >
+          <HStack spacing={"0.25rem"}>
+            <EditableControls />
+            <Box>
+              <EditablePreview />
+              <EditableInput color="black" />
+            </Box>
+          </HStack>
+        </Editable>}
+
       </Box>
       <Box
         gridArea={"harga"}
