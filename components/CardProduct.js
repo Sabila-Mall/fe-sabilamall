@@ -85,13 +85,7 @@ const CardProduct = ({
       bg="white"
       className={responsive ? "card-product-responsive" : "card-product"}
       cursor="pointer"
-      onClick={() =>
-        router.push(
-          `/product-details/${
-            products_slug ? products_slug : liked_products_id
-          }`,
-        )
-      }
+      onClick={() => router.push(`/product-details/${products_slug}`)}
     >
       <Box
         bg="white"

@@ -27,7 +27,9 @@ import { checkStock } from "../api/Stock";
 import { addToCart } from "../api/carts";
 import { addWishlist, deleteWishlist } from "../api/wishlist";
 import { useAuthContext } from "../contexts/authProvider";
+import { useCartContext } from "../contexts/cartProvider";
 import styles from "../styles/ProductDetails.module.scss";
+import { isRequestSuccess } from "../utils/api";
 import { calculateDiscountedPrice } from "../utils/functions";
 
 const formatPrice = (price) => {
@@ -58,6 +60,7 @@ const ProductCheckout = ({
   const productwa = products_slug && products_slug?.replace("-", "+");
   const { isLoggedIn } = useAuthContext();
   const { register, getValues } = useForm();
+  const { addCartItem } = useCartContext();
 
   const [stocks, setStocks] = useState(stockss);
   const [stock, setStock] = useState(null);
@@ -330,7 +333,7 @@ const ProductCheckout = ({
                 ""
               )} */}
               <Text textColor={"gray.500"}>Stok:</Text>
-              <Text textColor={"orange.300"}>{stock ?? ""}</Text>
+              <Text textColor={"orange.300"}>{stock ?? "0"}</Text>
             </HStack>
           </HStack>
         </Box>
@@ -408,31 +411,14 @@ const ProductCheckout = ({
               option_id = JSON.stringify(option_id);
             }
 
-            const dataPost = {
-              option_values_id,
-              quantity: numberOfItem,
-              user_level,
+            addCartItem(
               customers_id,
+              user_level,
               products_id,
+              numberOfItem,
               option_id,
-            };
-
-            addToCart(dataPost)
-              .then(() =>
-                callToast({
-                  isSuccess: true,
-                  title: "Berhasil",
-                  description:
-                    "Produk anda telah ditambahkan ke keranjang belanja.",
-                }),
-              )
-              .catch(() =>
-                callToast({
-                  title: "Gagal",
-                  description:
-                    "Produk anda gagal ditambahkan ke keranjang belanja.",
-                }),
-              );
+              option_values_id,
+            );
           }}
         >
           Masukkan ke Keranjang

@@ -27,9 +27,10 @@ const ProductDetails = () => {
   const [quantity, setQuantity] = useState(0);
   const [stocks, setStocks] = useState(null);
   const [reviewedCustomers, setReviewedCustomers] = useState([]);
-
+  const [id, setId] = useState(null);
   const router = useRouter();
-  const id = router.query.id;
+
+  const slug = router.query.id;
 
   useEffect(() => {
     setLoading(true);
@@ -40,25 +41,15 @@ const ProductDetails = () => {
     const getData = async () => {
       let dataPost = {
         customers_id: isLoggedIn ? userId : null,
+        products_slug: slug,
       };
-      if (isNan(id)) {
-        dataPost = {
-          products_id: id,
-          ...dataPost,
-        };
-      } else {
-        dataPost = {
-          products_id: Number(id),
-          ...dataPost,
-        };
-      }
 
       try {
         const resProductDetails = await getProductDetail(dataPost);
         setData(resProductDetails);
-
+        setId(resProductDetails.products_id);
         const resStock = await checkStock({
-          products_id: Number(id),
+          products_id: resProductDetails.products_id,
         });
         setStocks(resStock);
 
@@ -82,12 +73,14 @@ const ProductDetails = () => {
       }
     };
 
-    id && getData();
-  }, [id, userId]);
+    slug && getData();
+  }, [slug, userId]);
 
-  if (loading || !data) {
+  if (loading) {
     return <Loading />;
   }
+
+  if (!data) router.push("/404");
 
   const {
     po_close_status,
