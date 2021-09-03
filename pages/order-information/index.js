@@ -71,44 +71,58 @@ const OrderInformation = ({ order }) => {
   const { hasCopied, onCopy } = useClipboard(resi ? resi : "");
 
   const steps = [];
-  let subTotalProduk = 0;
-  const orderProducts = [];
-  const temporaryProducts = orderData?.data;
+  const [subTotalProduk, setSubTotalProduk] = useState(0);
+  const [orderProducts, setOrderProducts] = useState([]);
   useEffect(() => {
+    const temporaryProducts = orderData?.data;
+    let tempOrderProducts = [];
+    let tempSubtotal = 0;
     for (let i = 0; i < temporaryProducts?.length; i++) {
-      subTotalProduk += temporaryProducts[i].final_price;
+      tempSubtotal +=
+        temporaryProducts[i].products_price *
+        temporaryProducts[i].products_quantity;
 
       let tempDetail =
-        temporaryProducts[i].attributes[0].products_options_values;
+        temporaryProducts[i].attributes?.[0].products_options_values;
       for (let j = 1; j < temporaryProducts[i].attributes?.length; j++) {
         tempDetail +=
-          ", " + temporaryProducts[i].attributes[j].products_options_values;
+          ", " + temporaryProducts[i].attributes?.[j].products_options_values;
       }
-      orderProducts.push({
-        name: temporaryProducts[i].products_name,
-        details: tempDetail,
-        weight: `${temporaryProducts[i].products_weight} gr`,
-        notes: temporaryProducts[i].orders_products_notes,
-        image: IMAGE_HOST + temporaryProducts[i].image,
-        discount:
-          temporaryProducts[i].customers_discount &&
-          temporaryProducts[i].customers_discount !== 0 &&
-          `${temporaryProducts[i].customers_discount}%`,
-        price: currencyFormat(temporaryProducts[i].final_price),
-        discountPrice: currencyFormat(
-          (temporaryProducts[i].final_price *
-            (100 - temporaryProducts[i].customers_discount)) /
-            100,
-        ),
-        quantity: temporaryProducts[i].products_quantity,
-        subTotal: currencyFormat(
-          ((temporaryProducts[i].final_price *
-            (100 - temporaryProducts[i].customers_discount)) /
-            100) *
-            temporaryProducts[i].products_quantity,
-        ),
-      });
+      tempOrderProducts = [
+        ...tempOrderProducts,
+        {
+          name: temporaryProducts[i].products_name,
+          details: tempDetail,
+          weight: `${temporaryProducts[i].products_weight} gr`,
+          notes: temporaryProducts[i].orders_products_notes,
+          image: IMAGE_HOST + temporaryProducts[i].image,
+          discount:
+            temporaryProducts[i].customers_discount &&
+            temporaryProducts[i].customers_discount !== 0 &&
+            `${temporaryProducts[i].customers_discount}%`,
+          price: currencyFormat(temporaryProducts[i].products_price),
+          // discountPrice: currencyFormat(
+          //   // (temporaryProducts[i].final_price *
+          //   //   (100 - temporaryProducts[i].customers_discount)) /
+          //   //   100,
+          //   temporaryProducts[i].products_price
+          // ),
+          quantity: temporaryProducts[i].products_quantity,
+          subTotal: currencyFormat(
+            // ((temporaryProducts[i].final_price *
+            //   (100 - temporaryProducts[i].customers_discount)) /
+            //   100) *
+            //   temporaryProducts[i].products_quantity,
+            // temporaryProducts[i].products_price*temporaryProducts[i].products_quantity
+            temporaryProducts[i].products_price *
+              temporaryProducts[i].products_quantity,
+          ),
+        },
+      ];
     }
+    console.log(tempOrderProducts);
+    setOrderProducts(tempOrderProducts);
+    setSubTotalProduk(tempSubtotal);
 
     for (let i = 0; i < resiData.resulthistory?.length; i++) {
       steps.push({
@@ -117,6 +131,8 @@ const OrderInformation = ({ order }) => {
       });
     }
   }, [orderData]);
+  console.log("opp");
+  console.log(orderProducts);
 
   return (
     <Box>

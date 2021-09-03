@@ -21,8 +21,7 @@ export default function OrderProduct({ name, source, details, weight, notes }) {
 
       {notes && (
         <Flex align="center" color="gray.400" mt="0.5rem">
-          <IoCreateOutline size="1.5rem" />
-          <Text pl="0.5rem" fontSize="0.8rem" width="fit-content">
+          <Text fontSize="0.8rem" width="fit-content">
             {notes}
           </Text>
         </Flex>

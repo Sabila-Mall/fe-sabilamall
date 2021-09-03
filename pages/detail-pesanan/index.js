@@ -606,6 +606,18 @@ const DetailPesanan = () => {
         position: "top",
         status: "error",
       });
+    } else if (Object.keys(pengiriman).length === 0) {
+      toast({
+        title: "Pilih metode pengiriman",
+        position: "top",
+        status: "error",
+      });
+    } else if (Object.keys(metodePembayaran).length === 0) {
+      toast({
+        title: "Pilih metode pembayaran",
+        position: "top",
+        status: "error",
+      });
     } else {
       apiPlaceOrder(
         vendors_id,
