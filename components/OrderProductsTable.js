@@ -10,7 +10,9 @@ import {
   Spacer,
   Divider,
 } from "@chakra-ui/react";
+import { useState } from "react";
 
+import { currencyFormat } from "../utils/functions";
 import OrderProduct from "./OrderProduct";
 
 export default function OrderProductsTable({ products }) {
@@ -77,7 +79,7 @@ export default function OrderProductsTable({ products }) {
                   fontSize="1rem"
                   className="secondaryFont"
                 >
-                  999
+                  {product.quantity}
                 </Center>
               </Td>
               <Td
@@ -86,7 +88,7 @@ export default function OrderProductsTable({ products }) {
                 className="secondaryFont"
                 fontWeight="700"
               >
-                Rp999.999.999
+                {product.subTotal}
               </Td>
             </Tr>
           );
@@ -97,9 +99,13 @@ export default function OrderProductsTable({ products }) {
 }
 
 export function OrderProductsTableMobile({ products }) {
+  const [totalQuantity, setTotalQuantity] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(0);
   return (
     <Box>
       {products.map((product, index) => {
+        setTotalQuantity(totalQuantity + product.quantity);
+        setTotalPrice(totalPrice + product.discountPrice);
         return (
           <Box key={index}>
             <OrderProduct
@@ -124,7 +130,7 @@ export function OrderProductsTableMobile({ products }) {
                 fontSize="0.8rem"
                 className="secondaryFont"
               >
-                Jumlah: 999
+                Jumlah: {product.quantity}
               </Text>
               <Spacer />
               <Flex lineHeight="100%">
@@ -157,7 +163,7 @@ export function OrderProductsTableMobile({ products }) {
                 fontSize="0.8rem"
                 className="secondaryFont"
               >
-                Subtotal: 999
+                Subtotal: {product.totalQuantity}
               </Text>
               <Spacer />
               <Text
@@ -165,7 +171,7 @@ export function OrderProductsTableMobile({ products }) {
                 fontSize="0.8rem"
                 className="secondaryFont"
               >
-                Rp99.999.999
+                {currencyFormat(product.totalPrice)}
               </Text>
             </Flex>
             <Divider border="1px solid gray.200" my="16px" />

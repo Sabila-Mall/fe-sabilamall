@@ -11,10 +11,14 @@ import {
   Divider,
   Icon,
   Circle,
+  useClipboard,
+  Tooltip,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { IoCopy } from "react-icons/io5";
 
+import { apiGetSingleOrder, apiGetResi } from "../../api/GetOrder";
 import { CardProfile } from "../../components/CardProfile";
 import { Layout } from "../../components/Layout";
 import NavbarProfile from "../../components/NavbarProfile";
@@ -22,103 +26,97 @@ import OrderProductsTable, {
   OrderProductsTableMobile,
 } from "../../components/OrderProductsTable";
 import ScrollButton from "../../components/ScrollButton";
+import { IMAGE_HOST } from "../../constants/api";
+import { useAuthContext } from "../../contexts/authProvider";
 import { useWindowSize } from "../../hooks/useWindowSize";
+import { currencyFormat } from "../../utils/functions";
 
-const OrderInformation = () => {
+const OrderInformation = ({ order }) => {
   const { width } = useWindowSize();
+  const { userData } = useAuthContext();
   const isMobile = width < 768;
   const sm = [
-    { text: "SM Pay", value: "1000.000" },
-    { text: "SM Point", value: 5 },
+    { text: "SM Pay", value: currencyFormat(userData?.memberdeposit) },
+    { text: "SM Point", value: userData?.smpoint },
   ];
+
+  const [orderData, setOrderData] = useState({});
+  useEffect(() => {
+    // apiGetSingleOrder(2094, 65507)
+    apiGetSingleOrder(userData?.id, order)
+      .then((res) => {
+        setOrderData(res.data.data[0]);
+      })
+      .catch((err) => console.error(err));
+  }, [userData]);
+
+  const [resiData, setResiData] = useState([]);
+  useEffect(() => {
+    // apiGetResi(2094, 65507)
+    apiGetResi(userData?.id, order)
+      .then((res) => {
+        setResiData(res.data);
+      })
+      .catch((err) => console.error(err));
+  }, [userData]);
+
   const router = useRouter();
 
-  const status = "pending";
-  const productDiscount = "Rp-99.999";
-  const voucherDiscount = "Rp-99.999";
-  const notes =
-    "Ini catatan pesanan. Ice cream cake macaroon donut topping tiramisu tart bear claw lemon drops. Pastry lollipop cupcake lemon drops fruitcake gummies dragée liquorice. Halvah apple pie carrot cake gummi bears I love dragée I love marshmallow.";
-  const resi = "101010101";
+  const status = orderData?.payment_status;
+  const productDiscount = orderData?.level_discount;
+  const voucherDiscount = orderData?.shipping_promo_amount;
+  const notes = orderData?.order_notes;
+  const resi = resiData?.waybill_cognote;
 
-  const orderProducts = [
-    {
-      name: "Nama Produk Croissant Tiramisu...",
-      details: "Lengan panjang, Merah Cabe, XXXXXXXL",
-      weight: "1000gr",
-      notes:
-        "ini produk yang punya catatan tambahan. kalo gaada catatannya gausah dirender.",
-      image: "/images/productExample.svg",
-      discount: "99%",
-      price: "99.999.999",
-      discountPrice: "Rp99.999.999",
-      quantity: "999",
-      subTotal: "Rp999.999.999",
-    },
-    {
-      name: "Nama Produk Croissant Tiramisu...",
-      details: "Lengan panjang, Merah Cabe, XXXXXXXL",
-      weight: "1000gr",
-      notes: "",
-      image: "/images/productExample.svg",
-      discount: "99%",
-      price: "99.999.999",
-      discountPrice: "Rp99.999.999",
-      quantity: "999",
-      subTotal: "Rp999.999.999",
-    },
-    {
-      name: "Nama Produk Croissant Tiramisu...",
-      details: "Lengan panjang, Merah Cabe, XXXXXXXL",
-      weight: "1000gr",
-      notes: "another produk yang pake catatan tambahan",
-      image: "/images/productExample.svg",
-      discount: "99%",
-      price: "99.999.999",
-      discountPrice: "Rp99.999.999",
-      quantity: "999",
-      subTotal: "Rp999.999.999",
-    },
-  ];
+  const { hasCopied, onCopy } = useClipboard(resi ? resi : "");
 
-  const steps = [
-    {
-      title:
-        "Transaksi selesai.Transaksi selesai.Transaksi selesai.Transaksi selesai.Transaksi selesai.Transaksi selesai.Transaksi selesai.",
-      timestamp: "32 Jun 2021, 23:55 WIB ",
-    },
-    {
-      title: "Transaksi selesai.",
-      timestamp: "32 Jun 2021, 23:55 WIB ",
-    },
-    {
-      title: "Transaksi selesai.",
-      timestamp: "32 Jun 2021, 23:55 WIB ",
-    },
-    {
-      title: "Transaksi selesai.",
-      timestamp: "32 Jun 2021, 23:55 WIB ",
-    },
-    {
-      title: "Transaksi selesai.",
-      timestamp: "32 Jun 2021, 23:55 WIB ",
-    },
-    {
-      title: "Transaksi selesai.",
-      timestamp: "32 Jun 2021, 23:55 WIB ",
-    },
-    {
-      title: "Transaksi selesai.",
-      timestamp: "32 Jun 2021, 23:55 WIB ",
-    },
-    {
-      title: "Transaksi selesai.",
-      timestamp: "32 Jun 2021, 23:55 WIB ",
-    },
-    {
-      title: "Transaksi selesai.",
-      timestamp: "32 Jun 2021, 23:55 WIB ",
-    },
-  ];
+  const steps = [];
+  let subTotalProduk = 0;
+  const orderProducts = [];
+  const temporaryProducts = orderData?.data;
+  useEffect(() => {
+    for (let i = 0; i < temporaryProducts?.length; i++) {
+      subTotalProduk += temporaryProducts[i].final_price;
+
+      let tempDetail =
+        temporaryProducts[i].attributes[0].products_options_values;
+      for (let j = 1; j < temporaryProducts[i].attributes?.length; j++) {
+        tempDetail +=
+          ", " + temporaryProducts[i].attributes[j].products_options_values;
+      }
+      orderProducts.push({
+        name: temporaryProducts[i].products_name,
+        details: tempDetail,
+        weight: `${temporaryProducts[i].products_weight} gr`,
+        notes: temporaryProducts[i].orders_products_notes,
+        image: IMAGE_HOST + temporaryProducts[i].image,
+        discount:
+          temporaryProducts[i].customers_discount &&
+          temporaryProducts[i].customers_discount !== 0 &&
+          `${temporaryProducts[i].customers_discount}%`,
+        price: currencyFormat(temporaryProducts[i].final_price),
+        discountPrice: currencyFormat(
+          (temporaryProducts[i].final_price *
+            (100 - temporaryProducts[i].customers_discount)) /
+            100,
+        ),
+        quantity: temporaryProducts[i].products_quantity,
+        subTotal: currencyFormat(
+          ((temporaryProducts[i].final_price *
+            (100 - temporaryProducts[i].customers_discount)) /
+            100) *
+            temporaryProducts[i].products_quantity,
+        ),
+      });
+    }
+
+    for (let i = 0; i < resiData.resulthistory?.length; i++) {
+      steps.push({
+        title: resiData.resulthistory?.[i].desc,
+        timestamp: resiData.resulthistory?.[i].date,
+      });
+    }
+  }, [orderData]);
 
   return (
     <Box>
@@ -152,10 +150,11 @@ const OrderInformation = () => {
             ) : (
               <>
                 <Flex
-                  onClick={() => router.push("/profile")}
+                  onClick={() => router.push("/profile/pesanan-saya")}
                   dir="column"
                   w="fit-content"
                   mb="12px"
+                  cursor="pointer"
                 >
                   <ChevronLeftIcon w={6} h={6} />
                   <Text
@@ -183,7 +182,7 @@ const OrderInformation = () => {
                     Nomor Pesanan
                   </Text>
                   <Text color="black" fontSize="0.875rem">
-                    SMC10101
+                    {orderData?.orders_number}
                   </Text>
                 </Box>
                 <Flex>
@@ -192,7 +191,7 @@ const OrderInformation = () => {
                       Status Pesanan
                     </Text>
                     <Text color="black" fontSize="0.875rem">
-                      Terkirim
+                      {orderData?.orders_status}
                     </Text>
                   </Box>
                   <Box ml="16px">
@@ -200,7 +199,7 @@ const OrderInformation = () => {
                       Waktu Pemesanan
                     </Text>
                     <Text color="black" fontSize="0.875rem">
-                      9 Juni 2002 13:11
+                      {orderData?.date_purchased}
                     </Text>
                   </Box>
                 </Flex>
@@ -210,7 +209,7 @@ const OrderInformation = () => {
                       Status Pembayaran
                     </Text>
                     <Text color="black" fontSize="0.875rem">
-                      Terkirim
+                      {orderData?.payment_status}
                     </Text>
                   </Box>
                   <Box ml="16px">
@@ -218,7 +217,7 @@ const OrderInformation = () => {
                       Waktu Pembayaran
                     </Text>
                     <Text color="black" fontSize="0.875rem">
-                      9 Juni 2021 13:11
+                      {orderData?.payment_date}
                     </Text>
                   </Box>
                 </Flex>
@@ -233,7 +232,7 @@ const OrderInformation = () => {
                 minW="186px"
               >
                 {(() => {
-                  if (status == "pending") {
+                  if (status?.toLowerCase() == "pending") {
                     return (
                       <>
                         <Button
@@ -242,6 +241,11 @@ const OrderInformation = () => {
                           borderRadius="4px"
                           w="100%"
                           p="0px 16px"
+                          onClick={() =>
+                            router.push(
+                              `/konfirmasi?order=${orderData?.orders_number}`,
+                            )
+                          }
                         >
                           Konfirmasi Pembayaran
                         </Button>
@@ -251,12 +255,17 @@ const OrderInformation = () => {
                           bgColor="white"
                           w="100%"
                           borderRadius="4px"
+                          onClick={() =>
+                            router.push(
+                              `/nota-pembayaran/${orderData?.orders_id}`,
+                            )
+                          }
                         >
                           Lihat Nota Pesanan
                         </Button>
                       </>
                     );
-                  } else if (status === "confirmed") {
+                  } else if (status?.toLowerCase() === "terbayar") {
                     return (
                       <>
                         <Button
@@ -265,12 +274,17 @@ const OrderInformation = () => {
                           bgColor="white"
                           w="100%"
                           borderRadius="4px"
+                          onClick={() =>
+                            router.push(
+                              `/nota-pembayaran/${orderData?.orders_id}`,
+                            )
+                          }
                         >
                           Lihat Nota Pesanan
                         </Button>
                       </>
                     );
-                  } else if (status === "delivered") {
+                  } else if (status?.toLowerCase() === "delivered") {
                     return (
                       <>
                         <Button
@@ -278,6 +292,7 @@ const OrderInformation = () => {
                           bgColor="orange.500"
                           w="100%"
                           borderRadius="4px"
+                          isDisabled={true}
                         >
                           Berikan Penilaian
                         </Button>
@@ -287,12 +302,17 @@ const OrderInformation = () => {
                           bgColor="white"
                           w="100%"
                           borderRadius="4px"
+                          onClick={() =>
+                            router.push(
+                              `/nota-pembayaran/${orderData?.orders_id}`,
+                            )
+                          }
                         >
                           Lihat Nota Pesanan
                         </Button>
                       </>
                     );
-                  } else if (status === "reviewed") {
+                  } else if (status?.toLowerCase() === "reviewed") {
                     return (
                       <>
                         <Button
@@ -310,6 +330,11 @@ const OrderInformation = () => {
                           bgColor="white"
                           w="100%"
                           borderRadius="4px"
+                          onClick={() =>
+                            router.push(
+                              `/nota-pembayaran/${orderData?.orders_id}`,
+                            )
+                          }
                         >
                           Lihat Nota Pesanan
                         </Button>
@@ -328,10 +353,10 @@ const OrderInformation = () => {
                   Data Pengirim
                 </Text>
                 <Text color="gray.600" fontWeight="700" mt="16px">
-                  M Abdurahman Basyah
+                  {orderData?.dropship_name}
                 </Text>
                 <Text color="gray.600" fontWeight="400">
-                  08234234234
+                  {orderData?.dropship_phone}
                 </Text>
 
                 <Divider my="16px" />
@@ -340,22 +365,26 @@ const OrderInformation = () => {
                   Data Penerima
                 </Text>
                 <Text color="gray.600" fontWeight="700" mt="16px">
-                  M Abdurahman Basyah
+                  {orderData?.delivery_name}
                 </Text>
                 <Text color="gray.600" fontWeight="400">
-                  08234234234
+                  {orderData?.delivery_phone}
                 </Text>
                 <Text
                   className="secondaryFont"
                   fontWeight="500"
                   fontSize="0.875rem"
                 >
-                  Jl Kb Kacang Grand Indonesia Shopping Town East Mall Lt Ground
-                  30, TANGERANG - CILEDUG, BANTEN, 15148
+                  {orderData?.delivery_street_address},{" "}
+                  {orderData?.delivery_subsubdistrict},{" "}
+                  {orderData?.delivery_subdistrict},{" "}
+                  {orderData?.delivery_cityname}, {orderData?.delivery_province}
+                  , {orderData?.delivery_country},{" "}
+                  {orderData?.delivery_postcode}
                 </Text>
               </Box>
               <Divider />
-              <Box pos="relative" mt={{ base: "24px", md: "" }}>
+              <Box pos="relative" w="100%" mt={{ base: "24px", md: "" }}>
                 <Flex>
                   <Box>
                     <Text
@@ -377,17 +406,27 @@ const OrderInformation = () => {
                     color="gray.600"
                     textAlign="right"
                   >
-                    <Text>JNE Reguler</Text>
-                    <Text>
-                      {`No. Resi:  ${resi}`}
-                      <Icon
-                        as={IoCopy}
-                        color="orange.500"
-                        boxSize="1rem"
-                        ml="0.25rem"
-                        cursor="pointer"
-                      />
-                    </Text>
+                    <Text>{resiData?.waybill_courrier}</Text>
+                    {resi && (
+                      <Flex alignItems="center">
+                        <Text>{`No. Resi:  ${resi}`}</Text>
+                        <Tooltip
+                          label={hasCopied ? "Copied!" : "Copy"}
+                          placement="top"
+                          closeOnClick={false}
+                        >
+                          <Box ml="0.25rem">
+                            <Icon
+                              as={IoCopy}
+                              color="orange.500"
+                              boxSize="1rem"
+                              cursor="pointer"
+                              onClick={onCopy}
+                            />
+                          </Box>
+                        </Tooltip>
+                      </Flex>
+                    )}
                   </Box>
                 </Flex>
                 <Divider
@@ -422,14 +461,14 @@ const OrderInformation = () => {
                           minW={{ base: "6rem", lg: "fit-content" }}
                           fontSize={{ base: "0.8rem", md: "0.875rem" }}
                         >
-                          {step.timestamp}
+                          {step?.timestamp}
                         </Text>
                         <Text
                           color={index === 0 ? "orange.400" : "gray.500"}
                           ml="0.5rem"
                           fontSize="1rem"
                         >
-                          {step.title}
+                          {step?.title}
                         </Text>
                       </Flex>
                     );
@@ -461,11 +500,7 @@ const OrderInformation = () => {
                     borderRadius="4px"
                     border="1px solid #E2E8F0"
                   >
-                    Ini catatan pesanan. Ice cream cake macaroon donut topping
-                    tiramisu tart bear claw lemon drops. Pastry lollipop cupcake
-                    lemon drops fruitcake gummies dragée liquorice. Halvah apple
-                    pie carrot cake gummi bears I love dragée I love
-                    marshmallow.
+                    {orderData?.order_notes}
                   </Text>
                 </Box>
               ) : (
@@ -481,23 +516,23 @@ const OrderInformation = () => {
                 <Flex>
                   <Text>Subtotal Produk</Text>
                   <Spacer />
-                  <Text>Rp9.999.999</Text>
+                  <Text>{currencyFormat(subTotalProduk)}</Text>
                 </Flex>
                 <Flex mt="8px">
                   <Text>Biaya Pengiriman</Text>
                   <Spacer />
-                  <Text>Rp99.999</Text>
+                  <Text>{currencyFormat(orderData?.shipping_cost)}</Text>
                 </Flex>
                 <Flex mt="8px">
                   <Text>Biaya Tambahan</Text>
                   <Spacer />
-                  <Text>Rp0</Text>
+                  <Text>{currencyFormat(orderData?.addcostvalue)}</Text>
                 </Flex>
                 {productDiscount ? (
                   <Flex mt="8px">
                     <Text>Diskon Produk</Text>
                     <Spacer />
-                    <Text>{productDiscount}</Text>
+                    <Text>- {currencyFormat(productDiscount)}</Text>
                   </Flex>
                 ) : (
                   <></>
@@ -506,7 +541,7 @@ const OrderInformation = () => {
                   <Flex mt="8px">
                     <Text>Diskon Voucher</Text>
                     <Spacer />
-                    <Text>{voucherDiscount}</Text>
+                    <Text>- {currencyFormat(voucherDiscount)}</Text>
                   </Flex>
                 ) : (
                   <></>
@@ -520,13 +555,18 @@ const OrderInformation = () => {
                     fontWeight="700"
                     className="primaryFont"
                   >
-                    Rp999.999.999
+                    {currencyFormat(
+                      subTotalProduk +
+                        orderData?.shipping_cost -
+                        productDiscount -
+                        voucherDiscount,
+                    )}
                   </Text>
                 </Flex>
                 <Flex mt="8px">
                   <Text>Metode Pembayaran</Text>
                   <Spacer />
-                  <Text>Transfer Bank BNI</Text>
+                  <Text>{orderData?.payment_method}</Text>
                 </Flex>
               </Box>
             </Grid>
@@ -536,6 +576,12 @@ const OrderInformation = () => {
       {isMobile ? <ScrollButton /> : <></>}
     </Box>
   );
+};
+
+OrderInformation.getInitialProps = async ({ query }) => {
+  const { order } = query;
+
+  return { order };
 };
 
 export default OrderInformation;

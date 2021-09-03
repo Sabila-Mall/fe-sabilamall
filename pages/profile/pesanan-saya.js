@@ -15,6 +15,7 @@ import {
   useDisclosure,
   Link,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useContext } from "react";
@@ -29,6 +30,7 @@ import { Layout } from "../../components/Layout";
 import Navbar from "../../components/Navbar";
 import NavbarProfile from "../../components/NavbarProfile";
 import { MONTH } from "../../constants/pesanan-saya";
+import { useSmPayPointContext } from "../../contexts/SMPayPointProvider";
 import { useAuthContext } from "../../contexts/authProvider";
 import {
   MyOrderProvider,
@@ -42,11 +44,6 @@ import {
   formatNumber,
 } from "../../utils/functions";
 import { needForLogin } from "../../utils/functions";
-
-const sm = [
-  { text: "SM Pay", value: "1000.000" },
-  { text: "SM Point", value: 5 },
-];
 
 const handleSearch = (
   search,
@@ -98,7 +95,7 @@ const SearchBar = () => {
   }, [search]);
 
   return (
-    <Flex w="full" justify="flex-end">
+    <Flex w="full" justify="flex-end" zIndex="1">
       <InputGroup maxW="35rem">
         <Input
           onChange={(e) => {
@@ -127,6 +124,7 @@ const CardPesanan = ({
   parentId,
   totalPriceAgent,
 }) => {
+  const router = useRouter();
   const { width } = useWindowSize();
   const { userData } = useAuthContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -137,7 +135,7 @@ const CardPesanan = ({
   )}`;
   return (
     <VStack
-      p={width > 320 && "1.5rem"}
+      p={width >= 320 && "1.5rem"}
       boxShadow="0px 2px 4px -1px rgba(45, 55, 72, 0.06), 0px 4px 6px -1px rgba(45, 55, 72, 0.1)"
       borderRadius="20px"
       background="white"
@@ -150,7 +148,16 @@ const CardPesanan = ({
         w="full"
       >
         <Link
+          display="flex"
+          alignItems="center"
+          justifyContent={
+            parentId == 0 && paymentStatus !== "Batal"
+              ? "space-between"
+              : "flex-end"
+          }
           _hover={{ textDecoration: "none" }}
+          mb={{ base: "1rem", md: "0" }}
+          w="full"
           target="_blank"
           href={`${window.location.origin}/nota-pembayaran/${orderId}`}
         >
@@ -160,11 +167,18 @@ const CardPesanan = ({
               color="white"
               bg="orange.500"
               alignSelf={{ base: "flex-start", md: "center" }}
-              mb={{ base: "1rem", md: "0" }}
             >
               Cetak Nota
             </Button>
           )}
+          <Text
+            display={{ base: "block", md: "none" }}
+            fontSize="1rem"
+            fontWeight="700"
+            color="orange.500"
+          >
+            {orderStatus}
+          </Text>
         </Link>
         <Flex justifyContent="space-between" w="full" mb="0.5rem">
           <Flex alignItems="center">
@@ -191,7 +205,7 @@ const CardPesanan = ({
               {formatedDate}
             </Text>
           </Flex>
-          <Flex align="center">
+          <Flex align="center" display={{ base: "none", md: "flex" }}>
             <Text
               fontSize="1rem"
               fontWeight="700"
@@ -235,6 +249,7 @@ const CardPesanan = ({
             {totalPriceAgent === 0 ? "Total Price :" : "Harga Agen :"}
           </Text>
           <Text fontSize="1.2rem" fontWeight="bold">
+            {console.log(totalPrice)}
             {totalPriceAgent === 0
               ? currencyFormat(String(totalPrice))
               : currencyFormat(totalPriceAgent)}
@@ -256,17 +271,25 @@ const CardPesanan = ({
           direction={width < 365 ? "column" : "row"}
           w={width < 365 ? "full" : "auto"}
         >
-          <Button
-            color="orange.500"
-            bg="transparent"
-            borderWidth="1px"
-            _hover={{ bg: "#EEE" }}
-            borderColor="orange.500"
-            w={width < 365 ? "full" : "auto"}
-            mb={width < 365 ? "0.25rem" : "0"}
+          <Link
+            _hover={{ textDecoration: "none" }}
+            target="_blank"
+            href={`${
+              window.location.origin
+            }/order-information/?order=${orderNum.slice(3)}`}
           >
-            Lihat Detail Transaksi
-          </Button>
+            <Button
+              color="orange.500"
+              bg="transparent"
+              borderWidth="1px"
+              _hover={{ bg: "#EEE" }}
+              borderColor="orange.500"
+              w={width < 365 ? "full" : "auto"}
+              mb={width < 365 ? "0.25rem" : "0"}
+            >
+              Lihat Detail Transaksi
+            </Button>
+          </Link>
           {orderStatus === "Booking" &&
             paymentStatus === "Pending" &&
             parentId === 0 && (
@@ -314,6 +337,13 @@ const PesananSayaDesktop = () => {
     searchState,
   } = useMyOrderContext();
   const { width } = useWindowSize();
+
+  const { smPay, smPoint } = useSmPayPointContext();
+
+  const sm = [
+    { text: "SM Pay", value: smPay },
+    { text: "SM Point", value: smPoint },
+  ];
 
   return (
     <Box bg="gray.50" minH="100vh">
@@ -410,9 +440,9 @@ const PesananSayaMobile = () => {
   const { width } = useWindowSize();
 
   return (
-    <Box minH="100vh">
-      <Layout>
-        <NavbarProfile section={"Pesanan Saya"} />
+    <Box minH="100vh" bg="gray.50">
+      <NavbarProfile section={"Pesanan Saya"} />
+      <Layout hasPadding>
         <Flex pt="2rem" flexDir="column" width="100%" my="1rem">
           <SearchBar />
           {!searchState && (

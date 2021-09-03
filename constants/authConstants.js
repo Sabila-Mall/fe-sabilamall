@@ -12,6 +12,7 @@ export const USER_FIELDS = [
   "user_name",
   "smpoint",
   "avatar",
+  "memberdeposit",
   "users_ktp",
 ];
 

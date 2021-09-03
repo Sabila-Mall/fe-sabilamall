@@ -14,6 +14,7 @@ import { IoHeart } from "react-icons/io5";
 import { IoWalletOutline } from "react-icons/io5";
 import { VscPackage } from "react-icons/vsc";
 
+import { useAuthContext } from "../contexts/authProvider";
 import { ButtonStatusUser } from "./ButtonProfile";
 
 export const SMCard = ({ sm, w }) => (
@@ -55,8 +56,9 @@ export const SMCard = ({ sm, w }) => (
   </Flex>
 );
 
-export const CardProfile = ({ sm, cardProfileText, userData }) => {
+export const CardProfile = ({ sm, cardProfileText }) => {
   const router = useRouter();
+  const { userData } = useAuthContext();
   const profileMenu = [
     { text: "Akun Saya", icon: FaUser, path: "/profile" },
     { text: "Wishlist", icon: IoHeart, path: "/wishlist" },
