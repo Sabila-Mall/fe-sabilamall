@@ -24,6 +24,15 @@ export const apiGetOrder = async (customerId, page) => {
   }
 };
 
+export const apiGetSingleOrder = async (customers_id, orders_id) => {
+  return axios.post(HOST + "/api/order/get_by_customers", {
+    customers_id: customers_id,
+    currency_code: "IDR",
+    language_id: 1,
+    orders_id: orders_id,
+  });
+};
+
 export const apiSearchOrder = async (customerId, orderId) => {
   try {
     const res = await axios.post(HOST + `/api/order/search_by_customers`, {
@@ -39,6 +48,13 @@ export const apiSearchOrder = async (customerId, orderId) => {
   } catch (err) {
     throw new Error(err);
   }
+};
+
+export const apiGetResi = async (customers_id, orders_id) => {
+  return axios.post(HOST + "/api/resi/cek_resi", {
+    customers_id: customers_id,
+    orders_id: orders_id,
+  });
 };
 
 export const apiGetOrderCustomer = async (customerId, orderId) => {

@@ -1,5 +1,5 @@
 import { IconButton } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowUpIcon } from '@chakra-ui/icons'
 
 const ScrollButton = () => {
@@ -23,6 +23,12 @@ const ScrollButton = () => {
         });
     };
 
+    useEffect(() => {
+        toggleVisible()
+    }, [])
+
+    console.log("tes");
+
     window.addEventListener('scroll', toggleVisible);
     return (
         <IconButton
@@ -30,8 +36,8 @@ const ScrollButton = () => {
             isRound={true}
             icon={<ArrowUpIcon />}
             pos="fixed"
-            right="1rem"
-            bottom="1rem"
+            right="2rem"
+            bottom="5rem"
             onClick={scrollToTop}
             style={{ display: visible ? 'inline' : 'none' }}
         />

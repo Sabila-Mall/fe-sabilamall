@@ -1,12 +1,14 @@
 import { Box, Button } from "@chakra-ui/react";
 
+import { setBadgeColor } from "../utils/functions";
+
 export const ButtonStatusUser = ({ text, mt }) => {
   return (
     <Box
       minWidth={{ base: "64px", md: "80px" }}
       h={{ base: "24px", md: "30px" }}
       borderRadius="30px"
-      bg="gray.400"
+      bg={setBadgeColor(text)}
       fontSize={{ base: "12px", md: "14px" }}
       fontWeight="500"
       lineHeight="21px"

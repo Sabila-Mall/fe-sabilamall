@@ -65,9 +65,9 @@ export const SMCard = ({ w }) => {
   );
 };
 
-export const CardProfile = ({ cardProfileText }) => {
-  const { userData } = useAuthContext();
+export const CardProfile = ({ sm, cardProfileText }) => {
   const router = useRouter();
+  const { userData } = useAuthContext();
   const profileMenu = [
     { text: "Akun Saya", icon: FaUser, path: "/profile" },
     { text: "Wishlist", icon: IoHeart, path: "/wishlist" },
