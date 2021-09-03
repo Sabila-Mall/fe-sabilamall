@@ -519,10 +519,13 @@ const DetailPesanan = () => {
       setPengiriman({});
     } else {
       const tempPengiriman = kurir.filter((data) => data.name === selected)[0];
+      const estimasi = tempPengiriman.destination.split("|")[2];
       setPengiriman({
         nama: tempPengiriman.name,
-        estimasi: tempPengiriman.destination.split("|")[2],
-        harga: tempPengiriman.rate,
+        estimasi: /\d/.test(estimasi)
+          ? estimasi.toLowerCase()
+          : "1" + estimasi.toLowerCase(),
+        harga: tempPengiriman.rate - (tempPengiriman.shipping_promo ?? 0),
         destination: tempPengiriman.destination,
       });
     }
@@ -590,8 +593,12 @@ const DetailPesanan = () => {
     console.log("PRODUCT BASKET", arrayOfCustomerBasket);
     console.log(weight, vendors_id, vendor_origin, totalOrder, products_jenis);
 
+    console.log("totalPrice", totalPrice);
+    console.log("pengiriman.harga", pengiriman.harga);
+    console.log("totalDiscount", totalDiscount);
+
     if (
-      totalPrice + pengiriman.harga - diskon <=
+      totalPrice + pengiriman.harga - totalDiscount <=
       paymentMethod.filter((e) => e.method === "deposit")[0].memberdeposit
     ) {
       toast({

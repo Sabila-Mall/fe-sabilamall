@@ -175,7 +175,7 @@ const ProductHeader = ({
             fontSize="16px"
             h="24px"
           >
-            Rp{price}
+            {price}
           </Text>
         </Box>
       ) : (
