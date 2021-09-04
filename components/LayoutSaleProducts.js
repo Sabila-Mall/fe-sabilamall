@@ -1,11 +1,4 @@
-import {
-  Box,
-  Divider,
-  Flex,
-  Heading,
-  Skeleton,
-  SkeletonText,
-} from "@chakra-ui/react";
+import { Box, Divider, Flex, Heading, Skeleton, SkeletonText } from "@chakra-ui/react";
 import { useState } from "react";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import Slider from "react-slick";
@@ -17,6 +10,11 @@ import CardProduct from "./CardProduct";
 
 const px = { base: "1rem", md: "1.5rem", lg: "3rem", xl: "50px" };
 
+// TODO:
+// Fix border flash sale yang warna orange
+// Tambahin diskon di card product
+// Tambahin slider di kategori
+
 const LayoutSaleProducts = ({ data, loading, headingText, hasBackground }) => {
   const [display, setDisplay] = useState("none");
   const { userData } = useAuthContext();
@@ -27,7 +25,7 @@ const LayoutSaleProducts = ({ data, loading, headingText, hasBackground }) => {
     arrows: true,
     infinite: false,
     speed: 500,
-    slidesToShow: width >= 768 ? width / 232 : width / 180,
+    slidesToShow: width >= 1440 ? 6 : width >= 768 ? width / 232 : width / 180,
     slidesToScroll: 3,
     initialSlid: 0,
   };
@@ -157,7 +155,3 @@ const LayoutSaleProducts = ({ data, loading, headingText, hasBackground }) => {
 };
 
 export default LayoutSaleProducts;
-
-{
-  /*<CardProduct key={item.id} {...item} />*/
-}
