@@ -1,4 +1,4 @@
-import { Box, Circle, Flex, Icon, Text } from "@chakra-ui/react";
+import { Box, Circle, Divider, Flex, Icon, Text } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { IoArrowUp } from "react-icons/io5";
 import "slick-carousel/slick/slick-theme.css";
@@ -13,7 +13,7 @@ import { HomepageProvider, useHomePageContext } from "../contexts/homepageProvid
 import LayoutSaleProducts from "../components/LayoutSaleProducts";
 import LayoutProductList from "../components/LayoutProductList";
 
-const Home = () => {
+const HomeDisplay = () => {
   const { isLoggedIn } = useAuthContext();
   const {
     products, flashSaleProducts, discountProducts,
@@ -37,8 +37,8 @@ const Home = () => {
   }, []);
 
   return (
-    <Layout hasNavbar={true} hasPadding={false}>
-      <Box as="main" overflow="hidden">
+    <>
+      <Layout hasNavbar={true} hasPadding={false} noFooter={true}>
         <Circle
           bg="red.600"
           size="40px"
@@ -92,16 +92,28 @@ const Home = () => {
             />
           </Box>
         </Flex>
-        <LayoutSaleProducts
-          data={flashSaleProducts.data}
-          headingText="Flash Sale"
-          hasBackground={true}
-          loading={flashSaleProducts.loading}
-        />
+      </Layout>
+      <Flex justify="center" bg="orange.400">
+        <Box maxW="1440px">
+          <LayoutSaleProducts
+            data={flashSaleProducts.data}
+            headingText="Flash Sale"
+            hasBackground={true}
+            loading={flashSaleProducts.loading}
+          />
+        </Box>
+      </Flex>
+      <Layout hasNavbar={false}>
         <LayoutSaleProducts
           data={discountProducts.data}
           headingText="Discount"
           loading={discountProducts.loading}
+        />
+        <Divider
+          orientation="horizontal"
+          w="100%"
+          colorScheme="gray"
+          my="1.5rem"
         />
         <LayoutProductList
           headingText="Semua Produk"
@@ -111,9 +123,14 @@ const Home = () => {
           handleLoadMore={handleLoadMoreProducts}
           handleFilter={handleFilterProducts}
         />
-      </Box>
-    </Layout>
+      </Layout>
+    </>
   );
 };
 
-export default <HomepageProvider><Home /></HomepageProvider>;
+const Home = () =>
+  <HomepageProvider>
+    <HomeDisplay />
+  </HomepageProvider>;
+
+export default Home;
