@@ -9,7 +9,7 @@ import SMCard from "../components/SMCard";
 import { useAuthContext } from "../contexts/authProvider";
 import { Layout } from "../components/Layout";
 import Banner from "../components/Banner";
-import { useHomePageContext } from "../contexts/homepageProvider";
+import { HomepageProvider, useHomePageContext } from "../contexts/homepageProvider";
 import LayoutSaleProducts from "../components/LayoutSaleProducts";
 import LayoutProductList from "../components/LayoutProductList";
 
@@ -17,7 +17,7 @@ const Home = () => {
   const { isLoggedIn } = useAuthContext();
   const {
     products, flashSaleProducts, discountProducts,
-    banner, category, handleLoadMoreProducts, handleFilterProducts
+    banner, category, handleLoadMoreProducts, handleFilterProducts,
   } = useHomePageContext();
   const [scrollVisible, setScrollVisible] = useState(false);
 
@@ -116,4 +116,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default <HomepageProvider><Home /></HomepageProvider>;

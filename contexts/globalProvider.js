@@ -5,7 +5,6 @@ import { AddressProvider } from "./addressProvider";
 import { AuthProvider } from "./authProvider";
 import { CartProvider } from "./cartProvider";
 import { CheckoutProvider } from "./checkoutProvider";
-import { HomepageProvider } from "./homepageProvider";
 import { WishlistProvider } from "./wishlistProvider";
 
 export const GlobalProvider = ({ children }) => {
@@ -13,15 +12,13 @@ export const GlobalProvider = ({ children }) => {
     <ChakraProvider>
       <AuthProvider>
         <SMPayPointProvider>
-          <HomepageProvider>
-            <CheckoutProvider>
-              <AddressProvider>
-                <WishlistProvider>
-                  <CartProvider>{children}</CartProvider>
-                </WishlistProvider>
-              </AddressProvider>
-            </CheckoutProvider>
-          </HomepageProvider>
+          <CheckoutProvider>
+            <AddressProvider>
+              <WishlistProvider>
+                <CartProvider>{children}</CartProvider>
+              </WishlistProvider>
+            </AddressProvider>
+          </CheckoutProvider>
         </SMPayPointProvider>
       </AuthProvider>
     </ChakraProvider>
