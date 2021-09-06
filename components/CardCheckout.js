@@ -4,11 +4,11 @@ import { css } from "@emotion/react";
 import { useCartContext } from "../contexts/cartProvider";
 
 export const CardCheckout = () => {
-  const { totalDiscount, selectedPrice, checkoutValidation } = useCartContext();
+  const { selectedDiscount, selectedPrice, checkoutValidation } = useCartContext();
   const idr = Intl.NumberFormat("id-ID");
   // const subtotal = subTotal.replace(/\./g, "");
   // const disc = totalDiscount.replace(/\./g, "");
-  const total = Number(selectedPrice) - Number(totalDiscount);
+  const total = Number(selectedPrice) - Number(selectedDiscount);
 
   const handleCheckout = () => {
     checkoutValidation()
@@ -26,9 +26,9 @@ export const CardCheckout = () => {
           <Text fontWeight="700">Subtotal</Text>
           <Text>Rp{idr.format(selectedPrice)}</Text>
         </Flex>
-        {totalDiscount ? <Flex my="6px" justifyContent="space-between">
+        {selectedDiscount ? <Flex my="6px" justifyContent="space-between">
           <Text fontWeight="700">Diskon</Text>
-          <Text>-Rp{idr.format(totalDiscount)}</Text>
+          <Text>-Rp{idr.format(selectedDiscount)}</Text>
         </Flex> : <></>}
 
         <Divider my="6px" />

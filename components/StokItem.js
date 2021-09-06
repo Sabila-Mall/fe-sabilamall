@@ -12,9 +12,10 @@ import {
   Button,
   Box,
   Text,
+  Spinner,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BsClock } from "react-icons/bs";
 import {
   IoCartOutline,
@@ -22,8 +23,41 @@ import {
   IoFileTrayStacked,
 } from "react-icons/io5";
 
-const StokItem = ({ img, nama, supplier, tag, variant, link }) => {
+import { apiStock } from "../api/Stock";
+
+const StokItem = ({ img, nama, supplier, tag, link, productId }) => {
+  const [fetch, setFetch] = useState(false);
   const referenceAccordion = useRef(null);
+  const [variant, setVariant] = useState([]);
+
+  useEffect(() => {
+    if (fetch && variant.length == 0) {
+      apiStock(productId).then((res) => {
+        const data = res.data;
+        const listWarna = Object.keys(data);
+        let variants = [];
+
+        listWarna.map((warna) => {
+          let ukuran = [];
+          let stok = [];
+
+          data[warna].map((el) => {
+            ukuran.push(el.ukuran);
+            stok.push(el.stock);
+          });
+
+          let ob = {
+            warna: warna,
+            ukuran: ukuran,
+            stok: stok,
+          };
+          variants.push(ob);
+        });
+        setVariant((curr) => variants);
+        setFetch(false);
+      });
+    }
+  }, [fetch]);
 
   return (
     <>
@@ -53,16 +87,16 @@ const StokItem = ({ img, nama, supplier, tag, variant, link }) => {
             </Text>
             <Tag
               variant="outline"
-              colorScheme={tag === "Reguler" ? "gray" : "orange"}
+              colorScheme={tag === "reguler" ? "gray" : "orange"}
               marginTop="0.5rem"
               size="md"
             >
-              <TagLeftIcon as={tag === "Reguler" ? IoCartOutline : BsClock} />
+              <TagLeftIcon as={tag === "reguler" ? IoCartOutline : BsClock} />
               <TagLabel
-                color={tag === "Reguler" ? "" : "orange.600"}
+                color={tag === "reguler" ? "" : "orange.600"}
                 fontWeight="500"
               >
-                {tag}
+                {tag === "reguler" ? "Reguler" : "Pre-Order"}
               </TagLabel>
             </Tag>
           </Box>
@@ -82,6 +116,9 @@ const StokItem = ({ img, nama, supplier, tag, variant, link }) => {
                     d="flex"
                     justifyContent="space-between"
                     ref={referenceAccordion}
+                    onClick={() => {
+                      setFetch(true);
+                    }}
                   >
                     <Box
                       textAlign="left"
@@ -130,11 +167,12 @@ const StokItem = ({ img, nama, supplier, tag, variant, link }) => {
                     fontSize="0.875rem"
                     mx={{ base: "0.4rem", md: "0rem" }}
                   >
-                    {variant &&
-                      variant.map((vari) => {
+                    {variant.length != 0 ? (
+                      variant.map((vari, i) => {
                         return (
                           <>
                             <Box
+                              key={i}
                               d="flex"
                               flexDir="row"
                               borderBottom="1px"
@@ -153,7 +191,7 @@ const StokItem = ({ img, nama, supplier, tag, variant, link }) => {
                               <Box w={{ base: "40%", lg: "50%" }}>
                                 {vari.ukuran.length !== 0 &&
                                   vari.ukuran.map((ukur) => {
-                                    return <Text>{ukur}</Text>;
+                                    return <Text key={ukur}>{ukur}</Text>;
                                   })}
                                 {vari.ukuran.length === 0 && (
                                   <Text color="gray.300">
@@ -163,18 +201,27 @@ const StokItem = ({ img, nama, supplier, tag, variant, link }) => {
                               </Box>
                               <Box w={{ base: "20%", lg: "10%" }}>
                                 {vari.stok &&
-                                  vari.stok.map((stokk) => {
+                                  vari.stok.map((stokk, i) => {
                                     if (stokk !== 0) {
-                                      return <Text>{stokk}</Text>;
+                                      return <Text key={i}>{stokk}</Text>;
                                     } else {
-                                      return <Text color="red.500">Habis</Text>;
+                                      return (
+                                        <Text key={i} color="red.500">
+                                          Habis
+                                        </Text>
+                                      );
                                     }
                                   })}
                               </Box>
                             </Box>
                           </>
                         );
-                      })}
+                      })
+                    ) : (
+                      <Flex justifyContent="center" mt="2rem" w="full">
+                        <Spinner />
+                      </Flex>
+                    )}
                   </AccordionPanel>
                   <Text
                     mt="0.4rem"
@@ -183,7 +230,10 @@ const StokItem = ({ img, nama, supplier, tag, variant, link }) => {
                     className="secondaryFont"
                     cursor="pointer"
                     mx={{ base: "0.4rem", md: "0rem" }}
-                    onClick={() => referenceAccordion.current.click()}
+                    onClick={() => {
+                      setFetch(true);
+                      referenceAccordion.current.click();
+                    }}
                   >
                     {isExpanded ? "Sembunyikan" : "Lihat varian produk"}
                   </Text>

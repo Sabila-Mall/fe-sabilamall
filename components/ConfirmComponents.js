@@ -1,17 +1,25 @@
 import {
+  Box,
+  Button,
+  Flex,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Input,
-  Textarea,
   Select,
-  Box,
-  Flex,
+  Skeleton,
   Text,
-  Button,
+  Textarea,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { getBanks, postPaymentConfirmation } from "../api/Konfirmasi";
+import { useAuthContext } from "../contexts/authProvider";
+import { useToast } from "@chakra-ui/toast";
+import { useRouter } from "next/router";
+import { isRequestSuccess } from "../utils/api";
 
-export const SummaryBox = ({ dataSummary }) => (
+export const SummaryBox = ({ dataSummary, loading }) => (
   <Box
     className="primaryFont"
     borderRadius=".75rem"
@@ -26,10 +34,12 @@ export const SummaryBox = ({ dataSummary }) => (
     mx="auto"
   >
     {dataSummary.map(({ info, value }) => (
-      <Flex color="gray.500" key={info} justify="space-between" mb="0.82rem">
-        <Text fontWeight={700}>{info}</Text>
-        <Text fontWeight={500}>{value}</Text>
-      </Flex>
+      <Skeleton key={info} isLoaded={!loading}>
+        <Flex color="gray.500" justify="space-between" mb="0.82rem">
+          <Text fontWeight={700}>{info}</Text>
+          <Text fontWeight={500}>{value}</Text>
+        </Flex>
+      </Skeleton>
     ))}
   </Box>
 );
@@ -45,78 +55,98 @@ const FormFieldGroup = ({ textHead, children }) => (
   </Box>
 );
 
+const Options = ({ type, data }) => {
+  switch (type) {
+    case "bankPengirim":
+      return (
+        <>
+          {
+            data.map(each =>
+              <option key={each.bankid} value={each.bankid}>{each.namabank}</option>,
+            )
+          }
+        </>
+      );
+    case "bankTujuan":
+      return (
+        <>
+          {
+            data.map(each =>
+              <option key={each.bankid} value={each.bankid}>{`${each.namabank} - ${each.rekening}`}</option>,
+            )
+          }
+        </>
+      );
+    case "metode":
+      return (
+        <>
+          {
+            data.map(each =>
+              <option key={each.method} value={each.method}>{each.method}</option>,
+            )
+          }
+        </>
+      );
+    default:
+      return null;
+  }
+};
+
 const FormField = ({
-  textLabel,
-  placeholder,
-  type = "text",
-  options,
-  min = 0,
-  register,
-  id,
-}) => {
+                     textLabel,
+                     placeholder,
+                     type = "text",
+                     options,
+                     register,
+                     id,
+                     errors,
+                   }) => {
   let inputElement = null;
 
-  if (type === "text" || type === "email" || type === "date") {
-    inputElement = (
-      <Input
-        _focus={{ outline: "none" }}
-        _hover={{ cursor: "text" }}
-        placeholder={placeholder}
-        type={type}
-        required={true}
-        id={id}
-        {...register(id)}
-      />
-    );
-  }
-
-  if (type == "number") {
-    inputElement = (
-      <Input
-        _focus={{ outline: "none" }}
-        placeholder={placeholder}
-        type={type}
-        min={min}
-        required={true}
-        id={id}
-        {...register(id)}
-      />
-    );
-  }
-
-  if (type === "select") {
-    inputElement = (
-      <Select
-        placeholder={placeholder}
-        _focus={{ outline: "none" }}
-        required={true}
-        id={id}
-        _hover={{ cursor: "pointer" }}
-        {...register(id)}
-      >
-        {options.map(({ text }) => (
-          <option value={text} key={text}>
-            {text}
-          </option>
-        ))}
-      </Select>
-    );
-  }
-
-  if (type == "textarea") {
-    inputElement = (
-      <Textarea
-        placeholder={placeholder}
-        size="md"
-        _focus={{ outline: "none" }}
-        id={id}
-        {...register(id)}
-      />
-    );
+  switch (type) {
+    case "text":
+    case "email":
+    case "date":
+    case "number":
+      inputElement = (
+        <Input
+          placeholder={placeholder}
+          type={type}
+          id={id}
+          {...register(id, {
+            required: "Kolom ini wajib diisi",
+            min: { value: 0, message: "Nominal minimal 0" },
+          })}
+        />
+      );
+      break;
+    case "select":
+      inputElement = (
+        <Select
+          placeholder={placeholder}
+          id={id}
+          {...register(id, {
+            required: "Kolom ini wajib diisi",
+          })}
+        >
+          <Options type={id} data={options} />
+        </Select>
+      );
+      break;
+    case "textarea":
+      inputElement = (
+        <Textarea
+          placeholder={placeholder}
+          size="md"
+          id={id}
+          {...register(id)}
+        />
+      );
+      break;
   }
 
   return (
-    <>
+    <FormControl isInvalid={errors[id]}>
       <FormLabel
         mt=".75rem"
         textTransform="capitalize"
@@ -126,116 +156,163 @@ const FormField = ({
         {textLabel}
       </FormLabel>
       {inputElement}
-    </>
+      <FormErrorMessage>
+        {errors[id] && errors[id].message}
+      </FormErrorMessage>
+    </FormControl>
   );
 };
 
-export const Form = () => {
+export const Form = ({ orderNumber }) => {
   const {
     register,
     handleSubmit,
-    watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm();
+  const { userData } = useAuthContext();
+  const memberId = userData?.memberid;
 
-  const onSubmit = (data) => console.log(data);
+  const router = useRouter();
 
-  const methods = [
-    { text: "Metode 1" },
-    { text: "Metode 2" },
-    { text: "Metode 3" },
-    { text: "Metode 4" },
-  ];
+  const toast = useToast();
+  const successToast = (successMessage) => {
+    toast({
+      position: "top",
+      title: successMessage,
+      status: "success",
+      isClosable: true,
+    });
+  };
+  const errorToast = (errMessage) => {
+    toast({
+      position: "top",
+      title: errMessage,
+      status: "error",
+      isClosable: true,
+    });
+  };
 
-  const banks = [
-    { text: "BRI" },
-    { text: "BCA" },
-    { text: "BNI" },
-    { text: "BI" },
-  ];
+  const onSubmit = async data => {
+    const dateArr = data.tanggalTransfer.split("-");
+    const tanggal = `${dateArr[2]}-${dateArr[1]}-${dateArr[0]}`;
 
-  // let today = new Date();
-  // const dd = String(today.getDate()).padStart(2, "0");
-  // const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-  // const yyyy = today.getFullYear();
+    const postData = {
+      action: "confirm",
+      noorder: orderNumber,
+      metode: "Bank",
+      memberid: memberId,
+      amount: Number(data.nominalTransfer),
+      date: tanggal,
+      bankasal: Number(data.bankPengirim),
+      pemilik: data.nama,
+      banktujuan: Number(data.bankTujuan),
+      notes: data.catatan,
+    };
 
-  // today = yyyy + "-" + mm + "-" + dd;
+    try {
+      const res = await postPaymentConfirmation(postData);
+      if (isRequestSuccess(res)) {
+        successToast(res.message);
+        router.push("/profile/pesanan-saya");
+      } else {
+        errorToast(res.message ?? "Gagal mengirim konfirmasi pembayaran");
+      }
+    } catch (err) {
+      console.error(err);
+      errorToast(err ?? "Terjadi kesalahan");
+    }
+  };
+
+  const [bankPengirim, setBankPengirim] = useState([]);
+  const [bankTujuan, setBankTujuan] = useState([]);
+
+  useEffect(() => {
+    getBanks()
+      .then(res => {
+        setBankPengirim(res.data.bankasal ?? []);
+        setBankTujuan(res.data.banktujuan ?? []);
+      })
+      .catch(err => {
+        console.error(err);
+        errorToast(err);
+      });
+  }, []);
 
   return (
-    <FormControl
-      as="form"
-      className="primaryFont"
-      mx="auto"
-      maxWidth="23rem"
-      width={{ base: "100%", lg: "23rem" }}
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <FormFieldGroup>
-        <FormField
-          textLabel="Metode Pembayaran"
-          type="select"
-          options={methods}
-          id="metode"
-          register={register}
-        />
-      </FormFieldGroup>
-      <FormFieldGroup textHead="Pengirim">
-        <FormField
-          textLabel="Pilih Bank Pengirim"
-          type="select"
-          options={banks}
-          id="bankPengirim"
-          register={register}
-        />
-        <FormField
-          textLabel="Nama Pengirim"
-          placeholder="Masukkan nama awal penerima"
-          id="nama"
-          register={register}
-        />
-      </FormFieldGroup>
-      <FormFieldGroup textHead="Penerima">
-        <FormField
-          textLabel="Bank Tujuan"
-          type="select"
-          placeholder="Pilih Bank Tujuan Transfer"
-          options={banks}
-          id="bankTujuan"
-          register={register}
-        />
-        <FormField
-          textLabel="Tanggal Transfer"
-          placeholder="Pilih tanggal transfer"
-          type="date"
-          id="tanggalTransfer"
-          register={register}
-        />
-        <FormField
-          textLabel="Nominal Transfer"
-          placeholder="Masukkan nominal transfer"
-          type="number"
-          id="nominalTransfer"
-          register={register}
-        />
-        <FormField
-          textLabel="Catatan"
-          placeholder="Masukkan alamat penerima"
-          type="textarea"
-          id="catatan"
-          register={register}
-        />
-      </FormFieldGroup>
-      <Flex justify="flex-end">
-        <Button
-          type="submit"
-          bg="orange.500"
-          color="white"
-          _hover={{ bg: "orange.400" }}
-          _focus={{ outline: "none" }}
-        >
-          Kirim Konfirmasi
-        </Button>
-      </Flex>
-    </FormControl>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Box
+        as="main"
+        className="primaryFont"
+        mx="auto"
+        maxWidth="23rem"
+        width={{ base: "100%", lg: "23rem" }}
+      >
+        <FormFieldGroup />
+        <FormFieldGroup textHead="Pengirim">
+          <FormField
+            textLabel="Bank Pengirim"
+            placeholder="Pilih Bank Pengirim"
+            type="select"
+            options={bankPengirim}
+            id="bankPengirim"
+            register={register}
+            errors={errors}
+          />
+          <FormField
+            textLabel="Nama Pengirim"
+            placeholder="Masukkan nama awal pengirim"
+            id="nama"
+            register={register}
+            errors={errors}
+          />
+        </FormFieldGroup>
+        <FormFieldGroup textHead="Penerima">
+          <FormField
+            textLabel="Bank Tujuan"
+            type="select"
+            placeholder="Pilih Bank Tujuan Transfer"
+            options={bankTujuan}
+            id="bankTujuan"
+            register={register}
+            errors={errors}
+          />
+          <FormField
+            textLabel="Tanggal Transfer"
+            placeholder="Pilih tanggal transfer"
+            type="date"
+            id="tanggalTransfer"
+            register={register}
+            errors={errors}
+          />
+          <FormField
+            textLabel="Nominal Transfer"
+            placeholder="Masukkan nominal transfer"
+            type="number"
+            id="nominalTransfer"
+            register={register}
+            errors={errors}
+          />
+          <FormField
+            textLabel="Catatan"
+            placeholder="Masukkan alamat penerima"
+            type="textarea"
+            id="catatan"
+            register={register}
+            errors={errors}
+          />
+        </FormFieldGroup>
+        <Flex justify="flex-end">
+          <Button
+            type="submit"
+            bg="orange.500"
+            color="white"
+            _hover={{ bg: "orange.400" }}
+            isLoading={isSubmitting}
+          >
+            Kirim Konfirmasi
+          </Button>
+        </Flex>
+      </Box>
+    </form>
   );
 };

@@ -22,6 +22,7 @@ const CardProduct = ({
   endTime,
   discount,
   products_id: liked_products_id,
+  products_slug,
   price,
   responsive,
   liked_customers_id,
@@ -84,7 +85,7 @@ const CardProduct = ({
       bg="white"
       className={responsive ? "card-product-responsive" : "card-product"}
       cursor="pointer"
-      onClick={() => router.push(`/product-details/${liked_products_id}`)}
+      onClick={() => router.push(`/product-details/${products_slug}`)}
     >
       <Box
         bg="white"

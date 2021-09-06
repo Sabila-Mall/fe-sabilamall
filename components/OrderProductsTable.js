@@ -50,7 +50,9 @@ export default function OrderProductsTable({ products }) {
                     {product.price}
                   </Text>
                 ) : (
-                  ""
+                  <Text color="black" fontSize="0.75rem">
+                    {product.price}
+                  </Text>
                 )}
 
                 <Text fontSize="1rem">{product.discountPrice}</Text>

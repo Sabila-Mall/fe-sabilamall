@@ -12,7 +12,7 @@ import { IoStar } from "react-icons/io5";
 import { IMAGE_HOST } from "../constants/api";
 
 const ProductReview = ({ reviewed_customers }) => {
-  const totalReview = reviewed_customers.length;
+  const totalReview = reviewed_customers ? reviewed_customers.length : 0;
 
   const renderStar = (numberOfStars) => {
     const ret = [];
@@ -50,7 +50,7 @@ const ProductReview = ({ reviewed_customers }) => {
       <HStack></HStack>
 
       <VStack spacing={"16px"} w="full">
-        {reviewed_customers.map(
+        {reviewed_customers?.map(
           ({
             customers_name,
             reviews_rating,

@@ -181,6 +181,7 @@ export const AddressProvider = ({ children }) => {
     deleteItem,
     addItemPengirim,
     addItemPenerima,
+    getAllData,
   };
 
   return (

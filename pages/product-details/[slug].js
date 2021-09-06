@@ -15,6 +15,7 @@ import ProductReview from "../../components/ProductReview";
 import RelatedProductContainer from "../../components/RelatedProductContainer";
 import { ShareProduct } from "../../components/ShareProduct";
 import { useAuthContext } from "../../contexts/authProvider";
+import { isNumber } from "../../utils/functions";
 
 const ProductDetails = () => {
   const { userData, isLoggedIn } = useAuthContext();
@@ -27,9 +28,17 @@ const ProductDetails = () => {
   const [quantity, setQuantity] = useState(0);
   const [stocks, setStocks] = useState(null);
   const [reviewedCustomers, setReviewedCustomers] = useState([]);
+  const [id, setId] = useState(null);
+  const [pricePerUnit, setPricePerUnit] = useState(null);
+  const [discountPricePerUnit, setDiscountPricePerUnit] = useState(null);
+  // const [pricePerUnit, setPricePerUnit] = useState(Number(current_price));
+  // const [discountPricePerUnit, setDiscountPricePerUnit] = useState(
+  //   discount_price ? Number(discount_price) : null,
+  // );
+  const [productSlug, setProductSlug] = useState("");
 
   const router = useRouter();
-  const id = router.query.id;
+  const slug = router.query.slug;
 
   useEffect(() => {
     setLoading(true);
@@ -38,21 +47,48 @@ const ProductDetails = () => {
     setStocks(null);
 
     const getData = async () => {
-      const dataPost = {
-        products_id: Number(id),
-        customers_id: isLoggedIn ? userId : null,
-      };
+      let dataPost = {};
+      if (isNumber(slug)) {
+        dataPost = {
+          customers_id: isLoggedIn ? userId : null,
+          products_id: slug,
+        };
+      } else {
+        dataPost = {
+          customers_id: isLoggedIn ? userId : null,
+          products_slug: slug,
+        };
+      }
+
       try {
         const resProductDetails = await getProductDetail(dataPost);
+        const { current_price, discount_price } = resProductDetails;
+        setPricePerUnit(current_price ? Number(current_price) : 0);
+        setDiscountPricePerUnit(discount_price ? Number(discount_price) : null);
+        if (isNumber(slug))
+          router.replace(
+            `/product-details/${resProductDetails?.products_slug}`,
+            undefined,
+            {
+              shallow: true,
+            },
+          );
         setData(resProductDetails);
+        setId(Number(resProductDetails?.products_id));
+
+        const dataPostReview = {
+          customers_id: isLoggedIn ? userId : null,
+          products_id: Number(resProductDetails?.products_id),
+        };
 
         const resStock = await checkStock({
-          products_id: Number(id),
+          products_id: Number(resProductDetails?.products_id),
         });
         setStocks(resStock);
 
         const stockData = Object.entries(resStock);
         let quantity = 0;
+
         stockData.forEach((d) => {
           d?.[1]?.forEach((ds) => {
             if (ds.stock && ds.ukuran !== "" && ds.stock > 0) {
@@ -60,21 +96,22 @@ const ProductDetails = () => {
             }
           });
         });
+
         setQuantity(quantity);
 
-        const resReview = await getReviewProduct(dataPost);
+        const resReview = await getReviewProduct(dataPostReview);
         setReviewedCustomers(resReview?.reviewed_customers?.data);
       } catch (e) {
-        console.error(e);
+        router.push("/404");
       } finally {
         setLoading(false);
       }
     };
 
-    id && getData();
-  }, [id, userId]);
+    slug && getData();
+  }, [slug, userId]);
 
-  if (loading || !data) {
+  if (loading) {
     return <Loading />;
   }
 
@@ -118,25 +155,6 @@ const ProductDetails = () => {
     products_image,
   };
 
-  const productHeaderData = {
-    po_close_status,
-    libur: isHoliday === 1,
-    preOrder: products_jenis === "po",
-    po_close_status,
-    products_ordered,
-    vendors_name,
-    rating,
-    customerdiscount,
-    current_price,
-    products_quantity: quantity,
-    isholidaydata,
-    po_opendate,
-    po_closedate,
-    discount_price,
-    po_shippingdate,
-    products_name,
-  };
-
   const productInformationData = {
     products_description,
     vendors_name,
@@ -169,6 +187,25 @@ const ProductDetails = () => {
     products_quantity: quantity,
   };
 
+  const productHeaderData = {
+    po_close_status,
+    libur: isHoliday === 1,
+    preOrder: products_jenis === "po",
+    po_close_status,
+    products_ordered,
+    vendors_name,
+    rating,
+    customerdiscount,
+    current_price: pricePerUnit,
+    products_quantity: quantity,
+    isholidaydata,
+    po_opendate,
+    po_closedate,
+    discount_price: discountPricePerUnit,
+    po_shippingdate,
+    products_name,
+  };
+
   const path = [
     {
       name: "Kategori",
@@ -189,7 +226,7 @@ const ProductDetails = () => {
 
   return (
     <Layout hasNavbar sticky hasBreadCrumb breadCrumbItem={path} hasPadding>
-      <Box w="full" overflow="hidden">
+      <Box w="full">
         <Flex
           flexDirection={{ base: "column", lg: "row" }}
           justifyContent={{ md: "center" }}
@@ -222,7 +259,11 @@ const ProductDetails = () => {
             </Box>
           </Box>
           <Box w={{ base: "100%", lg: "25%" }} maxW="100vw">
-            <ProductCheckout {...productCheckoutData} />
+            <ProductCheckout
+              {...productCheckoutData}
+              setDiscountPricePerUnit={setDiscountPricePerUnit}
+              setPricePerUnit={setPricePerUnit}
+            />
           </Box>
           <Box
             display={{ base: "block", lg: "none" }}

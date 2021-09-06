@@ -103,21 +103,6 @@ export const daftarProduk = [
   },
 ];
 
-export const daftarJasaPengiriman = [
-  {
-    id: "jne",
-    nama: "JNE JTR",
-  },
-  {
-    id: "sicepat",
-    nama: "SICEPAT",
-  },
-  {
-    id: "pos",
-    nama: "POS INDONESIA",
-  },
-];
-
 export const daftarMetodePembayaran = [
   {
     id: "bank",

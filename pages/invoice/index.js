@@ -1,8 +1,16 @@
-import { Box, Button, Flex, Text, useToast } from "@chakra-ui/react";
+import { Box, Button, Flex, Text, useToast, Spinner } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { IoCopyOutline } from "react-icons/io5";
 
 import { Layout } from "../../components/Layout";
-import { copyToClipboard } from "../../utils/functions";
+import { useCheckoutContext } from "../../contexts/checkoutProvider";
+import { isRequestSuccess } from "../../utils/api";
+import {
+  copyToClipboard,
+  currencyFormat,
+  dateFormat,
+} from "../../utils/functions";
 
 const path = [
   {
@@ -16,7 +24,18 @@ const path = [
     isOnPage: true,
   },
 ];
+
+const PAYMENT_METHOD = {
+  BANK_TRANSFER: "Transfer Bank",
+  SM_PAY: "Deposit",
+  VA_BCA: "Midtrans - Virtual Account BCA",
+};
+
 const Invoice = () => {
+  const { orderNumber, subtotal, checkoutResponse } = useCheckoutContext();
+
+  const router = useRouter();
+
   return (
     <>
       <Layout
@@ -47,7 +66,7 @@ const Invoice = () => {
           </Text>
           <Flex justifyContent="space-between" w={{ base: "75%", lg: "60%" }}>
             <Text>Nomor Order/Invoice</Text>
-            <Text fontWeight="bold">SMC58172</Text>
+            <Text fontWeight="bold">{checkoutResponse.orders_number}</Text>
           </Flex>
           <Flex
             mb="1rem"
@@ -55,27 +74,9 @@ const Invoice = () => {
             w={{ base: "75%", lg: "60%" }}
           >
             <Text>Total Tagihan</Text>
-            <Text>Rp.199.999</Text>
+            <Text>{currencyFormat(checkoutResponse.subtotal)}</Text>
           </Flex>
-          <Text mb="0.5rem">
-            Pembayaran dilakukan dengan melakukan Transfer ke Rekening berikut:
-          </Text>
-          <Flex flexDir="column" w={{ base: "60%", lg: "40%" }} mb="0.5rem">
-            <Bank bank="BCA" number="8691879542" />
-            <Bank bank="Mandiri" number="1570007081186" />
-            <Bank bank="BRI" number="954406744" />
-            <Bank bank="BSI" number="716111613" />
-          </Flex>
-          <Text>a.n. SABILAMALL NIAGA DIGITAL PT</Text>
-          <Flex justifyContent={{ lg: "flex-end" }} w="full">
-            <Button
-              colorScheme="orange"
-              w={{ base: "full", lg: "15rem" }}
-              mt="1rem"
-            >
-              Konfirmasi Pembayaran
-            </Button>
-          </Flex>
+          <InvoiceInfo router={router} />
         </Box>
       </Layout>
     </>
@@ -112,7 +113,7 @@ const Bank = ({ bank, number }) => {
   };
 
   return (
-    <Flex justifyContent="space-between" textAlign="left">
+    <Flex justifyContent="space-between" textAlign="left" my="1">
       <Text>{bank}</Text>
       <Flex alignItems="center">
         <Text mr="0.5rem">{number}</Text>
@@ -125,4 +126,94 @@ const Bank = ({ bank, number }) => {
       </Flex>
     </Flex>
   );
+};
+
+const InvoiceInfo = ({ router }) => {
+  const { checkoutResponse } = useCheckoutContext();
+
+  switch (checkoutResponse?.data?.payment_method) {
+    case PAYMENT_METHOD.BANK_TRANSFER:
+      return (
+        <>
+          <Text mb="0.5rem">
+            Pembayaran dilakukan dengan melakukan Transfer ke Rekening berikut:
+          </Text>
+          <Flex flexDir="column" w={{ base: "60%", lg: "40%" }} mb="0.5rem">
+            {checkoutResponse.rekeningbank.map((bank) => (
+              <Bank
+                key={bank.namabank}
+                bank={`${bank.namabank}`}
+                number={bank.rekening}
+              />
+            ))}
+          </Flex>
+          <Flex justifyContent={{ lg: "flex-end" }} w="full">
+            <Button
+              onClick={() =>
+                router.push(
+                  "/konfirmasi?order=" +
+                    checkoutResponse.orders_number.slice(3),
+                )
+              }
+              colorScheme="orange"
+              w={{ base: "full", lg: "15rem" }}
+              mt="1rem"
+            >
+              Konfirmasi Pembayaran
+            </Button>
+          </Flex>
+        </>
+      );
+    case PAYMENT_METHOD.SM_PAY:
+      return (
+        <>
+          <Text mb="0.5rem">
+            Terima kasih telah melakukan pembelian menggunakan SM Pay, pembelian
+            Anda akan segera diproses oleh sistem kami.
+          </Text>
+          <Flex justifyContent={{ lg: "flex-end" }} w="full">
+            <Button
+              colorScheme="orange"
+              w={{ base: "full", lg: "15rem" }}
+              mt="1rem"
+              onClick={() => router.push("/")}
+            >
+              Kembali Berbelanja
+            </Button>
+          </Flex>
+        </>
+      );
+    case PAYMENT_METHOD.VA_BCA:
+      return (
+        <>
+          <Text mb="0.5rem">
+            Pembayaran dilakukan dengan melakukan Transfer ke Rekening Virtual
+            Account berikut:
+          </Text>
+          <Flex flexDir="column" w={{ base: "60%", lg: "40%" }} mb="0.5rem">
+            <Bank
+              key={checkoutResponse.bankname}
+              bank={`${checkoutResponse.bankname?.toUpperCase()}`}
+              number={checkoutResponse.va_number}
+            />
+          </Flex>
+          <Text mb="0.5rem">
+            Lakukan pembayaran sebelum{" "}
+            {dateFormat(checkoutResponse.payment_due_date)}
+          </Text>
+          <Flex justifyContent={{ lg: "flex-end" }} w="full">
+            <Button
+              colorScheme="orange"
+              w={{ base: "full", lg: "15rem" }}
+              mt="1rem"
+              onClick={() => router.push("/")}
+            >
+              Kembali Berbelanja
+            </Button>
+          </Flex>
+        </>
+      );
+    default:
+      return <Text>...</Text>;
+  }
 };

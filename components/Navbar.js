@@ -28,6 +28,7 @@ import {
   IoHeartSharp,
   IoNotifications,
   IoCart,
+  IoFileTrayStacked,
 } from "react-icons/io5";
 import { IoHomeSharp, IoReceiptSharp } from "react-icons/io5";
 
@@ -200,7 +201,8 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
       templateColumns={{
         base: "repeat(3, 1.3rem)",
         sm: "repeat(3, 2rem)",
-        md: isLoggedIn ? "repeat(4, 2.75rem) 6rem" : "repeat(3, 3rem) 6rem",
+        md: isLoggedIn ? "repeat(5, 2.75rem) 6rem" : "repeat(5, 2.5rem) 6rem",
+        lg: isLoggedIn ? "repeat(5, 2.75rem) 6rem" : "repeat(5, 3rem) 6rem",
       }}
       w="auto"
       columnGap={{ base: 6, md: 0 }}
@@ -232,6 +234,14 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
       <Link href={isLoggedIn ? "/wishlist" : "/login"} w="fit-content">
         <Icon
           as={IoHeartSharp}
+          className={styles.navbarIcon}
+          color="gray.500"
+        />
+      </Link>
+      <Link href={"/stok"} w="fit-content">
+        <Icon
+          display={{ base: "none", md: "block" }}
+          as={IoFileTrayStacked}
           className={styles.navbarIcon}
           color="gray.500"
         />

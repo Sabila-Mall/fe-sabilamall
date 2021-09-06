@@ -41,11 +41,11 @@ export const formatNumber = (amount) => {
 
 export const formatPhoneNumber = (phoneNumber) => {
   return (
-    phoneNumber.slice(0, 4) +
+    phoneNumber?.slice(0, 4) +
     "-" +
-    phoneNumber.slice(4, 8) +
+    phoneNumber?.slice(4, 8) +
     "-" +
-    phoneNumber.slice(7, 11)
+    phoneNumber?.slice(7, 11)
   );
 };
 
@@ -183,4 +183,23 @@ export const dateFormat = (date) => {
       ? "0" + new Date(date).getDate().toString()
       : new Date(date).getDate()
   }`;
+};
+
+export const estimasiFormat = (estimasi) => {
+  let tempResult = "";
+  if (/\d/.test(estimasi)) {
+    tempResult = estimasi.toLowerCase();
+  } else {
+    tempResult = "1" + estimasi.toLowerCase();
+  }
+
+  if (!estimasi.toLowerCase().includes("hari")) {
+    tempResult += " hari";
+  }
+
+  return tempResult;
+};
+
+export const isNumber = (n) => {
+  return /^-?[\d.]+(?:e-?\d+)?$/.test(n);
 };

@@ -14,47 +14,56 @@ import { IoHeart } from "react-icons/io5";
 import { IoWalletOutline } from "react-icons/io5";
 import { VscPackage } from "react-icons/vsc";
 
+import { useSmPayPointContext } from "../contexts/SMPayPointProvider";
 import { useAuthContext } from "../contexts/authProvider";
+import { currencyFormat } from "../utils/functions";
 import { ButtonStatusUser } from "./ButtonProfile";
 
-export const SMCard = ({ sm, w }) => (
-  <Flex mt="20px" mx="auto" w={w} justifyContent="center" alignItems="center">
-    {sm.map((item, index) => (
-      <Box
-        key={item.text}
-        display="flex"
-        flexDirection="column"
-        ml={index ? "12px" : "0px"}
-        borderRadius="8px"
-        boxShadow="0px 1px 3px 0px #2D37481A,0px 1px 2px 0px #2D37480F"
-      >
-        <Box bg="gray.100" w="113px" p="7px" borderRadius="8px 8px 0px 0px">
-          <Text
-            className="primaryFont"
-            fontWeight="700"
-            fontSize="14px"
-            color="orange.500"
-            textAlign="center"
-          >
-            {item.text}
-          </Text>
+export const SMCard = ({ w }) => {
+  const { smPay, smPoint } = useSmPayPointContext();
+  const sm = [
+    { text: "SM Pay", value: smPay },
+    { text: "SM Point", value: smPoint },
+  ];
+  return (
+    <Flex mt="20px" mx="auto" w={w} justifyContent="center" alignItems="center">
+      {sm.map((item, index) => (
+        <Box
+          key={item.text}
+          display="flex"
+          flexDirection="column"
+          ml={index ? "12px" : "0px"}
+          borderRadius="8px"
+          boxShadow="0px 1px 3px 0px #2D37481A,0px 1px 2px 0px #2D37480F"
+        >
+          <Box bg="gray.100" w="113px" p="7px" borderRadius="8px 8px 0px 0px">
+            <Text
+              className="primaryFont"
+              fontWeight="700"
+              fontSize="14px"
+              color="orange.500"
+              textAlign="center"
+            >
+              {item.text}
+            </Text>
+          </Box>
+          <Box w="100%" p="7px" bg="gray.50" borderRadius="0px 0px 8px 8px">
+            <Text
+              className="secondaryFont"
+              fontWeight="500"
+              fontSize="12px"
+              lineHeight="18px"
+              textAlign="center"
+              color="gray.900"
+            >
+              {index ? item.value : `${item.value}`}
+            </Text>
+          </Box>
         </Box>
-        <Box w="100%" p="7px" bg="gray.50" borderRadius="0px 0px 8px 8px">
-          <Text
-            className="secondaryFont"
-            fontWeight="500"
-            fontSize="12px"
-            lineHeight="18px"
-            textAlign="center"
-            color="gray.900"
-          >
-            {index ? item.value : `${item.value}`}
-          </Text>
-        </Box>
-      </Box>
-    ))}
-  </Flex>
-);
+      ))}
+    </Flex>
+  );
+};
 
 export const CardProfile = ({ sm, cardProfileText }) => {
   const router = useRouter();
@@ -119,7 +128,7 @@ export const CardProfile = ({ sm, cardProfileText }) => {
         </Box>
       </Flex>
       <Box px="10px" mt="50px">
-        <SMCard sm={sm} />
+        <SMCard />
       </Box>
       <VStack
         mt="40px"
