@@ -3,6 +3,10 @@ import axios from "axios";
 import { HOST } from "../constants/api";
 
 export const apiGetOrder = async (customerId, page) => {
+  let device_id = null;
+  if (typeof window !== "undefined") {
+    device_id = window.localStorage.getItem("device_id");
+  }
   try {
     const res = await axios.post(
       HOST + `/api/order/get_by_customers?page=${page}`,
@@ -10,6 +14,7 @@ export const apiGetOrder = async (customerId, page) => {
         customers_id: customerId,
         currency_code: "IDR",
         language_id: 1,
+        device_id,
       },
     );
     const d = {
@@ -25,21 +30,31 @@ export const apiGetOrder = async (customerId, page) => {
 };
 
 export const apiGetSingleOrder = async (customers_id, orders_id) => {
+  let device_id = null;
+  if (typeof window !== "undefined") {
+    device_id = window.localStorage.getItem("device_id");
+  }
   return axios.post(HOST + "/api/order/get_by_customers", {
     customers_id: customers_id,
     currency_code: "IDR",
     language_id: 1,
     orders_id: orders_id,
+    device_id,
   });
 };
 
 export const apiSearchOrder = async (customerId, orderId) => {
+  let device_id = null;
+  if (typeof window !== "undefined") {
+    device_id = window.localStorage.getItem("device_id");
+  }
   try {
     const res = await axios.post(HOST + `/api/order/search_by_customers`, {
       customers_id: customerId,
       currency_code: "IDR",
       language_id: 1,
       orders_id: orderId,
+      device_id,
     });
     const d = {
       data: res.data,
@@ -51,18 +66,28 @@ export const apiSearchOrder = async (customerId, orderId) => {
 };
 
 export const apiGetResi = async (customers_id, orders_id) => {
+  let device_id = null;
+  if (typeof window !== "undefined") {
+    device_id = window.localStorage.getItem("device_id");
+  }
   return axios.post(HOST + "/api/resi/cek_resi", {
     customers_id: customers_id,
     orders_id: orders_id,
+    device_id,
   });
 };
 
 export const apiGetOrderCustomer = async (customerId, orderId) => {
+  let device_id = null;
+  if (typeof window !== "undefined") {
+    device_id = window.localStorage.getItem("device_id");
+  }
   const res = await axios.post(HOST + `/api/order/get_by_customers`, {
     customers_id: customerId,
     currency_code: "IDR",
     language_id: 1,
     orders_id: orderId,
+    device_id,
   });
   return res.data;
 };

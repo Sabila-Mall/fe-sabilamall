@@ -1,5 +1,6 @@
 import nookies from "nookies";
 import { createContext, useContext, useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 import { apiGetUserProfile } from "../api/Auth";
 import { USER_FIELDS } from "../constants/authConstants";
@@ -15,6 +16,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     nookies.destroy(null, "user_id");
+    localStorage.removeItem("device_id");
     setIsLoggedIn(false);
     setUserData(null);
   };
@@ -23,6 +25,11 @@ export const AuthProvider = ({ children }) => {
     if (userData === null) {
       const userId = nookies.get(null, "user_id");
       if (document.cookie.indexOf("user_id") !== -1) {
+        const devId = localStorage.getItem("device_id");
+        const parsedDevId = devId ? JSON.parse(devId) : null;
+        if (!parsedDevId) {
+          localStorage.setItem("device_id", JSON.stringify(uuidv4()));
+        }
         setIsLoggedIn(true);
         setLoading(true);
         apiGetUserProfile(userId.user_id)
@@ -36,6 +43,8 @@ export const AuthProvider = ({ children }) => {
             }
           })
           .finally(() => setLoading(false));
+      } else {
+        localStorage.removeItem("device_id");
       }
     }
   }, []);
