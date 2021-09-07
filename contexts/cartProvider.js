@@ -107,8 +107,6 @@ export const CartProvider = ({ children }) => {
                     }
                   });
                   vendor.keranjang = tempKeranjang;
-                  console.log(vendor.keranjang);
-                  console.log(secondItem);
                 }
               }
             }
@@ -119,7 +117,6 @@ export const CartProvider = ({ children }) => {
               tempCart.push(product);
             });
           });
-          console.log(tempCart);
 
           let tempPrice = 0;
           let tempDiscount = 0;
@@ -191,8 +188,6 @@ export const CartProvider = ({ children }) => {
       setselectedQuantity(tempQuantity);
       setselectedWeight(tempWeight);
       setselectedDiscount(tempDiscount);
-      console.log(tempDiscount);
-      console.log(checkoutData);
     } else {
       toast({
         title: "Pilih barang yang akan dicheckout terlebih dahulu",
@@ -213,7 +208,6 @@ export const CartProvider = ({ children }) => {
   const deleteFromCheckout = (data) => {
     let tempData = [];
     selectedItem.forEach((element) => {
-      console.log(element.products_id === data.products_id);
       if (element.customers_basket_id !== data.customers_basket_id) {
         tempData.push(element);
       }
@@ -225,7 +219,6 @@ export const CartProvider = ({ children }) => {
 
   const calculateTotalSelected = (data) => {
     setselectedPrice(0);
-    console.log(data);
     if (data.length > 0) {
       let tempTotal = 0;
       data.forEach((element) => {
@@ -254,7 +247,6 @@ export const CartProvider = ({ children }) => {
   ) => {
     editCartNotes({ customers_id, customers_basket_id, customers_basket_notes })
       .then((res) => {
-        console.log(res);
         if (isRequestSuccess(res)) {
           successToast("Berhasil menambahkan catatan produk");
           getAllData();
@@ -285,7 +277,6 @@ export const CartProvider = ({ children }) => {
       option_values_id,
     })
       .then((res) => {
-        console.log(res);
         if (isRequestSuccess(res)) {
           successToast("Produk berhasil ditambahkan ke keranjang belanja");
           getAllData();

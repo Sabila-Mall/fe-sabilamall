@@ -1,13 +1,33 @@
 import { Box, Text } from "@chakra-ui/layout";
-import { Grid, Heading, HStack, Image, Square, Stack, Editable, EditableInput, EditablePreview, useEditableControls, IconButton } from "@chakra-ui/react";
+import {
+  Grid,
+  Heading,
+  HStack,
+  Image,
+  Square,
+  Stack,
+  Editable,
+  EditableInput,
+  EditablePreview,
+  useEditableControls,
+  IconButton,
+} from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
 import { IoCreateOutline } from "react-icons/io5";
 
 import { IMAGE_HOST } from "../constants/api";
+import { useAuthContext } from "../contexts/authProvider";
+import { useCartContext } from "../contexts/cartProvider";
 import { useWindowSize } from "../hooks/useWindowSize";
 import { formatNumber } from "../utils/functions";
+
 const CheckoutProduct = ({ product }) => {
   const { width } = useWindowSize();
   const isSmartphone = width < 768;
+
+  const { userData } = useAuthContext();
+  const userId = userData?.id;
+  const { editCartItemNotes } = useCartContext();
 
   const gambarURL = product.products_image_path_medium;
   const discount = Number(product.customers_discount);
@@ -16,10 +36,24 @@ const CheckoutProduct = ({ product }) => {
   const nama = product.products_name;
   const varian = product?.varian;
   const jumlah = product.customers_basket_quantity;
-  const catatan = product.customers_basket_notes
+  const catatan = product.customers_basket_notes;
+  const customerBasket = product?.customers_basket_id;
 
   let deskripsiArray = [];
   let deskripsi;
+  const focusOut = useRef(null);
+
+  useEffect(() => {
+    if (focusOut.current !== null) {
+      const onFocusOut = (event) => {
+        editCartItemNotes(userId, customerBasket, event.target.value);
+      };
+      focusOut.current.addEventListener("focusout", onFocusOut);
+      return () => {
+        focusOut.current?.removeEventListener("focusout", onFocusOut);
+      };
+    }
+  }, [userData]);
 
   if (varian) {
     varian.forEach((element) => {
@@ -82,24 +116,28 @@ const CheckoutProduct = ({ product }) => {
             </Text>
           </Box>
         </HStack>
-        {catatan && <Editable
-          mt="0.75rem"
-          className="secondaryFont"
-          color={"gray.400"}
-          fontSize={"0.75rem"}
-          isDisabled={true}
-          isPreviewFocusable={false}
-          placeholder={catatan}
-        >
-          <HStack spacing={"0.25rem"}>
-            <EditableControls />
-            <Box>
-              <EditablePreview />
-              <EditableInput color="black" />
-            </Box>
-          </HStack>
-        </Editable>}
-
+        {catatan && (
+          <Editable
+            mt="0.75rem"
+            className="secondaryFont"
+            color={"gray.400"}
+            fontSize={"0.75rem"}
+            isPreviewFocusable={false}
+            placeholder={catatan}
+          >
+            <HStack spacing={"0.25rem"}>
+              {userData && (
+                <>
+                  <EditableControls />
+                  <Box>
+                    <EditablePreview />
+                    <EditableInput color="black" ref={focusOut} />
+                  </Box>
+                </>
+              )}
+            </HStack>
+          </Editable>
+        )}
       </Box>
       <Box
         gridArea={"harga"}

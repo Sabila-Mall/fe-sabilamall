@@ -43,13 +43,14 @@ const Stok = () => {
   const [nameSearch, setNameSearch] = useState("");
   const [supplier, setSupplier] = useState([]);
   const [brandId, setBrandId] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [stocks, setStocks] = useState([]);
   const [firstTime, setFirstTime] = useState(true);
   const [supplierName, setSupplierName] = useState("");
   const [data, setData] = useState([]);
   const [totalProduct, setTotalProduct] = useState(-1);
   const [tempData, setTempData] = useState([]);
+  const [noProduct, setNoProduct] = useState(false);
 
   const objToArray = (d) => {
     if (typeof d === "object") {
@@ -95,6 +96,10 @@ const Stok = () => {
     if (brandId != 0) {
       apiGetProductBrandPage(brandId, currPage).then((res) => {
         let d = res.data.data.data;
+
+        if (d.length == 0) setNoProduct(true);
+        else setNoProduct(false);
+
         const lastPage = res.data.data.last_page;
         setTotalProduct(res.data.data.total);
         setTempData((curr) => [...curr, ...d]);
@@ -133,6 +138,7 @@ const Stok = () => {
             justifyContent="space-between"
           >
             <Select
+              disabled={loading}
               placeholder={firstTime && "Cari supplier"}
               w={{ base: "100%", md: "30%" }}
               onChange={(e) => {
@@ -203,12 +209,12 @@ const Stok = () => {
                   );
                 }
               })
-            ) : !firstTime && loading ? (
+            ) : loading ? (
               <Box w="full" display="flex" justifyContent="center">
                 <Spinner />
               </Box>
             ) : (
-              !loading && <h1>Tidak ada produk</h1>
+              noProduct && <h1>Tidak ada produk</h1>
             )}
             {firstTime && (
               <Flex

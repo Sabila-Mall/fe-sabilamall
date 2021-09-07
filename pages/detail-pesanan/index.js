@@ -75,7 +75,6 @@ const RingkasanPesanan = () => {
     const localCheckout = JSON.parse(localStorage.getItem("selectedProduct"));
     if (localCheckout) {
       products = localCheckout.products;
-      console.log(products);
     }
   }
   return (
