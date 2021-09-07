@@ -13,13 +13,6 @@ import {
   GridItem,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { FaUser } from "react-icons/fa";
-import { IoLogoFacebook } from "react-icons/io";
-import {
-  IoLogoTwitter,
-  IoLogoInstagram,
-  IoLogoLinkedin,
-} from "react-icons/io5";
 
 import styles from "../styles/Footer.module.scss";
 import { socialMedia } from "../utils/socialMediaLink";
@@ -88,27 +81,27 @@ const DesktopFooter = () => {
               align="initial"
               className={styles.secondaryFont}
             >
-              <Link href="/about-us">
+              <Link href={"/about-us"}>
                 <Text cursor="pointer" _hover={{ textDecoration: "underline" }}>
                   Mengenal SabilaMall
                 </Text>
               </Link>
-              <Link href="/join-reseller">
+              <Link href={"/join-reseller"}>
                 <Text cursor="pointer" _hover={{ textDecoration: "underline" }}>
                   Gabung Reseller Baju Muslim
                 </Text>
               </Link>
-              <Link href="/privacy-policy">
+              <Link href={"/privacy-policy"}>
                 <Text cursor="pointer" _hover={{ textDecoration: "underline" }}>
                   Kebijakan Privasi
                 </Text>
               </Link>
-              <Link href="/terms-and-conditions">
+              <Link href={"/terms-and-conditions"}>
                 <Text cursor="pointer" _hover={{ textDecoration: "underline" }}>
                   Syarat & Ketentuan
                 </Text>
               </Link>
-              <Link href="/contact-us">
+              <Link href={"/contact-us"}>
                 <Text cursor="pointer" _hover={{ textDecoration: "underline" }}>
                   Kontak kami
                 </Text>
@@ -124,7 +117,7 @@ const DesktopFooter = () => {
               spacing={{ base: 1, lg: 4 }}
               className={styles.secondaryFont}
             >
-              {socialMedia.map(({ name, link, logoType }) => {
+              {socialMedia.map(({ name, link, logoType }, index) => {
                 return (
                   <Text
                     as="a"
@@ -132,6 +125,7 @@ const DesktopFooter = () => {
                     target="_blank"
                     _focus={{ boxShadow: "none" }}
                     cursor="pointer"
+                    key={index}
                   >
                     <Icon
                       aria-label={name}

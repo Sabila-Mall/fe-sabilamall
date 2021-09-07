@@ -36,7 +36,6 @@ const LayoutSaleProducts = ({ data, loading, headingText, hasBackground }) => {
   return (
     <Box
       pt="1.5rem"
-      pb="3.25rem"
       position="relative"
       overflow="hidden"
       onMouseEnter={() => setDisplay("block")}
