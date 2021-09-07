@@ -1,8 +1,14 @@
+import { useToast } from "@chakra-ui/toast";
 import { createContext, useContext, useEffect, useState } from "react";
 
-import { getBanner, getCategory, getDiscountProducts, getFlashSaleProducts, getProducts } from "../api/Homepage";
+import {
+  getBanner,
+  getCategory,
+  getDiscountProducts,
+  getFlashSaleProducts,
+  getProducts,
+} from "../api/Homepage";
 import { isRequestSuccess } from "../utils/api";
-import { useToast } from "@chakra-ui/toast";
 
 const HomepageContext = createContext();
 
@@ -49,7 +55,7 @@ export const HomepageProvider = ({ children }) => {
 
   useEffect(() => {
     getFlashSaleProducts(1)
-      .then(res => {
+      .then((res) => {
         if (isRequestSuccess(res.data)) {
           setFlashSaleProducts({
             data: res.data.data.data ?? [],
@@ -61,16 +67,20 @@ export const HomepageProvider = ({ children }) => {
           throw "Gagal mendapatkan produk flash sale";
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         errorToast(err);
-        setFlashSaleProducts({ data: [], loading: false, ...flashSaleProducts });
+        setFlashSaleProducts({
+          data: [],
+          loading: false,
+          ...flashSaleProducts,
+        });
       });
   }, []);
 
   useEffect(() => {
     getDiscountProducts(1)
-      .then(res => {
+      .then((res) => {
         if (isRequestSuccess(res.data)) {
           setDiscountProducts({
             data: res.data.data.data ?? [],
@@ -82,16 +92,20 @@ export const HomepageProvider = ({ children }) => {
           throw "Gagal mendapatkan produk diskon";
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         errorToast(err);
-        setDiscountProducts({ data: [], loading: false, ...discountProducts });
+        setDiscountProducts({
+          data: [],
+          loading: false,
+          ...discountProducts,
+        });
       });
   }, []);
 
   useEffect(() => {
     getBanner()
-      .then(res => {
+      .then((res) => {
         if (isRequestSuccess(res.data)) {
           setBanner({
             data: res.data.data ?? [],
@@ -101,7 +115,7 @@ export const HomepageProvider = ({ children }) => {
           throw "Gagal mendapatkan banner";
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         errorToast(err);
         setBanner({ ...banner, loading: false });
@@ -110,7 +124,7 @@ export const HomepageProvider = ({ children }) => {
 
   useEffect(() => {
     getCategory()
-      .then(res => {
+      .then((res) => {
         if (isRequestSuccess(res.data)) {
           setCategory({
             data: res.data.data ?? [],
@@ -120,7 +134,7 @@ export const HomepageProvider = ({ children }) => {
           throw "Gagal mendapatkan kategori";
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         errorToast(err);
         setCategory({ data: [], loading: false });
@@ -129,18 +143,20 @@ export const HomepageProvider = ({ children }) => {
 
   useEffect(() => {
     getProducts(1, filter)
-      .then((res => {
+      .then((res) => {
         if (isRequestSuccess(res.data)) {
-          setProducts(
-            {
-              data: filter === "" ? Object.values(res.data.data.data) : res.data.data.data,
-              currentPage: 1,
-              lastPage: res.data.data.last_page,
-              loading: false,
-            });
+          setProducts({
+            data:
+              filter === ""
+                ? Object.values(res.data.data.data)
+                : res.data.data.data,
+            currentPage: 1,
+            lastPage: res.data.data.last_page,
+            loading: false,
+          });
         }
-      }))
-      .catch(err => {
+      })
+      .catch((err) => {
         console.error(err);
         errorToast("Gagal mendapatkan produk");
         setProducts({ ...products, data: [], loading: false });
@@ -152,18 +168,20 @@ export const HomepageProvider = ({ children }) => {
 
     const newPage = products.currentPage + 1;
     getProducts(newPage, filter)
-      .then((res => {
+      .then((res) => {
         if (isRequestSuccess(res.data)) {
-          setProducts(
-            {
-              data: filter === "" ? products.data.concat(Object.values(res.data.data.data)) : products.data.concat(res.data.data.data),
-              currentPage: newPage,
-              lastPage: res.data.data.last_page,
-              loading: false,
-            });
+          setProducts({
+            data:
+              filter === ""
+                ? products.data.concat(Object.values(res.data.data.data))
+                : products.data.concat(res.data.data.data),
+            currentPage: newPage,
+            lastPage: res.data.data.last_page,
+            loading: false,
+          });
         }
-      }))
-      .catch(err => {
+      })
+      .catch((err) => {
         console.error(err);
         errorToast("Gagal menampilkan produk lebih");
       });

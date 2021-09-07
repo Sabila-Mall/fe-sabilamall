@@ -1,12 +1,21 @@
+import { Box, Text } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/toast";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { HomepageProvider, useHomePageContext } from "../../contexts/homepageProvider";
-import { Box, Text } from "@chakra-ui/react";
-import LayoutProductList from "../../components/LayoutProductList";
+
+import {
+  getDiscountProducts,
+  getFlashSaleProducts,
+  getProducts,
+} from "../../api/Homepage";
 import { Layout } from "../../components/Layout";
-import { getDiscountProducts, getFlashSaleProducts, getProducts } from "../../api/Homepage";
+import LayoutProductList from "../../components/LayoutProductList";
+import {
+  HomepageProvider,
+  useHomePageContext,
+} from "../../contexts/homepageProvider";
 import { isRequestSuccess } from "../../utils/api";
-import { useToast } from "@chakra-ui/toast";
+import { titleCase } from "../../utils/functions";
 
 const SaleProductsDisplay = () => {
   const router = useRouter();
@@ -42,18 +51,17 @@ const SaleProductsDisplay = () => {
 
     if (response) {
       response
-        .then(res => {
+        .then((res) => {
           if (isRequestSuccess(res.data)) {
-            setProducts(
-              {
-                data: products.data.concat(Object.values(res.data.data.data)),
-                currentPage: newPage,
-                lastPage: res.data.data.last_page,
-                loading: false,
-              });
+            setProducts({
+              data: products.data.concat(Object.values(res.data.data.data)),
+              currentPage: newPage,
+              lastPage: res.data.data.last_page,
+              loading: false,
+            });
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(err);
           errorToast("Gagal menampilkan produk lebih");
         });
@@ -68,17 +76,18 @@ const SaleProductsDisplay = () => {
         setProducts(flashSaleProducts);
       }
     }
-  }, [type]);
+  }, [type, flashSaleProducts, discountProducts]);
 
   return (
-    <Layout hasNavbar={true} hasPadding={true}>
-      <Box
-        as="main"
-        pb="12"
-        d="flex"
-        justifyContent="start"
-        w="full"
-      >
+    <Layout
+      hasNavbar={true}
+      hasPadding={true}
+      hasBreadCrumb
+      breadCrumbItem={[
+        { name: titleCase(type.replace("-", " ")), isOnPage: true },
+      ]}
+    >
+      <Box as="main" pb="12" d="flex" justifyContent="start" w="full">
         <Box paddingTop="1.8rem" minH="100vh" w="full">
           <Text
             className="primaryFont"
@@ -87,12 +96,15 @@ const SaleProductsDisplay = () => {
             paddingBottom="1.5rem"
             textAlign="left"
           >
-            Daftar produk {(type ?? "").replace("-", " ")}
+            Daftar produk {titleCase((type ?? "").replace("-", " "))}
           </Text>
 
           <LayoutProductList
-            data={products} loading={products.loading}
-            handleLoadMore={handleLoadMore} sorting={false} title={false}
+            data={products}
+            loading={products.loading}
+            handleLoadMore={handleLoadMore}
+            sorting={false}
+            title={false}
           />
         </Box>
       </Box>
@@ -100,10 +112,10 @@ const SaleProductsDisplay = () => {
   );
 };
 
-const SaleProducts = () =>
+const SaleProducts = () => (
   <HomepageProvider>
     <SaleProductsDisplay />
-  </HomepageProvider>;
-
+  </HomepageProvider>
+);
 
 export default SaleProducts;

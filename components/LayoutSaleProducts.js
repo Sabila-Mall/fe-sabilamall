@@ -1,12 +1,21 @@
-import { Box, Flex, Heading, Icon, Skeleton, SkeletonText, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Icon,
+  Skeleton,
+  SkeletonText,
+  Text,
+} from "@chakra-ui/react";
+import Link from "next/link";
 import { useState } from "react";
+import { IoArrowForwardOutline } from "react-icons/io5";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import Slider from "react-slick";
+
 import { useWindowSize } from "../hooks/useWindowSize";
 import styles from "../styles/Product.module.scss";
 import CardProduct from "./CardProduct";
-import { IoArrowForwardOutline } from "react-icons/io5";
-import Link from 'next/link'
 
 const px = { base: "1rem", md: "1.5rem", lg: "3rem", xl: "50px" };
 
@@ -123,7 +132,11 @@ const LayoutSaleProducts = ({ data, loading, headingText, hasBackground }) => {
         color="black"
         cursor="pointer"
       >
-        <Link href={`/produk-sale?type=${headingText.toLowerCase().replace(" ", "-")}`}>
+        <Link
+          href={`/product-sale?type=${headingText
+            .toLowerCase()
+            .replace(" ", "-")}`}
+        >
           <Text
             color={hasBackground ? "white" : "black"}
             fontSize="16px"
