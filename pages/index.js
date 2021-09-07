@@ -93,17 +93,17 @@ const HomeDisplay = () => {
           </Box>
         </Flex>
       </Layout>
-      <Flex justify="center" bg="orange.400">
-        <Box maxW="1440px">
+      <Box justify="center" bg="orange.400">
+        <Layout hasNavbar={false} noFooter={true} hasPadding={true}>
           <LayoutSaleProducts
             data={flashSaleProducts.data}
             headingText="Flash Sale"
             hasBackground={true}
             loading={flashSaleProducts.loading}
           />
-        </Box>
-      </Flex>
-      <Layout hasNavbar={false}>
+        </Layout>
+      </Box>
+      <Layout hasNavbar={false} hasPadding={true}>
         <LayoutSaleProducts
           data={discountProducts.data}
           headingText="Discount"

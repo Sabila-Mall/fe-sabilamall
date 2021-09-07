@@ -1,10 +1,11 @@
-import { Box, Flex, Heading, Skeleton, SkeletonText } from "@chakra-ui/react";
+import { Box, Flex, Heading, Icon, Skeleton, SkeletonText, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import Slider from "react-slick";
 import { useWindowSize } from "../hooks/useWindowSize";
 import styles from "../styles/Product.module.scss";
 import CardProduct from "./CardProduct";
+import { IoArrowForwardOutline } from "react-icons/io5";
 
 const px = { base: "1rem", md: "1.5rem", lg: "3rem", xl: "50px" };
 
@@ -26,7 +27,6 @@ const LayoutSaleProducts = ({ data, loading, headingText, hasBackground }) => {
     <Box
       pt="1.5rem"
       pb="3.25rem"
-      pl={px}
       position="relative"
       overflow="hidden"
       onMouseEnter={() => setDisplay("block")}
@@ -115,24 +115,23 @@ const LayoutSaleProducts = ({ data, loading, headingText, hasBackground }) => {
           <MdChevronRight size="2em" />
         </Box>
       </Box>
-      {/* Temporarily removed as the API loads all data without pages */}
-      {/*<Flex*/}
-      {/*  justify="flex-end"*/}
-      {/*  mt="1rem"*/}
-      {/*  mr="2rem"*/}
-      {/*  color="black"*/}
-      {/*  cursor="pointer"*/}
-      {/*>*/}
-      {/*  <Text*/}
-      {/*    color={hasBackground ? "white" : "black"}*/}
-      {/*    fontSize="16px"*/}
-      {/*    lineHeight="24px"*/}
-      {/*    fontWeight="500"*/}
-      {/*    pr={px}*/}
-      {/*  >*/}
-      {/*    Lihat selengkapnya <Icon as={IoArrowForwardOutline} />*/}
-      {/*  </Text>*/}
-      {/*</Flex>*/}
+      <Flex
+        justify="flex-end"
+        mt="1rem"
+        mr="2rem"
+        color="black"
+        cursor="pointer"
+      >
+        <Text
+          color={hasBackground ? "white" : "black"}
+          fontSize="16px"
+          lineHeight="24px"
+          fontWeight="500"
+          pr={px}
+        >
+          Lihat selengkapnya <Icon as={IoArrowForwardOutline} />
+        </Text>
+      </Flex>
     </Box>
   );
 };

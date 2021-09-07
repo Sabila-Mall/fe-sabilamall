@@ -20,11 +20,8 @@ import {
 } from "@chakra-ui/react";
 import { IoArrowDown, IoChevronDown, IoFilterOutline } from "react-icons/io5";
 
-import { useAuthContext } from "../contexts/authProvider";
 import styles from "../styles/Product.module.scss";
 import CardProduct from "./CardProduct";
-
-const px = { base: "1rem", md: "1.5rem", lg: "3rem", xl: "50px" };
 
 const LayoutProductList = ({
   data,
@@ -35,14 +32,13 @@ const LayoutProductList = ({
   title = true,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { userData } = useAuthContext();
   function handleFilterWrapper(filter) {
     onClose();
     handleFilter(filter);
   }
 
   return (
-    <Box bg="white" pb="100px" px={px}>
+    <Box bg="white" pb="100px">
       <Box
         className={styles.secondaryFont}
         mb="32px"

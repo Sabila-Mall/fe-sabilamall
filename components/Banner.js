@@ -27,6 +27,7 @@ const Banner = ({ data, loading }) => {
       : <Box
         marginTop="1.5rem"
         position="relative"
+        overflow="hidden"
         onMouseEnter={() => setDisplay("block")}
         onMouseLeave={() => setDisplay("none")}
       >
