@@ -92,7 +92,7 @@ export const extractName = (name) => {
 };
 
 export const calculateTimeLeft = (endTime) => {
-  let difference = +endTime - +new Date();
+  let difference = endTime - new Date().getMilliseconds();
   let timeLeft = {};
 
   if (difference > 0) {

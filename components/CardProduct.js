@@ -19,7 +19,7 @@ import { calculateTimeLeft, numberWithDot } from "../utils/functions";
 const CardProduct = ({
   image_path,
   name,
-  endTime,
+  flash_end,
   discount,
   products_id: liked_products_id,
   products_slug,
@@ -37,7 +37,7 @@ const CardProduct = ({
   const priceAfterDiscount = discount
     ? numberWithDot(price - (price * discount) / 100)
     : null;
-  const timeLeft = endTime && calculateTimeLeft(endTime);
+  const timeLeft = flash_end && calculateTimeLeft(flash_end);
 
   const [liked, setLiked] = useState(
     wishlistData?.length > 0
@@ -110,7 +110,7 @@ const CardProduct = ({
           bgSize="cover"
         ></Box>
         <Box padding="2" w="100%">
-          {endTime && timeLeft && (
+          {flash_end && timeLeft && (
             <Box
               px="4px"
               h="26px"
