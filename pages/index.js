@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { IoArrowUp } from "react-icons/io5";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
-import Head from 'next/head'
+import Head from "next/head";
 
 import LayoutCategoryList from "../components/LayoutCategoryList";
 import SMCard from "../components/SMCard";
@@ -38,16 +38,18 @@ const HomeDisplay = () => {
   }, []);
 
   return (
-    <Layout hasNavbar={true} hasPadding={false} noFooter>
-      <Head>
-        <title>Distributor Grosir Supplier Nibras, Endomoda, Ethica - Open Reseller</title>
-        <meta name="keywords" content="reseller baju muslim, supplier dropship, open reseller gamis, supplier hijab, dropship terpercaya" />
-        <meta name="author" content="SabilaMall" />
-        <meta name="DC.title" content />
-        <meta name="description" content="Distributor Grosir Supplier Baju Muslim, Gamis, Hijab Nibras, Endomoda, Ethica, Seply, Labella, Yasmeera. Dropship  Terpercaya & Murah Open Reseller." />
-        <meta name="csrf-token" content="jpDOUlWRa9ZovRrM3JYK7D6McJnWKCeU19SmLZqV" />
-      </Head>
-      <Box as="main" overflow="hidden">
+    <>
+      <Layout hasNavbar={true} hasPadding={false} noFooter={true}>
+        <Head>
+          <title>Distributor Grosir Supplier Nibras, Endomoda, Ethica - Open Reseller</title>
+          <meta name="keywords"
+                content="reseller baju muslim, supplier dropship, open reseller gamis, supplier hijab, dropship terpercaya" />
+          <meta name="author" content="SabilaMall" />
+          <meta name="DC.title" content />
+          <meta name="description"
+                content="Distributor Grosir Supplier Baju Muslim, Gamis, Hijab Nibras, Endomoda, Ethica, Seply, Labella, Yasmeera. Dropship  Terpercaya & Murah Open Reseller." />
+          <meta name="csrf-token" content="jpDOUlWRa9ZovRrM3JYK7D6McJnWKCeU19SmLZqV" />
+        </Head>
         <Circle
           bg="red.600"
           size="40px"
