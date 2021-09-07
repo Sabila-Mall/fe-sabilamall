@@ -1,43 +1,50 @@
-import { Box, Image, Text, Icon, Flex } from "@chakra-ui/react";
+import { Box, Text, Icon, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { IoHeartOutline, IoTimeSharp, IoHeart } from "react-icons/io5";
 
-import { addWishlist, deleteWishlist } from "../api/wishlist";
 import { useAuthContext } from "../contexts/authProvider";
 import { useWishlistContext } from "../contexts/wishlistProvider";
 import styles from "../styles/Product.module.scss";
 import { getImageUrl } from "../utils/api";
-import { calculateTimeLeft, numberWithDot } from "../utils/functions";
-
-// import { BsFilter } from "react-icons/bs";
+import { calculateTimeLeft, formatNumber, numberWithDot } from "../utils/functions";
 
 // discount masukin angkanya aja, misalnya
 // kalau diskonnya 10%, masukin 10 aja
 // kalau gaada diskon, gak usah dimasukin angka
 
 const CardProduct = ({
-  image_path,
-  name,
-  flash_end,
-  discount,
-  products_id: liked_products_id,
-  products_slug,
-  price,
-  responsive,
-  liked_customers_id,
-  isWishlist = false,
-  isLiked,
-}) => {
+                       image_path,
+                       name,
+                       flash_end,
+                       customerdiscount: discount,
+                       flash_price: flashPrice,
+                       products_id: liked_products_id,
+                       products_slug,
+                       price,
+                       sale_price: salePrice,
+                       responsive,
+                       liked_customers_id,
+                       isWishlist = false,
+                       isLiked,
+                     }) => {
   const router = useRouter();
   const { isLoggedIn, userData } = useAuthContext();
   const { wishlistData } = useWishlistContext();
   const [imageHeight, setImageHeight] = useState(144);
   const realPriceString = numberWithDot(price.replace(/\.(.*?[0]{1,2})/g, ""));
-  const priceAfterDiscount = discount
-    ? numberWithDot(price - (price * discount) / 100)
-    : null;
+  // const priceAfterDiscount = discount
+  //   ? numberWithDot(price - (price * discount) / 100)
+  //   : null;
+  const priceAfterDiscount = salePrice ?? flashPrice;
   const timeLeft = flash_end && calculateTimeLeft(flash_end);
+
+  // let discountPercentage;
+  // if (discount) {
+  //   discountPercentage = 100 * (price.substr(0, price.length - 3));
+  // } else {
+  //   discountPercentage = 100 * (price.substr())
+  // }
 
   const [liked, setLiked] = useState(
     wishlistData?.length > 0
@@ -67,10 +74,11 @@ const CardProduct = ({
     function handleResize() {
       let width = responsive
         ? document.getElementsByClassName("card-product-responsive")[0]
-            .clientWidth
+          .clientWidth
         : document.getElementsByClassName("card-product")[0].clientWidth;
       setImageHeight(width);
     }
+
     window.addEventListener("resize", handleResize);
     handleResize();
     return () => window.removeEventListener("resize", handleResize);
@@ -108,7 +116,7 @@ const CardProduct = ({
           bgPosition="center"
           bgRepeat="no-repeat"
           bgSize="cover"
-        ></Box>
+        />
         <Box padding="2" w="100%">
           {flash_end && timeLeft && (
             <Box
@@ -131,7 +139,7 @@ const CardProduct = ({
                 lineHeight={{ base: "15px", md: "18px" }}
                 fontWeight="500"
               >
-                <Icon as={IoTimeSharp}></Icon>{" "}
+                <Icon as={IoTimeSharp} />{" "}
                 {`${timeLeft.hours} Jam ${timeLeft.minutes} Menit lagi`}
               </Text>
             </Box>
@@ -142,30 +150,30 @@ const CardProduct = ({
                 {name.toUpperCase()}
               </Text>
             </Box>
-            {discount && (
-              <Box
-                w="100%"
-                h="18px"
+            {priceAfterDiscount &&
+            <Box
+              w="100%"
+              h="18px"
+              display="flex"
+              alignItems="center"
+              fontSize="12px"
+              fontWeight="500"
+              lineHeight="18px"
+              mb="8px"
+            >
+              <Text as="del" color="gray.500">{`Rp ${price}`}</Text>
+              <Text
+                ml="9px"
+                h="100%"
+                bg="red.200"
+                p="2px"
+                borderRadius="4px"
+                color="red.700"
                 display="flex"
                 alignItems="center"
-                fontSize="12px"
-                fontWeight="500"
-                lineHeight="18px"
-                mb="8px"
-              >
-                <Text as="del" color="gray.500">{`Rp ${realPriceString}`}</Text>
-                <Text
-                  ml="9px"
-                  h="100%"
-                  bg="red.200"
-                  p="2px"
-                  borderRadius="4px"
-                  color="red.700"
-                  display="flex"
-                  alignItems="center"
-                >{`${discount}%`}</Text>
-              </Box>
-            )}
+              >{`${discount}%`}</Text>
+            </Box>
+            }
             <Box
               className={styles.primaryFont}
               w="100%"
@@ -176,7 +184,7 @@ const CardProduct = ({
               fontSize="16px"
               lineHeight="20.8px"
             >
-              <Text>Rp {priceAfterDiscount ?? realPriceString}</Text>
+              <Text>Rp {priceAfterDiscount ?? price}</Text>
               {isLoggedIn && (
                 <Icon
                   onClick={(e) => {
@@ -186,7 +194,7 @@ const CardProduct = ({
                   }}
                   as={liked ? IoHeart : IoHeartOutline}
                   color={liked ? "red.500" : "black"}
-                ></Icon>
+                />
               )}
             </Box>
           </Flex>
