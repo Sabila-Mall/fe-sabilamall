@@ -7,7 +7,7 @@ import { useAuthContext } from "../contexts/authProvider";
 import { useWishlistContext } from "../contexts/wishlistProvider";
 import styles from "../styles/Product.module.scss";
 import { getImageUrl } from "../utils/api";
-import { calculateTimeLeft, formatNumber, numberWithDot } from "../utils/functions";
+import { calculateTimeLeft, currencyFormat, formatNumber, numberWithDot, parseNumber } from "../utils/functions";
 
 // discount masukin angkanya aja, misalnya
 // kalau diskonnya 10%, masukin 10 aja
@@ -38,13 +38,6 @@ const CardProduct = ({
   //   : null;
   const priceAfterDiscount = salePrice ?? flashPrice;
   const timeLeft = flash_end && calculateTimeLeft(flash_end);
-
-  // let discountPercentage;
-  // if (discount) {
-  //   discountPercentage = 100 * (price.substr(0, price.length - 3));
-  // } else {
-  //   discountPercentage = 100 * (price.substr())
-  // }
 
   const [liked, setLiked] = useState(
     wishlistData?.length > 0
@@ -104,7 +97,6 @@ const CardProduct = ({
         flexDirection="column"
         alignItems="start"
         borderRadius="8px"
-        // h="21rem"
       >
         <Box
           h={`${imageHeight}px`}
@@ -161,9 +153,13 @@ const CardProduct = ({
               lineHeight="18px"
               mb="8px"
             >
-              <Text as="del" color="gray.500">{`Rp ${price}`}</Text>
+              {priceAfterDiscount !== price &&
+                <Text as="del" color="gray.500">
+                  {currencyFormat(parseNumber(price)).slice(0, -3)}
+                </Text>
+              }
               <Text
-                ml="9px"
+                ml={priceAfterDiscount !== price ? "9px" : 0}
                 h="100%"
                 bg="red.200"
                 p="2px"
@@ -184,13 +180,12 @@ const CardProduct = ({
               fontSize="16px"
               lineHeight="20.8px"
             >
-              <Text>Rp {priceAfterDiscount ?? price}</Text>
+              <Text>{currencyFormat(parseNumber(priceAfterDiscount ?? price)).slice(0, -3)}</Text>
               {isLoggedIn && (
                 <Icon
                   onClick={(e) => {
                     e.stopPropagation();
                     handleClickWishlist();
-                    // setLiked((prev) => !prev)
                   }}
                   as={liked ? IoHeart : IoHeartOutline}
                   color={liked ? "red.500" : "black"}
