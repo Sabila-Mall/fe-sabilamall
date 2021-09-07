@@ -18,14 +18,18 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { FiChevronRight, FiSearch } from "react-icons/fi";
 
-import { apiGetProduct, apiGetProductBrand } from "../../api/GetProduct";
+import {
+  apiGetProduct,
+  apiGetProductBrand,
+  apiGetProductBrandPage,
+} from "../../api/GetProduct";
 import { apiStock } from "../../api/Stock";
 import Footer from "../../components/Footer";
 import { Layout } from "../../components/Layout";
 import Navbar from "../../components/Navbar";
 import StokItem from "../../components/StokItem";
 import { stocks } from "../../constants/stokData";
-import { getImageUrl } from "../../utils/api";
+import { fetchingStock } from "../../utils/stok/fetchStock";
 
 const path = [
   {
@@ -39,10 +43,26 @@ const Stok = () => {
   const [nameSearch, setNameSearch] = useState("");
   const [supplier, setSupplier] = useState([]);
   const [brandId, setBrandId] = useState(0);
-  const [products, setProducts] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [stocks, setStocks] = useState([]);
   const [firstTime, setFirstTime] = useState(true);
   const [supplierName, setSupplierName] = useState("");
+  const [data, setData] = useState([]);
+  const [totalProduct, setTotalProduct] = useState(-1);
+  const [tempData, setTempData] = useState([]);
+  const [noProduct, setNoProduct] = useState(false);
+
+  const objToArray = (d) => {
+    if (typeof d === "object") {
+      const key = Object.keys(d);
+      let temp = [];
+      key.map((k) => {
+        temp.push(d[k]);
+      });
+      d = temp;
+    }
+    return d;
+  };
 
   useEffect(() => {
     apiGetProduct().then((res) => {
@@ -52,56 +72,48 @@ const Stok = () => {
   }, []);
 
   useEffect(() => {
-    if (brandId != 0) {
-      apiGetProductBrand(brandId).then((res) => {
-        let d = res.data.data.data;
-        if (typeof d === "object") {
-          const key = Object.keys(d);
-          let temp = [];
-          key.map((k) => {
-            temp.push(d[k]);
-          });
-          d = temp;
+    if (data != 0 && totalProduct == tempData.length) {
+      data.map((product) => {
+        try {
+          const stocksPush = fetchingStock(product, supplierName);
+          setStocks((curr) => [...curr, stocksPush]);
+          setLoading(false);
+        } catch (err) {
+          console.log(err);
         }
-        if (d.length != 0) {
-          setProducts(true);
-          d.map((product) => {
-            apiStock(product.id).then(async (res) => {
-              const data = res.data;
-              const listWarna = Object.keys(data);
+      });
+    }
+  }, [data]);
 
-              let variant = [];
+  useEffect(() => {
+    if (totalProduct == tempData.length) {
+      setData(tempData);
+    }
+  }, [tempData]);
 
-              listWarna.map((warna) => {
-                let ukuran = [];
-                let stok = [];
+  useEffect(() => {
+    let currPage = 1;
+    if (brandId != 0) {
+      apiGetProductBrandPage(brandId, currPage).then((res) => {
+        let d = res.data.data.data;
 
-                data[warna].map((el) => {
-                  ukuran.push(el.ukuran);
-                  stok.push(el.stock);
-                });
+        if (d.length == 0) setNoProduct(true);
+        else setNoProduct(false);
 
-                let ob = {
-                  warna: warna,
-                  ukuran: ukuran,
-                  stok: stok,
-                };
-                variant.push(ob);
-              });
+        const lastPage = res.data.data.last_page;
+        setTotalProduct(res.data.data.total);
+        setTempData((curr) => [...curr, ...d]);
+        currPage++;
+        if (d.length != 0) setLoading(true);
+        else setLoading(false);
 
-              let stocksPush = {
-                img: getImageUrl(product.image_path),
-                nama: product.name,
-                supplier: supplierName,
-                tag: product.jenis,
-                variant: variant,
-              };
-
-              setStocks((curr) => [...curr, stocksPush]);
+        if (lastPage > 1) {
+          for (let i = 1; i < lastPage; i++, currPage++) {
+            apiGetProductBrandPage(brandId, currPage).then((res) => {
+              let d = objToArray(res.data.data.data);
+              setTempData((curr) => [...curr, ...d]);
             });
-          });
-        } else {
-          setProducts(false);
+          }
         }
       });
     }
@@ -126,6 +138,7 @@ const Stok = () => {
             justifyContent="space-between"
           >
             <Select
+              disabled={loading}
               placeholder={firstTime && "Cari supplier"}
               w={{ base: "100%", md: "30%" }}
               onChange={(e) => {
@@ -133,7 +146,10 @@ const Stok = () => {
                 setBrandId(Number(split[0]));
                 setSupplierName(split[1]);
                 setFirstTime(false);
+                setLoading(true);
                 setStocks([]);
+                setData([]);
+                setTempData([]);
               }}
             >
               {supplier.length != 0 ? (
@@ -182,22 +198,23 @@ const Stok = () => {
                 ) {
                   return (
                     <StokItem
-                      link={"/product-details"}
+                      link={`/product-details/${stock.productId}`}
                       img={stock.img}
                       nama={stock.nama}
                       supplier={stock.supplier}
                       tag={stock.tag}
-                      variant={stock.variant}
+                      // variant={stock.variant}
+                      productId={stock.productId}
                     />
                   );
                 }
               })
-            ) : !firstTime && products ? (
+            ) : loading ? (
               <Box w="full" display="flex" justifyContent="center">
                 <Spinner />
               </Box>
             ) : (
-              !products && <h1>Tidak ada produk</h1>
+              noProduct && <h1>Tidak ada produk</h1>
             )}
             {firstTime && (
               <Flex

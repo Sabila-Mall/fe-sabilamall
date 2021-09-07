@@ -7,6 +7,7 @@ const CheckoutContext = createContext();
 
 export const CheckoutProvider = ({ children }) => {
   const [checkoutData, setCheckoutData] = useState({});
+  const [checkoutResponse, setCheckoutResponse] = useState({});
   const [orderNumber, setOrderNumber] = useState("");
   const [subtotal, setSubtotal] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -55,6 +56,8 @@ export const CheckoutProvider = ({ children }) => {
     setOrderNumber,
     subtotal,
     setSubtotal,
+    checkoutResponse,
+    setCheckoutResponse,
   };
 
   return (

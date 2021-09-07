@@ -13,6 +13,7 @@ import {
   NumberInput,
   NumberInputField,
   Select,
+  Spinner,
   SimpleGrid,
   Spacer,
   StackDivider,
@@ -40,8 +41,10 @@ import {
 import { useAuthContext } from "../../contexts/authProvider";
 import { useCheckoutContext } from "../../contexts/checkoutProvider";
 import { useWindowSize } from "../../hooks/useWindowSize";
+import { isRequestSuccess } from "../../utils/api";
 import {
   currencyFormat,
+  estimasiFormat,
   filterObject,
   formatNumber,
   formatPhoneNumber,
@@ -72,7 +75,6 @@ const RingkasanPesanan = () => {
     const localCheckout = JSON.parse(localStorage.getItem("selectedProduct"));
     if (localCheckout) {
       products = localCheckout.products;
-      console.log(products);
     }
   }
   return (
@@ -196,7 +198,7 @@ const RingkasanPesanan = () => {
  *  @param {int} pengiriman.harga Harga pengiriman
  * @param {function} setPengiriman Function buat ngubah pengiriman
  */
-const Pengiriman = ({ kurir, pengiriman, handler }) => {
+const Pengiriman = ({ kurir, pengiriman, handler, loadingKurir }) => {
   let totalWeight = 0;
 
   if (typeof window !== "undefined") {
@@ -223,19 +225,24 @@ const Pengiriman = ({ kurir, pengiriman, handler }) => {
             <Text fontWeight="bold">Total berat:</Text>
             <Text fontWeight="normal">{formatNumber(totalWeight)} gr</Text>
           </HStack>
-          <Select
-            className="secondaryFont"
-            placeholder="Pilih jasa pengiriman"
-            onChange={(event) => {
-              handler(event.target.value);
-            }}
-          >
-            {kurir.map((jasa, index) => (
-              <option value={jasa.name} key={index}>
-                {jasa.name}
-              </option>
-            ))}
-          </Select>
+          {loadingKurir ? (
+            <Spinner m="3" />
+          ) : (
+            <Select
+              className="secondaryFont"
+              placeholder="Pilih jasa pengiriman"
+              onChange={(event) => {
+                handler(event.target.value);
+              }}
+            >
+              {kurir.map((jasa, index) => (
+                <option value={jasa.name} key={index}>
+                  {jasa.name} (
+                  {currencyFormat(jasa.rate - (jasa.shipping_promo ?? 0))})
+                </option>
+              ))}
+            </Select>
+          )}
         </Flex>
         <Flex justify="space-between">
           {!isEmpty(pengiriman) && (
@@ -301,28 +308,35 @@ const MetodePembayaran = ({
   handler,
   handleDiskonPengiriman,
   paymentMethod,
+  loadingPayment,
 }) => {
+  console.log(paymentMethod);
   return (
     <VStack spacing="1rem" align="stretch">
       <Heading as="h3" fontSize="1.5rem" className="primaryFont">
         Metode Pembayaran
       </Heading>
-      <Select
-        className="secondaryFont"
-        placeholder="Pilih metode pembayaran"
-        onChange={(event) => handler(event.target.value)}
-      >
-        {console.log(paymentMethod)}
-        {paymentMethod.map((method, index) => {
-          return (
-            <option value={method.method} key={index}>
-              {method.method === "deposit"
-                ? `${method.name} (${currencyFormat(method.memberdeposit)})`
-                : method.name}
-            </option>
-          );
-        })}
-      </Select>
+      {loadingPayment ? (
+        <Spinner m="5" />
+      ) : (
+        <Select
+          className="secondaryFont"
+          placeholder="Pilih metode pembayaran"
+          onChange={(event) => handler(event.target.value)}
+        >
+          {console.log(paymentMethod)}
+          {paymentMethod.map((method, index) => {
+            return (
+              <option value={method.payment_method} key={index}>
+                {method.method === "deposit"
+                  ? `${method.name} (${currencyFormat(method.memberdeposit)})`
+                  : method.name}
+              </option>
+            );
+          })}
+        </Select>
+      )}
+
       {!isEmpty(metodePembayaran) && (
         <Flex justify="space-between" color="gray.600" className="primaryFont">
           {metodePembayaran.isCod ? (
@@ -449,7 +463,12 @@ const DetailPesanan = () => {
   const router = useRouter();
 
   const { userData } = useAuthContext();
-  const { checkoutData, setOrderNumber, setSubtotal } = useCheckoutContext();
+  const {
+    checkoutData,
+    setOrderNumber,
+    setSubtotal,
+    setCheckoutResponse,
+  } = useCheckoutContext();
 
   const [catatanPesanan, setCatatanPesanan] = useState("");
   const [pengiriman, setPengiriman] = useState({});
@@ -458,9 +477,11 @@ const DetailPesanan = () => {
   const [persetujuan, setPersetujuan] = useState(false);
 
   const [kurir, setKurir] = useState([]);
+  const [loadingKurir, setLoadingKurir] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState([]);
+  const [loadingPayment, setLoadingPayment] = useState(false);
   const [paymentDesc, setPaymentDesc] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const toast = useToast();
 
   let arrayOfCustomerBasket = [];
@@ -482,6 +503,7 @@ const DetailPesanan = () => {
   }
 
   useEffect(() => {
+    setLoadingKurir(true);
     getKurir(
       userData?.id,
       checkoutData?.postcode,
@@ -496,10 +518,12 @@ const DetailPesanan = () => {
       .then((res) => {
         setKurir(res.data.data.kurirIndonesia.services);
       })
-      .catch((err) => console.error(err));
-  }, []);
+      .catch((err) => console.error(err))
+      .finally(() => setLoadingKurir(false));
+  }, [checkoutData]);
 
   useEffect(() => {
+    setLoadingPayment(true);
     getPaymentMethod(
       vendors_id,
       userData?.id,
@@ -510,7 +534,8 @@ const DetailPesanan = () => {
       .then((res) => {
         setPaymentMethod(res.data.data);
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error(err))
+      .finally(() => setLoadingPayment(false));
   }, []);
 
   const handleSelectedPengirman = (selected) => {
@@ -522,9 +547,7 @@ const DetailPesanan = () => {
       const estimasi = tempPengiriman.destination.split("|")[2];
       setPengiriman({
         nama: tempPengiriman.name,
-        estimasi: /\d/.test(estimasi)
-          ? estimasi.toLowerCase()
-          : "1" + estimasi.toLowerCase(),
+        estimasi: estimasiFormat(estimasi),
         harga: tempPengiriman.rate - (tempPengiriman.shipping_promo ?? 0),
         destination: tempPengiriman.destination,
       });
@@ -535,7 +558,7 @@ const DetailPesanan = () => {
     // Kalo misalkan metode pembayaran cod, setCod ubah jadi true
 
     const tempPayment = paymentMethod.filter(
-      (data) => data.method === selected,
+      (data) => data.payment_method === selected,
     )[0];
     if (selected === "cod") {
       setMetodePembayaran({
@@ -558,53 +581,6 @@ const DetailPesanan = () => {
         isCod: false,
         diskon: 10,
         payment_method: tempPayment?.payment_method,
-      });
-    }
-  };
-
-  const handleDiskonPengiriman = (diskon) => {
-    let temp = metodePembayaran;
-    temp.diskon = diskon;
-    setMetodePembayaran(temp);
-  };
-
-  let totalPrice = 0,
-    totalQuantity = 0,
-    totalDiscount = 0,
-    totalWeight = 0;
-
-  if (typeof window !== "undefined") {
-    const checkoutData = JSON.parse(localStorage.getItem("selectedProduct"));
-    if (checkoutData) {
-      totalPrice = checkoutData.total_price;
-      totalQuantity = checkoutData.quantity;
-      totalWeight = checkoutData.weight;
-      totalDiscount = checkoutData.discount;
-    }
-  }
-
-  const onSubmit = () => {
-    // Values udah berisi semua input yang dimasukin user dalam bentuk object
-    // Buat liat bentuknya bisa di cek di console
-    console.log("CATATAN PESANAN", catatanPesanan);
-    console.log("PENGIRIMAN", pengiriman);
-    console.log("METODE PEMBAYARAN", metodePembayaran);
-    console.log("VOUCHER", voucher);
-    console.log("PRODUCT BASKET", arrayOfCustomerBasket);
-    console.log(weight, vendors_id, vendor_origin, totalOrder, products_jenis);
-
-    console.log("totalPrice", totalPrice);
-    console.log("pengiriman.harga", pengiriman.harga);
-    console.log("totalDiscount", totalDiscount);
-
-    if (
-      totalPrice + pengiriman.harga - totalDiscount <=
-      paymentMethod.filter((e) => e.method === "deposit")[0].memberdeposit
-    ) {
-      toast({
-        title: "Saldo SM Pay tidak mencukupi",
-        position: "top",
-        status: "error",
       });
     } else if (Object.keys(pengiriman).length === 0) {
       toast({
@@ -641,6 +617,97 @@ const DetailPesanan = () => {
           router.push("/invoice");
         })
         .catch((err) => console.error(err));
+    }
+  };
+
+  const handleDiskonPengiriman = (diskon) => {
+    let temp = metodePembayaran;
+    temp.diskon = diskon;
+    setMetodePembayaran(temp);
+  };
+
+  let totalPrice = 0,
+    totalQuantity = 0,
+    totalDiscount = 0,
+    totalWeight = 0;
+
+  if (typeof window !== "undefined") {
+    const checkoutData = JSON.parse(localStorage.getItem("selectedProduct"));
+    if (checkoutData) {
+      totalPrice = checkoutData.total_price;
+      totalQuantity = checkoutData.quantity;
+      totalWeight = checkoutData.weight;
+      totalDiscount = checkoutData.discount;
+    }
+  }
+  console.log(metodePembayaran);
+  const onSubmit = () => {
+    // Values udah berisi semua input yang dimasukin user dalam bentuk object
+    // Buat liat bentuknya bisa di cek di console
+    console.log("CATATAN PESANAN", catatanPesanan);
+    console.log("PENGIRIMAN", pengiriman);
+    console.log("METODE PEMBAYARAN", metodePembayaran);
+    console.log("VOUCHER", voucher);
+    console.log("PRODUCT BASKET", arrayOfCustomerBasket);
+    console.log(weight, vendors_id, vendor_origin, totalOrder, products_jenis);
+
+    console.log("totalPrice", totalPrice);
+    console.log("pengiriman.harga", pengiriman.harga);
+    console.log("totalDiscount", totalDiscount);
+    if (
+      metodePembayaran.payment_method === "deposit" &&
+      totalPrice + pengiriman.harga - totalDiscount >
+        paymentMethod.filter((e) => e.method === "deposit")[0].memberdeposit
+    ) {
+      toast({
+        title: "Saldo SM Pay tidak mencukupi",
+        position: "top",
+        status: "error",
+      });
+    } else if (Object.keys(pengiriman).length === 0) {
+      toast({
+        title: "Pilih metode pengiriman",
+        position: "top",
+        status: "error",
+      });
+    } else if (Object.keys(metodePembayaran).length === 0) {
+      toast({
+        title: "Pilih metode pembayaran",
+        position: "top",
+        status: "error",
+      });
+    } else {
+      setLoading(true);
+      apiPlaceOrder(
+        vendors_id,
+        arrayOfCustomerBasket,
+        pengiriman.destination,
+        checkoutData.userId,
+        checkoutData.delivery_id,
+        checkoutData.dropshipper_id,
+        metodePembayaran.payment_method,
+        false,
+        0,
+        0,
+        catatanPesanan,
+        "1.0.2",
+        "",
+        0,
+      )
+        .then((res) => {
+          if (isRequestSuccess(res.data)) {
+            setCheckoutResponse(res.data);
+            router.push("/invoice");
+          } else {
+            toast({
+              title: res.data.message,
+              position: "top",
+              status: "error",
+            });
+          }
+        })
+        .catch((err) => console.error(err))
+        .finally(() => setLoading(false));
     }
   };
 
@@ -683,10 +750,12 @@ const DetailPesanan = () => {
                 handler={handleSelectedPengirman}
                 beratTotal={999}
                 kurir={kurir}
+                loadingKurir={loadingKurir}
               />
               <CatatanPesanan setCatatanPesanan={setCatatanPesanan} />
               <SimpleGrid spacing="1.5rem" columns={{ base: 1, md: 2 }}>
                 <MetodePembayaran
+                  loadingPayment={loadingPayment}
                   metodePembayaran={metodePembayaran}
                   handler={handleSelectedMetodePembayaran}
                   paymentMethod={paymentMethod}
@@ -716,6 +785,7 @@ const DetailPesanan = () => {
                   color="white"
                   onClick={onSubmit}
                   disabled={!persetujuan}
+                  isLoading={loading}
                 >
                   Pesan Sekarang
                 </Button>
@@ -726,7 +796,7 @@ const DetailPesanan = () => {
             jumlah={totalQuantity}
             berat={totalWeight}
             subtotal={totalPrice}
-            tambahan={0}
+            tambahan={metodePembayaran.biaya}
             pengiriman={pengiriman.harga}
             diskon={totalDiscount}
             voucher={voucher.harga}

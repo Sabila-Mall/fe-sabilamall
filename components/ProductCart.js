@@ -2,46 +2,56 @@ import { Text } from "@chakra-ui/layout";
 import { VStack, HStack } from "@chakra-ui/layout";
 import { Flex, Box } from "@chakra-ui/layout";
 import { Checkbox, IconButton, Image } from "@chakra-ui/react";
-import { Editable, EditableInput, EditablePreview, useEditableControls } from "@chakra-ui/react"
+import {
+  Editable,
+  EditableInput,
+  EditablePreview,
+  useEditableControls,
+} from "@chakra-ui/react";
 import { useState, createRef, useRef, useEffect } from "react";
+import { IoCreateOutline } from "react-icons/io5";
+
 import { IMAGE_HOST } from "../constants/api";
 import { useAuthContext } from "../contexts/authProvider";
 import { useCartContext } from "../contexts/cartProvider";
-import { IoCreateOutline } from "react-icons/io5";
-
 import { CartPrice } from "./CartPrice";
+
 export const ProductCart = ({ isDiscount, product }) => {
   const { userData } = useAuthContext();
-  const userId = userData?.id
-  const { addToCheckout, deleteFromCheckout, editCartItemNotes } = useCartContext();
+  const userId = userData?.id;
 
-  const productName = product?.products_name
-  const productPath = product?.products_image_path
-  const productPrice = product?.final_price
-  const customerBasket = product?.customers_basket_id
+  const {
+    addToCheckout,
+    deleteFromCheckout,
+    editCartItemNotes,
+  } = useCartContext();
 
-  const focusOut = useRef(null)
+  const productName = product?.products_name;
+  const productPath = product?.products_image_path;
+  const productPrice = product?.final_price;
+  const customerBasket = product?.customers_basket_id;
 
-  const varian = product?.varian
-  let inputRef = createRef()
+  const focusOut = useRef(null);
+
+  const varian = product?.varian;
+  let inputRef = createRef();
   const handleCheckbox = () => {
     if (inputRef.current.checked) {
-      addToCheckout(product)
+      addToCheckout(product);
     } else {
-      deleteFromCheckout(product)
+      deleteFromCheckout(product);
     }
-  }
+  };
 
   useEffect(() => {
     const onFocusOut = (event) => {
-      console.log(userId, customerBasket);
-      editCartItemNotes(userId, customerBasket, event.target.value)
-    }
-    focusOut.current.addEventListener("focusout", onFocusOut)
+      editCartItemNotes(userId, customerBasket, event.target.value);
+    };
+    focusOut.current.addEventListener("focusout", onFocusOut);
     return () => {
-      focusOut.current?.removeEventListener("focusout", onFocusOut)
-    }
-  }, [])
+      focusOut.current?.removeEventListener("focusout", onFocusOut);
+    };
+  }, []);
 
   const EditableControls = () => {
     const { getEditButtonProps } = useEditableControls();
@@ -55,7 +65,11 @@ export const ProductCart = ({ isDiscount, product }) => {
     );
   };
   return (
-    <Box width="100%" px={{ base: "1rem", md: 0 }} onClick={() => handleCheckbox()}>
+    <Box
+      width="100%"
+      px={{ base: "1rem", md: 0 }}
+      onClick={() => handleCheckbox()}
+    >
       <Flex
         alignItems="start"
         justifyContent={{ base: "center", md: "start" }}
@@ -74,11 +88,7 @@ export const ProductCart = ({ isDiscount, product }) => {
             w={{ base: "5em", sm: "8em", md: "6em" }}
             h={{ base: "5em", sm: "8em", md: "6em" }}
           >
-            <Image
-              h="100%"
-              quality={100}
-              src={IMAGE_HOST + productPath}
-            />
+            <Image h="100%" quality={100} src={IMAGE_HOST + productPath} />
           </Box>
         </Flex>
 
@@ -91,13 +101,14 @@ export const ProductCart = ({ isDiscount, product }) => {
             {productName}
           </Text>
           <VStack spacing="3px" alignItems="start" mb="1rem">
-            {varian && varian.map((el, index) => {
-              return (
-                <Text color="gray.500" fontSize="14px">
-                  {`${el.products_options_name} : ${el.products_options_values_name}`}
-                </Text>
-              )
-            })}
+            {varian &&
+              varian.map((el, index) => {
+                return (
+                  <Text color="gray.500" fontSize="14px">
+                    {`${el.products_options_name} : ${el.products_options_values_name}`}
+                  </Text>
+                );
+              })}
           </VStack>
           <Box display={{ md: "none" }}>
             <CartPrice isDiscount={isDiscount} price={productPrice} />

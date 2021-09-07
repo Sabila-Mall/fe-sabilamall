@@ -1,4 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -15,6 +16,7 @@ import ProductReview from "../../components/ProductReview";
 import RelatedProductContainer from "../../components/RelatedProductContainer";
 import { ShareProduct } from "../../components/ShareProduct";
 import { useAuthContext } from "../../contexts/authProvider";
+import { isNumber } from "../../utils/functions";
 
 const ProductDetails = () => {
   const { userData, isLoggedIn } = useAuthContext();
@@ -28,6 +30,13 @@ const ProductDetails = () => {
   const [stocks, setStocks] = useState(null);
   const [reviewedCustomers, setReviewedCustomers] = useState([]);
   const [id, setId] = useState(null);
+  const [pricePerUnit, setPricePerUnit] = useState(null);
+  const [discountPricePerUnit, setDiscountPricePerUnit] = useState(null);
+  // const [pricePerUnit, setPricePerUnit] = useState(Number(current_price));
+  // const [discountPricePerUnit, setDiscountPricePerUnit] = useState(
+  //   discount_price ? Number(discount_price) : null,
+  // );
+  const [productSlug, setProductSlug] = useState("");
 
   const router = useRouter();
   const slug = router.query.slug;
@@ -39,13 +48,32 @@ const ProductDetails = () => {
     setStocks(null);
 
     const getData = async () => {
-      let dataPost = {
-        customers_id: isLoggedIn ? userId : null,
-        products_slug: slug,
-      };
+      let dataPost = {};
+      if (isNumber(slug)) {
+        dataPost = {
+          customers_id: isLoggedIn ? userId : null,
+          products_id: slug,
+        };
+      } else {
+        dataPost = {
+          customers_id: isLoggedIn ? userId : null,
+          products_slug: slug,
+        };
+      }
 
       try {
         const resProductDetails = await getProductDetail(dataPost);
+        const { current_price, discount_price } = resProductDetails;
+        setPricePerUnit(current_price ? Number(current_price) : 0);
+        setDiscountPricePerUnit(discount_price ? Number(discount_price) : null);
+        if (isNumber(slug))
+          router.replace(
+            `/product-details/${resProductDetails?.products_slug}`,
+            undefined,
+            {
+              shallow: true,
+            },
+          );
         setData(resProductDetails);
         setId(Number(resProductDetails?.products_id));
 
@@ -73,7 +101,6 @@ const ProductDetails = () => {
         setQuantity(quantity);
 
         const resReview = await getReviewProduct(dataPostReview);
-
         setReviewedCustomers(resReview?.reviewed_customers?.data);
       } catch (e) {
         router.push("/404");
@@ -131,25 +158,6 @@ const ProductDetails = () => {
     products_image,
   };
 
-  const productHeaderData = {
-    po_close_status,
-    libur: isHoliday === 1,
-    preOrder: products_jenis === "po",
-    po_close_status,
-    products_ordered,
-    vendors_name,
-    rating,
-    customerdiscount,
-    current_price,
-    products_quantity: quantity,
-    isholidaydata,
-    po_opendate,
-    po_closedate,
-    discount_price,
-    po_shippingdate,
-    products_name,
-  };
-
   const productInformationData = {
     products_description,
     vendors_name,
@@ -182,6 +190,25 @@ const ProductDetails = () => {
     products_quantity: quantity,
   };
 
+  const productHeaderData = {
+    po_close_status,
+    libur: isHoliday === 1,
+    preOrder: products_jenis === "po",
+    po_close_status,
+    products_ordered,
+    vendors_name,
+    rating,
+    customerdiscount,
+    current_price: pricePerUnit,
+    products_quantity: quantity,
+    isholidaydata,
+    po_opendate,
+    po_closedate,
+    discount_price: discountPricePerUnit,
+    po_shippingdate,
+    products_name,
+  };
+
   const path = [
     {
       name: "Kategori",
@@ -200,9 +227,39 @@ const ProductDetails = () => {
     },
   ];
 
+  const tempHeadImage = products_image.split("/");
+  const headImage = tempHeadImage.slice(2, tempHeadImage.length).join("/");
+
   return (
     <Layout hasNavbar sticky hasBreadCrumb breadCrumbItem={path} hasPadding>
-      <Box w="full" overflow="hidden">
+      <Head>
+        <title>{`${products_name} - SabilaMall`}</title>
+        <meta
+          property="og:url"
+          content={`https://sabilamall.co.id/product-details/${products_slug}`}
+        />{" "}
+        //TODO
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={products_name} /> //TODO
+        <meta property="og:description" content={products_description} />
+        <meta
+          property="og:image"
+          content={`https://media.sabilamall.co.id/${headImage}`}
+        />{" "}
+        //TODO
+        <meta name="keywords" content="" />
+        <meta name="author" content="SabilaMall" />
+        <meta name="DC.title" content="" />
+        <meta
+          name="description"
+          content="Distributor Grosir Supplier Baju Muslim, Gamis, Hijab Nibras, Endomoda, Ethica, Seply, Labella, Yasmeera. Dropship  Terpercaya & Murah Open Reseller."
+        />
+        <meta
+          name="csrf-token"
+          content="jpDOUlWRa9ZovRrM3JYK7D6McJnWKCeU19SmLZqV"
+        />
+      </Head>
+      <Box w="full">
         <Flex
           flexDirection={{ base: "column", lg: "row" }}
           justifyContent={{ md: "center" }}
@@ -235,7 +292,11 @@ const ProductDetails = () => {
             </Box>
           </Box>
           <Box w={{ base: "100%", lg: "25%" }} maxW="100vw">
-            <ProductCheckout {...productCheckoutData} />
+            <ProductCheckout
+              {...productCheckoutData}
+              setDiscountPricePerUnit={setDiscountPricePerUnit}
+              setPricePerUnit={setPricePerUnit}
+            />
           </Box>
           <Box
             display={{ base: "block", lg: "none" }}

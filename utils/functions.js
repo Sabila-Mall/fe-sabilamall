@@ -196,3 +196,22 @@ export const titleCase = (str) => {
   // Directly return the joined string
   return splitStr.join(" ");
 };
+
+export const estimasiFormat = (estimasi) => {
+  let tempResult = "";
+  if (/\d/.test(estimasi)) {
+    tempResult = estimasi.toLowerCase();
+  } else {
+    tempResult = "1" + estimasi.toLowerCase();
+  }
+
+  if (!estimasi.toLowerCase().includes("hari")) {
+    tempResult += " hari";
+  }
+
+  return tempResult;
+};
+
+export const isNumber = (n) => {
+  return /^-?[\d.]+(?:e-?\d+)?$/.test(n);
+};

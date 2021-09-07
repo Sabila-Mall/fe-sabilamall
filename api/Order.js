@@ -18,6 +18,10 @@ export const apiPlaceOrder = (
   paymentAddCostMethod,
   paymentAddCostValue,
 ) => {
+  let device_id = null;
+  if (typeof window !== "undefined") {
+    device_id = window.localStorage.getItem("device_id");
+  }
   return axios.post(HOST + "/api/order/place_order", {
     dataorder: [
       {
@@ -37,6 +41,7 @@ export const apiPlaceOrder = (
     app_version: appVersion,
     payment_addcostmethod: paymentAddCostMethod,
     payment_addcostvalue: paymentAddCostValue,
+    device_id,
   });
 };
 

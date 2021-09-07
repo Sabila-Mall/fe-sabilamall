@@ -155,13 +155,14 @@ const Sidebar = ({
                       >
                         {item.text}
                       </Heading>
+
+                      <Image
+                        src="/images/Navbar/google-play.svg"
+                        alt="Google Play"
+                        mt="-13px"
+                        mb="14px"
+                      />
                     </Link>
-                    <Image
-                      src="/images/Navbar/google-play.svg"
-                      alt="Google Play"
-                      mt="-13px"
-                      mb="14px"
-                    />
                   </Box>
                 );
               case "kl":

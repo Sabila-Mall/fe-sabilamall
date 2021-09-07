@@ -38,6 +38,9 @@ const ProductHeader = ({
       }).format(Number(current_price))
     : null;
 
+  console.log(discount_price_be, "DPBE");
+  console.log(current_price, "CPPPPPP");
+
   return (
     <Box>
       <Text
@@ -167,7 +170,7 @@ const ProductHeader = ({
       )}
 
       {discount_price ? (
-        <Box d={{ base: "none", md: "block" }}>
+        <Box>
           <Text
             as="del"
             color="gray.300"

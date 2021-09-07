@@ -53,6 +53,8 @@ const ProductCheckout = ({
   preOrder,
   products_slug,
   products_quantity,
+  setDiscountPricePerUnit,
+  setPricePerUnit,
 }) => {
   const toast = useToast();
   const router = useRouter();
@@ -68,11 +70,16 @@ const ProductCheckout = ({
 
   const [isLiked, setIsLiked] = useState(is_liked == "1");
 
+  const [pricePrefixColor, setPricePrefixColor] = useState("+");
+  const [pricePrefixSize, setPricePrefixSize] = useState("+");
+  const [priceColor, setPriceColor] = useState(0);
+  const [priceSize, setPriceSize] = useState(0);
+
   const colorsData = attributes.filter(
-    (attr) => attr?.option?.name === "Warna",
+    (attr) => attr?.option?.name?.toLowerCase() === "warna",
   )[0];
   const sizesData = attributes.filter(
-    (attr) => attr?.option?.name === "Ukuran",
+    (attr) => attr?.option?.name?.toLowerCase() === "ukuran",
   )[0];
 
   const colors = colorsData?.values;
@@ -97,7 +104,7 @@ const ProductCheckout = ({
     defaultValue: 0,
   });
 
-  const realPrice = current_price * numberOfItem;
+  // const realPrice = current_price * numberOfItem;
 
   const checkStockCl = (dataFilter) => {
     if (!sizes || !colors) return setStock(products_quantity);
@@ -107,9 +114,14 @@ const ProductCheckout = ({
 
     if (!warna || !ukuran) return;
 
-    const data = stocks?.[warna]?.find((stock) => stock?.ukuran == ukuran);
+    const c = colors?.find((c) => c.id == warna);
+    const s = sizes?.find((s) => s.id == ukuran);
 
-    setStock(data?.stock);
+    const data = stocks?.[c.value]?.find(
+      (stock) => stock?.attr_ukuran == s.products_attributes_id,
+    );
+
+    setStock(data?.stock ?? 0);
   };
 
   const handleModifyNumberOfItem = (event) => {
@@ -197,6 +209,44 @@ const ProductCheckout = ({
         });
   };
 
+  const calculateTotalPrice = (isDiscount = false) => {
+    let addedPrice = 0;
+
+    if (pricePrefixColor === "+" && pricePrefixSize === "+") {
+      addedPrice = Number(priceColor) + Number(priceSize);
+    }
+
+    if (pricePrefixColor === "+" && pricePrefixSize === "-") {
+      addedPrice = +Number(priceColor) - Number(priceSize);
+    }
+
+    if (pricePrefixColor === "-" && pricePrefixSize === "+") {
+      addedPrice = -Number(priceColor) + Number(priceSize);
+    }
+
+    if (pricePrefixColor === "-" && pricePrefixSize === "-") {
+      addedPrice = -Number(priceColor) - Number(priceSize);
+    }
+
+    if (!discount_price) {
+      setDiscountPricePerUnit(null);
+      setPricePerUnit(Number(current_price) + addedPrice);
+    } else {
+      setDiscountPricePerUnit(Number(discount_price) + addedPrice);
+      setPricePerUnit(Number(current_price) + addedPrice);
+    }
+
+    if (isDiscount || !discount_price) {
+      return formatPrice((Number(current_price) + addedPrice) * numberOfItem);
+    }
+
+    if (discount_price) {
+      return formatPrice((Number(discount_price) + addedPrice) * numberOfItem);
+    }
+
+    return 0;
+  };
+
   useEffect(() => {
     checkStockCl();
   }, []);
@@ -233,16 +283,31 @@ const ProductCheckout = ({
               onChange={(e) => {
                 setFilterStock((prev) => ({
                   ...prev,
-                  warna: e.target.value?.split(" ")?.[1],
+                  warna: e.target.value?.split(" ")?.[0],
                 }));
+
+                console.log(e.target.value?.split(" ")?.[1], "WARNA ONCHANGE");
                 checkStockCl({
                   ...filterStock,
-                  warna: e.target.value?.split(" ")?.[1],
+                  warna: e.target.value?.split(" ")?.[0],
                 });
+                const prefix_price = e.target.value?.split(" ")?.[2];
+                const price = e.target.value
+                  ?.split(" ")?.[3]
+                  ?.replace(/\D/g, "");
+
+                setPricePrefixColor(prefix_price);
+                setPriceColor(Number(price));
               }}
             >
-              {colors?.map(({ value, id }) => (
-                <option key={id} value={`${id} ${value}`}>
+              {colors?.map(({ value, id, price_prefix = "+", price = 0 }) => (
+                <option
+                  key={id}
+                  value={`${id} p ${price_prefix}  ${(price + "")?.replace(
+                    /\D/g,
+                    "",
+                  )}`}
+                >
                   {value}
                 </option>
               ))}
@@ -265,16 +330,29 @@ const ProductCheckout = ({
               onChange={(e) => {
                 setFilterStock((prev) => ({
                   ...prev,
-                  ukuran: e.target.value?.split(" ")?.[1],
+                  ukuran: e.target.value?.split(" ")?.[0],
                 }));
                 checkStockCl({
                   ...filterStock,
-                  ukuran: e.target.value?.split(" ")?.[1],
+                  ukuran: e.target.value?.split(" ")?.[0],
                 });
+                const prefix_price = e.target.value?.split(" ")?.[2];
+                const price = e.target.value
+                  ?.split(" ")?.[3]
+                  ?.replace(/\D/g, "");
+
+                setPricePrefixSize(prefix_price);
+                setPriceSize(Number(price));
               }}
             >
-              {sizes?.map(({ value, id }) => (
-                <option key={id} value={`${id} ${value}`}>
+              {sizes?.map(({ value, id, prefix_price = "+", price = 0 }) => (
+                <option
+                  key={id}
+                  value={`${id} p ${prefix_price} ${(price + "")?.replace(
+                    /\D/g,
+                    "",
+                  )}`}
+                >
                   {value}
                 </option>
               ))}
@@ -352,7 +430,7 @@ const ProductCheckout = ({
           <VStack alignItems={"flex-end"}>
             {discount_price && (
               <Text as={"s"} color={"gray.400"} fontSize={"12px"}>
-                Rp{formatPrice(realPrice)}
+                Rp{calculateTotalPrice(true)}
               </Text>
             )}
             <Text
@@ -362,9 +440,7 @@ const ProductCheckout = ({
               fontWeight={"bold"}
             >
               Rp
-              {discount_price
-                ? formatPrice(Number(discount_price) * numberOfItem)
-                : formatPrice(realPrice)}
+              {calculateTotalPrice()}
             </Text>
           </VStack>
         </Flex>

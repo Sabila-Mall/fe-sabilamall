@@ -78,9 +78,7 @@ const OrderInformation = ({ order }) => {
     let tempOrderProducts = [];
     let tempSubtotal = 0;
     for (let i = 0; i < temporaryProducts?.length; i++) {
-      tempSubtotal +=
-        temporaryProducts[i].products_price *
-        temporaryProducts[i].products_quantity;
+      tempSubtotal += temporaryProducts[i].final_price;
 
       let tempDetail =
         temporaryProducts[i].attributes?.[0].products_options_values;
@@ -100,11 +98,16 @@ const OrderInformation = ({ order }) => {
             temporaryProducts[i].customers_discount &&
             temporaryProducts[i].customers_discount !== 0 &&
             `${temporaryProducts[i].customers_discount}%`,
-          price: currencyFormat(temporaryProducts[i].products_price),
-          // discountPrice: currencyFormat(
-          //   // (temporaryProducts[i].final_price *
-          //   //   (100 - temporaryProducts[i].customers_discount)) /
-          //   //   100,
+          price: currencyFormat(
+            temporaryProducts[i].products_price +
+              (temporaryProducts[i].attributes
+                ? temporaryProducts[i].attributes.reduce(
+                    (accumulator, currentValue) =>
+                      Number(accumulator.options_values_price) +
+                      Number(currentValue.options_values_price),
+                  )
+                : 0),
+          ),
           //   temporaryProducts[i].products_price
           // ),
           quantity: temporaryProducts[i].products_quantity,
@@ -114,8 +117,7 @@ const OrderInformation = ({ order }) => {
             //   100) *
             //   temporaryProducts[i].products_quantity,
             // temporaryProducts[i].products_price*temporaryProducts[i].products_quantity
-            temporaryProducts[i].products_price *
-              temporaryProducts[i].products_quantity,
+            temporaryProducts[i].final_price,
           ),
         },
       ];
@@ -571,12 +573,7 @@ const OrderInformation = ({ order }) => {
                     fontWeight="700"
                     className="primaryFont"
                   >
-                    {currencyFormat(
-                      subTotalProduk +
-                        orderData?.shipping_cost -
-                        productDiscount -
-                        voucherDiscount,
-                    )}
+                    {currencyFormat(orderData.order_price)}
                   </Text>
                 </Flex>
                 <Flex mt="8px">
