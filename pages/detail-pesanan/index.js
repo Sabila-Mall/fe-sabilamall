@@ -582,7 +582,9 @@ const DetailPesanan = () => {
         diskon: 10,
         payment_method: tempPayment?.payment_method,
       });
-    } else if (Object.keys(pengiriman).length === 0) {
+    }
+
+    if (Object.keys(pengiriman).length === 0) {
       toast({
         title: "Pilih metode pengiriman",
         position: "top",
