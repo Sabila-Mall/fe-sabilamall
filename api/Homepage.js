@@ -6,12 +6,18 @@ export const getProducts = (page = 1, type = "") => {
   return axios.get(HOST + `/api/product/get_all_filters?page=${page}&type=${type}`);
 };
 
-export const getFlashSaleProducts = () => {
-  return axios.post(HOST + "/api/product/get_flash_sale_products", {});
+export const getFlashSaleProducts = (page = 1) => {
+  return axios.post(HOST + "/api/product/get_flash_sale_products", {
+    type: "paginate",
+    page: page,
+  });
 };
 
-export const getDiscountProducts = () => {
-  return axios.post(HOST + "/api/product/get_sale_products", {});
+export const getDiscountProducts = (page = 1) => {
+  return axios.post(HOST + "/api/product/get_sale_products", {
+    type: "paginate",
+    page: page,
+  });
 };
 
 export const getBanner = () => {

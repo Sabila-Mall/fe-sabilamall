@@ -18,10 +18,14 @@ export const HomepageProvider = ({ children }) => {
   const [flashSaleProducts, setFlashSaleProducts] = useState({
     data: new Array(8).fill(0),
     loading: true,
+    currentPage: 1,
+    lastPage: Number.MAX_SAFE_INTEGER,
   });
   const [discountProducts, setDiscountProducts] = useState({
     data: new Array(8).fill(0),
     loading: true,
+    currentPage: 1,
+    lastPage: Number.MAX_SAFE_INTEGER,
   });
 
   const [banner, setBanner] = useState({
@@ -44,12 +48,14 @@ export const HomepageProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    getFlashSaleProducts()
+    getFlashSaleProducts(1)
       .then(res => {
         if (isRequestSuccess(res.data)) {
           setFlashSaleProducts({
-            data: res.data.data ?? [],
+            data: res.data.data.data ?? [],
             loading: false,
+            currentPage: 1,
+            lastPage: res.data.data.last_page,
           });
         } else {
           throw "Gagal mendapatkan produk flash sale";
@@ -58,17 +64,19 @@ export const HomepageProvider = ({ children }) => {
       .catch(err => {
         console.error(err);
         errorToast(err);
-        setFlashSaleProducts({ data: [], loading: false });
+        setFlashSaleProducts({ data: [], loading: false, ...flashSaleProducts });
       });
   }, []);
 
   useEffect(() => {
-    getDiscountProducts()
+    getDiscountProducts(1)
       .then(res => {
         if (isRequestSuccess(res.data)) {
           setDiscountProducts({
-            data: res.data.data ?? [],
+            data: res.data.data.data ?? [],
             loading: false,
+            currentPage: 1,
+            lastPage: res.data.data.last_page,
           });
         } else {
           throw "Gagal mendapatkan produk diskon";
@@ -77,7 +85,7 @@ export const HomepageProvider = ({ children }) => {
       .catch(err => {
         console.error(err);
         errorToast(err);
-        setDiscountProducts({ data: [], loading: false });
+        setDiscountProducts({ data: [], loading: false, ...discountProducts });
       });
   }, []);
 
