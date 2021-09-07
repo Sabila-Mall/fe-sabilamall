@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import {
   getDiscountProducts,
   getFlashSaleProducts,
-  getProducts,
 } from "../../api/Homepage";
 import { Layout } from "../../components/Layout";
 import LayoutProductList from "../../components/LayoutProductList";
@@ -84,7 +83,7 @@ const SaleProductsDisplay = () => {
       hasPadding={true}
       hasBreadCrumb
       breadCrumbItem={[
-        { name: titleCase(type.replace("-", " ")), isOnPage: true },
+        { name: titleCase((type ?? "").replace("-", " ")), isOnPage: true },
       ]}
     >
       <Box as="main" pb="12" d="flex" justifyContent="start" w="full">
