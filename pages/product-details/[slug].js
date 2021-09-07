@@ -17,6 +17,8 @@ import { ShareProduct } from "../../components/ShareProduct";
 import { useAuthContext } from "../../contexts/authProvider";
 import { isNumber } from "../../utils/functions";
 
+import Head from 'next/head'
+
 const ProductDetails = () => {
   const { userData, isLoggedIn } = useAuthContext();
 
@@ -224,8 +226,25 @@ const ProductDetails = () => {
     },
   ];
 
+  const tempHeadImage = products_image.split("/")
+  const headImage = tempHeadImage.slice(2, tempHeadImage.length).join("/")
+
   return (
     <Layout hasNavbar sticky hasBreadCrumb breadCrumbItem={path} hasPadding>
+      <Head>
+        <title>{`${products_name} - SabilaMall`}</title>
+        <meta property="og:url" content={`https://sabilamall.co.id/product-details/${products_slug}`} /> //TODO
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={products_name} /> //TODO
+        <meta property="og:description" content={products_description} />
+        <meta property="og:image" content={`https://media.sabilamall.co.id/${headImage}`} /> //TODO
+
+        <meta name="keywords" content="" />
+        <meta name="author" content="SabilaMall" />
+        <meta name="DC.title" content="" />
+        <meta name="description" content="Distributor Grosir Supplier Baju Muslim, Gamis, Hijab Nibras, Endomoda, Ethica, Seply, Labella, Yasmeera. Dropship  Terpercaya & Murah Open Reseller." />
+        <meta name="csrf-token" content="jpDOUlWRa9ZovRrM3JYK7D6McJnWKCeU19SmLZqV" />
+      </Head>
       <Box w="full">
         <Flex
           flexDirection={{ base: "column", lg: "row" }}
