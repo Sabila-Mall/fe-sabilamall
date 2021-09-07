@@ -79,7 +79,7 @@ const Stok = () => {
           setStocks((curr) => [...curr, stocksPush]);
           setLoading(false);
         } catch (err) {
-          console.log(err);
+          () => {};
         }
       });
     }

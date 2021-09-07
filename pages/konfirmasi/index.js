@@ -54,7 +54,6 @@ const Konfirmasi = () => {
     if (orderId && userId) {
       getMyOrder(userId, orderId)
         .then((res) => {
-          console.log(res.data[0]);
           if (isRequestSuccess(res)) {
             setOrderInformation({
               number: res.data[0].orders_number,

@@ -324,15 +324,11 @@ export const CartProvider = ({ children }) => {
     })
       .then((res) => {
         if (isRequestSuccess(res)) {
-          console.log("berhasil");
           getAllData(false);
         } else {
-          console.log("gagal");
         }
       })
-      .catch(() => {
-        console.log("gagal error");
-      });
+      .catch(() => {});
   };
 
   useEffect(() => {

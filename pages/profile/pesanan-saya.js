@@ -249,7 +249,6 @@ const CardPesanan = ({
             {totalPriceAgent === 0 ? "Total Price :" : "Harga Agen :"}
           </Text>
           <Text fontSize="1.2rem" fontWeight="bold">
-            {console.log(totalPrice)}
             {totalPriceAgent === 0
               ? currencyFormat(String(totalPrice))
               : currencyFormat(totalPriceAgent)}

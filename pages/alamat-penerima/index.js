@@ -47,7 +47,6 @@ const AlamatPenerima = () => {
     loading: loadingAddress,
     getAllData,
   } = useAddressContext();
-  console.log(addressDataPenerima, "ADD PENERIMA");
   const userId = userData?.id;
   const router = useRouter();
   // const userId = 6089;
@@ -293,7 +292,7 @@ const AlamatPenerima = () => {
     try {
       addCheckoutData(data);
     } catch {
-      console.log("EERRRRR");
+      () => {};
     }
   };
 
@@ -331,7 +330,6 @@ const AlamatPenerima = () => {
     } else if (pengirimCurrentTab == 0 && penerimaCurrentTab == 1) {
       try {
         const res = await addAddressPenerima();
-        console.log(res, "RESSS1");
         saveToContext({
           userId,
           dropshipper_id: addressIdPengirim,
@@ -386,7 +384,6 @@ const AlamatPenerima = () => {
       try {
         const res1 = await addAddressPengirim();
         const res2 = await addAddressPenerima();
-        console.log(res1, "RESS1");
         saveToContext({
           userId,
           dropshipper_id: res1?.data?.address_book_id,
@@ -414,20 +411,13 @@ const AlamatPenerima = () => {
   };
 
   const handleDisable = () => {
-    console.log(pengirimCurrentTab, "PGT");
-    console.log(penerimaCurrentTab, "PRT");
-    console.log(namaPengirimInput);
-    console.log(namaPenerima);
     if (pengirimCurrentTab == 0 && penerimaCurrentTab == 0) {
       if (namaPengirim !== "" && namaPenerima !== "") {
         return false;
       } else {
-        console.log("tesss");
         return true;
       }
     } else if (pengirimCurrentTab == 0 && penerimaCurrentTab == 1) {
-      console.log(namaPengirimInput);
-      console.log(alamatPenerima);
       if (
         namaPengirim !== "" &&
         namaAwalPenerima !== "" &&
@@ -482,8 +472,6 @@ const AlamatPenerima = () => {
     loadingPage
   )
     return <Loading />;
-
-  console.log(dataPengirim, "DATA PENGIRIM BOT");
 
   return (
     <Layout hasNavbar hasBreadCrumb breadCrumbItem={path} hasPadding sticky>

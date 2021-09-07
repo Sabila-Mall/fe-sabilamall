@@ -3,50 +3,55 @@ import { Box, HStack, Text, Flex } from "@chakra-ui/layout";
 import { css } from "@emotion/react";
 import { useState } from "react";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
+
 import { useAuthContext } from "../contexts/authProvider";
 import { useCartContext } from "../contexts/cartProvider";
 
 export const AddAmount = ({ product, mb }) => {
-
   const { userData } = useAuthContext();
-  const { updateQuantity, totalPrice, settotalPrice, deleteCartItem, totalDiscount, settotalDiscount } = useCartContext();
+  const {
+    updateQuantity,
+    totalPrice,
+    settotalPrice,
+    deleteCartItem,
+    totalDiscount,
+    settotalDiscount,
+  } = useCartContext();
   const userId = userData?.id;
-  const stock = product?.products_stok
-  const [quantity, setquantity] = useState(product.customers_basket_quantity)
-  const price = product.final_price
-  const discount = product?.products_discount
+  const stock = product?.products_stok;
+  const [quantity, setquantity] = useState(product.customers_basket_quantity);
+  const price = product.final_price;
+  const discount = product?.products_discount;
 
   const handleModifyNumberOfItem = (event) => {
-    let tempPrice = totalPrice
-    let tempDiscount = totalDiscount
+    let tempPrice = totalPrice;
+    let tempDiscount = totalDiscount;
     if (event === "increase") {
       if (stock - quantity > 0) {
-        const newQuantity = quantity + 1
-        tempDiscount += Number(discount)
-        settotalDiscount(tempDiscount)
-        tempPrice = Number(price)
-        settotalPrice(tempPrice)
-        updateQuantity(userId, product.customers_basket_id, newQuantity)
-        setquantity(newQuantity)
+        const newQuantity = quantity + 1;
+        tempDiscount += Number(discount);
+        settotalDiscount(tempDiscount);
+        tempPrice = Number(price);
+        settotalPrice(tempPrice);
+        updateQuantity(userId, product.customers_basket_id, newQuantity);
+        setquantity(newQuantity);
       }
     } else if (event === "decrease") {
       if (quantity > 1) {
-        const newQuantity = quantity - 1
-        tempDiscount -= Number(discount)
-        settotalDiscount(tempDiscount)
-        tempPrice = Number(price)
-        settotalPrice(tempPrice)
-        updateQuantity(userId, product.customers_basket_id, newQuantity)
-        setquantity(newQuantity)
+        const newQuantity = quantity - 1;
+        tempDiscount -= Number(discount);
+        settotalDiscount(tempDiscount);
+        tempPrice = Number(price);
+        settotalPrice(tempPrice);
+        updateQuantity(userId, product.customers_basket_id, newQuantity);
+        setquantity(newQuantity);
       }
     }
-    console.log(totalPrice)
   };
 
   const handleDelete = (productId) => {
-    console.log(productId);
-    deleteCartItem(userId, productId)
-  }
+    deleteCartItem(userId, productId);
+  };
 
   return (
     <Box mb={mb}>

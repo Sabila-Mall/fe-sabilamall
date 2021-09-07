@@ -122,7 +122,6 @@ const OrderInformation = ({ order }) => {
         },
       ];
     }
-    console.log(tempOrderProducts);
     setOrderProducts(tempOrderProducts);
     setSubTotalProduk(tempSubtotal);
 
@@ -133,8 +132,6 @@ const OrderInformation = ({ order }) => {
       });
     }
   }, [orderData]);
-  console.log("opp");
-  console.log(orderProducts);
 
   return (
     <Box>

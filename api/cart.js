@@ -78,7 +78,6 @@ export const updateCartQuantity = async (dataPost) => {
       ...dataPost,
       device_id,
     });
-    console.log(res);
     const data = await res.data;
     return data;
   } catch (error) {

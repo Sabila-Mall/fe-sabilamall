@@ -286,7 +286,6 @@ const ProductCheckout = ({
                   warna: e.target.value?.split(" ")?.[0],
                 }));
 
-                console.log(e.target.value?.split(" ")?.[1], "WARNA ONCHANGE");
                 checkStockCl({
                   ...filterStock,
                   warna: e.target.value?.split(" ")?.[0],

@@ -2,6 +2,7 @@ import { Button } from "@chakra-ui/button";
 import { Box, Flex, Text } from "@chakra-ui/layout";
 import { Center, Divider, Grid, Spinner } from "@chakra-ui/react";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/table";
+
 import { AddAmount } from "../../components/AddAmount";
 import { CardCheckout } from "../../components/CardCheckout";
 import { Layout } from "../../components/Layout";
@@ -18,13 +19,15 @@ const path = [
 ];
 
 const cartDetails = () => {
-
   const { cartData, loading, cartDataByVendor } = useCartContext();
 
   return (
     <Layout hasNavbar hasPadding hasBreadCrumb breadCrumbItem={path}>
-      {loading ? <Grid placeItems="center">
-        <Spinner></Spinner></Grid> :
+      {loading ? (
+        <Grid placeItems="center">
+          <Spinner></Spinner>
+        </Grid>
+      ) : (
         <Box w="full">
           <Box display={{ lg: "flex" }} justifyContent="space-between">
             <Box
@@ -46,10 +49,9 @@ const cartDetails = () => {
                     </Th>
                   </Tr>
                 </Thead>
-                {cartDataByVendor.length ?
+                {cartDataByVendor.length ? (
                   <Tbody>
                     {cartDataByVendor.map((el, index) => {
-                      console.log(cartData);
                       return (
                         <>
                           <Text
@@ -62,21 +64,20 @@ const cartDetails = () => {
                             {el.vendors_name}
                           </Text>
                           {el.keranjang.map((elemenKeranjang, index) => {
-                            return (
-                              <TableContent product={elemenKeranjang} />
-                            )
+                            return <TableContent product={elemenKeranjang} />;
                           })}
                         </>
-
-                      )
+                      );
                     })}
-                  </Tbody> :
+                  </Tbody>
+                ) : (
                   <Box w="100%">
-                    <Center w="100%" >
+                    <Center w="100%">
                       <Text
                         mt="1rem"
                         fontSize={"1rem"}
-                        className={"secondaryFont"}>
+                        className={"secondaryFont"}
+                      >
                         Belum ada barang di dalam keranjang belanja
                       </Text>
                     </Center>
@@ -84,8 +85,7 @@ const cartDetails = () => {
                       <AddVoucher width={{ base: "full", lg: "50%" }} />
                     </Center>
                   </Box>
-                }
-
+                )}
               </Table>
             </Box>
 
@@ -95,7 +95,7 @@ const cartDetails = () => {
           </Box>
 
           <Box display={{ base: "block", md: "none" }}>
-            {cartDataByVendor.length ?
+            {cartDataByVendor.length ? (
               <Box>
                 {cartDataByVendor.map((el, index) => {
                   return (
@@ -116,21 +116,24 @@ const cartDetails = () => {
                             <AddAmount product={elemenKeranjang} mb="2rem" />
                             <Divider />
                           </Box>
-
-                        )
+                        );
                       })}
                     </>
-
-                  )
+                  );
                 })}
-              </Box> :
+              </Box>
+            ) : (
               <></>
-            }
+            )}
           </Box>
         </Box>
-      }
+      )}
 
-      {cartDataByVendor.length ? <AddVoucher width={{ base: "full", lg: "30%" }} /> : <></>}
+      {cartDataByVendor.length ? (
+        <AddVoucher width={{ base: "full", lg: "30%" }} />
+      ) : (
+        <></>
+      )}
       <Box display={{ lg: "none" }}>
         <CardCheckout />
       </Box>

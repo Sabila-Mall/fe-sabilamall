@@ -310,7 +310,6 @@ const MetodePembayaran = ({
   paymentMethod,
   loadingPayment,
 }) => {
-  console.log(paymentMethod);
   return (
     <VStack spacing="1rem" align="stretch">
       <Heading as="h3" fontSize="1.5rem" className="primaryFont">
@@ -324,7 +323,6 @@ const MetodePembayaran = ({
           placeholder="Pilih metode pembayaran"
           onChange={(event) => handler(event.target.value)}
         >
-          {console.log(paymentMethod)}
           {paymentMethod.map((method, index) => {
             return (
               <option value={method.payment_method} key={index}>
@@ -642,20 +640,9 @@ const DetailPesanan = () => {
       totalDiscount = checkoutData.discount;
     }
   }
-  console.log(metodePembayaran);
   const onSubmit = () => {
     // Values udah berisi semua input yang dimasukin user dalam bentuk object
     // Buat liat bentuknya bisa di cek di console
-    console.log("CATATAN PESANAN", catatanPesanan);
-    console.log("PENGIRIMAN", pengiriman);
-    console.log("METODE PEMBAYARAN", metodePembayaran);
-    console.log("VOUCHER", voucher);
-    console.log("PRODUCT BASKET", arrayOfCustomerBasket);
-    console.log(weight, vendors_id, vendor_origin, totalOrder, products_jenis);
-
-    console.log("totalPrice", totalPrice);
-    console.log("pengiriman.harga", pengiriman.harga);
-    console.log("totalDiscount", totalDiscount);
     if (
       metodePembayaran.payment_method === "deposit" &&
       totalPrice + pengiriman.harga - totalDiscount >

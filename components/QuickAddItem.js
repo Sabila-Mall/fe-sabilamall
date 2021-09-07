@@ -39,7 +39,6 @@ const QuickAddItem = ({ product, my }) => {
     totalDiscount,
     settotalDiscount,
   } = useCartContext();
-  // console.log(priceValue);
 
   const [quantity, setquantity] = useState(product.customers_basket_quantity);
   const price = product.final_price;
@@ -73,11 +72,9 @@ const QuickAddItem = ({ product, my }) => {
         setquantity(newQuantity);
       }
     }
-    console.log(totalPrice);
   };
 
   const handleDelete = (productId) => {
-    console.log(productId);
     deleteCartItem(userId, productId);
   };
 
