@@ -25,7 +25,6 @@ import { setBadgeColor } from "../utils/functions";
 
 const UserInfo = ({ useBorder }) => {
   const { userData, logout } = useAuthContext();
-  console.log(userData);
   return (
     <Flex
       borderBottom={useBorder && "1px solid #e2e8f0"}
