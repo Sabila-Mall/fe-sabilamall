@@ -17,7 +17,7 @@ const CardProduct = ({
                        image_path,
                        name,
                        flash_end,
-                       customerdiscount: discount,
+                       // customerdiscount: discount,
                        flash_price: flashPrice,
                        products_id: liked_products_id,
                        products_slug,
@@ -38,6 +38,7 @@ const CardProduct = ({
   //   : null;
   const priceAfterDiscount = salePrice ?? flashPrice;
   const timeLeft = flash_end && calculateTimeLeft(flash_end);
+  const discount = priceAfterDiscount && 100 - (100 * (parseNumber(priceAfterDiscount) / parseNumber(price)));
 
   const [liked, setLiked] = useState(
     wishlistData?.length > 0
@@ -142,7 +143,7 @@ const CardProduct = ({
                 {name.toUpperCase()}
               </Text>
             </Box>
-            {priceAfterDiscount &&
+            {priceAfterDiscount && priceAfterDiscount !== price &&
             <Box
               w="100%"
               h="18px"
@@ -153,11 +154,9 @@ const CardProduct = ({
               lineHeight="18px"
               mb="8px"
             >
-              {priceAfterDiscount !== price &&
-                <Text as="del" color="gray.500">
-                  {currencyFormat(parseNumber(price)).slice(0, -3)}
-                </Text>
-              }
+              <Text as="del" color="gray.500">
+                {currencyFormat(parseNumber(price)).slice(0, -3)}
+              </Text>
               <Text
                 ml={priceAfterDiscount !== price ? "9px" : 0}
                 h="100%"
