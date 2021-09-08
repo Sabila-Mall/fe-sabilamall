@@ -7,38 +7,26 @@ import { useAuthContext } from "../contexts/authProvider";
 import { useWishlistContext } from "../contexts/wishlistProvider";
 import styles from "../styles/Product.module.scss";
 import { getImageUrl } from "../utils/api";
-import { calculateTimeLeft, currencyFormat, formatNumber, numberWithDot, parseNumber } from "../utils/functions";
-
-// discount masukin angkanya aja, misalnya
-// kalau diskonnya 10%, masukin 10 aja
-// kalau gaada diskon, gak usah dimasukin angka
+import { calculateTimeLeft, currencyFormat, parseNumber } from "../utils/functions";
 
 const CardProduct = ({
                        image_path,
                        name,
                        flash_end,
-                       // customerdiscount: discount,
                        flash_price: flashPrice,
                        products_id: liked_products_id,
                        products_slug,
                        price,
                        sale_price: salePrice,
                        responsive,
-                       liked_customers_id,
-                       isWishlist = false,
-                       isLiked,
                      }) => {
   const router = useRouter();
   const { isLoggedIn, userData } = useAuthContext();
   const { wishlistData } = useWishlistContext();
   const [imageHeight, setImageHeight] = useState(144);
-  const realPriceString = numberWithDot(price.replace(/\.(.*?[0]{1,2})/g, ""));
-  // const priceAfterDiscount = discount
-  //   ? numberWithDot(price - (price * discount) / 100)
-  //   : null;
   const priceAfterDiscount = salePrice ?? flashPrice;
   const timeLeft = flash_end && calculateTimeLeft(flash_end);
-  const discount = priceAfterDiscount && 100 - (100 * (parseNumber(priceAfterDiscount) / parseNumber(price)));
+  const discount = priceAfterDiscount && Math.round(100 - (100 * (parseNumber(priceAfterDiscount) / parseNumber(price))));
 
   const [liked, setLiked] = useState(
     wishlistData?.length > 0
