@@ -1,4 +1,3 @@
-import { useToast } from "@chakra-ui/react";
 import nookies from "nookies";
 
 const fallbackCopyTextToClipboard = (text) => {
@@ -215,3 +214,7 @@ export const estimasiFormat = (estimasi) => {
 export const isNumber = (n) => {
   return /^-?[\d.]+(?:e-?\d+)?$/.test(n);
 };
+
+export const parseNumber = (str) => {
+  return Number(str.slice(0, -3));
+}
