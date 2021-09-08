@@ -25,6 +25,7 @@ import { setBadgeColor } from "../utils/functions";
 
 const UserInfo = ({ useBorder }) => {
   const { userData, logout } = useAuthContext();
+  console.log(userData);
   return (
     <Flex
       borderBottom={useBorder && "1px solid #e2e8f0"}
@@ -41,11 +42,9 @@ const UserInfo = ({ useBorder }) => {
         borderRadius="full"
       />
       <Box ml=".5rem" fontSize="14px">
-        <Text
-          fontWeight="700"
-          maxW="15ch"
-          isTruncated
-        >{`${userData?.first_name} ${userData?.lastName}`}</Text>
+        <Text fontWeight="700" maxW="15ch" isTruncated>{`${
+          userData?.first_name
+        } ${userData?.last_name ?? ""}`}</Text>
         <Flex>
           <Text>{userData?.memberid}</Text>
           <Flex
