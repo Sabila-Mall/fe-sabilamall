@@ -198,7 +198,7 @@ const Stok = () => {
                 ) {
                   return (
                     <StokItem
-                      link={`/product-details/${stock.productId}`}
+                      link={`/product-detail/${stock.productId}`}
                       img={stock.img}
                       nama={stock.nama}
                       supplier={stock.supplier}

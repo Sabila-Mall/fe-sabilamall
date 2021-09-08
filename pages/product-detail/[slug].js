@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import { checkStock } from "../../api/Stock";
-import { getProductDetail } from "../../api/product-details";
+import { getProductDetail } from "../../api/product-detail";
 import { getReviewProduct } from "../../api/review";
 import { Layout } from "../../components/Layout";
 import Loading from "../../components/Loading";
@@ -68,7 +68,7 @@ const ProductDetails = () => {
         setDiscountPricePerUnit(discount_price ? Number(discount_price) : null);
         if (isNumber(slug))
           router.replace(
-            `/product-details/${resProductDetails?.products_slug}`,
+            `/product-detail/${resProductDetails?.products_slug}`,
             undefined,
             {
               shallow: true,
@@ -236,7 +236,7 @@ const ProductDetails = () => {
         <title>{`${products_name} - SabilaMall`}</title>
         <meta
           property="og:url"
-          content={`https://sabilamall.co.id/product-details/${products_slug}`}
+          content={`https://sabilamall.co.id/product-detail/${products_slug}`}
         />{" "}
         //TODO
         <meta property="og:type" content="website" />
