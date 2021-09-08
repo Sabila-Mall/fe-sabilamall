@@ -29,12 +29,14 @@ const ProductHeader = ({
     ? new Intl.NumberFormat("id-ID", {
         style: "currency",
         currency: "IDR",
+        maximumFractionDigits: 0,
       }).format(Number(discount_price_be))
     : null;
   const price = current_price
     ? new Intl.NumberFormat("id-ID", {
         style: "currency",
         currency: "IDR",
+        maximumFractionDigits: 0,
       }).format(Number(current_price))
     : null;
 

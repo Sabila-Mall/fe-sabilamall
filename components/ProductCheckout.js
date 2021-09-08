@@ -122,6 +122,7 @@ const ProductCheckout = ({
     );
 
     setStock(data?.stock ?? 0);
+    setNumberOfItem(data?.stock ? 1 : 0);
   };
 
   const handleModifyNumberOfItem = (event) => {
@@ -429,7 +430,7 @@ const ProductCheckout = ({
           <VStack alignItems={"flex-end"}>
             {discount_price && (
               <Text as={"s"} color={"gray.400"} fontSize={"12px"}>
-                Rp{calculateTotalPrice(true)}
+                Rp {calculateTotalPrice(true)}
               </Text>
             )}
             <Text
@@ -438,8 +439,7 @@ const ProductCheckout = ({
               fontSize="20px"
               fontWeight={"bold"}
             >
-              Rp
-              {calculateTotalPrice()}
+              Rp {calculateTotalPrice()}
             </Text>
           </VStack>
         </Flex>
