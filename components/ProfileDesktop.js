@@ -29,7 +29,7 @@ const ProfileDesktop = ({ section, element, cardProfileText }) => {
     },
     {
       text: "Upgrade Akun",
-      path: "/profile/profile-saya",
+      path: "/profile/invoice-upgrade-akun",
       icon: IoMedalOutline,
     },
     { text: "Ubah Password", path: "/profile/ubah-password", icon: IoKey },
