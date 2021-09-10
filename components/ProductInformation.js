@@ -11,14 +11,12 @@ import {
   Heading,
   HStack,
   Progress,
-  Center,
-  useBoolean,
-  color,
+  Center
 } from "@chakra-ui/react";
-import { css } from "@emotion/react";
 import dynamic from "next/dynamic";
-import Link from "next/link";
+import { useState } from "react";
 import { GoStar } from "react-icons/go";
+import { css } from "@emotion/react";
 
 import styles from "../styles/ProductDetails.module.scss";
 
@@ -40,7 +38,22 @@ const ProductInformation = ({
   four_ratio,
   five_ratio,
 }) => {
-  const [description, setDescription] = useBoolean(false);
+  const [description, setDescription] = useState(false);
+  const [isOverflow, setIsOverflow] = useState(() => {
+    const descriptionText = document.getElementById("descriptionText")
+    if (descriptionText) {
+      let overflowStatus = descriptionText?.style.overflow
+      if (!overflowStatus || overflowStatus === "visible") {
+        descriptionText.style.overflow = "hidden";
+      }
+      let isOverflowing = descriptionText?.clientHeight < descriptionText?.scrollHeight;
+
+      descriptionText.style.overflow = overflowStatus;
+
+      return isOverflowing;
+    }
+    return false
+  })
 
   const ratingArray = {
     1: one_ratio,
@@ -83,9 +96,13 @@ const ProductInformation = ({
 
   const showDescription = () => {
     const descriptionText = document.getElementById("descriptionText");
-    setDescription.toggle();
-
-    descriptionText.classList.toggle(styles.productDescription);
+    if (description) {
+      window.scrollTo(0, 0)
+      descriptionText.classList.add(styles.productDescription)
+    } else {
+      descriptionText.classList.remove(styles.productDescription)
+    }
+    setDescription(!description)
   };
 
   return (
@@ -98,7 +115,6 @@ const ProductInformation = ({
             _focus={{ boxShadow: "none" }}
             className="secondaryFont"
             fontWeight="500"
-            onClick={setDescription.on}
           >
             Informasi Produk
           </Tab>
@@ -108,7 +124,6 @@ const ProductInformation = ({
             _focus={{ boxShadow: "none" }}
             className="secondaryFont"
             fontWeight="500"
-            onClick={setDescription.off}
           >
             Penilaian
           </Tab>
@@ -200,9 +215,8 @@ const ProductInformation = ({
               <Text fontWeight="bold" mt="8px" mb="8px">
                 Deskripsi Produk
               </Text>
-              <Text
+              {description ? <Text
                 id="descriptionText"
-                className={styles.productDescription}
                 color="gray.600"
                 fontSize="14px"
               >
@@ -210,18 +224,52 @@ const ProductInformation = ({
                 <div
                   dangerouslySetInnerHTML={{ __html: products_description }}
                 />
-              </Text>
+              </Text> :
+                <Text
+                  id="descriptionText"
+                  color="gray.600"
+                  fontSize="14px"
+                  css={css`
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-line-clamp: 4;
+                -webkit-box-orient: vertical;
+              `}
+                >
+                  {/* {products_description?.replace(/<[^>]+>/g, "")} */}
+                  {products_description ? <div
+                    dangerouslySetInnerHTML={{ __html: products_description }}
+                  /> : <Text id="descriptionText"
+                    color="gray.600"
+                    fontSize="14px">-</Text>}
+
+                </Text>
+              }
               <Button
                 bg="none"
                 color="orange.400"
                 fontWeight="bold"
                 p="0"
-                onClick={showDescription}
+                onClick={() => showDescription()}
                 id="seeMoreButton"
                 _hover={{ bg: "transparent", color: "orange.500" }}
                 _focus={{ boxShadow: "none" }}
               >
-                {description ? "Lebih Sedikit" : "Lihat selengkapnya"}
+                {(() => {
+                  if (isOverflow) {
+                    if (description) {
+                      return ("Lebih Sedikit")
+                    } else {
+                      return ("Lihat Selengkapnya")
+                    }
+                  } else if (products_description) {
+                    if (description) {
+                      return ("Lebih Sedikit")
+                    } else {
+                      return ("Lihat Selengkapnya")
+                    }
+                  }
+                })()}
               </Button>
             </Box>
           </TabPanel>
@@ -301,7 +349,7 @@ const ProductInformation = ({
           </TabPanel>
         </TabPanels>
       </Tabs>
-    </Box>
+    </Box >
   );
 };
 
