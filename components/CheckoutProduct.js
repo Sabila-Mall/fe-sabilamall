@@ -116,14 +116,14 @@ const CheckoutProduct = ({ product }) => {
             </Text>
           </Box>
         </HStack>
-        {catatan && (
+        {
           <Editable
             mt="0.75rem"
             className="secondaryFont"
             color={"gray.400"}
             fontSize={"0.75rem"}
             isPreviewFocusable={false}
-            placeholder={catatan}
+            placeholder={catatan ? catatan : "tambahkan catatan"}
           >
             <HStack spacing={"0.25rem"}>
               {userData && (
@@ -137,7 +137,7 @@ const CheckoutProduct = ({ product }) => {
               )}
             </HStack>
           </Editable>
-        )}
+        }
       </Box>
       <Box
         gridArea={"harga"}

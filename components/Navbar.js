@@ -34,6 +34,8 @@ import { IoHomeSharp, IoReceiptSharp } from "react-icons/io5";
 
 import { productList } from "../constants/dummyData";
 import { useAuthContext } from "../contexts/authProvider";
+import { useCartContext } from "../contexts/cartProvider";
+import { useWishlistContext } from "../contexts/wishlistProvider";
 import styles from "../styles/Navbar.module.scss";
 import { setBadgeColor } from "../utils/functions";
 import QuickAdd from "./QuickAdd";
@@ -41,6 +43,8 @@ import Sidebar from "./Sidebar";
 
 export const NavbarBottom = ({ onDrawerOpen, isLoggedIn }) => {
   const router = useRouter();
+  const { cartData } = useCartContext();
+  let l = cartData?.length;
   return (
     <Box
       as="nav"
@@ -62,6 +66,7 @@ export const NavbarBottom = ({ onDrawerOpen, isLoggedIn }) => {
         </Text>
       </Box>
       <Box
+        position="relative"
         className={styles.boxIcon}
         onClick={isLoggedIn ? onDrawerOpen : () => router.push("/login")}
       >
@@ -69,6 +74,24 @@ export const NavbarBottom = ({ onDrawerOpen, isLoggedIn }) => {
         <Text color="gray.500" className={styles.boxIconText}>
           Keranjang
         </Text>
+        {l != 0 && (
+          <Flex
+            top="-.1rem"
+            right="-0.05rem"
+            width="1.25rem"
+            height="1.25rem"
+            position="absolute"
+            color="white"
+            justifyContent="center"
+            fontWeight="700"
+            fontSize="0.7rem"
+            alignItems="center"
+            borderRadius="100%"
+            bgColor="orange.500"
+          >
+            <Text fontSize="0.7rem">{l < 99 ? l : "99"}</Text>
+          </Flex>
+        )}
       </Box>
       <Box
         className={styles.boxIcon}
@@ -191,8 +214,12 @@ const SearchedElement = ({ isSearched, setIsSearched }) => {
 
 const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
   const { userData, loading, logout } = useAuthContext();
+  const { cartData } = useCartContext();
+  const { wishlistData } = useWishlistContext();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const router = useRouter();
+  let l = cartData?.length;
+  let d = wishlistData?.length;
 
   return loading ? (
     <Spinner mx="auto" />
@@ -223,6 +250,7 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
         />
       </Link>
       <Box
+        position="relative"
         w="fit-content"
         display={{ base: "none", md: "block" }}
         onClick={
@@ -230,14 +258,53 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
         }
       >
         <Icon as={IoCart} className={styles.navbarIcon} color="gray.500" />
+        {l != 0 && (
+          <Flex
+            bottom={l < 10 ? "-0.5rem" : "-0.55rem"}
+            right={l < 10 ? "-0.55rem" : "-0.55rem"}
+            width="1.25rem"
+            height="1.25rem"
+            position="absolute"
+            color="white"
+            justifyContent="center"
+            fontWeight="700"
+            fontSize="0.7rem"
+            alignItems="center"
+            borderRadius="100%"
+            bgColor="orange.500"
+          >
+            <Text fontSize="0.7rem">{l < 99 ? l : "99"}</Text>
+          </Flex>
+        )}
       </Box>
+
       <Link href={isLoggedIn ? "/wishlist" : "/login"} w="fit-content">
-        <Icon
-          as={IoHeartSharp}
-          className={styles.navbarIcon}
-          color="gray.500"
-        />
+        <Box position="relative" w="fit-content">
+          <Icon
+            as={IoHeartSharp}
+            className={styles.navbarIcon}
+            color="gray.500"
+          />
+          {d != 0 && (
+            <Flex
+              bottom={d < 10 ? "-0.5rem" : "-0.55rem"}
+              right={d < 10 ? "-0.5rem" : "-0.7rem"}
+              width={d < 10 ? "1.25rem" : "1.35rem"}
+              height={d < 10 ? "1.25rem" : "1.35rem"}
+              position="absolute"
+              color="white"
+              justifyContent="center"
+              fontWeight="700"
+              alignItems="center"
+              borderRadius="100%"
+              bgColor="orange.500"
+            >
+              <Text fontSize="0.7rem">{d < 99 ? d : "99"}</Text>
+            </Flex>
+          )}
+        </Box>
       </Link>
+
       <Link href={"/stok"} w="fit-content">
         <Icon
           display={{ base: "none", md: "block" }}
