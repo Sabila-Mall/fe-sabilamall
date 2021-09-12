@@ -14,6 +14,7 @@ import {
   useToast,
   useDisclosure,
   Link,
+  InputRightAddon,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -54,7 +55,7 @@ const handleSearch = (
   currentPage,
   setSearchState,
 ) => {
-  const pattern = /\bSMC\d{3,}$/;
+  const pattern = /\bSMC\d{1,}$/;
   if (search.match(pattern)) {
     const orderId = search.split("SMC")[1];
     setOrderId(orderId);
@@ -75,6 +76,7 @@ const SearchBar = () => {
     setSearchState,
   } = useMyOrderContext();
   const [search, setSearch] = useState("");
+  const [submit, setSubmit] = useState("");
 
   useEffect(() => {
     if (search.length > 3) {
@@ -92,12 +94,20 @@ const SearchBar = () => {
       setData(cacheData[currentPage - 1]);
       setSearchState(false);
     }
+  }, [submit]);
+
+  useEffect(() => {
+    if (search.length < 3) {
+      setSubmit(!submit);
+      console.log("masuk");
+    }
   }, [search]);
 
   return (
     <Flex w="full" justify="flex-end" zIndex="1">
       <InputGroup maxW="35rem">
         <Input
+          focusBorderColor="orange.400"
           onChange={(e) => {
             setSearch(e.target.value);
           }}
@@ -105,7 +115,14 @@ const SearchBar = () => {
           bg="white"
           value={search}
         />
-        <InputRightElement children={<BiSearch />} />
+        <InputRightAddon
+          onClick={() => {
+            setSubmit(search);
+          }}
+          bg="orange.400"
+          _hover={{ cursor: "pointer", backgroundColor: "orange" }}
+          children={<BiSearch />}
+        />
       </InputGroup>
     </Flex>
   );
@@ -334,6 +351,12 @@ const PesananSayaDesktop = () => {
     setCurrentPage,
     currentPage,
     searchState,
+    orderId,
+    tidakDitemukan,
+    setTidakDitemukan,
+    setData,
+    cacheData,
+    setSearchState,
   } = useMyOrderContext();
   const { width } = useWindowSize();
 
@@ -356,7 +379,7 @@ const PesananSayaDesktop = () => {
           <VStack
             maxW={width > 768 && width < 1024 && "478px"}
             minW={width > 768 && width < 1024 && "478px"}
-            alignItems="flex-end"
+            alignItems="flex-start"
             pl="1rem"
             w="full"
             mx={{ base: "1rem", md: 0 }}
@@ -367,16 +390,17 @@ const PesananSayaDesktop = () => {
               w="full"
               alignItems="center"
             >
-              {!searchState && (
-                <Text
-                  fontWeight="500"
-                  fontSize="1.1rem"
-                  w={{ base: "20%", "2xl": "35%" }}
-                  pl={{ base: "0.5rem" }}
-                >
-                  Halaman : {currentPage}
-                </Text>
-              )}
+              <Text
+                fontWeight="500"
+                fontSize="1.1rem"
+                w={{ base: "65%", "2xl": "35%" }}
+                pl={{ base: "0.5rem" }}
+              >
+                {!searchState
+                  ? `Halaman : ${currentPage}`
+                  : `Hasil Pencarian : SMC${orderId}`}
+              </Text>
+
               <SearchBar />
             </Flex>
             {!searchState && !loading && (
@@ -385,12 +409,30 @@ const PesananSayaDesktop = () => {
                 setCurrentPage={setCurrentPage}
               />
             )}
-
+            {searchState && (
+              <Kembali
+                setData={setData}
+                setSearchState={setSearchState}
+                setTidakDitemukan={setTidakDitemukan}
+                cacheData={cacheData}
+                currentPage={currentPage}
+              />
+            )}
             <Box w="full" d="flex" alignItems="center" flexDir="column">
               {loading ? (
                 <Spinner />
+              ) : tidakDitemukan ? (
+                <Box mt="10rem">
+                  <Text>
+                    Hasil Pencarian Order : <b>{`SMC${orderId}`}</b> tidak
+                    ditemukan
+                  </Text>
+                </Box>
               ) : (
                 data.map((dataPesanan, i) => {
+                  if (Array.isArray(dataPesanan)) {
+                    dataPesanan = dataPesanan[i];
+                  }
                   let totalPriceAgent = 0;
                   if (dataPesanan.parent_id) {
                     totalPriceAgent = dataPesanan.total_price_agent;
@@ -435,6 +477,12 @@ const PesananSayaMobile = () => {
     currentPage,
     setCurrentPage,
     searchState,
+    tidakDitemukan,
+    setTidakDitemukan,
+    setData,
+    cacheData,
+    setSearchState,
+    orderId,
   } = useMyOrderContext();
   const { width } = useWindowSize();
 
@@ -444,32 +492,62 @@ const PesananSayaMobile = () => {
       <Layout hasPadding>
         <Flex pt="2rem" flexDir="column" width="100%" my="1rem">
           <SearchBar />
-          {!searchState && (
+          {!searchState ? (
             <Box w="full">
               <Pages
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
               />
             </Box>
+          ) : (
+            <Kembali
+              setData={setData}
+              setSearchState={setSearchState}
+              setTidakDitemukan={setTidakDitemukan}
+              cacheData={cacheData}
+              currentPage={currentPage}
+            />
           )}
         </Flex>
         <VStack spacing="1rem" mb="1rem">
           {loading ? (
             <Spinner />
+          ) : tidakDitemukan ? (
+            <Box mt="1rem" pl="0.5rem">
+              <Text>
+                Hasil Pencarian Order : <b>{`SMC${orderId}`}</b> tidak ditemukan
+              </Text>
+            </Box>
           ) : (
-            data.map((dataPesanan) => {
+            data.map((dataPesanan, i) => {
+              if (Array.isArray(dataPesanan)) {
+                dataPesanan = dataPesanan[i];
+              }
+              let totalPriceAgent = 0;
+              if (dataPesanan.parent_id) {
+                totalPriceAgent = dataPesanan.total_price_agent;
+              }
               return (
-                <CardPesanan
-                  key={dataPesanan.order_number}
-                  orderNum={dataPesanan.orders_number}
-                  datePurchased={dataPesanan.date_purchased}
-                  orderStatus={dataPesanan.orders_status}
-                  paymentStatus={dataPesanan.payments_status}
-                  dropShip={dataPesanan.dropship_name}
-                  deliverer={dataPesanan.delivery_name}
-                  totalPrice={dataPesanan.total_price}
-                  parentId={dataPesanan.parent_id}
-                />
+                <>
+                  {searchState && (
+                    <Text>
+                      Hasil Pencarian Order : <b>{`SMC${orderId}`}</b>{" "}
+                    </Text>
+                  )}
+                  <CardPesanan
+                    key={i}
+                    orderId={dataPesanan.orders_id}
+                    orderNum={dataPesanan.orders_number}
+                    datePurchased={dataPesanan.date_purchased}
+                    orderStatus={dataPesanan.orders_status}
+                    paymentStatus={dataPesanan.payments_status}
+                    dropShip={dataPesanan.dropship_name}
+                    deliverer={dataPesanan.delivery_name}
+                    totalPrice={dataPesanan.total_price}
+                    parentId={dataPesanan.parent_id}
+                    totalPriceAgent={totalPriceAgent}
+                  />
+                </>
               );
             })
           )}
@@ -485,11 +563,11 @@ const PesananSayaMobile = () => {
 };
 
 const Pages = ({ currentPage, setCurrentPage }) => {
-  const { loading, lastPage } = useMyOrderContext();
+  const { loading, lastPage, tidakDitemukan } = useMyOrderContext();
 
   return (
     <>
-      {!loading && (
+      {!loading && !tidakDitemukan && (
         <>
           <Text
             my="1rem"
@@ -512,40 +590,43 @@ const Pages = ({ currentPage, setCurrentPage }) => {
 };
 
 const NextPrevPages = ({ currentPage, setCurrentPage }) => {
-  const { lastPage } = useMyOrderContext();
+  const { lastPage, tidakDitemukan } = useMyOrderContext();
   const { width } = useWindowSize();
   return (
-    <Flex
-      justifyContent={currentPage !== 1 ? "space-between" : "flex-end"}
-      w="full"
-      fontWeight="500"
-      textDecoration="underline"
-      color="orange.500"
-      px="0.5rem"
-      fontSize={width < 325 && "0.9rem"}
-    >
-      {currentPage > 1 && (
-        <Text
-          cursor="pointer"
-          onClick={() => {
-            setCurrentPage((curr) => curr - 1);
-          }}
-        >
-          Halaman Sebelumnya
-        </Text>
-      )}
-      {!(lastPage === currentPage) && (
-        <Text
-          cursor="pointer"
-          onClick={() => {
-            setCurrentPage((curr) => curr + 1);
-            window.scrollTo(0, 0);
-          }}
-        >
-          Halaman Selanjutnya
-        </Text>
-      )}
-    </Flex>
+    !tidakDitemukan && (
+      <Flex
+        justifyContent={currentPage !== 1 ? "space-between" : "flex-end"}
+        w="full"
+        fontWeight="500"
+        textDecoration="underline"
+        color="orange.500"
+        px="0.5rem"
+        fontSize={width < 325 && "0.9rem"}
+      >
+        {currentPage > 1 && (
+          <Text
+            cursor="pointer"
+            onClick={() => {
+              setCurrentPage((curr) => curr - 1);
+            }}
+          >
+            Halaman Sebelumnya
+          </Text>
+        )}
+        {!(lastPage === currentPage) && (
+          <Text
+            cursor="pointer"
+            textAlign="right"
+            onClick={() => {
+              setCurrentPage((curr) => curr + 1);
+              window.scrollTo(0, 0);
+            }}
+          >
+            Halaman Selanjutnya
+          </Text>
+        )}
+      </Flex>
+    )
   );
 };
 
@@ -571,6 +652,33 @@ const PesananSayaComponent = () => {
     <PesananSayaDesktop />
   ) : (
     <PesananSayaMobile />
+  );
+};
+
+const Kembali = ({
+  setData,
+  setSearchState,
+  setTidakDitemukan,
+  cacheData,
+  currentPage,
+}) => {
+  return (
+    <Text
+      mt="1rem"
+      pl="0.5rem"
+      fontWeight="500"
+      display="inline"
+      textDecoration="underline"
+      color="orange.500"
+      cursor="pointer"
+      onClick={() => {
+        setData(cacheData[currentPage - 1]);
+        setSearchState(false);
+        setTidakDitemukan(false);
+      }}
+    >
+      Kembali
+    </Text>
   );
 };
 

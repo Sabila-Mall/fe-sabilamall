@@ -10,6 +10,7 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { IoHeart } from "react-icons/io5";
 import { VscPackage } from "react-icons/vsc";
@@ -33,8 +34,8 @@ const ProfileMobile = () => {
   ];
 
   const wisPack = [
-    { text: "Wishlist", icon: IoHeart, href: "/#" },
-    { text: "Pesanan Saya", icon: VscPackage, href: "/#" },
+    { text: "Wishlist", icon: IoHeart, href: "/wishlist" },
+    { text: "Pesanan Saya", icon: VscPackage, href: "/profile/pesanan-saya" },
   ];
 
   const profileMenu = [
@@ -131,24 +132,27 @@ const ProfileMobile = () => {
                 </Box>
               </Flex>
               <SMCard sm={sm} w="308px" />
+
               <Box display="flex" justifyContent="space-evenly" mt="20px">
                 {wisPack.map((item) => (
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                    key={item.text}
-                  >
-                    <Icon as={item.icon} color="orange.400" fontSize="30px" />
-                    <Text
-                      className="secondaryFont"
-                      fontSize="12px"
-                      fontWeight="500"
-                      lineHeight="18px"
+                  <Link href={item.href}>
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      alignItems="center"
+                      key={item.text}
                     >
-                      {item.text}
-                    </Text>
-                  </Box>
+                      <Icon as={item.icon} color="orange.400" fontSize="30px" />
+                      <Text
+                        className="secondaryFont"
+                        fontSize="12px"
+                        fontWeight="500"
+                        lineHeight="18px"
+                      >
+                        {item.text}
+                      </Text>
+                    </Box>
+                  </Link>
                 ))}
               </Box>
               <VStack

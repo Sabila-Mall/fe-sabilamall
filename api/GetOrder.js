@@ -61,7 +61,12 @@ export const apiSearchOrder = async (customerId, orderId) => {
     };
     return d;
   } catch (err) {
-    throw new Error(err);
+    const d = {
+      data: {
+        success: false,
+      },
+    };
+    return d;
   }
 };
 

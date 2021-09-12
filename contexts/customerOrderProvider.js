@@ -18,6 +18,7 @@ export const MyOrderProvider = ({ children }) => {
   const [searchState, setSearchState] = useState(false);
   const [lastPage, setLastPage] = useState(0);
   const [refetch, setRefetch] = useState(false);
+  const [tidakDitemukan, setTidakDitemukan] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -51,6 +52,7 @@ export const MyOrderProvider = ({ children }) => {
   useEffect(() => {
     if (fetchOrder) {
       setLoading(true);
+      setTidakDitemukan(false);
       const filter = searchCache.filter(
         (el) => el.orders_id === Number(orderId),
       );
@@ -69,8 +71,8 @@ export const MyOrderProvider = ({ children }) => {
             setSearchCache((curr) => [...curr, res.data.data]);
             setSearchState(true);
           } else {
-            setData(cacheData[currentPage - 1]);
-            setSearchState(false);
+            setTidakDitemukan(true);
+            setSearchState(true);
           }
           setLoading(false);
           setFetchOrder(false);
@@ -97,6 +99,8 @@ export const MyOrderProvider = ({ children }) => {
     lastPage,
     refetch,
     setRefetch,
+    tidakDitemukan,
+    setTidakDitemukan,
   };
 
   return (

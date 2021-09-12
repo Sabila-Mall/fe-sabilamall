@@ -13,6 +13,7 @@ import {
   Circle,
   useClipboard,
   Tooltip,
+  Spinner,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -133,7 +134,7 @@ const OrderInformation = ({ order }) => {
     }
   }, [orderData]);
 
-  return (
+  return Object.keys(orderData).length != 0 ? (
     <Box>
       {isMobile && (
         <NavbarProfile
@@ -585,6 +586,10 @@ const OrderInformation = ({ order }) => {
       </Layout>
       {isMobile ? <ScrollButton /> : <></>}
     </Box>
+  ) : (
+    <Flex w="100vw" h="100vh" justify="center" alignItems="center">
+      <Spinner />
+    </Flex>
   );
 };
 
