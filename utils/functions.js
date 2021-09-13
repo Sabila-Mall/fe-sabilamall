@@ -230,3 +230,6 @@ export const getUserId = () => {
     return nookies.get(null, "user_id");
   return null;
 };
+
+export const priceAfterDiscount = (finalPrice, customerDiscount) =>
+  (finalPrice * (100 - customerDiscount)) / 100;

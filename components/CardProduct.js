@@ -8,7 +8,11 @@ import { useAuthContext } from "../contexts/authProvider";
 import { useWishlistContext } from "../contexts/wishlistProvider";
 import styles from "../styles/Product.module.scss";
 import { getImageUrl } from "../utils/api";
-import { calculateTimeLeft, currencyFormat } from "../utils/functions";
+import {
+  calculateTimeLeft,
+  currencyFormat,
+  priceAfterDiscount,
+} from "../utils/functions";
 
 const CardProduct = ({
   image_path,
@@ -27,7 +31,7 @@ const CardProduct = ({
   const [imageHeight, setImageHeight] = useState(144);
   const price = isLoggedIn ? final_price : normal_price;
   const priceAfterDiscount = isLoggedIn
-    ? (final_price * (100 - customerdiscount)) / 100
+    ? priceAfterDiscount(final_price, customerdiscount)
     : final_price;
   const timeLeft = flash_end && calculateTimeLeft(flash_end);
   const discount =
