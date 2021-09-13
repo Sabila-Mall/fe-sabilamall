@@ -125,7 +125,7 @@ export const CartProvider = ({ children }) => {
             const quantity = element.customers_basket_quantity;
             const discount = element.customers_discount;
             tempPrice += price * quantity;
-            tempDiscount += discount * quantity;
+            tempDiscount += discount * price * quantity;
           });
 
           settotalPrice(tempPrice);
@@ -171,8 +171,9 @@ export const CartProvider = ({ children }) => {
         tempQuantity += element.customers_basket_quantity;
         if (element.customers_discount) {
           tempDiscount +=
-            Number(element.customers_discount) *
-            element.customers_basket_quantity;
+            (Number(element.customers_discount) / 100) *
+            element.customers_basket_quantity *
+            element.final_price;
         }
       });
 
@@ -234,7 +235,9 @@ export const CartProvider = ({ children }) => {
       let tempTotal = 0;
       data.forEach((element) => {
         tempTotal +=
-          element.products_discount * element.customers_basket_quantity;
+          (element.customers_discount / 100) *
+          element.final_price *
+          element.customers_basket_quantity;
       });
       setselectedDiscount(tempTotal);
     }

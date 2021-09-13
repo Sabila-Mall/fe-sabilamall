@@ -32,6 +32,8 @@ import { useAuthContext } from "../../contexts/authProvider";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import { currencyFormat } from "../../utils/functions";
 
+const TRANSFER_BANK = "Transfer Bank";
+
 const OrderInformation = ({ order }) => {
   const { width } = useWindowSize();
   const { userData } = useAuthContext();
@@ -248,7 +250,10 @@ const OrderInformation = ({ order }) => {
                 minW="186px"
               >
                 {(() => {
-                  if (status?.toLowerCase() == "pending") {
+                  if (
+                    status?.toLowerCase() == "pending" &&
+                    orderData?.payment_method === TRANSFER_BANK
+                  ) {
                     return (
                       <>
                         <Button
@@ -259,7 +264,9 @@ const OrderInformation = ({ order }) => {
                           p="0px 16px"
                           onClick={() =>
                             router.push(
-                              `/konfirmasi?order=${orderData?.orders_number}`,
+                              `/konfirmasi?order=${orderData?.orders_number.slice(
+                                3,
+                              )}`,
                             )
                           }
                         >

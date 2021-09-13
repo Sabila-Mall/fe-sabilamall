@@ -257,7 +257,7 @@ const Pengiriman = ({ kurir, pengiriman, handler, loadingKurir }) => {
               </Flex>
 
               <Text className="secondaryFont">
-                Rp. {formatNumber(pengiriman.harga)}
+                {currencyFormat(pengiriman.harga)}
               </Text>
             </>
           )}
@@ -580,43 +580,6 @@ const DetailPesanan = () => {
         diskon: 10,
         payment_method: tempPayment?.payment_method,
       });
-    }
-
-    if (Object.keys(pengiriman).length === 0) {
-      toast({
-        title: "Pilih metode pengiriman",
-        position: "top",
-        status: "error",
-      });
-    } else if (Object.keys(metodePembayaran).length === 0) {
-      toast({
-        title: "Pilih metode pembayaran",
-        position: "top",
-        status: "error",
-      });
-    } else {
-      apiPlaceOrder(
-        vendors_id,
-        arrayOfCustomerBasket,
-        pengiriman.destination,
-        checkoutData.userId,
-        checkoutData.delivery_id,
-        checkoutData.dropshipper_id,
-        metodePembayaran.payment_method,
-        false,
-        0,
-        0,
-        catatanPesanan,
-        "1.0.2",
-        "",
-        0,
-      )
-        .then((res) => {
-          setOrderNumber(res.data.orders_number);
-          setSubtotal(res.data.subtotal);
-          router.push("/invoice");
-        })
-        .catch((err) => console.error(err));
     }
   };
 

@@ -19,7 +19,7 @@ import { IMAGE_HOST } from "../constants/api";
 import { useAuthContext } from "../contexts/authProvider";
 import { useCartContext } from "../contexts/cartProvider";
 import { useWindowSize } from "../hooks/useWindowSize";
-import { formatNumber } from "../utils/functions";
+import { currencyFormat, formatNumber } from "../utils/functions";
 
 const CheckoutProduct = ({ product }) => {
   const { width } = useWindowSize();
@@ -112,7 +112,7 @@ const CheckoutProduct = ({ product }) => {
               {deskripsi}
             </Text>
             <Text color="gray.500" fontSize="0.875rem">
-              Berat: {formatNumber(berat)}gr
+              Berat: {`${formatNumber(berat)} gr`}
             </Text>
           </Box>
         </HStack>
@@ -152,10 +152,10 @@ const CheckoutProduct = ({ product }) => {
           <Box textAlign={{ base: "right", lg: "left" }}>
             {discount !== 0 && (
               <Text fontSize={"0.75rem"} as={"s"} color={"gray.400"}>
-                Rp{formatNumber(harga)}
+                {currencyFormat(harga)}
               </Text>
             )}
-            <Text color={"gray.700"}>Rp{formatNumber(realPrice)}</Text>
+            <Text color={"gray.700"}>{currencyFormat(realPrice)}</Text>
           </Box>
           {discount !== 0 && (
             <Square
@@ -187,7 +187,7 @@ const CheckoutProduct = ({ product }) => {
         justifySelf={{ md: "center" }}
       >
         {isSmartphone && <Text>Subtotal:</Text>}
-        <Text color={"gray.700"}>Rp{formatNumber(jumlah * harga)}</Text>
+        <Text color={"gray.700"}>{currencyFormat(jumlah * realPrice)}</Text>
       </HStack>
     </Grid>
   );

@@ -36,7 +36,12 @@ import { ErrorToast, SuccessToast } from "../../components/Toast";
 import { useAddressContext } from "../../contexts/addressProvider";
 import { useAuthContext } from "../../contexts/authProvider";
 import { useCheckoutContext } from "../../contexts/checkoutProvider";
-import { extractName, numberWithDot } from "../../utils/functions";
+import {
+  currencyFormat,
+  extractName,
+  getPriceAfterDiscount,
+  numberWithDot,
+} from "../../utils/functions";
 
 const AlamatPenerima = () => {
   const { userData } = useAuthContext();
@@ -85,6 +90,7 @@ const AlamatPenerima = () => {
   let totalPrice = 0,
     totalQuantity = 0,
     totalDiscount = 0,
+    priceAfterDiscount = 0,
     totalWeight = 0;
 
   if (typeof window !== "undefined") {
@@ -94,6 +100,7 @@ const AlamatPenerima = () => {
       totalQuantity = checkoutData.quantity;
       totalWeight = checkoutData.weight;
       totalDiscount = checkoutData.discount;
+      priceAfterDiscount = totalPrice - totalDiscount;
     }
   }
 
@@ -551,19 +558,6 @@ const AlamatPenerima = () => {
                       maxH={{ base: "11.5rem", lg: "7.3rem" }}
                       overflowY="auto"
                       pb="0.25rem"
-                      css={
-                        {
-                          // "&::-webkit-scrollbar": {
-                          //   width: "0px",
-                          // },
-                          // "&::-webkit-scrollbar-track": {
-                          //   width: "10px",
-                          // },
-                          // "&::-webkit-scrollbar-thumb": {
-                          //   width: "10px",
-                          // },
-                        }
-                      }
                     >
                       <RadioGroup onChange={(e) => pengirimRadioHandler(e)}>
                         <Grid
@@ -1141,7 +1135,7 @@ const AlamatPenerima = () => {
                   fontWeight="500"
                   isTruncated
                 >
-                  Rp{numberWithDot(totalPrice)}
+                  {currencyFormat(totalPrice)}
                 </Text>
               </Box>
               <Box
@@ -1164,7 +1158,7 @@ const AlamatPenerima = () => {
                   fontWeight="500"
                   isTruncated
                 >
-                  Rp{numberWithDot(totalDiscount)}
+                  {currencyFormat(totalDiscount)}
                 </Text>
               </Box>
               <Box
@@ -1212,7 +1206,7 @@ const AlamatPenerima = () => {
                   fontSize="1.25rem"
                   isTruncated
                 >
-                  Rp{numberWithDot(totalPrice - totalDiscount)}
+                  {currencyFormat(priceAfterDiscount)}
                 </Text>
               </Box>
             </Box>

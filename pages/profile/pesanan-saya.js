@@ -99,7 +99,6 @@ const SearchBar = () => {
   useEffect(() => {
     if (search.length < 3) {
       setSubmit(!submit);
-      console.log("masuk");
     }
   }, [search]);
 
