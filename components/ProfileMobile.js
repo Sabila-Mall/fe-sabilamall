@@ -55,7 +55,6 @@ const ProfileMobile = () => {
   const logoutHandler = () => {
     onClose();
     logout();
-    router.push("/login");
   };
 
   return (

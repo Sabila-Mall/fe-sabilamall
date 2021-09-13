@@ -166,6 +166,8 @@ export const currencyFormat = (amount) => {
   return new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
+    maximumFractionDigits: 0,
+    minimumFractionDigits: 0,
   }).format(amount);
 };
 
@@ -217,4 +219,14 @@ export const isNumber = (n) => {
 
 export const parseNumber = (str) => {
   return Number(str.slice(0, -3));
+};
+
+export const getDeviceId = () => {
+  return window.localStorage.getItem("device_id");
+};
+
+export const getUserId = () => {
+  if (document.cookie.indexOf("user_id") !== -1)
+    return nookies.get(null, "user_id");
+  return null;
 };

@@ -170,10 +170,7 @@ const Sidebar = ({
                       className={styles.boxMenu}
                       key={item.id}
                       _hover={{ cursor: "pointer" }}
-                      onClick={() => {
-                        logout();
-                        router.push("/login");
-                      }}
+                      onClick={() => logout()}
                     >
                       <Heading
                         className={styles.fontSizeSidebar}

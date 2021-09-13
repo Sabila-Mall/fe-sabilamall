@@ -366,10 +366,7 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
               <MenuItem
                 icon={<Icon as={BiLogOut} color="red.400" />}
                 color="red.400"
-                onClick={() => {
-                  logout();
-                  router.push("/login");
-                }}
+                onClick={() => logout()}
               >
                 Keluar
               </MenuItem>

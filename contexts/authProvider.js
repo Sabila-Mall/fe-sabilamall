@@ -6,6 +6,9 @@ import { apiGetUserProfile } from "../api/Auth";
 import { USER_FIELDS } from "../constants/authConstants";
 import { isRequestSuccess } from "../utils/api";
 import { filterObject } from "../utils/functions";
+import { useCartContext } from "./cartProvider";
+import { useCheckoutContext } from "./checkoutProvider";
+import { useWishlistContext } from "./wishlistProvider";
 
 const AuthContext = createContext();
 
@@ -17,8 +20,9 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     nookies.destroy(null, "user_id");
     localStorage.removeItem("device_id");
-    setIsLoggedIn(false);
-    setUserData(null);
+    if (window !== undefined) {
+      window.location.reload();
+    }
   };
 
   useEffect(() => {

@@ -49,7 +49,7 @@ const Login = () => {
           saveUserIdToCookies(response.data[0].id);
           saveTokenToCookies(response.data[0].token);
           setIsLoggedIn(true);
-          router.push("/");
+          window.location.href = "/";
         } else {
           toast({
             position: "top",

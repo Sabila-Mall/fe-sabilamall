@@ -32,10 +32,6 @@ const ProductDetails = () => {
   const [id, setId] = useState(null);
   const [pricePerUnit, setPricePerUnit] = useState(null);
   const [discountPricePerUnit, setDiscountPricePerUnit] = useState(null);
-  // const [pricePerUnit, setPricePerUnit] = useState(Number(current_price));
-  // const [discountPricePerUnit, setDiscountPricePerUnit] = useState(
-  //   discount_price ? Number(discount_price) : null,
-  // );
   const [productSlug, setProductSlug] = useState("");
 
   const router = useRouter();
@@ -124,7 +120,6 @@ const ProductDetails = () => {
     images,
     products_name,
     products_ordered,
-    current_price,
     vendors_name,
     rating,
     products_quantity,
@@ -144,12 +139,13 @@ const ProductDetails = () => {
     four_ratio,
     five_ratio,
     related_products,
-    discount_price,
     po_shippingdate,
     vendors_success_rate,
     products_jenis,
     isLiked,
     products_slug,
+    normal_price,
+    final_price,
   } = data;
 
   const productImagesData = {
@@ -176,8 +172,10 @@ const ProductDetails = () => {
     attributes,
     products_quantity,
     customerdiscount,
-    discount_price,
-    current_price,
+    discount_price: isLoggedIn
+      ? (final_price * (100 - customerdiscount)) / 100
+      : final_price,
+    current_price: isLoggedIn ? final_price : normal_price,
     user_level: userLevel,
     customers_id: userId,
     products_id: id,
