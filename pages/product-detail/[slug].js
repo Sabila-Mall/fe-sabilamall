@@ -116,7 +116,7 @@ const ProductDetails = () => {
     return <Loading />;
   }
 
-  if (!data) router.push("/404");
+  if (!data) router.replace("/404");
   const {
     po_close_status,
     isHoliday,

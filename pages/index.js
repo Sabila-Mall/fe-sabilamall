@@ -1,26 +1,36 @@
 import { Box, Circle, Divider, Flex, Icon, Text } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import Head from "next/head";
+import { useEffect, useState } from "react";
 import { IoArrowUp } from "react-icons/io5";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
-import Head from "next/head";
 
+import Banner from "../components/Banner";
+import { Layout } from "../components/Layout";
 import LayoutCategoryList from "../components/LayoutCategoryList";
+import LayoutProductList from "../components/LayoutProductList";
+import LayoutSaleProducts from "../components/LayoutSaleProducts";
 import SMCard from "../components/SMCard";
 import { useAuthContext } from "../contexts/authProvider";
-import { Layout } from "../components/Layout";
-import Banner from "../components/Banner";
-import { HomepageProvider, useHomePageContext } from "../contexts/homepageProvider";
-import LayoutSaleProducts from "../components/LayoutSaleProducts";
-import LayoutProductList from "../components/LayoutProductList";
+import {
+  HomepageProvider,
+  useHomePageContext,
+} from "../contexts/homepageProvider";
+import { useWindowSize } from "../hooks/useWindowSize";
 
 const HomeDisplay = () => {
   const { isLoggedIn } = useAuthContext();
   const {
-    products, flashSaleProducts, discountProducts,
-    banner, category, handleLoadMoreProducts, handleFilterProducts,
+    products,
+    flashSaleProducts,
+    discountProducts,
+    banner,
+    category,
+    handleLoadMoreProducts,
+    handleFilterProducts,
   } = useHomePageContext();
   const [scrollVisible, setScrollVisible] = useState(false);
+  const { width } = useWindowSize();
 
   useEffect(() => {
     const scrollLogger = () => {
@@ -41,14 +51,23 @@ const HomeDisplay = () => {
     <>
       <Layout hasNavbar={true} hasPadding={false} noFooter={true}>
         <Head>
-          <title>Distributor Grosir Supplier Nibras, Endomoda, Ethica - Open Reseller</title>
-          <meta name="keywords"
-                content="reseller baju muslim, supplier dropship, open reseller gamis, supplier hijab, dropship terpercaya" />
+          <title>
+            Distributor Grosir Supplier Nibras, Endomoda, Ethica - Open Reseller
+          </title>
+          <meta
+            name="keywords"
+            content="reseller baju muslim, supplier dropship, open reseller gamis, supplier hijab, dropship terpercaya"
+          />
           <meta name="author" content="SabilaMall" />
           <meta name="DC.title" content />
-          <meta name="description"
-                content="Distributor Grosir Supplier Baju Muslim, Gamis, Hijab Nibras, Endomoda, Ethica, Seply, Labella, Yasmeera. Dropship  Terpercaya & Murah Open Reseller." />
-          <meta name="csrf-token" content="jpDOUlWRa9ZovRrM3JYK7D6McJnWKCeU19SmLZqV" />
+          <meta
+            name="description"
+            content="Distributor Grosir Supplier Baju Muslim, Gamis, Hijab Nibras, Endomoda, Ethica, Seply, Labella, Yasmeera. Dropship  Terpercaya & Murah Open Reseller."
+          />
+          <meta
+            name="csrf-token"
+            content="jpDOUlWRa9ZovRrM3JYK7D6McJnWKCeU19SmLZqV"
+          />
         </Head>
         <Circle
           bg="red.600"
@@ -63,45 +82,40 @@ const HomeDisplay = () => {
           cursor="pointer"
           onClick={() => window.scroll({ top: 0, behavior: "smooth" })}
         >
-          <Icon
-            as={IoArrowUp}
-            color="white"
-            width="55%"
-            height="55%"
-          />
+          <Icon as={IoArrowUp} color="white" width="55%" height="55%" />
         </Circle>
         <Banner data={banner.data} loading={banner.loading} />
         <Flex
           flexDirection={{ base: "column", xl: "row" }}
           justifyContent="space-evenly"
-          align="center" justify="center"
-          marginY="2rem"
+          align="center"
+          justify="center"
+          marginY={{ base: "0", md: "2rem" }}
         >
-          {isLoggedIn && (
-            <SMCard width={{ base: "90vw", md: "26rem" }} />
-          )}
-          <Box
-            d={{ base: "none", md: "flex" }}
-            flexDirection="column"
-            alignItems="center"
-            paddingTop={{ base: "2rem", xl: "0px" }}
-            marginTop={isLoggedIn ? "0rem" : "2rem"}
-            marginBottom={isLoggedIn ? "1rem" : "1.5rem"}
-          >
-            <Text
-              className="primaryFont"
-              fontWeight="700"
-              fontSize="1.5rem"
-              marginBottom="2rem"
+          {isLoggedIn && <SMCard width={{ base: "90vw", md: "26rem" }} />}
+          {width > 768 && (
+            <Flex
+              direction="column"
+              alignItems="center"
+              paddingTop={{ base: "2rem", xl: "0px" }}
+              marginTop={isLoggedIn ? "0rem" : "2rem"}
+              marginBottom={isLoggedIn ? "1rem" : "1.5rem"}
             >
-              Kategori
-            </Text>
-            <LayoutCategoryList
-              isLoggedIn={isLoggedIn}
-              data={category.data}
-              loading={category.loading}
-            />
-          </Box>
+              <Text
+                className="primaryFont"
+                fontWeight="700"
+                fontSize="1.5rem"
+                marginBottom="2rem"
+              >
+                Kategori
+              </Text>
+              <LayoutCategoryList
+                isLoggedIn={isLoggedIn}
+                data={category.data}
+                loading={category.loading}
+              />
+            </Flex>
+          )}
         </Flex>
       </Layout>
       <Box justify="center" bg="orange.400">
@@ -139,9 +153,10 @@ const HomeDisplay = () => {
   );
 };
 
-const Home = () =>
+const Home = () => (
   <HomepageProvider>
     <HomeDisplay />
-  </HomepageProvider>;
+  </HomepageProvider>
+);
 
 export default Home;

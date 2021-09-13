@@ -28,7 +28,14 @@ const LayoutSaleProducts = ({ data, loading, headingText, hasBackground }) => {
     arrows: true,
     infinite: false,
     speed: 500,
-    slidesToShow: width >= 1440 ? 6 : width >= 768 ? width / 232 : width / 180,
+    slidesToShow:
+      width >= 1440
+        ? 6
+        : width >= 768
+        ? width / 232
+        : width >= 560
+        ? width / 190
+        : width / 200,
     slidesToScroll: 3,
     initialSlid: 0,
   };
@@ -98,7 +105,7 @@ const LayoutSaleProducts = ({ data, loading, headingText, hasBackground }) => {
                 </Box>
               </Flex>
             ) : (
-              <CardProduct key={item.id} {...item}/>
+              <CardProduct key={item.id} {...item} />
             ),
           )}
         </Slider>

@@ -6,21 +6,23 @@ import {
   Flex,
   HStack,
   Icon,
+  Stack,
   Skeleton,
   Spinner,
   Square,
   Text,
   VStack,
 } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/toast";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { FaHistory } from "react-icons/fa";
 import { IoIosAddCircle } from "react-icons/io";
-import { useEffect, useState } from "react";
+
 import { getLeaderboard, getProfile, getRanking } from "../api/SMCard";
+import { useAuthContext } from "../contexts/authProvider";
 import { isRequestSuccess } from "../utils/api";
 import { formatNumber } from "../utils/functions";
-import { useAuthContext } from "../contexts/authProvider";
-import { useRouter } from "next/router";
-import { useToast } from "@chakra-ui/toast";
 
 const SMCard = ({ width }) => {
   const { userData } = useAuthContext();
@@ -58,7 +60,7 @@ const SMCard = ({ width }) => {
 
   useEffect(() => {
     getLeaderboard()
-      .then(res => {
+      .then((res) => {
         if (isRequestSuccess(res.data)) {
           setLeaderboard({
             data: res.data.data ?? [],
@@ -68,7 +70,7 @@ const SMCard = ({ width }) => {
           throw "Gagal mendapatkan leaderboard";
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         errorToast(err);
         setLeaderboard({ data: [], loading: false });
@@ -78,7 +80,7 @@ const SMCard = ({ width }) => {
   useEffect(() => {
     if (memberId) {
       getRanking(memberId)
-        .then(res => {
+        .then((res) => {
           if (isRequestSuccess(res.data)) {
             setRanking({
               data: res.data.data[0].ranking ?? [],
@@ -88,7 +90,7 @@ const SMCard = ({ width }) => {
             throw "Gagal mendapatkan ranking";
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(err);
           errorToast(err);
           setRanking({ data: 0, loading: false });
@@ -99,7 +101,7 @@ const SMCard = ({ width }) => {
   useEffect(() => {
     if (userId) {
       getProfile(userId)
-        .then(res => {
+        .then((res) => {
           if (isRequestSuccess(res.data)) {
             setSMPay({
               data: res.data.memberdeposit ?? 0,
@@ -114,7 +116,7 @@ const SMCard = ({ width }) => {
             throw "Gagal mendapatkan profile user";
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(err);
           errorToast(err);
           setSMPay({ data: 0, loading: false });
@@ -124,7 +126,13 @@ const SMCard = ({ width }) => {
   }, [userId]);
 
   return (
-    <Box pt="3.5rem" w={width} h="22rem" mb="1rem">
+    <Box
+      pt={{ base: "0.5rem", md: "3.5rem" }}
+      w={width}
+      h={{ base: "fit-content", md: "22rem" }}
+      mb="1rem"
+      mt="2rem"
+    >
       <Center bg="gray.50" w="full" h="32%" borderTopRadius="lg">
         <Center w="60%">
           <Box marginRight={{ base: "0.3rem", sm: "0.6rem" }} ml="0.6rem">
@@ -136,16 +144,17 @@ const SMCard = ({ width }) => {
             >
               SM Pay
             </Text>
-            {
-              SMPay.loading ? <Spinner />
-                : <Text
-                  className="secondaryFont"
-                  fontWeight="500"
-                  fontSize="0.875rem"
-                >
-                  Rp {formatNumber(SMPay.data)}
-                </Text>
-            }
+            {SMPay.loading ? (
+              <Spinner />
+            ) : (
+              <Text
+                className="secondaryFont"
+                fontWeight="500"
+                fontSize="0.875rem"
+              >
+                Rp {formatNumber(SMPay.data)}
+              </Text>
+            )}
           </Box>
           <Box marginLeft={{ base: "0.3rem", sm: "0.7rem" }}>
             <Text
@@ -156,19 +165,25 @@ const SMCard = ({ width }) => {
             >
               SM Point
             </Text>
-            {
-              SMPoint.loading ? <Spinner />
-                : <Text
-                  className="secondaryFont"
-                  fontWeight="500"
-                  fontSize="0.875rem"
-                >
-                  {SMPoint.data}
-                </Text>
-            }
+            {SMPoint.loading ? (
+              <Spinner />
+            ) : (
+              <Text
+                className="secondaryFont"
+                fontWeight="500"
+                fontSize="0.875rem"
+              >
+                {SMPoint.data}
+              </Text>
+            )}
           </Box>
         </Center>
-        <Divider orientation="vertical" h="3.5rem" borderRight="1px" color="gray.400" />
+        <Divider
+          orientation="vertical"
+          h="3.5rem"
+          borderRight="1px"
+          color="gray.400"
+        />
         <Center w="40%">
           <Square
             size={{ base: "2.8rem", sm: "3rem" }}
@@ -216,26 +231,36 @@ const SMCard = ({ width }) => {
           </Square>
         </Center>
       </Center>
-      <HStack p="1rem" w="full" h="68%" bg="red.600" borderBottomRadius="lg">
+      <Stack
+        p="1rem"
+        w="full"
+        h={{ base: "100%", md: "68%" }}
+        bg="red.600"
+        borderBottomRadius="lg"
+        direction={{ base: "column", sm: "row" }}
+      >
         <Circle
           bg="white"
           flexDirection="column"
+          alignSelf="center"
           className="secondaryFont"
           shadow="xl"
           size={{ base: "8rem", md: "9rem" }}
-          maxW="40%" maxH="full"
+          maxW={{ base: "100%", sm: "40%" }}
+          maxH="full"
         >
           <Text fontSize="0.875rem" fontWeight="500">
             Ranking Saya
           </Text>
-          {
-            ranking.loading ? <Spinner />
-              : <Text fontSize="1.5rem" fontWeight="500">
-                {formatNumber(ranking.data)}
-              </Text>
-          }
+          {ranking.loading ? (
+            <Spinner />
+          ) : (
+            <Text fontSize="1.5rem" fontWeight="500">
+              {formatNumber(ranking.data)}
+            </Text>
+          )}
         </Circle>
-        <VStack color="white" fontSize="0.9rem" w="60%">
+        <VStack color="white" fontSize="0.9rem" w={{ base: "full", sm: "60%" }}>
           <Text fontWeight="700" className="primaryFont">
             Leaderboard
           </Text>
@@ -247,23 +272,27 @@ const SMCard = ({ width }) => {
             spacing="0.3rem"
             w="full"
           >
-            {
-              leaderboard.data.map((each, index) =>
-                <Skeleton isLoaded={!leaderboard.loading} key={index} w="full" justify="space-between" h="20px">
-                  <Flex>
-                    <Text w="70%" isTruncated>
-                      {index + 1}. {each.membername}
-                    </Text>
-                    <Text w="30%" isTruncated>
-                      {each.smpoint} poin
-                    </Text>
-                  </Flex>
-                </Skeleton>,
-              )
-            }
+            {leaderboard.data.map((each, index) => (
+              <Skeleton
+                isLoaded={!leaderboard.loading}
+                key={index}
+                w="full"
+                justify="space-between"
+                h="20px"
+              >
+                <Flex>
+                  <Text w="70%" isTruncated>
+                    {index + 1}. {each.membername}
+                  </Text>
+                  <Text w="30%" isTruncated>
+                    {each.smpoint} poin
+                  </Text>
+                </Flex>
+              </Skeleton>
+            ))}
           </VStack>
         </VStack>
-      </HStack>
+      </Stack>
     </Box>
   );
 };

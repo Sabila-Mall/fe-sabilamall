@@ -30,7 +30,6 @@ export const Layout = ({
       <Flex
         display={display ? display : "flex"}
         bg={background}
-        minH="100%"
         direction="column"
         alignItems="center"
         justifyItems="center"

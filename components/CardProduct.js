@@ -1,3 +1,4 @@
+import { Link } from "@chakra-ui/layout";
 import { Box, Text, Icon, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
@@ -75,127 +76,131 @@ const CardProduct = ({
   });
 
   return (
-    <Box
-      className={styles.secondaryFont}
-      w={responsive ? "100%" : { base: "160px", md: "200px" }}
-      border="1px solid #CBD5E0"
-      borderRadius="8px"
-      bg="white"
-      className={responsive ? "card-product-responsive" : "card-product"}
-      cursor="pointer"
-      onClick={() => router.push(`/product-detail/${products_slug}`)}
-    >
+    <Link href={`product-detail/${products_slug}`}>
       <Box
-        bg="white"
-        w="100%"
-        overflowX="hidden"
-        overflowY="visible"
-        display="flex"
-        flexDirection="column"
-        alignItems="start"
+        className={styles.secondaryFont}
+        w={responsive ? "100%" : { base: "160px", md: "200px" }}
+        border="1px solid #CBD5E0"
         borderRadius="8px"
+        bg="white"
+        className={responsive ? "card-product-responsive" : "card-product"}
+        cursor="pointer"
       >
         <Box
-          h={`${imageHeight}px`}
-          mb="8px"
-          display="flex"
-          justifyContent="center"
+          bg="white"
           w="100%"
-          bgImage={`url(${getImageUrl(image_path)})`}
-          bgPosition="center"
-          bgRepeat="no-repeat"
-          bgSize="cover"
-        />
-        <Box padding="2" w="100%">
-          {flash_end && timeLeft && (
-            <Box
-              px="4px"
-              h="26px"
-              bg="red.500"
-              borderRadius="4px"
-              boxSizing="border"
-              color="red.50"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              mb="8px"
-              w="fit-content"
-            >
-              <Text
-                as="p"
-                fontSize={{ base: "10px", md: "12px" }}
-                textAlign="center"
-                lineHeight={{ base: "15px", md: "18px" }}
-                fontWeight="500"
-              >
-                <Icon as={IoTimeSharp} />{" "}
-                {`${timeLeft.hours} Jam ${timeLeft.minutes} Menit lagi`}
-              </Text>
-            </Box>
-          )}
-          <Flex direction="column" justifyContent="flex-start" height="4.8rem">
-            <Box className={styles.productName} mb="8px">
-              <Text fontSize="16px" fontWeight="500" lineHeight="24px">
-                {name.toUpperCase()}
-              </Text>
-            </Box>
-            {priceAfterDiscount && priceAfterDiscount !== price && (
+          overflowX="hidden"
+          overflowY="visible"
+          display="flex"
+          flexDirection="column"
+          alignItems="start"
+          borderRadius="8px"
+        >
+          <Box
+            h={`${imageHeight}px`}
+            mb="8px"
+            display="flex"
+            justifyContent="center"
+            w="100%"
+            bgImage={`url(${getImageUrl(image_path)})`}
+            bgPosition="center"
+            bgRepeat="no-repeat"
+            bgSize="cover"
+          />
+          <Box padding="2" w="100%">
+            {flash_end && timeLeft && (
               <Box
-                w="100%"
-                h="18px"
+                px="4px"
+                h="26px"
+                bg="red.500"
+                borderRadius="4px"
+                boxSizing="border"
+                color="red.50"
                 display="flex"
+                justifyContent="center"
                 alignItems="center"
-                fontSize="12px"
-                fontWeight="500"
-                lineHeight="18px"
                 mb="8px"
+                w="fit-content"
               >
-                <Text as="del" color="gray.500">
-                  {currencyFormat(parseNumber(price)).slice(0, -3)}
-                </Text>
                 <Text
-                  ml={priceAfterDiscount !== price ? "9px" : 0}
-                  h="100%"
-                  bg="red.200"
-                  p="2px"
-                  borderRadius="4px"
-                  color="red.700"
-                  display="flex"
-                  alignItems="center"
-                >{`${discount}%`}</Text>
+                  as="p"
+                  fontSize={{ base: "10px", md: "12px" }}
+                  textAlign="center"
+                  lineHeight={{ base: "15px", md: "18px" }}
+                  fontWeight="500"
+                >
+                  <Icon as={IoTimeSharp} />{" "}
+                  {`${timeLeft.hours} Jam ${timeLeft.minutes} Menit lagi`}
+                </Text>
               </Box>
             )}
-            <Box
-              className={styles.primaryFont}
-              w="100%"
-              display="flex"
-              alignItems="center"
-              justifyContent="space-between"
-              fontWeight="700"
-              fontSize="16px"
-              lineHeight="20.8px"
+            <Flex
+              direction="column"
+              justifyContent="flex-start"
+              height="4.8rem"
             >
-              <Text>
-                {currencyFormat(parseNumber(priceAfterDiscount ?? price)).slice(
-                  0,
-                  -3,
-                )}
-              </Text>
-              {isLoggedIn && (
-                <Icon
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleClickWishlist();
-                  }}
-                  as={liked ? IoHeart : IoHeartOutline}
-                  color={liked ? "red.500" : "black"}
-                />
+              <Box className={styles.productName} mb="8px">
+                <Text fontSize="16px" fontWeight="500" lineHeight="24px">
+                  {name.toUpperCase()}
+                </Text>
+              </Box>
+              {priceAfterDiscount && priceAfterDiscount !== price && (
+                <Box
+                  w="100%"
+                  h="18px"
+                  display="flex"
+                  alignItems="center"
+                  fontSize="12px"
+                  fontWeight="500"
+                  lineHeight="18px"
+                  mb="8px"
+                >
+                  <Text as="del" color="gray.500">
+                    {currencyFormat(parseNumber(price)).slice(0, -3)}
+                  </Text>
+                  <Text
+                    ml={priceAfterDiscount !== price ? "9px" : 0}
+                    h="100%"
+                    bg="red.200"
+                    p="2px"
+                    borderRadius="4px"
+                    color="red.700"
+                    display="flex"
+                    alignItems="center"
+                  >{`${discount}%`}</Text>
+                </Box>
               )}
-            </Box>
-          </Flex>
+              <Box
+                className={styles.primaryFont}
+                w="100%"
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+                fontWeight="700"
+                fontSize="16px"
+                lineHeight="20.8px"
+              >
+                <Text>
+                  {currencyFormat(
+                    parseNumber(priceAfterDiscount ?? price),
+                  ).slice(0, -3)}
+                </Text>
+                {isLoggedIn && (
+                  <Icon
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleClickWishlist();
+                    }}
+                    as={liked ? IoHeart : IoHeartOutline}
+                    color={liked ? "red.500" : "black"}
+                  />
+                )}
+              </Box>
+            </Flex>
+          </Box>
         </Box>
       </Box>
-    </Box>
+    </Link>
   );
 };
 
