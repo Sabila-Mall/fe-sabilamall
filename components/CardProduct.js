@@ -11,7 +11,7 @@ import { getImageUrl } from "../utils/api";
 import {
   calculateTimeLeft,
   currencyFormat,
-  priceAfterDiscount,
+  getPriceAfterDiscount,
 } from "../utils/functions";
 
 const CardProduct = ({
@@ -31,7 +31,7 @@ const CardProduct = ({
   const [imageHeight, setImageHeight] = useState(144);
   const price = isLoggedIn ? final_price : normal_price;
   const priceAfterDiscount = isLoggedIn
-    ? priceAfterDiscount(final_price, customerdiscount)
+    ? getPriceAfterDiscount(final_price, customerdiscount)
     : final_price;
   const timeLeft = flash_end && calculateTimeLeft(flash_end);
   const discount =

@@ -231,5 +231,6 @@ export const getUserId = () => {
   return null;
 };
 
-export const priceAfterDiscount = (finalPrice, customerDiscount) =>
-  (finalPrice * (100 - customerDiscount)) / 100;
+export const getPriceAfterDiscount = (finalPrice, customerDiscount) => {
+  return (finalPrice * (100 - customerDiscount)) / 100;
+};

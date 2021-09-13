@@ -16,7 +16,7 @@ import ProductReview from "../../components/ProductReview";
 import RelatedProductContainer from "../../components/RelatedProductContainer";
 import { ShareProduct } from "../../components/ShareProduct";
 import { useAuthContext } from "../../contexts/authProvider";
-import { isNumber, priceAfterDiscount } from "../../utils/functions";
+import { isNumber, getPriceAfterDiscount } from "../../utils/functions";
 
 const ProductDetails = () => {
   const { userData, isLoggedIn } = useAuthContext();
@@ -173,7 +173,7 @@ const ProductDetails = () => {
     products_quantity,
     customerdiscount,
     discount_price: isLoggedIn
-      ? priceAfterDiscount(final_price, customerdiscount)
+      ? getPriceAfterDiscount(final_price, customerdiscount)
       : final_price,
     current_price: isLoggedIn ? final_price : normal_price,
     user_level: userLevel,
