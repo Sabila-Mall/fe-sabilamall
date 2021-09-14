@@ -6,6 +6,7 @@ import Slider from "react-slick";
 
 import { IMAGE_HOST } from "../constants/api";
 import styles from "../styles/ProductDetails.module.scss";
+import ReactImageZoom from 'react-image-zoom';
 
 export const ProductImages = ({
   slider,
@@ -59,8 +60,12 @@ export const ProductImages = ({
       </Head>
       <Flex flexDir="column" justifyContent="center" mb="1.5rem">
         <Flex mb="1rem" justifyContent="center">
-          <Box w="22rem">
-            <Image src={IMAGE_HOST + image} />
+          <Box cursor="crosshair" w="22rem">
+            <ReactImageZoom
+              width={400}
+              zoomPosition = "original"
+              img={IMAGE_HOST + image}
+            />
           </Box>
         </Flex>
 
@@ -113,17 +118,6 @@ export const ProductImages = ({
                 {images.map((e) => {
                   return (
                     <Box key={e.image} pr="5rem">
-                      {/* <Image
-                        border={imageActive === e.id ? "3px solid #f6ad55" : ""}
-                        src={IMAGE_HOST + e.image}
-                        onClick={() => {
-                          setImage(e.image);
-                          setImageActive(e.id);
-                        }}
-                        w="4rem"
-                        h="4rem"
-                        cursor="pointer"
-                      /> */}
                       <Box
                         w="3rem"
                         h="3rem"
