@@ -58,9 +58,9 @@ const DetailPesanan = ({
         <>
           <Text>{name}</Text>
           <Box style={{ fontSize: "10px" }}>
-            {detail.map(({ products_options, products_options_values }) => {
+            {detail?.map(({ products_options, products_options_values }) => {
               return (
-                <Text>
+                <Text key={products_options}>
                   {products_options}: {products_options_values}
                 </Text>
               );
@@ -154,6 +154,7 @@ const MyDocument = ({
                 attributes,
               }) => (
                 <DetailPesanan
+                  key={products_name}
                   name={products_name}
                   hargaSatuan={products_price}
                   jumlah={products_quantity}
@@ -192,7 +193,7 @@ const MyDocument = ({
 
 const biayaTambahan = (detail) => {
   let total = 0;
-  detail.forEach(({ options_values_price }) => {
+  detail?.forEach(({ options_values_price }) => {
     total += Number(options_values_price);
   });
   return total;

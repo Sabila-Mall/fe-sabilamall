@@ -59,7 +59,7 @@ const HomeDisplay = () => {
             content="reseller baju muslim, supplier dropship, open reseller gamis, supplier hijab, dropship terpercaya"
           />
           <meta name="author" content="SabilaMall" />
-          <meta name="DC.title" content />
+          <meta name="DC.title" content="true" />
           <meta
             name="description"
             content="Distributor Grosir Supplier Baju Muslim, Gamis, Hijab Nibras, Endomoda, Ethica, Seply, Labella, Yasmeera. Dropship  Terpercaya & Murah Open Reseller."

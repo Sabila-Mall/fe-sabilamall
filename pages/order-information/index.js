@@ -136,7 +136,7 @@ const OrderInformation = ({ order }) => {
     }
   }, [orderData]);
 
-  return Object.keys(orderData).length != 0 ? (
+  return orderData && Object.keys(orderData).length != 0 ? (
     <Box>
       {isMobile && (
         <NavbarProfile
