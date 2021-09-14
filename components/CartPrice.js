@@ -1,9 +1,7 @@
-import { Input } from "@chakra-ui/input";
-import { Box, Flex, HStack, Text } from "@chakra-ui/layout";
-import { useState } from "react";
-import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
+import { Box, Flex, Text } from "@chakra-ui/layout";
+import { getPriceAfterDiscount } from "../utils/functions";
 
-export const CartPrice = ({ isDiscount, price }) => {
+export const CartPrice = ({ discount, initialPrice }) => {
   const idr = Intl.NumberFormat("id-ID");
   const formatPrice = (price) => {
     return new Intl.NumberFormat(
@@ -13,7 +11,7 @@ export const CartPrice = ({ isDiscount, price }) => {
   };
   return (
     <>
-      {isDiscount ? (
+      {discount !== 0 ? (
         <>
           <Flex flexDirection="column">
             <Text
@@ -21,7 +19,7 @@ export const CartPrice = ({ isDiscount, price }) => {
               fontSize="0.8rem"
               color="gray.500"
             >
-              Rp99.999.999
+              {`Rp${formatPrice(initialPrice)}`}
             </Text>
             <Flex mb="12px" flexDir={{ base: "row", md: "column" }}>
               <Text
@@ -31,7 +29,7 @@ export const CartPrice = ({ isDiscount, price }) => {
                 fontWeight="500"
                 my={{ md: "0.5rem" }}
               >
-                {`Rp${formatPrice(price)}`}
+                {`Rp${formatPrice(getPriceAfterDiscount(initialPrice, discount))}`}
               </Text>
               <Box
                 w={{ lg: "6rem" }}
@@ -47,7 +45,7 @@ export const CartPrice = ({ isDiscount, price }) => {
                   fontSize={{ base: "12px", md: "14px" }}
                   textAlign="center"
                 >
-                  Diskon 99%
+                  {`Diskon ${discount}%`}
                 </Text>
               </Box>
             </Flex>
@@ -55,7 +53,7 @@ export const CartPrice = ({ isDiscount, price }) => {
         </>
       ) : (
         <Text fontSize="1.1rem" mb="12px">
-          {`Rp${formatPrice(price)}`}
+          {`Rp${formatPrice(getPriceAfterDiscount(initialPrice, discount))}`}
         </Text>
       )}
     </>

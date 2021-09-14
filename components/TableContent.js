@@ -4,6 +4,7 @@ import { Td, Tr } from "@chakra-ui/table";
 import { useState, useEffect } from "react";
 
 import { useCartContext } from "../contexts/cartProvider";
+import { getPriceAfterDiscount } from "../utils/functions";
 import { AddAmount } from "./AddAmount";
 import { CartPrice } from "./CartPrice";
 import { ProductCart } from "./ProductCart";
@@ -11,16 +12,16 @@ import { ProductCart } from "./ProductCart";
 export const TableContent = ({ isDiscount, product }) => {
   const { loading } = useCartContext();
   const idr = Intl.NumberFormat("id-ID");
-  const discount = product?.products_discount;
+  const discount = product?.customers_discount;
   const productPrice = product?.final_price;
   const quantity = product?.customers_basket_quantity;
   // const isDiscount = productDetail?.products_discount
 
-  const [totalPrice, settotalPrice] = useState(productPrice * quantity);
+  const [totalPrice, settotalPrice] = useState(getPriceAfterDiscount(productPrice, discount) * quantity);
 
   useEffect(() => {
     return () => {
-      settotalPrice(productPrice * quantity);
+      settotalPrice(getPriceAfterDiscount(productPrice, discount) * quantity);
     };
   }, [quantity]);
 
@@ -37,7 +38,7 @@ export const TableContent = ({ isDiscount, product }) => {
               <ProductCart isDiscount={isDiscount} product={product} />
             </Td>
             <Td>
-              <CartPrice isDiscount={isDiscount} price={productPrice} />
+              <CartPrice discount={discount} initialPrice={productPrice} />
             </Td>
             <Td p={{ md: "0", "2xl": "1.5rem" }}>
               <AddAmount product={product} />

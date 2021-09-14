@@ -27,7 +27,7 @@ import QuickAddListItem from "./QuickAddListItem";
  * @param onDrawerClose callback function yang dipanggil untuk close modal [dapatkan dari useDisclosure()]
  */
 const QuickAdd = ({ isDrawerOpen, onDrawerClose }) => {
-  const { loading, totalDiscount, selectedPrice, checkoutValidation } = useCartContext();
+  const { loading, selectedPrice, checkoutValidation, selectedDiscount } = useCartContext();
 
   const size = useBreakpointValue({ base: "full", md: "md" });
 
@@ -83,7 +83,7 @@ const QuickAdd = ({ isDrawerOpen, onDrawerClose }) => {
                 fontSize={"20"}
                 fontWeight={"bold"}
               >
-                Rp{formatPrice(selectedPrice)}
+                Rp{formatPrice(selectedPrice - selectedDiscount)}
               </Text>
             </Flex>
             <Text

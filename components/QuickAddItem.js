@@ -8,7 +8,7 @@ import {
   Image,
   Checkbox,
 } from "@chakra-ui/react";
-import { createRef, useEffect, useState } from "react";
+import { createRef, useState } from "react";
 import {
   IoAddCircleOutline,
   IoRemoveCircleOutline,
@@ -18,6 +18,7 @@ import {
 import { IMAGE_HOST } from "../constants/api";
 import { useAuthContext } from "../contexts/authProvider";
 import { useCartContext } from "../contexts/cartProvider";
+import { getPriceAfterDiscount } from "../utils/functions";
 
 const formatPrice = (price) => {
   return new Intl.NumberFormat("id-ID", {
@@ -41,12 +42,14 @@ const QuickAddItem = ({ product, my }) => {
   } = useCartContext();
 
   const [quantity, setquantity] = useState(product.customers_basket_quantity);
-  const price = product.final_price;
+  const initialPrice = product.final_price;
   const stock = product.products_stok;
-  const discount = product?.products_discount;
+  const discount = product?.customers_discount;
   const varian = product?.varian;
+  const finalPrice = getPriceAfterDiscount(initialPrice, discount)
 
-  settotalPrice(price * quantity);
+
+  settotalPrice(finalPrice * quantity);
 
   const handleModifyNumberOfItem = (event) => {
     let tempDiscount = totalDiscount;
@@ -56,7 +59,7 @@ const QuickAddItem = ({ product, my }) => {
         const newQuantity = quantity + 1;
         tempDiscount += Number(discount);
         settotalDiscount(tempDiscount);
-        tempPrice = Number(price);
+        tempPrice = Number(finalPrice);
         settotalPrice(tempPrice);
         updateQuantity(userId, product.customers_basket_id, newQuantity);
         setquantity(newQuantity);
@@ -66,7 +69,7 @@ const QuickAddItem = ({ product, my }) => {
         const newQuantity = quantity - 1;
         tempDiscount -= Number(discount);
         settotalDiscount(tempDiscount);
-        tempPrice = Number(price);
+        tempPrice = Number(finalPrice);
         settotalPrice(tempPrice);
         updateQuantity(userId, product.customers_basket_id, newQuantity);
         setquantity(newQuantity);
@@ -201,7 +204,7 @@ const QuickAddItem = ({ product, my }) => {
               textColor={"gray.400"}
               className={"secondaryFont"}
             >
-              Rp{formatPrice(product.final_price * quantity)}
+              Rp{formatPrice(finalPrice * quantity)}
             </Text>
           </HStack>
         </VStack>

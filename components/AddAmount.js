@@ -1,7 +1,7 @@
 import { Input } from "@chakra-ui/input";
 import { Box, HStack, Text, Flex } from "@chakra-ui/layout";
 import { css } from "@emotion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
 
 import { useAuthContext } from "../contexts/authProvider";
@@ -11,8 +11,8 @@ export const AddAmount = ({ product, mb }) => {
   const { userData } = useAuthContext();
   const {
     updateQuantity,
-    totalPrice,
     settotalPrice,
+    totalPrice,
     deleteCartItem,
     totalDiscount,
     settotalDiscount,
@@ -21,7 +21,7 @@ export const AddAmount = ({ product, mb }) => {
   const stock = product?.products_stok;
   const [quantity, setquantity] = useState(product.customers_basket_quantity);
   const price = product.final_price;
-  const discount = product?.products_discount;
+  const discount = product?.customers_discount;
 
   const handleModifyNumberOfItem = (event) => {
     let tempPrice = totalPrice;
@@ -30,21 +30,21 @@ export const AddAmount = ({ product, mb }) => {
       if (stock - quantity > 0) {
         const newQuantity = quantity + 1;
         tempDiscount += Number(discount);
-        settotalDiscount(tempDiscount);
         tempPrice = Number(price);
-        settotalPrice(tempPrice);
         updateQuantity(userId, product.customers_basket_id, newQuantity);
         setquantity(newQuantity);
+        settotalPrice(tempPrice);
+        settotalDiscount(tempDiscount);
       }
     } else if (event === "decrease") {
       if (quantity > 1) {
         const newQuantity = quantity - 1;
         tempDiscount -= Number(discount);
-        settotalDiscount(tempDiscount);
         tempPrice = Number(price);
-        settotalPrice(tempPrice);
         updateQuantity(userId, product.customers_basket_id, newQuantity);
         setquantity(newQuantity);
+        settotalDiscount(tempDiscount);
+        settotalPrice(tempPrice);
       }
     }
   };

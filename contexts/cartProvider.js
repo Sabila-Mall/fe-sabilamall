@@ -331,7 +331,7 @@ export const CartProvider = ({ children }) => {
         } else {
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   useEffect(() => {
