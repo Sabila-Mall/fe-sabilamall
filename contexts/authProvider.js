@@ -17,16 +17,8 @@ export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const logout = () => {
-    nookies.destroy(null, "user_id");
-    localStorage.removeItem("device_id");
-    if (window !== undefined) {
-      window.location.reload();
-    }
-  };
-
   useEffect(() => {
-    if (userData === null) {
+    if (userData === null && !isLoggedIn) {
       const userId = nookies.get(null, "user_id");
       if (document.cookie.indexOf("user_id") !== -1) {
         const devId = localStorage.getItem("device_id");
@@ -60,7 +52,6 @@ export const AuthProvider = ({ children }) => {
     setUserData,
     isLoggedIn,
     setIsLoggedIn,
-    logout,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

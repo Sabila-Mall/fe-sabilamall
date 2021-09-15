@@ -234,3 +234,13 @@ export const getUserId = () => {
 export const getPriceAfterDiscount = (finalPrice, customerDiscount) => {
   return (finalPrice * (100 - customerDiscount)) / 100;
 };
+
+export const logout = () => {
+  localStorage.clear();
+  // clear cookie
+  document.cookie =
+    "user_id" + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;";
+  document.cookie = "token" + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;";
+
+  window.location.href = "/";
+};

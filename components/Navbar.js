@@ -37,7 +37,7 @@ import { useAuthContext } from "../contexts/authProvider";
 import { useCartContext } from "../contexts/cartProvider";
 import { useWishlistContext } from "../contexts/wishlistProvider";
 import styles from "../styles/Navbar.module.scss";
-import { setBadgeColor } from "../utils/functions";
+import { logout, setBadgeColor } from "../utils/functions";
 import QuickAdd from "./QuickAdd";
 import Sidebar from "./Sidebar";
 
@@ -213,7 +213,7 @@ const SearchedElement = ({ isSearched, setIsSearched }) => {
 };
 
 const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
-  const { userData, loading, logout } = useAuthContext();
+  const { userData, loading } = useAuthContext();
   const { cartData } = useCartContext();
   const { wishlistData } = useWishlistContext();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -242,13 +242,11 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
         onClick={() => setIsSearched(true)}
         display={{ base: "block", md: "none" }}
       />
-      <Link href="/" w="fit-content">
-        <Icon
-          as={IoNotifications}
-          className={styles.navbarIcon}
-          color="gray.500"
-        />
-      </Link>
+      <Icon
+        as={IoNotifications}
+        className={styles.navbarIcon}
+        color="gray.500"
+      />
       <Box
         position="relative"
         w="fit-content"

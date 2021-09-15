@@ -17,6 +17,7 @@ import { VscPackage } from "react-icons/vsc";
 
 import { useSmPayPointContext } from "../contexts/SMPayPointProvider";
 import { useAuthContext } from "../contexts/authProvider";
+import { logout } from "../utils/functions";
 import { ButtonStatusUser } from "./ButtonProfile";
 import { SMCard } from "./CardProfile";
 import ModalProfile from "./ModalProfile";
@@ -25,7 +26,7 @@ import NavbarProfile from "./NavbarProfile";
 const ProfileMobile = () => {
   const router = useRouter();
 
-  const { userData, logout } = useAuthContext();
+  const { userData } = useAuthContext();
   const { smLoading, smPay, smPoint } = useSmPayPointContext();
 
   const sm = [

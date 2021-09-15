@@ -21,10 +21,10 @@ import { menuCategory, menuSidebar } from "../constants/navbarConstant";
 import { useAuthContext } from "../contexts/authProvider";
 import styles from "../styles/Navbar.module.scss";
 import { getImageUrl } from "../utils/api";
-import { setBadgeColor } from "../utils/functions";
+import { logout, setBadgeColor } from "../utils/functions";
 
 const UserInfo = ({ useBorder }) => {
-  const { userData, logout } = useAuthContext();
+  const { userData } = useAuthContext();
   return (
     <Flex
       borderBottom={useBorder && "1px solid #e2e8f0"}
@@ -89,7 +89,7 @@ const Sidebar = ({
   isLoggedIn,
   isMainMenu,
 }) => {
-  const { userData, loading, logout } = useAuthContext();
+  const { userData, loading } = useAuthContext();
   const router = useRouter();
   return (
     <>
