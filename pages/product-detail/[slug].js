@@ -146,6 +146,7 @@ const ProductDetails = () => {
     products_slug,
     normal_price,
     final_price,
+    isfreeshipping,
   } = data;
 
   const productImagesData = {
@@ -204,6 +205,7 @@ const ProductDetails = () => {
     discount_price: discountPricePerUnit,
     po_shippingdate,
     products_name,
+    isfreeshipping,
   };
 
   const path = [

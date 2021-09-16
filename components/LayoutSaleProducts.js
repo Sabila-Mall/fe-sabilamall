@@ -105,7 +105,10 @@ const LayoutSaleProducts = ({ data, loading, headingText, hasBackground }) => {
                 </Box>
               </Flex>
             ) : (
-              <CardProduct key={item.id} {...item} />
+              <>
+                <CardProduct key={item.id} {...item} />
+                {console.log(item)}
+              </>
             ),
           )}
         </Slider>

@@ -2,6 +2,7 @@ import { Link } from "@chakra-ui/layout";
 import { Box, Text, Icon, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
+import { FaShippingFast } from "react-icons/fa";
 import { IoHeartOutline, IoTimeSharp, IoHeart } from "react-icons/io5";
 
 import { useAuthContext } from "../contexts/authProvider";
@@ -24,6 +25,7 @@ const CardProduct = ({
   final_price,
   customerdiscount,
   responsive,
+  isfreeshipping,
 }) => {
   const router = useRouter();
   const { isLoggedIn, userData } = useAuthContext();
@@ -185,16 +187,29 @@ const CardProduct = ({
                 lineHeight="20.8px"
               >
                 <Text>{currencyFormat(priceAfterDiscount ?? price)}</Text>
-                {isLoggedIn && (
-                  <Icon
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleClickWishlist();
-                    }}
-                    as={liked ? IoHeart : IoHeartOutline}
-                    color={liked ? "red.500" : "black"}
-                  />
-                )}
+                <Flex align="center">
+                  {isfreeshipping !== 0 && (
+                    <Icon
+                      width="1.3em"
+                      height="1.3em"
+                      as={FaShippingFast}
+                      color={"green.500"}
+                    />
+                  )}
+                  {isLoggedIn && (
+                    <Icon
+                      width="1.15em"
+                      height="1.15em"
+                      ml={isfreeshipping !== 0 ? "0.5rem" : "0.25rem"}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleClickWishlist();
+                      }}
+                      as={liked ? IoHeart : IoHeartOutline}
+                      color={liked ? "red.500" : "black"}
+                    />
+                  )}
+                </Flex>
               </Box>
             </Flex>
           </Box>

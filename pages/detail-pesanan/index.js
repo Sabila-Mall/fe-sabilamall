@@ -21,10 +21,12 @@ import {
   useOutsideClick,
   VStack,
   useToast,
+  Icon,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useRef, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { FaShippingFast } from "react-icons/fa";
 
 import { getKurir, getPaymentMethod, apiPlaceOrder } from "../../api/Order";
 import CheckoutBreadcrumb from "../../components/CheckoutBreadcrumb";
@@ -61,6 +63,8 @@ import {
  *  @param {string} dataPenerima.alamat Alamat penerima
  * @param {CheckoutProduct[]} daftarProduk
  */
+
+const ACCEPTED_PAYMENT_METHODS = ["transferbank", "deposit"];
 
 const RingkasanPesanan = () => {
   const { width } = useWindowSize();
@@ -237,8 +241,8 @@ const Pengiriman = ({ kurir, pengiriman, handler, loadingKurir }) => {
             >
               {kurir.map((jasa, index) => (
                 <option value={jasa.name} key={index}>
-                  {jasa.name} (
-                  {currencyFormat(jasa.rate - (jasa.shipping_promo ?? 0))})
+                  {console.log(jasa)}
+                  {jasa.name} ({currencyFormat(jasa.rate)})
                 </option>
               ))}
             </Select>
@@ -248,17 +252,34 @@ const Pengiriman = ({ kurir, pengiriman, handler, loadingKurir }) => {
           {!isEmpty(pengiriman) && (
             <>
               <Flex direction={"column"}>
-                <Text className="primaryFont" fontWeight="bold">
-                  {pengiriman.nama}
-                </Text>
+                <Flex align="center">
+                  <Text className="primaryFont" fontWeight="bold">
+                    {pengiriman.nama}
+                  </Text>
+                  {pengiriman.shipping_promo !== null && (
+                    <Icon
+                      ml="0.5rem"
+                      width="1.25em"
+                      height="1.25em"
+                      as={FaShippingFast}
+                      color="green.400"
+                    />
+                  )}
+                </Flex>
                 <Text className="secondaryFont">
                   Estimasi {pengiriman.estimasi}
                 </Text>
               </Flex>
-
-              <Text className="secondaryFont">
-                {currencyFormat(pengiriman.harga)}
-              </Text>
+              <Flex direction="column">
+                {pengiriman.shipping_promo !== null && (
+                  <Text className="secondaryFont" textDecor="line-through">
+                    {currencyFormat(pengiriman.harga_original)}
+                  </Text>
+                )}
+                <Text className="secondaryFont" fontWeight="700">
+                  {currencyFormat(pengiriman.harga)}
+                </Text>
+              </Flex>
             </>
           )}
         </Flex>
@@ -323,15 +344,17 @@ const MetodePembayaran = ({
           placeholder="Pilih metode pembayaran"
           onChange={(event) => handler(event.target.value)}
         >
-          {paymentMethod.map((method, index) => {
-            return (
-              <option value={method.payment_method} key={index}>
-                {method.method === "deposit"
-                  ? `${method.name} (${currencyFormat(method.memberdeposit)})`
-                  : method.name}
-              </option>
-            );
-          })}
+          {paymentMethod
+            .filter((e) => ACCEPTED_PAYMENT_METHODS.includes(e.method))
+            .map((method, index) => {
+              return (
+                <option value={method.payment_method} key={index}>
+                  {method.method === "deposit"
+                    ? `${method.name} (${currencyFormat(method.memberdeposit)})`
+                    : method.name}
+                </option>
+              );
+            })}
         </Select>
       )}
 
@@ -501,24 +524,29 @@ const DetailPesanan = () => {
   }
 
   useEffect(() => {
-    setLoadingKurir(true);
-    getKurir(
-      userData?.id,
-      checkoutData?.postcode,
-      checkoutData?.city_id,
-      checkoutData?.zone_id,
-      checkoutData?.district_id,
-      checkoutData?.subdistrict_id,
-      weight,
-      vendors_id,
-      vendor_origin,
-    )
-      .then((res) => {
-        setKurir(res.data.data.kurirIndonesia.services);
-      })
-      .catch((err) => console.error(err))
-      .finally(() => setLoadingKurir(false));
-  }, [checkoutData]);
+    let device_id = window.localStorage.getItem("device_id");
+    device_id = JSON.parse(device_id);
+    if (userData !== null && checkoutData) {
+      setLoadingKurir(true);
+      getKurir(
+        userData?.id,
+        checkoutData?.postcode,
+        checkoutData?.city_id,
+        checkoutData?.zone_id,
+        checkoutData?.district_id,
+        checkoutData?.subdistrict_id,
+        weight,
+        vendors_id,
+        vendor_origin,
+        device_id,
+      )
+        .then((res) => {
+          setKurir(res.data.data.kurirIndonesia.services);
+        })
+        .catch((err) => console.error(err))
+        .finally(() => setLoadingKurir(false));
+    }
+  }, [checkoutData, userData]);
 
   useEffect(() => {
     setLoadingPayment(true);
@@ -546,8 +574,12 @@ const DetailPesanan = () => {
       setPengiriman({
         nama: tempPengiriman.name,
         estimasi: estimasiFormat(estimasi),
-        harga: tempPengiriman.rate - (tempPengiriman.shipping_promo ?? 0),
+        harga_original: tempPengiriman.rate,
+        harga:
+          tempPengiriman.rate -
+          (tempPengiriman.shipping_promo?.shipping_promo_amount ?? 0),
         destination: tempPengiriman.destination,
+        shipping_promo: tempPengiriman.shipping_promo,
       });
     }
   };
@@ -700,7 +732,6 @@ const DetailPesanan = () => {
               <Pengiriman
                 pengiriman={pengiriman}
                 handler={handleSelectedPengirman}
-                beratTotal={999}
                 kurir={kurir}
                 loadingKurir={loadingKurir}
               />

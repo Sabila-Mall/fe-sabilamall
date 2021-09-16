@@ -53,6 +53,7 @@ export const getKurir = (
   weight,
   vendorId,
   vendorOrigin,
+  deviceId,
 ) => {
   return axios.post(HOST + "/api/shipping/get_all_shipping", {
     customers_id: customerId,
@@ -67,6 +68,7 @@ export const getKurir = (
     weight: weight,
     vendors_id: vendorId,
     vendors_origin: vendorOrigin,
+    device_id: deviceId,
   });
 };
 

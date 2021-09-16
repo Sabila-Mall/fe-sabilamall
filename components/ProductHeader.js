@@ -1,5 +1,6 @@
-import { Box, Text, Stack, StackDivider, Flex } from "@chakra-ui/react";
+import { Box, Text, Stack, StackDivider, Flex, Icon } from "@chakra-ui/react";
 import { FaStar } from "react-icons/fa";
+import { FaShippingFast } from "react-icons/fa";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { IoTimeOutline } from "react-icons/io5";
 import { RiCalendarEventFill } from "react-icons/ri";
@@ -22,6 +23,7 @@ const ProductHeader = ({
   discount_price: discount_price_be,
   po_shippingdate,
   po_close_status,
+  isfreeshipping,
 }) => {
   const isClose = preOrder && po_close_status == 1;
 
@@ -96,6 +98,19 @@ const ProductHeader = ({
             <IoTimeOutline size="1.4em" color="#ECC94B" as="span" />
             <Text color="yellow.400" pl="0.5rem">
               Pre Order
+            </Text>
+          </Flex>
+        )}
+        {isfreeshipping == 1 && (
+          <Flex alignItems="center">
+            <Icon
+              color="green.400"
+              as={FaShippingFast}
+              width="1.25em"
+              height="1.25em"
+            />
+            <Text color="green.400" pl="0.5rem">
+              Free Ongkir
             </Text>
           </Flex>
         )}
