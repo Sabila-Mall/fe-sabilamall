@@ -28,16 +28,19 @@ import {
   Wrap,
   WrapItem,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaUser } from "react-icons/fa";
 import { IoHeart, IoWalletOutline, IoCamera } from "react-icons/io5";
 import { VscPackage } from "react-icons/vsc";
 
+import { topUpHistory, topUpList } from "../../api/Deposit";
 import { CardProfile } from "../../components/CardProfile";
 import Entry from "../../components/Entry";
 import { Layout } from "../../components/Layout";
 import Navbar from "../../components/Navbar";
+import { useAuthContext } from "../../contexts/authProvider";
 import { useWindowSize } from "../../hooks/useWindowSize";
+import { currencyFormat } from "../../utils/functions";
 import { formatNumber } from "../../utils/functions";
 
 const sm = [
@@ -68,63 +71,6 @@ const listBankTujuan = [
     nama: "BTPN",
   },
 ];
-
-const listTopUp = [
-  {
-    nama: "Bank BNI",
-    tanggal: "31-01-2099 13:31",
-    kode: "1234",
-    harga: 9999999,
-    status: "tidak masalah",
-  },
-  {
-    nama: "Bank Mandiri",
-    tanggal: "31-01-2099 13:31",
-    kode: "1234",
-    harga: 9999999,
-    status: "tidak masalah",
-  },
-  {
-    nama: "Bank BNI",
-    tanggal: "31-01-2099 13:31",
-    kode: "1234",
-    harga: 9999999,
-    status: "tidak masalah",
-  },
-];
-
-const listRiwayat = [
-  {
-    nama: "Top Up",
-    tanggal: "31-01-2099 13:31",
-    kode: "1234",
-    harga: 9999999,
-    status: "tidak masalah",
-  },
-  {
-    nama: "Belanja",
-    tanggal: "31-01-2099 13:31",
-    kode: "1234",
-    harga: 9999999,
-    status: "tidak masalah",
-  },
-  {
-    nama: "[Nama Transaksi]",
-    tanggal: "31-01-2099 13:31",
-    kode: "1234",
-    harga: 9999999,
-    status: "tidak masalah",
-  },
-];
-
-const userData = {
-  nama: "Litha Cantik",
-  email: "zulmusuydu@biyac.com",
-  memberId: "1234567",
-  tipe: "Reguler",
-  SMPay: 100000000,
-  SMPoint: 5,
-};
 
 const VERSI = "9.99.99";
 
@@ -409,6 +355,49 @@ const SmartPhoneTopUp = ({ nominal, setNominal }) => {
 };
 
 const DesktopTopUp = ({ nominal, setNominal }) => {
+  const { userData } = useAuthContext();
+  const [listRiwayat, setListRiwayat] = useState([]);
+  const [listTopUp, setListTopUp] = useState([]);
+  useEffect(() => {
+    if (userData?.memberid) {
+      topUpHistory(userData?.memberid)
+        .then((res) => {
+          let tempRiwayat = [];
+          for (let i = 0; i < res.data.data.length; i++) {
+            tempRiwayat.push({
+              nama: res?.data?.data?.[i]?.transaction,
+              tanggal: res?.data?.data?.[i]?.date,
+              kode: res?.data?.data?.[i]?.trxid,
+              harga: `${
+                res?.data?.data?.[i]?.type == "CR" ? "+" : "-"
+              }${currencyFormat(res?.data?.data?.[i]?.amount)}`,
+            });
+          }
+          setListRiwayat(tempRiwayat);
+        })
+        .catch((err) => console.error(err));
+    }
+  }, [userData]);
+
+  useEffect(() => {
+    if (userData?.memberid) {
+      topUpList(userData?.memberid)
+        .then((res) => {
+          let tempListTopUp = [];
+          for (let i = 0; i < res.data.data.length; i++) {
+            tempListTopUp.push({
+              nama: `Bank ${res?.data?.data?.[i]?.bank.toUpperCase()}`,
+              tanggal: res?.data?.data?.[i]?.date,
+              kode: res?.data?.data?.[i]?.trxid,
+              harga: currencyFormat(res?.data?.data?.[i]?.amount),
+              status: res?.data?.data?.[i]?.status,
+            });
+          }
+          setListTopUp(tempListTopUp);
+        })
+        .catch((err) => console.error(err));
+    }
+  }, [userData]);
   return (
     <Box bg="gray.50">
       <Layout hasNavbar={true} hasPadding>

@@ -12,69 +12,65 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 
+import { topUpHistory, topUpList } from "../../api/Deposit";
 import Entry from "../../components/Entry";
 import { Layout } from "../../components/Layout";
 import Navbar from "../../components/Navbar";
+import { useAuthContext } from "../../contexts/authProvider";
 import { useWindowSize } from "../../hooks/useWindowSize";
+import { currencyFormat } from "../../utils/functions";
 import { formatNumber } from "../../utils/functions";
 
-// Dummy data
-const listTopUp = [
-  {
-    nama: "Bank BNI",
-    tanggal: "31-01-2099 13:31",
-    kode: "1234",
-    harga: 9999999,
-    status: "tidak masalah",
-  },
-  {
-    nama: "Bank Mandiri",
-    tanggal: "31-01-2099 13:31",
-    kode: "1234",
-    harga: 9999999,
-    status: "tidak masalah",
-  },
-  {
-    nama: "Bank BNI",
-    tanggal: "31-01-2099 13:31",
-    kode: "1234",
-    harga: 9999999,
-    status: "tidak masalah",
-  },
-];
-
-const listRiwayat = [
-  {
-    nama: "Top Up",
-    tanggal: "31-01-2099 13:31",
-    kode: "1234",
-    harga: 9999999,
-    status: "tidak masalah",
-  },
-  {
-    nama: "Belanja",
-    tanggal: "31-01-2099 13:31",
-    kode: "1234",
-    harga: 9999999,
-    status: "tidak masalah",
-  },
-  {
-    nama: "[Nama Transaksi]",
-    tanggal: "31-01-2099 13:31",
-    kode: "1234",
-    harga: 9999999,
-    status: "tidak masalah",
-  },
-];
-
-const SMPoint = 5;
-
-const SMPay = 99999999;
-
 const Riwayat = () => {
+  const { userData } = useAuthContext();
+  const SMPoint = userData?.smpoint;
+  const SMPay = userData?.memberdeposit;
+  const [listRiwayat, setListRiwayat] = useState([]);
+  const [listTopUp, setListTopUp] = useState([]);
+  useEffect(() => {
+    if (userData?.memberid) {
+      topUpHistory(userData?.memberid)
+        .then((res) => {
+          let tempRiwayat = [];
+          for (let i = 0; i < res.data.data.length; i++) {
+            tempRiwayat.push({
+              nama: res?.data?.data?.[i]?.transaction,
+              tanggal: res?.data?.data?.[i]?.date,
+              kode: res?.data?.data?.[i]?.trxid,
+              harga: `${
+                res?.data?.data?.[i] == "CR" ? "+" : "-"
+              }${currencyFormat(res?.data?.data?.[i]?.amount)}`,
+            });
+          }
+          setListRiwayat(tempRiwayat);
+        })
+        .catch((err) => console.error(err));
+      console.log(listRiwayat);
+    }
+  }, [userData]);
+
+  useEffect(() => {
+    if (userData?.memberid) {
+      topUpList(userData?.memberid)
+        .then((res) => {
+          let tempListTopUp = [];
+          for (let i = 0; i < res.data.data.length; i++) {
+            tempListTopUp.push({
+              nama: `Bank ${res?.data?.data?.[i]?.bank.toUpperCase()}`,
+              tanggal: res?.data?.data?.[i]?.date,
+              kode: res?.data?.data?.[i]?.trxid,
+              harga: currencyFormat(res?.data?.data?.[i]?.amount),
+              status: res?.data?.data?.[i]?.status,
+            });
+          }
+          setListTopUp(tempListTopUp);
+        })
+        .catch((err) => console.error(err));
+    }
+  }, [userData]);
   const { width } = useWindowSize();
   const router = useRouter();
 
