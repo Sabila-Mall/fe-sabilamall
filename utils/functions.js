@@ -230,7 +230,7 @@ export const getUserId = () => {
 };
 
 export const getPriceAfterDiscount = (finalPrice, customerDiscount) => {
-  return (finalPrice * (100 - customerDiscount)) / 100;
+  return (parseNumber(finalPrice) * (100 - customerDiscount) / 100);
 };
 
 export const logout = () => {

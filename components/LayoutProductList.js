@@ -58,93 +58,97 @@ const LayoutProductList = ({
             Semua Produk
           </Heading>
         )}
-
-        <Icon
-          onClick={onOpen}
-          as={IoFilterOutline}
-          fontSize="24px"
-          display={{ base: "block", md: "none", lg: "none" }}
-        />
-        <Modal
-          isOpen={isOpen}
-          onClose={onClose}
-          isCentered={true}
-          size="sm"
-          motionPreset="slideInBottom"
-        >
-          <ModalOverlay />
-          <ModalContent>
-            <ModalBody>
-              <VStack align="start" spacing="1rem" justify="center">
-                <Box onClick={() => handleFilterWrapper("")}>Paling Sesuai</Box>
-                <Box onClick={() => handleFilterWrapper("atoz")}>
-                  Urutkan (A-Z)
-                </Box>
-                <Box onClick={() => handleFilterWrapper("ztoa")}>
-                  Urutkan (Z-A)
-                </Box>
-                <Box onClick={() => handleFilterWrapper("hightolow")}>
-                  Harga (Tertinggi-Terendah)
-                </Box>
-                <Box onClick={() => handleFilterWrapper("lowtohigh")}>
-                  Harga (Terendah-Tertinggi)
-                </Box>
-                <Box onClick={() => handleFilterWrapper("topseller")}>
-                  Top Seller
-                </Box>
-                <Box onClick={() => handleFilterWrapper("mostliked")}>
-                  Paling Disukai
-                </Box>
-                <Box onClick={() => handleFilterWrapper("specials")}>
-                  Produk Spesial
-                </Box>
-              </VStack>
-            </ModalBody>
-          </ModalContent>
-        </Modal>
         {sorting && (
-          <Menu display={{ base: "none", md: "block" }}>
-            <MenuButton
-              px={4}
-              py={2}
-              transition="all 0.2s"
-              borderRadius="md"
-              borderWidth="1px"
-              borderColor="#E2E8F0"
-              _hover={{ bg: "gray.200" }}
-              _expanded={{ bg: "gray.300" }}
-              _focus={{ boxShadow: "none" }}
-              display={{ base: "none", md: "block" }}
+          <>
+            <Icon
+              onClick={onOpen}
+              as={IoFilterOutline}
+              fontSize="24px"
+              display={{ base: "block", md: "none", lg: "none" }}
+            />
+            <Modal
+              isOpen={isOpen}
+              onClose={onClose}
+              isCentered={true}
+              size="sm"
+              motionPreset="slideInBottom"
             >
-              Urutkan Berdasarkan <Icon ml="30px" as={IoChevronDown} />
-            </MenuButton>
-            <MenuList>
-              <MenuItem onClick={() => handleFilter("")}>
-                Paling Sesuai
-              </MenuItem>
-              <MenuItem onClick={() => handleFilter("atoz")}>
-                Urutkan (A-Z)
-              </MenuItem>
-              <MenuItem onClick={() => handleFilter("ztoa")}>
-                Urutkan (Z-A)
-              </MenuItem>
-              <MenuItem onClick={() => handleFilter("hightolow")}>
-                Harga (Tertinggi-Terendah)
-              </MenuItem>
-              <MenuItem onClick={() => handleFilter("lowtohigh")}>
-                Harga (Terendah-Tertinggi)
-              </MenuItem>
-              <MenuItem onClick={() => handleFilter("topseller")}>
-                Top Seller
-              </MenuItem>
-              <MenuItem onClick={() => handleFilter("mostliked")}>
-                Paling Disukai
-              </MenuItem>
-              <MenuItem onClick={() => handleFilter("specials")}>
-                Produk Spesial
-              </MenuItem>
-            </MenuList>
-          </Menu>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalBody>
+                  <VStack align="start" spacing="1rem" justify="center">
+                    <Box onClick={() => handleFilterWrapper("")}>
+                      Paling Sesuai
+                    </Box>
+                    <Box onClick={() => handleFilterWrapper("atoz")}>
+                      Urutkan (A-Z)
+                    </Box>
+                    <Box onClick={() => handleFilterWrapper("ztoa")}>
+                      Urutkan (Z-A)
+                    </Box>
+                    <Box onClick={() => handleFilterWrapper("hightolow")}>
+                      Harga (Tertinggi-Terendah)
+                    </Box>
+                    <Box onClick={() => handleFilterWrapper("lowtohigh")}>
+                      Harga (Terendah-Tertinggi)
+                    </Box>
+                    <Box onClick={() => handleFilterWrapper("topseller")}>
+                      Top Seller
+                    </Box>
+                    <Box onClick={() => handleFilterWrapper("mostliked")}>
+                      Paling Disukai
+                    </Box>
+                    <Box onClick={() => handleFilterWrapper("specials")}>
+                      Produk Spesial
+                    </Box>
+                  </VStack>
+                </ModalBody>
+              </ModalContent>
+            </Modal>
+
+            <Menu display={{ base: "none", md: "block" }}>
+              <MenuButton
+                px={4}
+                py={2}
+                transition="all 0.2s"
+                borderRadius="md"
+                borderWidth="1px"
+                borderColor="#E2E8F0"
+                _hover={{ bg: "gray.200" }}
+                _expanded={{ bg: "gray.300" }}
+                _focus={{ boxShadow: "none" }}
+                display={{ base: "none", md: "block" }}
+              >
+                Urutkan Berdasarkan <Icon ml="30px" as={IoChevronDown} />
+              </MenuButton>
+              <MenuList>
+                <MenuItem onClick={() => handleFilter("")}>
+                  Paling Sesuai
+                </MenuItem>
+                <MenuItem onClick={() => handleFilter("atoz")}>
+                  Urutkan (A-Z)
+                </MenuItem>
+                <MenuItem onClick={() => handleFilter("ztoa")}>
+                  Urutkan (Z-A)
+                </MenuItem>
+                <MenuItem onClick={() => handleFilter("hightolow")}>
+                  Harga (Tertinggi-Terendah)
+                </MenuItem>
+                <MenuItem onClick={() => handleFilter("lowtohigh")}>
+                  Harga (Terendah-Tertinggi)
+                </MenuItem>
+                <MenuItem onClick={() => handleFilter("topseller")}>
+                  Top Seller
+                </MenuItem>
+                <MenuItem onClick={() => handleFilter("mostliked")}>
+                  Paling Disukai
+                </MenuItem>
+                <MenuItem onClick={() => handleFilter("specials")}>
+                  Produk Spesial
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </>
         )}
       </Box>
       <Grid

@@ -1,18 +1,16 @@
-import { useToast } from "@chakra-ui/toast";
-import { createContext, useContext, useEffect, useState } from "react";
+import {useToast} from "@chakra-ui/toast";
+import {createContext, useContext, useEffect, useState} from "react";
 
-import {
-  getBanner,
-  getCategory,
-  getDiscountProducts,
-  getFlashSaleProducts,
-  getProducts,
-} from "../api/Homepage";
-import { isRequestSuccess } from "../utils/api";
+import {getBanner, getCategory, getDiscountProducts, getFlashSaleProducts, getProducts,} from "../api/Homepage";
+import {isRequestSuccess} from "../utils/api";
+import {useAuthContext} from "./authProvider";
 
 const HomepageContext = createContext();
 
-export const HomepageProvider = ({ children }) => {
+export const HomepageProvider = ({children}) => {
+  const {userData, isLoggedIn} = useAuthContext();
+  const userId = isLoggedIn ? userData?.id : "";
+
   const [filter, setFilter] = useState("");
   const [products, setProducts] = useState({
     data: new Array(8).fill(0),
@@ -54,54 +52,58 @@ export const HomepageProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    getFlashSaleProducts(1)
-      .then((res) => {
-        if (isRequestSuccess(res.data)) {
+    if (userId === "" || userId) {
+      getFlashSaleProducts(1, userId)
+        .then((res) => {
+          if (isRequestSuccess(res.data)) {
+            setFlashSaleProducts({
+              data: res.data.data.data ?? [],
+              loading: false,
+              currentPage: 1,
+              lastPage: res.data.data.last_page,
+            });
+          } else {
+            throw "Gagal mendapatkan produk flash sale";
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          errorToast(err);
           setFlashSaleProducts({
-            data: res.data.data.data ?? [],
+            data: [],
             loading: false,
-            currentPage: 1,
-            lastPage: res.data.data.last_page,
+            ...flashSaleProducts,
           });
-        } else {
-          throw "Gagal mendapatkan produk flash sale";
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        errorToast(err);
-        setFlashSaleProducts({
-          data: [],
-          loading: false,
-          ...flashSaleProducts,
         });
-      });
-  }, []);
+  }
+  }, [userId, isLoggedIn]);
 
   useEffect(() => {
-    getDiscountProducts(1)
-      .then((res) => {
-        if (isRequestSuccess(res.data)) {
+    if (userId === "" || userId) {
+      getDiscountProducts(1, userId)
+        .then((res) => {
+          if (isRequestSuccess(res.data)) {
+            setDiscountProducts({
+              data: res.data.data.data ?? [],
+              loading: false,
+              currentPage: 1,
+              lastPage: res.data.data.last_page,
+            });
+          } else {
+            throw "Gagal mendapatkan produk diskon";
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          errorToast(err);
           setDiscountProducts({
-            data: res.data.data.data ?? [],
+            data: [],
             loading: false,
-            currentPage: 1,
-            lastPage: res.data.data.last_page,
+            ...discountProducts,
           });
-        } else {
-          throw "Gagal mendapatkan produk diskon";
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        errorToast(err);
-        setDiscountProducts({
-          data: [],
-          loading: false,
-          ...discountProducts,
         });
-      });
-  }, []);
+    }
+  }, [userId, isLoggedIn]);
 
   useEffect(() => {
     getBanner()
@@ -118,7 +120,7 @@ export const HomepageProvider = ({ children }) => {
       .catch((err) => {
         console.error(err);
         errorToast(err);
-        setBanner({ ...banner, loading: false });
+        setBanner({...banner, loading: false});
       });
   }, []);
 
@@ -137,34 +139,36 @@ export const HomepageProvider = ({ children }) => {
       .catch((err) => {
         console.error(err);
         errorToast(err);
-        setCategory({ data: [], loading: false });
+        setCategory({data: [], loading: false});
       });
   }, []);
 
   useEffect(() => {
-    getProducts(1, filter)
-      .then((res) => {
-        if (isRequestSuccess(res.data)) {
-          setProducts({
-            data:
-              filter === ""
-                ? Object.values(res.data.data.data)
-                : res.data.data.data,
-            currentPage: 1,
-            lastPage: res.data.data.last_page,
-            loading: false,
-          });
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        errorToast("Gagal mendapatkan produk");
-        setProducts({ ...products, data: [], loading: false });
-      });
-  }, [filter]);
+    if (userId === "" || userId) {
+      getProducts(1, filter, userId)
+        .then((res) => {
+          if (isRequestSuccess(res.data)) {
+            setProducts({
+              data:
+                filter === ""
+                  ? Object.values(res.data.data.data)
+                  : res.data.data.data,
+              currentPage: 1,
+              lastPage: res.data.data.last_page,
+              loading: false,
+            });
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          errorToast("Gagal mendapatkan produk");
+          setProducts({...products, data: [], loading: false});
+        });
+    }
+  }, [filter, userId, isLoggedIn]);
 
   function handleLoadMoreProducts() {
-    setProducts({ ...products, loading: true });
+    setProducts({...products, loading: true});
 
     const newPage = products.currentPage + 1;
     getProducts(newPage, filter)
@@ -188,7 +192,7 @@ export const HomepageProvider = ({ children }) => {
   }
 
   function handleFilterProducts(filter) {
-    setProducts({ ...products, loading: true });
+    setProducts({...products, loading: true});
     setFilter(filter);
   }
 

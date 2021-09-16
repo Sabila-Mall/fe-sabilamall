@@ -1,20 +1,18 @@
 import axios from "axios";
 
 import { HOST } from "../constants/api";
-import { getUserId } from "../utils/functions";
 
-export const getProducts = (page = 1, type = "") => {
-  const userId = getUserId();
-  return axios.get(
-    HOST +
-      `/api/product/get_all_filters?page=${page}&type=${type}${
-        userId ? "&customers_id=" + userId : ""
-      }`,
-  );
+export const getProducts = (page = 1, type = "", userId) => {
+  return axios.get(HOST + '/api/product/get_all_filters', {
+    params: {
+      page: page,
+      type: type,
+      customers_id: userId ?? "",
+    }
+  })
 };
 
-export const getFlashSaleProducts = (page = 1) => {
-  const userId = getUserId();
+export const getFlashSaleProducts = (page = 1, userId) => {
   return axios.post(HOST + "/api/product/get_flash_sale_products", {
     type: "paginate",
     page: page,
@@ -22,8 +20,7 @@ export const getFlashSaleProducts = (page = 1) => {
   });
 };
 
-export const getDiscountProducts = (page = 1) => {
-  const userId = getUserId();
+export const getDiscountProducts = (page = 1, userId) => {
   return axios.post(HOST + "/api/product/get_sale_products", {
     type: "paginate",
     page: page,

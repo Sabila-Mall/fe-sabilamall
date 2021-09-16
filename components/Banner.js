@@ -20,7 +20,6 @@ const settings = {
 const Banner = ({ data, loading }) => {
   const [display, setDisplay] = useState("none");
   const { width } = useWindowSize();
-
   let ref = null;
 
   return loading ? (

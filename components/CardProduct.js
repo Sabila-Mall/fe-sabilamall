@@ -13,6 +13,7 @@ import {
   calculateTimeLeft,
   currencyFormat,
   getPriceAfterDiscount,
+  parseNumber,
 } from "../utils/functions";
 
 const CardProduct = ({
@@ -27,14 +28,15 @@ const CardProduct = ({
   responsive,
   isfreeshipping,
 }) => {
-  const router = useRouter();
   const { isLoggedIn, userData } = useAuthContext();
   const { wishlistData } = useWishlistContext();
   const [imageHeight, setImageHeight] = useState(144);
-  const price = isLoggedIn ? final_price : normal_price;
+  const price = isLoggedIn
+    ? parseNumber(final_price)
+    : parseNumber(normal_price);
   const priceAfterDiscount = isLoggedIn
     ? getPriceAfterDiscount(final_price, customerdiscount)
-    : final_price;
+    : parseNumber(final_price);
   const timeLeft = flash_end && calculateTimeLeft(flash_end);
   const discount =
     priceAfterDiscount && Math.round(100 - 100 * (priceAfterDiscount / price));
@@ -149,33 +151,34 @@ const CardProduct = ({
                   {name.toUpperCase()}
                 </Text>
               </Box>
-              {priceAfterDiscount &&
-                Number(priceAfterDiscount) !== Number(price) && (
-                  <Box
-                    w="100%"
-                    h="18px"
+              {priceAfterDiscount && priceAfterDiscount !== price && (
+                <Box
+                  w="100%"
+                  h="18px"
+                  display="flex"
+                  alignItems="center"
+                  fontSize="12px"
+                  fontWeight="500"
+                  lineHeight="18px"
+                  mb="8px"
+                >
+                  <Text as="del" color="gray.500">
+                    {currencyFormat(price)}
+                  </Text>
+                  <Text
+                    ml={priceAfterDiscount !== price ? "9px" : 0}
+                    h="100%"
+                    bg="red.200"
+                    p="2px"
+                    borderRadius="4px"
+                    color="red.700"
                     display="flex"
                     alignItems="center"
-                    fontSize="12px"
-                    fontWeight="500"
-                    lineHeight="18px"
-                    mb="8px"
                   >
-                    <Text as="del" color="gray.500">
-                      {currencyFormat(price)}
-                    </Text>
-                    <Text
-                      ml={priceAfterDiscount !== price ? "9px" : 0}
-                      h="100%"
-                      bg="red.200"
-                      p="2px"
-                      borderRadius="4px"
-                      color="red.700"
-                      display="flex"
-                      alignItems="center"
-                    >{`${discount}%`}</Text>
-                  </Box>
-                )}
+                    {`${discount}%`}
+                  </Text>
+                </Box>
+              )}
               <Box
                 className={styles.primaryFont}
                 w="100%"
