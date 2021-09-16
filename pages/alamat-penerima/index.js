@@ -1113,7 +1113,7 @@ const AlamatPenerima = () => {
                 fontWeight="700"
                 isTruncated
               >
-                Pembayaran
+                Tagihan
               </Text>
               <Box
                 width="100%"

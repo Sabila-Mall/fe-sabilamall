@@ -72,7 +72,7 @@ const CheckoutSummary = ({
         fontWeight="700"
         isTruncated
       >
-        Pembayaran
+        Tagihan
       </Text>
       <SummaryEntry text="Subtotal" data={subtotal} />
       <SummaryEntry text="Pengiriman" data={pengiriman} />
