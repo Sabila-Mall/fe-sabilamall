@@ -222,7 +222,7 @@ export const parseNumber = (str) => {
 };
 
 export const getDeviceId = () => {
-  return window.localStorage.getItem("device_id");
+  return JSON.parse(window.localStorage.getItem("device_id"));
 };
 
 export const getUserId = () => {

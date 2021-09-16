@@ -2,9 +2,10 @@ import axios from "axios";
 
 import { HOST } from "../constants/api";
 import { isRequestSuccess } from "../utils/api";
+import { getDeviceId } from "../utils/functions";
 
 export const addToCart = async (dataPost) => {
-  let device_id = window.localStorage.getItem("device_id");
+  let device_id = getDeviceId();
   try {
     const res = await axios.post(HOST + "/api/cart/add_to_cart", {
       ...dataPost,

@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import { HOST } from "../constants/api";
+import { getDeviceId } from "../utils/functions";
 
 export const apiPlaceOrder = (
   vendorId,
@@ -18,7 +19,7 @@ export const apiPlaceOrder = (
   paymentAddCostMethod,
   paymentAddCostValue,
 ) => {
-  let device_id = window.localStorage.getItem("device_id");
+  let device_id = getDeviceId();
   return axios.post(HOST + "/api/order/place_order", {
     dataorder: [
       {

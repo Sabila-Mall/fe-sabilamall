@@ -2,9 +2,10 @@ import axios from "axios";
 
 import { HOST } from "../constants/api";
 import { isRequestSuccess } from "../utils/api";
+import { getDeviceId } from "../utils/functions";
 
 export const apiGetCartByCustomerID = async (customers_id) => {
-  let device_id = window.localStorage.getItem("device_id");
+  let device_id = getDeviceId();
 
   const res = await axios.post(HOST + "/api/cart/get_cart_by_customer", {
     customers_id,
@@ -15,7 +16,7 @@ export const apiGetCartByCustomerID = async (customers_id) => {
 };
 
 export const addCart = async (dataPost) => {
-  let device_id = window.localStorage.getItem("device_id");
+  let device_id = getDeviceId();
   try {
     const res = await axios.post(HOST + "/api/cart/add_to_cart", {
       ...dataPost,
@@ -29,7 +30,7 @@ export const addCart = async (dataPost) => {
 };
 
 export const deleteCart = async (dataPost) => {
-  let device_id = window.localStorage.getItem("device_id");
+  let device_id = getDeviceId();
   try {
     const res = await axios.post(HOST + "/api/cart/delete", {
       ...dataPost,
@@ -43,7 +44,7 @@ export const deleteCart = async (dataPost) => {
 };
 
 export const editCartNotes = async (dataPost) => {
-  let device_id = window.localStorage.getItem("device_id");
+  let device_id = getDeviceId();
   try {
     const res = await axios.post(HOST + "/api/cart/update_notes_item", {
       ...dataPost,
@@ -57,7 +58,7 @@ export const editCartNotes = async (dataPost) => {
 };
 
 export const updateCartQuantity = async (dataPost) => {
-  let device_id = window.localStorage.getItem("device_id");
+  let device_id = getDeviceId();
   try {
     const res = await axios.post(HOST + "/api/cart/update_qty_item", {
       ...dataPost,
@@ -71,7 +72,7 @@ export const updateCartQuantity = async (dataPost) => {
 };
 
 export const getMyCart = async (user_id) => {
-  let device_id = window.localStorage.getItem("device_id");
+  let device_id = getDeviceId();
   try {
     const res = await axios.post(HOST + "/api/cart/get_cart_by_customer", {
       customers_id: user_id,

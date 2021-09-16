@@ -1,9 +1,10 @@
 import axios from "axios";
 
 import { HOST } from "../constants/api";
+import { getDeviceId } from "../utils/functions";
 
 export const apiGetOrder = async (customerId, page) => {
-  let device_id = window.localStorage.getItem("device_id");
+  let device_id = getDeviceId();
   try {
     const res = await axios.post(
       HOST + `/api/order/get_by_customers?page=${page}`,
@@ -27,7 +28,7 @@ export const apiGetOrder = async (customerId, page) => {
 };
 
 export const apiGetSingleOrder = async (customers_id, orders_id) => {
-  let device_id = window.localStorage.getItem("device_id");
+  let device_id = getDeviceId();
   return axios.post(HOST + "/api/order/get_by_customers", {
     customers_id: customers_id,
     currency_code: "IDR",
@@ -38,7 +39,7 @@ export const apiGetSingleOrder = async (customers_id, orders_id) => {
 };
 
 export const apiSearchOrder = async (customerId, orderId) => {
-  let device_id = window.localStorage.getItem("device_id");
+  let device_id = getDeviceId();
   try {
     const res = await axios.post(HOST + `/api/order/search_by_customers`, {
       customers_id: customerId,
@@ -62,7 +63,7 @@ export const apiSearchOrder = async (customerId, orderId) => {
 };
 
 export const apiGetResi = async (customers_id, orders_id) => {
-  let device_id = window.localStorage.getItem("device_id");
+  let device_id = getDeviceId();
   return axios.post(HOST + "/api/resi/cek_resi", {
     customers_id: customers_id,
     orders_id: orders_id,
@@ -71,7 +72,7 @@ export const apiGetResi = async (customers_id, orders_id) => {
 };
 
 export const apiGetOrderCustomer = async (customerId, orderId) => {
-  let device_id = window.localStorage.getItem("device_id");
+  let device_id = getDeviceId();
 
   const res = await axios.post(HOST + `/api/order/get_by_customers`, {
     customers_id: customerId,
