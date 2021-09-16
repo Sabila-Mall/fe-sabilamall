@@ -238,7 +238,7 @@ const ProfileMobile = () => {
                   color="gray.400"
                   mt="1.2rem"
                 >
-                  Sabila Mall v9.99.99
+                  Sabila Mall v1.00.00
                 </Text>
               </VStack>
             </Box>

@@ -18,9 +18,6 @@ const RelatedProductContainer = ({ related_products, customers_id }) => {
         <Heading fontSize="24px" className="primaryFont">
           Produk Terkait
         </Heading>
-        <Link href="/" color="orange.400" fontWeight="bold" fontSize="16px">
-          Lihat Semua
-        </Link>
       </Stack>
       <Grid
         templateColumns={`repeat(${related_products?.length}, 1fr)`}

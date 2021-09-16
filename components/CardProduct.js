@@ -74,11 +74,11 @@ const CardProduct = ({
     handleResize();
     return () => window.removeEventListener("resize", handleResize);
   });
-
   return (
     <Link
       _hover={{ textStyle: "none" }}
-      href={`product-detail/${products_slug}`}
+      href={`/product-detail/${products_slug}`}
+      target="_blank"
     >
       <Box
         className={styles.secondaryFont}

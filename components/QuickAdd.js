@@ -102,6 +102,7 @@ const QuickAdd = ({ isDrawerOpen, onDrawerClose }) => {
               className={"primaryFont"}
               width={"full"}
               onClick={() => handleCheckout()}
+              _hover={{ bgColor: "red.600" }}
             >
               Checkout
             </Button>

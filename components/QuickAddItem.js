@@ -8,6 +8,7 @@ import {
   Image,
   Checkbox,
 } from "@chakra-ui/react";
+
 import { createRef, useState } from "react";
 import {
   IoAddCircleOutline,
@@ -19,6 +20,7 @@ import { IMAGE_HOST } from "../constants/api";
 import { useAuthContext } from "../contexts/authProvider";
 import { useCartContext } from "../contexts/cartProvider";
 import { getPriceAfterDiscount } from "../utils/functions";
+import { useRouter } from 'next/router'
 
 const formatPrice = (price) => {
   return new Intl.NumberFormat("id-ID", {
@@ -26,6 +28,7 @@ const formatPrice = (price) => {
     currency: "IDR",
   }).format(price);
 };
+
 
 const QuickAddItem = ({ product, my }) => {
   const { userData } = useAuthContext();
@@ -39,6 +42,7 @@ const QuickAddItem = ({ product, my }) => {
     settotalPrice,
     totalDiscount,
     settotalDiscount,
+    selectedItem
   } = useCartContext();
 
   const [quantity, setquantity] = useState(product.customers_basket_quantity);
@@ -47,9 +51,11 @@ const QuickAddItem = ({ product, my }) => {
   const discount = product?.customers_discount;
   const varian = product?.varian;
   const finalPrice = getPriceAfterDiscount(initialPrice, discount)
-
-
+  const productID = product?.products_id
   settotalPrice(finalPrice * quantity);
+
+  const { asPath } = useRouter()
+  const router = useRouter()
 
   const handleModifyNumberOfItem = (event) => {
     let tempDiscount = totalDiscount;
@@ -99,19 +105,45 @@ const QuickAddItem = ({ product, my }) => {
         justify={"space-between"}
         spacing={"1rem"}
         w={"full"}
+        _hover={{ cursor: "pointer" }}
       >
         <Flex>
-          <Checkbox w="min-content" ref={inputRef}></Checkbox>
+          <Checkbox w="min-content" ref={inputRef} defaultChecked={selectedItem.includes(product)} size="lg"></Checkbox>
           <HStack spacing={"1rem"} ml="1rem">
             <Image
               src={IMAGE_HOST + product.products_image_path}
               alt="Product Image"
               w={"4rem"}
               h={"4rem"}
+              onClick={() => {
+                if (asPath.includes("/product-detail")) {
+                  return (
+                    router.push(`${productID}`)
+                  )
+                } else {
+                  return (
+                    router.push(`/product-detail/${productID}`)
+                  )
+                }
+              }
+              }
             />
 
+
             <VStack flexDirection={"column"} align={"start"}>
-              <Text noOfLines={1} fontSize={"1rem"} className={"secondaryFont"}>
+              <Text noOfLines={1} fontSize={"1rem"} className={"secondaryFont"}
+                onClick={() => {
+                  if (asPath.includes("/product-detail")) {
+                    return (
+                      router.push(`${productID}`)
+                    )
+                  } else {
+                    return (
+                      router.push(`/product-detail/${productID}`)
+                    )
+                  }
+                }
+                }>
                 {product.products_name}
               </Text>
               {product.discount ? (

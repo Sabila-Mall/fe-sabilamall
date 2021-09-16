@@ -1,5 +1,5 @@
 import { Text } from "@chakra-ui/layout";
-import { VStack, HStack } from "@chakra-ui/layout";
+import { VStack, HStack, Link } from "@chakra-ui/layout";
 import { Flex, Box } from "@chakra-ui/layout";
 import { Checkbox, IconButton, Image } from "@chakra-ui/react";
 import {
@@ -30,6 +30,7 @@ export const ProductCart = ({ isDiscount, product }) => {
   const productPath = product?.products_image_path;
   const productPrice = product?.final_price;
   const customerBasket = product?.customers_basket_id;
+  const productID = product?.products_id
 
   const focusOut = useRef(null);
 
@@ -75,8 +76,9 @@ export const ProductCart = ({ isDiscount, product }) => {
         justifyContent={{ base: "center", md: "start" }}
         justifyContent="flex-start"
         as="label"
+        _hover={{ cursor: "pointer" }}
       >
-        <Checkbox alignSelf="center" mr="20px" ref={inputRef}></Checkbox>
+        <Checkbox alignSelf="center" mr="20px" size="lg" ref={inputRef}></Checkbox>
         <Flex
           flexDirection="column"
           justifyContent="center"
@@ -88,7 +90,12 @@ export const ProductCart = ({ isDiscount, product }) => {
             w={{ base: "5em", sm: "8em", md: "6em" }}
             h={{ base: "5em", sm: "8em", md: "6em" }}
           >
-            <Image h="100%" quality={100} src={IMAGE_HOST + productPath} />
+            <Link
+              _hover={{ textStyle: "none" }}
+              href={`product-detail/${productID}`}
+            >
+              <Image h="100%" quality={100} src={IMAGE_HOST + productPath} />
+            </Link>
           </Box>
         </Flex>
 
@@ -97,9 +104,16 @@ export const ProductCart = ({ isDiscount, product }) => {
           w={{ base: "70%", md: "9rem", xl: "100%" }}
           fontWeight="500"
         >
-          <Text as="h1" isTruncated mb="8px">
-            {productName}
-          </Text>
+          <Link
+            _hover={{ textStyle: "none" }}
+            href={`product-detail/${productID}`}
+            w="fit-content"
+          >
+            <Text as="h1" isTruncated mb="8px">
+              {productName}
+            </Text>
+          </Link>
+
           <VStack spacing="3px" alignItems="start" mb="1rem">
             {varian &&
               varian.map((el, index) => {
@@ -121,12 +135,12 @@ export const ProductCart = ({ isDiscount, product }) => {
         color={"gray.400"}
         fontSize={"0.75rem"}
         defaultValue={product?.customers_basket_notes || "tambahkan Catatan"}
-        isPreviewFocusable={false}
+      // isPreviewFocusable={false}
       >
         <HStack spacing={"0.25rem"}>
           <EditableControls />
           <Box>
-            <EditablePreview />
+            <EditablePreview cursor="pointer" />
             <EditableInput color="black" ref={focusOut} />
           </Box>
         </HStack>
