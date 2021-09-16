@@ -171,7 +171,7 @@ export const HomepageProvider = ({children}) => {
     setProducts({...products, loading: true});
 
     const newPage = products.currentPage + 1;
-    getProducts(newPage, filter)
+    getProducts(newPage, filter, userId)
       .then((res) => {
         if (isRequestSuccess(res.data)) {
           setProducts({
