@@ -28,53 +28,87 @@ import {
   Wrap,
   WrapItem,
 } from "@chakra-ui/react";
+import NextLink from "next/link";
 import { useState, useEffect } from "react";
+import { set, useForm } from "react-hook-form";
 import { FaUser } from "react-icons/fa";
 import { IoHeart, IoWalletOutline, IoCamera } from "react-icons/io5";
 import { VscPackage } from "react-icons/vsc";
 
 import { topUpHistory, topUpList } from "../../api/Deposit";
+import { postPaymentConfirmation } from "../../api/Konfirmasi";
+import { getAllBanks } from "../../api/banks";
+import { confrimTopUp } from "../../api/topup";
 import { CardProfile } from "../../components/CardProfile";
 import Entry from "../../components/Entry";
 import { Layout } from "../../components/Layout";
 import Navbar from "../../components/Navbar";
+import { ErrorToast, SuccessToast } from "../../components/Toast";
 import { useAuthContext } from "../../contexts/authProvider";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import { currencyFormat } from "../../utils/functions";
 import { formatNumber } from "../../utils/functions";
 
-const sm = [
-  { text: "SM Pay", value: "1000.000" },
-  { text: "SM Point", value: 5 },
+const listTopUp = [
+  {
+    nama: "Bank BNI",
+    tanggal: "31-01-2099 13:31",
+    kode: "1234",
+    harga: 9999999,
+    status: "tidak masalah",
+  },
+  {
+    nama: "Bank Mandiri",
+    tanggal: "31-01-2099 13:31",
+    kode: "1234",
+    harga: 9999999,
+    status: "tidak masalah",
+  },
+  {
+    nama: "Bank BNI",
+    tanggal: "31-01-2099 13:31",
+    kode: "1234",
+    harga: 9999999,
+    status: "tidak masalah",
+  },
 ];
 
-// Dummy data
-const listBankTujuan = [
+const listRiwayat = [
   {
-    id: "bca",
-    nama: "BCA",
+    nama: "Top Up",
+    tanggal: "31-01-2099 13:31",
+    kode: "1234",
+    harga: 9999999,
+    status: "tidak masalah",
   },
   {
-    id: "bni",
-    nama: "BNI",
+    nama: "Belanja",
+    tanggal: "31-01-2099 13:31",
+    kode: "1234",
+    harga: 9999999,
+    status: "tidak masalah",
   },
   {
-    id: "jenius",
-    nama: "JENIUS",
-  },
-  {
-    id: "bri",
-    nama: "BRi",
-  },
-  {
-    id: "btpn",
-    nama: "BTPN",
+    nama: "[Nama Transaksi]",
+    tanggal: "31-01-2099 13:31",
+    kode: "1234",
+    harga: 9999999,
+    status: "tidak masalah",
   },
 ];
+
+const userData = {
+  nama: "Litha Cantik",
+  email: "zulmusuydu@biyac.com",
+  memberId: "1234567",
+  tipe: "Reguler",
+  SMPay: 100000000,
+  SMPoint: 5,
+};
 
 const VERSI = "9.99.99";
 
-const Nominal = ({ nominal, setNominal }) => {
+const Nominal = ({ dataPost, setDataPost }) => {
   return (
     <VStack spacing={"0.5rem"} w={"full"} align={"start"}>
       <Text fontSize={"1rem"}>Nominal</Text>
@@ -84,11 +118,13 @@ const Nominal = ({ nominal, setNominal }) => {
       <InputGroup>
         <InputLeftAddon children={"Rp"} />
         <NumberInput
-          value={nominal}
+          value={dataPost.amount}
           min={10000}
           keepWithinRange={false}
           clampValueOnBlur={false}
-          onChange={(value) => setNominal(value)}
+          onChange={(value) =>
+            setDataPost((prev) => ({ ...prev, amount: value }))
+          }
         >
           <NumberInputField />
         </NumberInput>
@@ -96,7 +132,12 @@ const Nominal = ({ nominal, setNominal }) => {
       <Wrap>
         <WrapItem>
           <Button
-            onClick={() => setNominal(20000)}
+            onClick={() =>
+              setDataPost((prev) => ({
+                ...prev,
+                amount: 20000,
+              }))
+            }
             variant={"outline"}
             fontSize={"0.75rem"}
           >
@@ -105,7 +146,12 @@ const Nominal = ({ nominal, setNominal }) => {
         </WrapItem>
         <WrapItem>
           <Button
-            onClick={() => setNominal(50000)}
+            onClick={() =>
+              setDataPost((prev) => ({
+                ...prev,
+                amount: 50000,
+              }))
+            }
             variant={"outline"}
             fontSize={"0.75rem"}
           >
@@ -114,7 +160,12 @@ const Nominal = ({ nominal, setNominal }) => {
         </WrapItem>
         <WrapItem>
           <Button
-            onClick={() => setNominal(100000)}
+            onClick={() =>
+              setDataPost((prev) => ({
+                ...prev,
+                amount: 100000,
+              }))
+            }
             variant={"outline"}
             fontSize={"0.75rem"}
           >
@@ -123,7 +174,12 @@ const Nominal = ({ nominal, setNominal }) => {
         </WrapItem>
         <WrapItem>
           <Button
-            onClick={() => setNominal(500000)}
+            onClick={() =>
+              setDataPost((prev) => ({
+                ...prev,
+                amount: 500000,
+              }))
+            }
             variant={"outline"}
             fontSize={"0.75rem"}
           >
@@ -132,7 +188,12 @@ const Nominal = ({ nominal, setNominal }) => {
         </WrapItem>
         <WrapItem>
           <Button
-            onClick={() => setNominal(1000000)}
+            onClick={() =>
+              setDataPost((prev) => ({
+                ...prev,
+                amount: 1000000,
+              }))
+            }
             variant={"outline"}
             fontSize={"0.75rem"}
           >
@@ -144,14 +205,19 @@ const Nominal = ({ nominal, setNominal }) => {
   );
 };
 
-const BankTujuan = () => {
+const BankTujuan = ({ listBank, dataPost, setDataPost }) => {
   return (
     <VStack spacing={"0.5rem"} w={"full"} align={"start"}>
       <Text>Bank Tujuan</Text>
-      <Select>
-        {listBankTujuan.map((each, index) => (
-          <option key={index} id={each.id}>
-            {each.nama}
+      <Select
+        value={dataPost.banktujuan}
+        onChange={(e) =>
+          setDataPost((prev) => ({ ...prev, banktujuan: e.target.value }))
+        }
+      >
+        {listBank?.bankTujuan.map((each, index) => (
+          <option key={each.namabank} id={each.bankid} value={each.bankid}>
+            {each.namabank} - {each.rekening}
           </option>
         ))}
       </Select>
@@ -159,39 +225,91 @@ const BankTujuan = () => {
   );
 };
 
-const TanggalTransfer = () => {
+const TanggalTransfer = ({ dataPost, setDataPost }) => {
   return (
     <VStack spacing={"0.5rem"} w={"full"} align={"start"}>
       <Text>Tanggal Transfer</Text>
-      <Input placeholder={"Masukan tanggal"} type={"date"} />
+
+      <Input
+        placeholder={"Masukan tanggal"}
+        type={"date"}
+        value={dataPost.date}
+        onChange={(e) => {
+          setDataPost((prev) => ({ ...prev, date: e.target.value }));
+        }}
+      />
     </VStack>
   );
 };
 
-const NamaBankPengirim = () => {
+const NamaBankPengirim = ({ listBank, dataPost, setDataPost }) => {
   return (
     <VStack spacing={"0.5rem"} w={"full"} align={"start"}>
       <Text>Nama Bank Pengirim</Text>
-      <Input placeholder={"Masukan Nama Bank Pengirim"} />
+      <Select
+        value={dataPost.bankasal}
+        onChange={(e) =>
+          setDataPost((prev) => ({ ...prev, bankasal: e.target.value }))
+        }
+      >
+        {listBank?.bankAsal.map((each, index) => (
+          <option key={each.namabank} id={each.bankid} value={each.namabank}>
+            {each.namabank}
+          </option>
+        ))}
+      </Select>
     </VStack>
   );
 };
 
-const NamaPemilikRekening = () => {
+const NamaPemilikRekening = ({ dataPost, setDataPost }) => {
   return (
     <VStack spacing={"0.5rem"} w={"full"} align={"start"}>
       <Text>Nama Pemilik Rekening</Text>
-      <Input placeholder={"Masukan Nama Pemilik Rekening"} />
+      <Input
+        placeholder={"Masukan Nama Pemilik Rekening"}
+        value={dataPost?.pemilik}
+        onChange={(e) =>
+          setDataPost((prev) => ({
+            ...prev,
+            pemilik: e.target.value,
+          }))
+        }
+      />
     </VStack>
   );
 };
 
-const Konfirmasi = () => {
+const Konfirmasi = ({ dataPost }) => {
+  const { userData } = useAuthContext();
+  const [loading, setLoading] = useState(false);
+  const { amount, bankasal, banktujuan, pemilik, date } = dataPost;
+
+  const onClick = (e) => {
+    e?.preventDefault();
+    const dateIND = dataPost?.date?.split("-").reverse().join("-");
+
+    setLoading(true);
+    confrimTopUp({
+      action: "confirm",
+      memberid: userData.memberid,
+      ...dataPost,
+      date: dateIND,
+      banktujuan: Number(dataPost.banktujuan),
+      amount: Number(dataPost.amount),
+    })
+      .then(() => SuccessToast("Top Up Berhasil!"))
+      .catch(() => ErrorToast("Top Up Gagal!"))
+      .finally(() => setLoading(false));
+  };
   return (
     <Button
       background={"orange.500"}
       color={"white"}
       w={{ base: "full", lg: "inherit" }}
+      isDisabled={!amount || !bankasal || !date || !banktujuan || !pemilik}
+      onClick={onClick}
+      isLoading={loading}
     >
       Konfirmasi
     </Button>
@@ -332,29 +450,37 @@ const SidePanel = ({ userData }) => {
   );
 };
 
-const SmartPhoneTopUp = ({ nominal, setNominal }) => {
+const SmartPhoneTopUp = ({ listBank, dataPost, setDataPost }) => {
   return (
     <>
       <Navbar />
       <VStack spacing={"1.5rem"} px={"1rem"} py={{ base: "3rem", md: "4rem" }}>
-        <Collapse in={nominal < 10000} animateOpacity>
+        <Collapse in={dataPost.amount < 10000} animateOpacity>
           <Alert status="error">
             <AlertIcon />
             <AlertDescription>Nominal Top Up Minimal Rp10.000</AlertDescription>
           </Alert>
         </Collapse>
-        <Nominal nominal={nominal} setNominal={setNominal} mt={"5rem"} />
-        <BankTujuan />
-        <TanggalTransfer />
-        <NamaBankPengirim />
-        <NamaPemilikRekening />
-        <Konfirmasi />
+        <Nominal dataPost={dataPost} setDataPost={setDataPost} mt={"5rem"} />
+        <BankTujuan
+          listBank={listBank}
+          dataPost={dataPost}
+          setDataPost={setDataPost}
+        />
+        <TanggalTransfer dataPost={dataPost} setDataPost={setDataPost} />
+        <NamaBankPengirim
+          listBank={listBank}
+          dataPost={dataPost}
+          setDataPost={setDataPost}
+        />
+        <NamaPemilikRekening dataPost={dataPost} setDataPost={setDataPost} />
+        <Konfirmasi dataPost={dataPost} setDataPost={setDataPost} />
       </VStack>
     </>
   );
 };
 
-const DesktopTopUp = ({ nominal, setNominal }) => {
+const DesktopTopUp = ({ listBank, dataPost, setDataPost, isAgent }) => {
   const { userData } = useAuthContext();
   const [listRiwayat, setListRiwayat] = useState([]);
   const [listTopUp, setListTopUp] = useState([]);
@@ -408,7 +534,7 @@ const DesktopTopUp = ({ nominal, setNominal }) => {
           paddingBottom={"4rem"}
           w="full"
         >
-          <CardProfile sm={sm} cardProfileText="SM Pay" />
+          <CardProfile cardProfileText="SM Pay" />
 
           <VStack
             background={"white"}
@@ -430,7 +556,7 @@ const DesktopTopUp = ({ nominal, setNominal }) => {
 
               <TabPanels>
                 <TabPanel>
-                  <Collapse in={nominal < 10000} animateOpacity>
+                  <Collapse in={dataPost.amount < 10000} animateOpacity>
                     <Alert status="error">
                       <AlertIcon />
                       <AlertDescription>
@@ -442,12 +568,26 @@ const DesktopTopUp = ({ nominal, setNominal }) => {
                     Top Up
                   </Heading>
                   <VStack align={"start"} spacing={"3rem"}>
-                    <Nominal nominal={nominal} setNominal={setNominal} />
-                    <BankTujuan />
-                    <TanggalTransfer />
-                    <NamaBankPengirim />
-                    <NamaPemilikRekening />
-                    <Konfirmasi />
+                    <Nominal setDataPost={setDataPost} dataPost={dataPost} />
+                    <BankTujuan
+                      listBank={listBank}
+                      setDataPost={setDataPost}
+                      dataPost={dataPost}
+                    />
+                    <TanggalTransfer
+                      setDataPost={setDataPost}
+                      dataPost={dataPost}
+                    />
+                    <NamaBankPengirim
+                      listBank={listBank}
+                      setDataPost={setDataPost}
+                      dataPost={dataPost}
+                    />
+                    <NamaPemilikRekening
+                      setDataPost={setDataPost}
+                      dataPost={dataPost}
+                    />
+                    <Konfirmasi setDataPost={setDataPost} dataPost={dataPost} />
                   </VStack>
                 </TabPanel>
 
@@ -502,17 +642,21 @@ const DesktopTopUp = ({ nominal, setNominal }) => {
                 </TabPanel>
               </TabPanels>
             </Tabs>
-            <HStack mt={"1.125rem"} alignSelf={"center"}>
-              <Text>Ingin upgrade akun untuk berjualan?</Text>
-              <Button
-                variant={"outline"}
-                color={"red.600"}
-                className={"primaryFont"}
-                borderColor={"red.600"}
-              >
-                Upgrade Akun
-              </Button>
-            </HStack>
+            {!isAgent && (
+              <HStack mt={"1.125rem"} alignSelf={"center"}>
+                <Text>Ingin upgrade akun untuk berjualan?</Text>
+                <NextLink href="/profile/upgrade-account">
+                  <Button
+                    variant={"outline"}
+                    color={"red.600"}
+                    className={"primaryFont"}
+                    borderColor={"red.600"}
+                  >
+                    Upgrade Akun
+                  </Button>
+                </NextLink>
+              </HStack>
+            )}
           </VStack>
         </HStack>
       </Layout>
@@ -521,13 +665,63 @@ const DesktopTopUp = ({ nominal, setNominal }) => {
 };
 
 const TopUp = () => {
-  const [nominal, setNominal] = useState(10000);
+  const { userData } = useAuthContext();
+  const [dataPost, setDataPost] = useState({
+    amount: 10000,
+    date: "",
+    pemilik: "",
+    bankasal: "",
+    banktujuan: null,
+  });
+
+  const [listBank, setListBank] = useState({
+    bankTujuan: [],
+    bankAsal: [],
+  });
+  const [loading, setLoading] = useState(true);
   const { width } = useWindowSize();
 
+  useEffect(() => {
+    const getAllData = async () => {
+      try {
+        const banks = await getAllBanks({ action: "forconfirmation" });
+
+        setListBank({
+          bankTujuan: banks?.banktujuan,
+          bankAsal: banks?.bankasal,
+        });
+        setDataPost((prev) => ({
+          ...prev,
+          banktujuan: banks?.banktujuan[0]?.bankid,
+          bankasal: banks?.bankasal?.[0]?.namabank,
+        }));
+      } catch (e) {
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getAllData();
+  }, [userData]);
+
+  const isAgent = userData?.user_level?.toLowerCase() === "agent";
+
+  if (loading) return null;
+
   return width < 768 ? (
-    <SmartPhoneTopUp nominal={nominal} setNominal={setNominal} />
+    <SmartPhoneTopUp
+      isAgent={isAgent}
+      listBank={listBank}
+      dataPost={dataPost}
+      setDataPost={setDataPost}
+    />
   ) : (
-    <DesktopTopUp nominal={nominal} setNominal={setNominal} />
+    <DesktopTopUp
+      isAgent={isAgent}
+      listBank={listBank}
+      dataPost={dataPost}
+      setDataPost={setDataPost}
+    />
   );
 };
 

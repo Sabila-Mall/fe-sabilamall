@@ -43,6 +43,8 @@ const ProfileMobile = () => {
     { text: "Ubah Password", path: "/profile/ubah-password" },
     { text: "Alamat Pengiriman", path: "/profile/alamat-pengiriman" },
     { text: "Edit Profile", path: "/profile/edit-profile" },
+    { text: "Top Up SM Pay", path: "/top-up" },
+    { text: "Riwayat Top Up", path: "/riwayat" },
     {
       text: "Upgrade Akun",
       path: ["/profile/invoice-upgrade-akun", "/profile/profile-saya"],
@@ -63,7 +65,7 @@ const ProfileMobile = () => {
       {smLoading ? (
         <Spinner />
       ) : (
-        <Box bg="gray.50" h="100%" display={{ base: "block", md: "none" }}>
+        <Box bg="gray.50" display={{ base: "block", md: "none" }}>
           <Box>
             <ModalProfile
               isOpen={isOpen}
