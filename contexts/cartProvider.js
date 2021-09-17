@@ -25,7 +25,6 @@ export const CartProvider = ({ children }) => {
   const [selectedWeight, setselectedWeight] = useState(0);
   const [selectedQuantity, setselectedQuantity] = useState(0);
   const [selectedDiscount, setselectedDiscount] = useState(0);
-  const [vendorChecked, setVendorChecked] = useState([]);
   const router = useRouter();
 
   const { userData } = useAuthContext();
@@ -251,12 +250,12 @@ export const CartProvider = ({ children }) => {
   ) => {
     editCartNotes({ customers_id, customers_basket_id, customers_basket_notes })
       .then((res) => {
-        let message;
+        let message
         console.log(res);
-        if (typeof res?.message === "object") {
-          message = res?.message.customers_basket_notes[0];
-        } else if (typeof res?.message === "string") {
-          message = res?.message;
+        if (typeof res?.message === 'object') {
+          message = res?.message.customers_basket_notes[0]
+        } else if (typeof res?.message === 'string') {
+          message = res?.message
         }
         if (isRequestSuccess(res)) {
           successToast(message);
@@ -337,7 +336,7 @@ export const CartProvider = ({ children }) => {
         } else {
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   };
 
   useEffect(() => {
@@ -367,8 +366,6 @@ export const CartProvider = ({ children }) => {
         selectedQuantity,
         editCartItemNotes,
         selectedDiscount,
-        vendorChecked,
-        setVendorChecked,
       }}
     >
       {children}
