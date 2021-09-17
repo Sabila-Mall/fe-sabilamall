@@ -48,7 +48,6 @@ const Riwayat = () => {
           setListRiwayat(tempRiwayat);
         })
         .catch((err) => console.error(err));
-      console.log(listRiwayat);
     }
   }, [userData]);
 

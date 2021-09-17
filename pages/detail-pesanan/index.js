@@ -241,7 +241,6 @@ const Pengiriman = ({ kurir, pengiriman, handler, loadingKurir }) => {
             >
               {kurir.map((jasa, index) => (
                 <option value={jasa.name} key={index}>
-                  {console.log(jasa)}
                   {jasa.name} ({currencyFormat(jasa.rate)})
                 </option>
               ))}

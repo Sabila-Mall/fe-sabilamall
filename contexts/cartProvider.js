@@ -250,12 +250,11 @@ export const CartProvider = ({ children }) => {
   ) => {
     editCartNotes({ customers_id, customers_basket_id, customers_basket_notes })
       .then((res) => {
-        let message
-        console.log(res);
-        if (typeof res?.message === 'object') {
-          message = res?.message.customers_basket_notes[0]
-        } else if (typeof res?.message === 'string') {
-          message = res?.message
+        let message;
+        if (typeof res?.message === "object") {
+          message = res?.message.customers_basket_notes[0];
+        } else if (typeof res?.message === "string") {
+          message = res?.message;
         }
         if (isRequestSuccess(res)) {
           successToast(message);
@@ -336,7 +335,7 @@ export const CartProvider = ({ children }) => {
         } else {
         }
       })
-      .catch(() => { });
+      .catch(() => {});
   };
 
   useEffect(() => {
