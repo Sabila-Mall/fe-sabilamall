@@ -105,7 +105,7 @@ const MyDocument = ({
 }) => (
   <PDFViewer width="100%" height="100%">
     <Document
-      title={"Resi"}
+      title={`Resi - ${nomorPesanan.slice(3)}`}
       onRender={(blob) => onRenderDocument(blob, nomorPesanan)}
     >
       <Page size="A4" style={styles.page}>
