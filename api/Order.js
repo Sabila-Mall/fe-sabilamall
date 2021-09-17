@@ -55,6 +55,15 @@ export const getKurir = (
   vendorOrigin,
   deviceId,
 ) => {
+  const customers_basket_id = [];
+  try {
+    JSON.parse(window.localStorage.getItem("selectedProduct")).products.forEach(
+      (el) => {
+        customers_basket_id.push(el.customers_basket_id);
+      },
+    );
+  } catch (error) {}
+
   return axios.post(HOST + "/api/shipping/get_all_shipping", {
     customers_id: customerId,
     countries_id: 100,
@@ -69,6 +78,7 @@ export const getKurir = (
     vendors_id: vendorId,
     vendors_origin: vendorOrigin,
     device_id: deviceId,
+    customers_basket_id: customers_basket_id,
   });
 };
 
@@ -79,6 +89,14 @@ export const getPaymentMethod = (
   totalorder,
   kurir,
 ) => {
+  const customers_basket_id = [];
+  try {
+    JSON.parse(window.localStorage.getItem("selectedProduct")).products.forEach(
+      (el) => {
+        customers_basket_id.push(el.customers_basket_id);
+      },
+    );
+  } catch (error) {}
   return axios.post(HOST + "/api/payment/get_payment_method", {
     language_id: "1",
     vendors_id: [`${vendors_id}`],
@@ -86,5 +104,6 @@ export const getPaymentMethod = (
     productsjenis: [`${products_jenis}`],
     totalorder: `${totalorder}`,
     kurir: kurir,
+    customers_basket_id: customers_basket_id,
   });
 };
