@@ -1,4 +1,5 @@
 import { Box, Spinner } from "@chakra-ui/react";
+import { PDFDownloadLink, Document, Page } from "@react-pdf/renderer";
 import axios from "axios";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
@@ -6,12 +7,13 @@ import { useState } from "react";
 import { useEffect } from "react";
 
 import { apiGetOrderCustomer } from "../../api/GetOrder";
+import MyDocument from "../../components/PDFViewer";
 import { useAuthContext } from "../../contexts/authProvider";
 import { currencyFormat } from "../../utils/functions";
 
-const PDFViewer = dynamic(() => import("../../components/PDFViewer"), {
-  ssr: false,
-});
+// const PDFViewer = dynamic(() => import("../../components/PDFViewer"), {
+//   ssr: false,
+// });
 
 export default function PDF() {
   const { userData } = useAuthContext();
@@ -55,7 +57,7 @@ export default function PDF() {
   return (
     <Box h="100%">
       {data && detailprice.length > 0 ? (
-        <PDFViewer
+        <MyDocument
           nomorPesanan={data.orders_number}
           namaPembeli={data.dropship_name}
           telpPembeli={data.dropship_phone}

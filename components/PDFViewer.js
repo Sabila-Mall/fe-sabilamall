@@ -104,7 +104,10 @@ const MyDocument = ({
   detailPrice,
 }) => (
   <PDFViewer width="100%" height="100%">
-    <Document>
+    <Document
+      title={`Resi - ${nomorPesanan.slice(3)}`}
+      onRender={(blob) => onRenderDocument(blob, nomorPesanan)}
+    >
       <Page size="A4" style={styles.page}>
         <View style={styles.section}>
           <View style={styles.title}>
@@ -198,5 +201,24 @@ const biayaTambahan = (detail) => {
   });
   return total;
 };
+export const onRenderDocument = ({ blob }, nomorPesanan) => {
+  let fileName = `Resi - ${nomorPesanan.slice(3)}`;
+  var blobUrl = URL.createObjectURL(blob);
+  saveDocument(blobUrl, fileName);
+};
+
+export const saveDocument = (function () {
+  if (typeof window !== "undefined") {
+    var a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+    return function (blob, fileName) {
+      a.href = blob;
+      a.download = fileName;
+      a.click();
+      window.URL.revokeObjectURL(blob);
+    };
+  }
+})();
 
 export default MyDocument;
