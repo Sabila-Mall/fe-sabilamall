@@ -182,8 +182,7 @@ const ProductHeader = ({
           <Text>Pre Order Telah Berakhir</Text>
         </Flex>
       )}
-
-      {discount_price ? (
+      {discount_price && discount_price !== price ? (
         <Box>
           <Text
             as="del"

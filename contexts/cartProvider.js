@@ -251,7 +251,6 @@ export const CartProvider = ({ children }) => {
     editCartNotes({ customers_id, customers_basket_id, customers_basket_notes })
       .then((res) => {
         let message;
-
         if (typeof res?.message === "object") {
           message = res?.message.customers_basket_notes[0];
         } else if (typeof res?.message === "string") {

@@ -218,7 +218,7 @@ export const isNumber = (n) => {
 };
 
 export const parseNumber = (str) => {
-  return Number(str.slice(0, -3));
+  return typeof str == "number" ? str : Number(str.slice(0, -3));
 };
 
 export const getDeviceId = () => {
