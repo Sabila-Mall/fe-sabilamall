@@ -30,7 +30,7 @@ export const copyToClipboard = (text, onSuccess, onFail) => {
   }
   navigator.clipboard
     .writeText(text)
-    .then(onSuccess ? onSuccess : () => { })
+    .then(onSuccess ? onSuccess : () => {})
     .catch(() => console.error("Unable to copy", err));
 };
 
@@ -91,15 +91,15 @@ export const extractName = (name) => {
 };
 
 export const calculateTimeLeft = (endTime) => {
-  let difference = endTime - new Date().getMilliseconds();
+  let difference = endTime - Math.floor(new Date().getTime() / 1000);
   let timeLeft = {};
-
+  console.log(difference);
   if (difference > 0) {
     timeLeft = {
-      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-      minutes: Math.floor((difference / 1000 / 60) % 60),
-      seconds: Math.floor((difference / 1000) % 60),
+      days: Math.floor(difference / (60 * 24 * 60)),
+      hours: Math.floor((difference / (60 * 60)) % 24),
+      minutes: Math.floor((difference / 60) % 60),
+      seconds: Math.floor(difference % 60),
     };
   }
 
@@ -175,13 +175,15 @@ export const currencyFormat = (amount) => {
  * date: MM/DD/YYYY
  */
 export const dateFormat = (date) => {
-  return `${new Date(date).getFullYear()}-${new Date(date).getMonth() + 1 < 10
-    ? "0" + (new Date(date).getMonth() + 1).toString()
-    : new Date(date).getMonth() + 1
-    }-${new Date(date).getDate() < 10
+  return `${new Date(date).getFullYear()}-${
+    new Date(date).getMonth() + 1 < 10
+      ? "0" + (new Date(date).getMonth() + 1).toString()
+      : new Date(date).getMonth() + 1
+  }-${
+    new Date(date).getDate() < 10
       ? "0" + new Date(date).getDate().toString()
       : new Date(date).getDate()
-    }`;
+  }`;
 };
 
 export const titleCase = (str) => {
@@ -230,7 +232,7 @@ export const getUserId = () => {
 };
 
 export const getPriceAfterDiscount = (finalPrice, customerDiscount) => {
-  return (parseNumber(finalPrice) * (100 - customerDiscount) / 100);
+  return (parseNumber(finalPrice) * (100 - customerDiscount)) / 100;
 };
 
 export const logout = () => {

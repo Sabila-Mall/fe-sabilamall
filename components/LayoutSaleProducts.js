@@ -107,7 +107,6 @@ const LayoutSaleProducts = ({ data, loading, headingText, hasBackground }) => {
             ) : (
               <>
                 <CardProduct key={item.id} {...item} />
-                {console.log(item)}
               </>
             ),
           )}
