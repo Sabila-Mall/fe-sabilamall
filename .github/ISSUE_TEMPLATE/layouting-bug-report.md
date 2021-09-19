@@ -8,10 +8,16 @@ assignees: ''
 ---
 
 ## Description
-- [ ] <bug description and suggestion>
+<description>
+  
+## To Do  
+- [ ] <what should be fixed>
 
+## Step to reproduce
+- [ ] <click here and there>  
+  
 ## Screenshots
-![image](link_to_image)
-
+![image](link_to_image)  
+  
 ## Other resources
 - [Figma](link_to_figma)
