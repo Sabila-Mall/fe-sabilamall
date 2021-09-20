@@ -69,7 +69,7 @@ const CardProduct = ({
     function handleResize() {
       let width = responsive
         ? document.getElementsByClassName("card-product-responsive")[0]
-            .clientWidth
+          .clientWidth
         : document.getElementsByClassName("card-product")[0].clientWidth;
       setImageHeight(width);
     }

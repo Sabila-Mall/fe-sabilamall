@@ -4,9 +4,7 @@ import {
   VStack,
   Heading,
   Accordion,
-  AccordionIcon,
   AccordionItem,
-  AccordionPanel,
   AccordionButton,
   Flex,
   Image,
@@ -14,13 +12,16 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
+import { getCategory } from "../api/Homepage";
 
 import { menuCategory, menuSidebar } from "../constants/navbarConstant";
 import { useAuthContext } from "../contexts/authProvider";
+import { useHomePageContext } from "../contexts/homepageProvider";
 import styles from "../styles/Navbar.module.scss";
-import { getImageUrl } from "../utils/api";
+import { getImageUrl, isRequestSuccess } from "../utils/api";
 import { logout, setBadgeColor } from "../utils/functions";
 
 const UserInfo = ({ useBorder }) => {
@@ -41,9 +42,8 @@ const UserInfo = ({ useBorder }) => {
         borderRadius="full"
       />
       <Box ml=".5rem" fontSize="14px">
-        <Text fontWeight="700" maxW="15ch" isTruncated>{`${
-          userData?.first_name
-        } ${userData?.last_name ?? ""}`}</Text>
+        <Text fontWeight="700" maxW="15ch" isTruncated>{`${userData?.first_name
+          } ${userData?.last_name ?? ""}`}</Text>
         <Flex>
           <Text>{userData?.memberid}</Text>
           <Flex
@@ -91,6 +91,25 @@ const Sidebar = ({
 }) => {
   const { userData, loading } = useAuthContext();
   const router = useRouter();
+  const [category, setCategory] = useState(null)
+  useEffect(() => {
+    getCategory()
+      .then((res) => {
+        if (isRequestSuccess(res.data)) {
+          setCategory({
+            data: res.data.data ?? [],
+            loading: false,
+          });
+        } else {
+          throw "Gagal mendapatkan kategori";
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        errorToast(err);
+        setCategory({ data: [], loading: false });
+      });
+  }, []);
   return (
     <>
       <Box
@@ -227,36 +246,24 @@ const Sidebar = ({
         </Box>
         <VStack spacing={1} px="10px" pt="5px">
           {isLoggedIn && <UserInfo useBorder={false} />}
-          <Accordion defaultIndex={[0]} borderWidth="0" allowMultiple>
-            {menuCategory.menu.map((item) => {
+          <Accordion defaultIndex={[0]} borderWidth="0">
+            {category && category.data.map((item) => {
               return (
-                <AccordionItem key={item.id}>
+                <AccordionItem key={item.id} >
                   <AccordionButton
                     borderWidth="0"
                     borderColor="transparent"
                     _focus={{ outline: "none" }}
                   >
-                    <Box className={styles.boxCategoryMenu}>
+                    <Box className={styles.boxCategoryMenu} onClick={() => router.push(`/daftar-produk?id=${item.id}&nama=${item.name}`)}>
                       <Heading
                         className={styles.fontSizeSidebar}
                         lineHeight="30px"
                       >
-                        {item.text}
+                        {item.name}
                       </Heading>
-                      <AccordionIcon />
                     </Box>
                   </AccordionButton>
-                  <AccordionPanel pb={1} pl="30px">
-                    {item.subMenu.map((sub) => (
-                      <Heading
-                        className={styles.fontSizeSidebar}
-                        lineHeight="40px"
-                        key={sub.id}
-                      >
-                        {sub.text}
-                      </Heading>
-                    ))}
-                  </AccordionPanel>
                 </AccordionItem>
               );
             })}
