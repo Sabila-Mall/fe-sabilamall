@@ -93,7 +93,6 @@ export const extractName = (name) => {
 export const calculateTimeLeft = (endTime) => {
   let difference = endTime - Math.floor(new Date().getTime() / 1000);
   let timeLeft = {};
-  console.log(difference);
   if (difference > 0) {
     timeLeft = {
       days: Math.floor(difference / (60 * 24 * 60)),

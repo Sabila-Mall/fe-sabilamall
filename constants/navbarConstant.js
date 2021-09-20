@@ -34,10 +34,7 @@ export const menuCategory = {
     {
       text: "Buku & Alat Tulis",
       id: "mlk1871",
-      subMenu: [
-        { text: "Kaus Muslim Keren Banget", href: "#", id: "mdjayqbd" },
-        { text: "Kaus Kaki Muslimah", href: "#", id: "kadindjqb1" },
-      ],
+      subMenu: [{ text: "Buku Bacaan", href: "#", id: "mdjayqbd" }],
     },
     {
       text: "Fashion Bayi & Anak",
