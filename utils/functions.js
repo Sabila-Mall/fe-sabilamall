@@ -91,15 +91,14 @@ export const extractName = (name) => {
 };
 
 export const calculateTimeLeft = (endTime) => {
-  let difference = endTime - new Date().getMilliseconds();
+  let difference = endTime - Math.floor(new Date().getTime() / 1000);
   let timeLeft = {};
-
   if (difference > 0) {
     timeLeft = {
-      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-      minutes: Math.floor((difference / 1000 / 60) % 60),
-      seconds: Math.floor((difference / 1000) % 60),
+      days: Math.floor(difference / (60 * 24 * 60)),
+      hours: Math.floor((difference / (60 * 60)) % 24),
+      minutes: Math.floor((difference / 60) % 60),
+      seconds: Math.floor(difference % 60),
     };
   }
 
