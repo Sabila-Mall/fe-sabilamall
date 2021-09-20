@@ -10,7 +10,7 @@ import {
   Spacer,
   Divider,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { currencyFormat } from "../utils/functions";
 import OrderProduct from "./OrderProduct";
@@ -103,11 +103,15 @@ export default function OrderProductsTable({ products }) {
 export function OrderProductsTableMobile({ products }) {
   const [totalQuantity, setTotalQuantity] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  useEffect(() => {
+    for (let i = 0; i < products.length; i++) {
+      setTotalQuantity(totalQuantity + products[i].quantity);
+      setTotalPrice(totalPrice + products[i].discountPrice);
+    }
+  }, []);
   return (
     <Box>
       {products.map((product, index) => {
-        setTotalQuantity(totalQuantity + product.quantity);
-        setTotalPrice(totalPrice + product.discountPrice);
         return (
           <Box key={index}>
             <OrderProduct
@@ -165,7 +169,7 @@ export function OrderProductsTableMobile({ products }) {
                 fontSize="0.8rem"
                 className="secondaryFont"
               >
-                Subtotal: {product.totalQuantity}
+                Subtotal: {product.subTotal}
               </Text>
               <Spacer />
               <Text

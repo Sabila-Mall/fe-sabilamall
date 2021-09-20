@@ -110,8 +110,6 @@ const OrderInformation = ({ order }) => {
               (100 - temporaryProducts[i].customers_discount)) /
               100,
           ),
-          //   temporaryProducts[i].products_price
-          // ),
           quantity: temporaryProducts[i].products_quantity,
           subTotal: currencyFormat(
             (temporaryProducts[i].final_price *
