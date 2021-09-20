@@ -69,7 +69,7 @@ const CardProduct = ({
     function handleResize() {
       let width = responsive
         ? document.getElementsByClassName("card-product-responsive")[0]
-          .clientWidth
+            .clientWidth
         : document.getElementsByClassName("card-product")[0].clientWidth;
       setImageHeight(width);
     }
@@ -205,6 +205,7 @@ const CardProduct = ({
                       height="1.15em"
                       ml={isfreeshipping !== 0 ? "0.5rem" : "0.25rem"}
                       onClick={(e) => {
+                        e.preventDefault();
                         e.stopPropagation();
                         handleClickWishlist();
                       }}
