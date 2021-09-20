@@ -25,7 +25,6 @@ import NavbarProfile from "./NavbarProfile";
 
 const ProfileMobile = () => {
   const router = useRouter();
-
   const { userData } = useAuthContext();
   const { smLoading, smPay, smPoint } = useSmPayPointContext();
 
@@ -47,7 +46,7 @@ const ProfileMobile = () => {
     { text: "Riwayat Top Up", path: "/riwayat" },
     {
       text: "Upgrade Akun",
-      path: ["/profile/invoice-upgrade-akun", "/profile/profile-saya"],
+      path: ["/profile/invoice-upgrade-akun", "/profile/upgrade-account"],
     },
     { text: "Pusat Bantuan", path: "/" },
     { text: "Keluar", path: "/login" },
@@ -165,7 +164,8 @@ const ProfileMobile = () => {
               >
                 <StackDivider borderColor="gray.200" />
                 {profileMenu.map((menu) =>
-                  menu.text === "Upgrade Akun" ? (
+                  menu.text === "Upgrade Akun" &&
+                  userData?.user_level?.toLowerCase() !== "agent" ? (
                     <VStack
                       divider={<StackDivider borderColor="gray.200" />}
                       align="stretch"

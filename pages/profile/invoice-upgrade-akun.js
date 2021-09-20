@@ -27,32 +27,35 @@ const InvoiceUpgradeAkunMobile = () => {
   const router = useRouter();
 
   const [dataInvoice, setDataInvoice] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [loadingBtn, setLoadingBtn] = useState(false);
   const { register, getValues, trigger } = useForm();
   const { width } = useWindowSize();
 
   useEffect(() => {
     const getInvoiceData = () => {
-      getInvoiceUpgradeAkun(userId).then((res) => {
-        if (res && Array.isArray(res) && res.length > 0)
-          setDataInvoice([
-            ...res?.map(
-              ({
-                description,
-                invoiceid,
-                payment_status,
-                amount,
-                upgrades_date,
-              }) => ({
-                description,
-                invoiceid,
-                payment_status,
-                amount,
-                upgrades_date,
-              }),
-            ),
-          ]);
-      });
+      getInvoiceUpgradeAkun(userId)
+        .then((res) => {
+          if (res && Array.isArray(res) && res.length > 0)
+            setDataInvoice([
+              ...res?.map(
+                ({
+                  description,
+                  invoiceid,
+                  payment_status,
+                  amount,
+                  upgrades_date,
+                }) => ({
+                  description,
+                  invoiceid,
+                  payment_status,
+                  amount,
+                  upgrades_date,
+                }),
+              ),
+            ]);
+        })
+        .finally(() => setLoading(false));
     };
     userId && getInvoiceData();
   }, [userId]);
@@ -61,8 +64,12 @@ const InvoiceUpgradeAkunMobile = () => {
     if (width >= 768) router.push("/profile/upgrade-account");
   }, [width]);
 
-  if (!dataInvoice) {
+  if (loading) {
     return <Loading />;
+  }
+
+  if (!loading && !dataInvoice) {
+    router.push("/404");
   }
 
   const handleSubmit = async () => {
