@@ -1,4 +1,5 @@
 import { FaUser } from "react-icons/fa";
+import { useHomePageContext } from "../contexts/homepageProvider";
 
 import { useHomePageContext } from "../contexts/homepageProvider";
 
@@ -25,6 +26,8 @@ export const menuSidebar = {
 export const menuCategory = ({ category }) => {
   return {
     headerText: "Kategori - Brand",
-    menu: category,
-  };
+    menu: category
+  }
+
+
 };
