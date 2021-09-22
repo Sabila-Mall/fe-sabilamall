@@ -1,10 +1,11 @@
-import { Box, Center, Img, Spinner } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+import {Box, Center, Img, Spinner} from "@chakra-ui/react";
+import {useState} from "react";
+import {MdChevronLeft, MdChevronRight} from "react-icons/md";
 import Slider from "react-slick";
 
-import { IMAGE_HOST } from "../constants/api";
-import { useWindowSize } from "../hooks/useWindowSize";
+import {IMAGE_HOST} from "../constants/api";
+import {useWindowSize} from "../hooks/useWindowSize";
+import {useRouter} from "next/router";
 
 const settings = {
   centerMode: true,
@@ -17,14 +18,16 @@ const settings = {
   arrows: true,
 };
 
-const Banner = ({ data, loading }) => {
+const Banner = ({data, loading}) => {
   const [display, setDisplay] = useState("none");
-  const { width } = useWindowSize();
+  const {width} = useWindowSize();
   let ref = null;
+
+  const router = useRouter();
 
   return loading ? (
     <Center>
-      <Spinner size="xl" />
+      <Spinner size="xl"/>
     </Center>
   ) : (
     <Box
@@ -51,7 +54,7 @@ const Banner = ({ data, loading }) => {
           bg="white"
           boxShadow="0px 2px 6px rgba(0, 0, 0, 0.25);"
         >
-          <MdChevronLeft size="2em" />
+          <MdChevronLeft size="2em"/>
         </Box>
       </Box>
       <Box
@@ -66,35 +69,38 @@ const Banner = ({ data, loading }) => {
           }}
           {...settings}
         >
+
           {width <= 576
             ? data.map((each) => (
+              <Box
+                key={data?.id}
+                display="flex !important"
+                justifyContent="center"
+                onClick={() => router.push(each.link)}
+              >
                 <Box
-                  key={data?.id}
-                  display="flex !important"
-                  justifyContent="center"
-                >
-                  <Box
-                    boxSizing="border-box"
-                    width={0.9 * window.innerWidth + "px"}
-                    height={(0.9 / 3) * window.innerWidth + "px"}
-                    className="imageRound"
-                    ml={{ base: "0.25rem", xl: "0.5rem" }}
-                    mr={{ base: "0.25rem", xl: "0.5rem" }}
-                    backgroundImage={`url(${IMAGE_HOST + each.image_path})`}
-                    backgroundPosition="center"
-                    backgroundSize="cover"
-                  ></Box>
-                </Box>
-              ))
-            : data.map((each) => (
-                <Img
+                  boxSizing="border-box"
+                  width={0.9 * window.innerWidth + "px"}
+                  height={(0.9 / 3) * window.innerWidth + "px"}
                   className="imageRound"
-                  src={IMAGE_HOST + each.image_path}
-                  pl={{ base: "0.2rem", xl: "0.5rem" }}
-                  pr={{ base: "0.2rem", xl: "0.5rem" }}
-                  key={each.id}
+                  ml={{base: "0.25rem", xl: "0.5rem"}}
+                  mr={{base: "0.25rem", xl: "0.5rem"}}
+                  backgroundImage={`url(${IMAGE_HOST + each.image_path})`}
+                  backgroundPosition="center"
+                  backgroundSize="cover"
                 />
-              ))}
+              </Box>
+            ))
+            : data.map((each) => (
+              <Img
+                onClick={() => router.push(each.url)}
+                className="imageRound"
+                src={IMAGE_HOST + each.image_path}
+                pl={{base: "0.2rem", xl: "0.5rem"}}
+                pr={{base: "0.2rem", xl: "0.5rem"}}
+                key={each.id}
+              />
+            ))}
         </Slider>
       </Box>
       <Box
@@ -116,7 +122,7 @@ const Banner = ({ data, loading }) => {
           bg="white"
           boxShadow="0px 2px 6px rgba(0, 0, 0, 0.25);"
         >
-          <MdChevronRight size="2em" />
+          <MdChevronRight size="2em"/>
         </Box>
       </Box>
     </Box>
