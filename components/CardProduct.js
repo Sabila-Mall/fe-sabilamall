@@ -205,6 +205,7 @@ const CardProduct = ({
                       height="1.15em"
                       ml={isfreeshipping !== 0 ? "0.5rem" : "0.25rem"}
                       onClick={(e) => {
+                        e.preventDefault();
                         e.stopPropagation();
                         handleClickWishlist();
                       }}

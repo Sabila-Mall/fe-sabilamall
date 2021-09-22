@@ -1,11 +1,12 @@
-import { Box, Text } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import {Box, Text} from "@chakra-ui/react";
+import {useRouter} from "next/router";
+import {useEffect, useState} from "react";
 
-import { Layout } from "../../components/Layout";
-import { getProductsByCategory } from "../../api/DaftarProduk";
+import {Layout} from "../../components/Layout";
+import {getProductsByCategory} from "../../api/DaftarProduk";
 import LayoutProductList from "../../components/LayoutProductList";
-import { useToast } from "@chakra-ui/toast";
+import {useToast} from "@chakra-ui/toast";
+import {useAuthContext} from "../../contexts/authProvider";
 
 const DaftarProduk = () => {
   const router = useRouter();
@@ -18,6 +19,9 @@ const DaftarProduk = () => {
   const categoryId = router.query.id;
   const categoryName = router.query.nama;
 
+  const {userData} = useAuthContext();
+  const customerId = userData?.id;
+
   const toast = useToast();
   const errorToast = (errMessage) => {
     toast({
@@ -29,7 +33,7 @@ const DaftarProduk = () => {
   };
 
   function handleLoadMore() {
-    setProducts({ ...products, loading: true });
+    setProducts({...products, loading: true});
 
     const newPage = products.currentPage + 1;
     getProductsByCategory(categoryId, newPage)
@@ -44,13 +48,13 @@ const DaftarProduk = () => {
       .catch(err => {
         console.error(err);
         errorToast("Gagal mengambil produk");
-        setProducts({ ...products, loading: false, data: [] });
+        setProducts({...products, loading: false, data: []});
       });
   }
 
   useEffect(() => {
     if (categoryId) {
-      getProductsByCategory(categoryId, 1)
+      getProductsByCategory(categoryId, 1, customerId)
         .then((res) => {
           setProducts({
             data: res.data.data,
@@ -61,7 +65,7 @@ const DaftarProduk = () => {
         })
         .catch(err => {
           console.error(err);
-          setProducts({ ...products, loading: false });
+          setProducts({...products, loading: false});
         });
     }
   }, [categoryId]);
