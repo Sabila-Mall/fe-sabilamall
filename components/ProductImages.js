@@ -2,11 +2,11 @@ import { Box, Image, Flex, HStack } from "@chakra-ui/react";
 import Head from "next/head";
 import { useState } from "react";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+import ReactImageZoom from "react-image-zoom";
 import Slider from "react-slick";
 
-import { IMAGE_HOST } from "../constants/api";
 import styles from "../styles/ProductDetails.module.scss";
-import ReactImageZoom from 'react-image-zoom';
+import { getImageLink } from "../utils/functions";
 
 export const ProductImages = ({
   slider,
@@ -63,8 +63,8 @@ export const ProductImages = ({
           <Box cursor="crosshair" w="22rem">
             <ReactImageZoom
               width={400}
-              zoomPosition = "original"
-              img={IMAGE_HOST + image}
+              zoomPosition="original"
+              img={getImageLink}
             />
           </Box>
         </Flex>
@@ -121,7 +121,7 @@ export const ProductImages = ({
                       <Box
                         w="3rem"
                         h="3rem"
-                        backgroundImage={`url("${IMAGE_HOST + e.image}")`}
+                        backgroundImage={`url("${getImageLink(e.image)}")`}
                         backgroundRepeat="no-repeat"
                         backgroundSize="cover"
                         border={imageActive === e.id ? "3px solid #f6ad55" : ""}

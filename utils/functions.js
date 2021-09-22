@@ -1,5 +1,7 @@
 import nookies from "nookies";
 
+import { IMAGE_HOST } from "../constants/api";
+
 const fallbackCopyTextToClipboard = (text) => {
   var textArea = document.createElement("textarea");
   textArea.value = text;
@@ -242,4 +244,8 @@ export const logout = () => {
   document.cookie = "token" + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;";
 
   window.location.href = "/";
+};
+
+export const getImageLink = (link) => {
+  return IMAGE_HOST + link.replace("images/media/", "");
 };

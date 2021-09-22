@@ -27,10 +27,9 @@ import OrderProductsTable, {
   OrderProductsTableMobile,
 } from "../../components/OrderProductsTable";
 import ScrollButton from "../../components/ScrollButton";
-import { IMAGE_HOST } from "../../constants/api";
 import { useAuthContext } from "../../contexts/authProvider";
 import { useWindowSize } from "../../hooks/useWindowSize";
-import { currencyFormat } from "../../utils/functions";
+import { currencyFormat, getImageLink } from "../../utils/functions";
 
 const TRANSFER_BANK = "Transfer Bank";
 
@@ -99,7 +98,7 @@ const OrderInformation = ({ order }) => {
           details: tempDetail,
           weight: `${temporaryProducts[i].products_weight} gr`,
           notes: temporaryProducts[i].orders_products_notes,
-          image: IMAGE_HOST + temporaryProducts[i].image,
+          image: getImageLink(temporaryProducts[i].image),
           discount:
             temporaryProducts[i].customers_discount &&
             temporaryProducts[i].customers_discount !== 0 &&

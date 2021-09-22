@@ -1,5 +1,6 @@
 import { Text, Box, Img } from "@chakra-ui/react";
-import { IMAGE_HOST } from "../constants/api";
+
+import { getImageLink } from "../utils/functions";
 
 const CardCategory = ({ isLoggedIn, icon, name, onClick }) => {
   return (
@@ -16,7 +17,7 @@ const CardCategory = ({ isLoggedIn, icon, name, onClick }) => {
       onClick={onClick}
     >
       <Img
-        src={IMAGE_HOST + icon}
+        src={getImageLink(icon)}
         color="red.600"
         boxSize="2rem"
         marginTop={isLoggedIn ? "0.8rem" : { md: "1rem", lg: "2rem" }}

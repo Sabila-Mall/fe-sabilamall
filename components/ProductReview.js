@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { IoStar } from "react-icons/io5";
 
-import { IMAGE_HOST } from "../constants/api";
+import { getImageLink } from "../utils/functions";
 
 const ProductReview = ({ reviewed_customers }) => {
   const totalReview = reviewed_customers ? reviewed_customers.length : 0;
@@ -71,7 +71,7 @@ const ProductReview = ({ reviewed_customers }) => {
                 pl={"25px"}
                 w="full"
               >
-                <Avatar src={IMAGE_HOST + image} />
+                <Avatar src={getImageLink(image)} />
 
                 <Flex flexDirection={"column"} ml={"16px"}>
                   <Flex
