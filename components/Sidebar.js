@@ -15,14 +15,14 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
-import { getCategory } from "../api/Homepage";
 
+import { getCategory } from "../api/Homepage";
 import { menuCategory, menuSidebar } from "../constants/navbarConstant";
 import { useAuthContext } from "../contexts/authProvider";
 import { useHomePageContext } from "../contexts/homepageProvider";
 import styles from "../styles/Navbar.module.scss";
-import { getImageUrl, isRequestSuccess } from "../utils/api";
-import { logout, setBadgeColor } from "../utils/functions";
+import { isRequestSuccess } from "../utils/api";
+import { getImageLink, logout, setBadgeColor } from "../utils/functions";
 
 const UserInfo = ({ useBorder }) => {
   const { userData } = useAuthContext();
@@ -38,12 +38,13 @@ const UserInfo = ({ useBorder }) => {
       <Image
         w="3.4rem"
         h="3.4rem"
-        src={getImageUrl(userData?.avatar)}
+        src={getImageLink(userData?.avatar)}
         borderRadius="full"
       />
       <Box ml=".5rem" fontSize="14px">
-        <Text fontWeight="700" maxW="15ch" isTruncated>{`${userData?.first_name
-          } ${userData?.last_name ?? ""}`}</Text>
+        <Text fontWeight="700" maxW="15ch" isTruncated>{`${
+          userData?.first_name
+        } ${userData?.last_name ?? ""}`}</Text>
         <Flex>
           <Text>{userData?.memberid}</Text>
           <Flex
@@ -91,7 +92,7 @@ const Sidebar = ({
 }) => {
   const { userData, loading } = useAuthContext();
   const router = useRouter();
-  const [category, setCategory] = useState(null)
+  const [category, setCategory] = useState(null);
   useEffect(() => {
     getCategory()
       .then((res) => {
@@ -247,26 +248,34 @@ const Sidebar = ({
         <VStack spacing={1} px="10px" pt="5px">
           {isLoggedIn && <UserInfo useBorder={false} />}
           <Accordion defaultIndex={[0]} borderWidth="0">
-            {category && category.data.map((item) => {
-              return (
-                <AccordionItem key={item.id} >
-                  <AccordionButton
-                    borderWidth="0"
-                    borderColor="transparent"
-                    _focus={{ outline: "none" }}
-                  >
-                    <Box className={styles.boxCategoryMenu} onClick={() => router.push(`/daftar-produk?id=${item.id}&nama=${item.name}`)}>
-                      <Heading
-                        className={styles.fontSizeSidebar}
-                        lineHeight="30px"
+            {category &&
+              category.data.map((item) => {
+                return (
+                  <AccordionItem key={item.id}>
+                    <AccordionButton
+                      borderWidth="0"
+                      borderColor="transparent"
+                      _focus={{ outline: "none" }}
+                    >
+                      <Box
+                        className={styles.boxCategoryMenu}
+                        onClick={() =>
+                          router.push(
+                            `/daftar-produk?id=${item.id}&nama=${item.name}`,
+                          )
+                        }
                       >
-                        {item.name}
-                      </Heading>
-                    </Box>
-                  </AccordionButton>
-                </AccordionItem>
-              );
-            })}
+                        <Heading
+                          className={styles.fontSizeSidebar}
+                          lineHeight="30px"
+                        >
+                          {item.name}
+                        </Heading>
+                      </Box>
+                    </AccordionButton>
+                  </AccordionItem>
+                );
+              })}
           </Accordion>
         </VStack>
       </Box>
