@@ -1,5 +1,6 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import axios from "axios";
+import Head from "next/head";
 
 import { AuthProvider } from "../contexts/authProvider";
 import { GlobalProvider } from "../contexts/globalProvider";
@@ -10,6 +11,9 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <GlobalProvider>
+      <Head>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <Component {...pageProps} />
     </GlobalProvider>
   );
