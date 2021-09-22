@@ -247,5 +247,5 @@ export const logout = () => {
 };
 
 export const getImageLink = (link) => {
-  return IMAGE_HOST + link.replace("images/media/", "");
+  return IMAGE_HOST + link?.replace("images/media/", "");
 };

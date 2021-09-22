@@ -64,7 +64,7 @@ export const ProductImages = ({
             <ReactImageZoom
               width={400}
               zoomPosition="original"
-              img={getImageLink}
+              img={getImageLink(products_image)}
             />
           </Box>
         </Flex>
