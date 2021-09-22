@@ -242,7 +242,7 @@ export const UpgradeAccount = ({ isMobile, currentAccount }) => {
         mt="30px"
         color={options.length === 0 ? "orange.500" : "black"}
       >
-        {options.length === 0
+        {userData?.user_level?.toLowerCase() === "agent"
           ? "Akunmu sudah level tertinggi (Agen)!"
           : "Pilih level member yang ingin kamu ajukan"}
       </Text>
