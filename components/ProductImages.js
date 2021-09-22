@@ -121,7 +121,6 @@ export const ProductImages = ({
                       <Box
                         w="3rem"
                         h="3rem"
-                        backgroundImage={`url("${getImageLink(e.image)}")`}
                         backgroundRepeat="no-repeat"
                         backgroundSize="cover"
                         border={imageActive === e.id ? "3px solid #f6ad55" : ""}
@@ -131,7 +130,9 @@ export const ProductImages = ({
                           setImage(e.image);
                           setImageActive(e.id);
                         }}
-                      />
+                      >
+                        <Image src={getImageLink(e.image)} objectFit="cover" />
+                      </Box>
                     </Box>
                   );
                 })}

@@ -1,5 +1,5 @@
 import { Link } from "@chakra-ui/layout";
-import { Box, Text, Icon, Flex } from "@chakra-ui/react";
+import { Box, Text, Icon, Flex, Image } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { FaShippingFast } from "react-icons/fa";
@@ -109,11 +109,12 @@ const CardProduct = ({
             display="flex"
             justifyContent="center"
             w="100%"
-            bgImage={`url(${getImageLink(image_path)})`}
             bgPosition="center"
             bgRepeat="no-repeat"
             bgSize="cover"
-          />
+          >
+            <Image src={getImageLink(image_path)} objectFit="cover" />
+          </Box>
           <Box padding="2" w="100%">
             {flash_end && timeLeft && (
               <Box
