@@ -13,6 +13,7 @@ import {
   toast,
   useControllableState,
   VStack,
+  Link,
 } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
@@ -522,27 +523,28 @@ const ProductCheckout = ({
           </Text>
         </HStack>
 
-        <HStack
-          backgroundColor={"orange.400"}
-          borderRadius={"4px"}
-          padding={"7px 12px"}
-          cursor="pointer"
-          onClick={() =>
-            router.push(
-              `https://office.sabilamall.com/warotator.php?pos=cso&produk=${productwa}`,
-            )
-          }
+        <Link
+          href={`https://office.sabilamall.com/warotator.php?pos=cso&produk=${productwa}`}
+          _hover={{ decoration: "none" }}
+          isExternal
         >
-          <Icon color={"White"} as={FaWhatsapp} />
-          <Text
-            textColor={"white"}
-            fontSize={"14px"}
-            fontWeight={"bold"}
-            className={"primaryFont"}
+          <HStack
+            backgroundColor={"orange.400"}
+            borderRadius={"4px"}
+            padding={"7px 12px"}
+            cursor="pointer"
           >
-            Chat Admin
-          </Text>
-        </HStack>
+            <Icon color={"White"} as={FaWhatsapp} />
+            <Text
+              textColor={"white"}
+              fontSize={"14px"}
+              fontWeight={"bold"}
+              className={"primaryFont"}
+            >
+              Chat Admin
+            </Text>
+          </HStack>
+        </Link>
       </Flex>
     </VStack>
   );

@@ -8,7 +8,6 @@ import {
 } from "@chakra-ui/react";
 
 import RelatedProductCard from "../components/RelatedProductCard";
-import { IMAGE_HOST } from "../constants/api";
 import CardProduct from "./CardProduct";
 
 const RelatedProductContainer = ({ related_products, customers_id }) => {

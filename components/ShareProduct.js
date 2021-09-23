@@ -4,13 +4,12 @@ import { useRouter } from "next/router";
 import { IoLogoFacebook, IoMdLink } from "react-icons/io";
 import { IoLogoTwitter, IoLogoWhatsapp } from "react-icons/io5";
 
-import { IMAGE_HOST } from "../constants/api";
-import { copyToClipboard } from "../utils/functions";
+import { copyToClipboard, getImageLink } from "../utils/functions";
 
 export const ShareProduct = () => {
   const toast = useToast();
   const router = useRouter();
-  const link = IMAGE_HOST + router.asPath;
+  const link = getImageLink(router.asPath);
   const d = [
     {
       name: "facebook",

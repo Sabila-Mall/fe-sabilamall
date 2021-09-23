@@ -1,4 +1,5 @@
 import { FaUser } from "react-icons/fa";
+
 import { useHomePageContext } from "../contexts/homepageProvider";
 
 export const menuSidebar = {
@@ -6,7 +7,7 @@ export const menuSidebar = {
   menu: [
     { text: "Kategori - Brand", id: "kb", href: "#" },
     { text: "Mengenal SabilaMall", id: "ms", href: "/about-us" },
-    { text: "Gabung Reseller Baju Murah", id: "grbm", href: "#" },
+    { text: "Gabung Reseller Baju Murah", id: "grbm", href: "/join-reseller" },
     { text: "Kebijakan Privasi", id: "kp", href: "/privacy-policy" },
     { text: "Syarat & Ketentuan", id: "sk", href: "/terms-and-conditions" },
     { text: "Hubungi Kami", id: "hk", href: "/contact-us" },
@@ -24,8 +25,6 @@ export const menuSidebar = {
 export const menuCategory = ({ category }) => {
   return {
     headerText: "Kategori - Brand",
-    menu: category
-  }
-
-
+    menu: category,
+  };
 };
