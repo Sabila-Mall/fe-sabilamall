@@ -4,7 +4,7 @@ import { IoHeartOutline, IoHeart } from "react-icons/io5";
 
 import { addWishlist, deleteWishlist } from "../api/wishlist";
 import { useWishlistContext } from "../contexts/wishlistProvider";
-import { getImageUrl } from "../utils/api";
+import { getImageLink } from "../utils/functions";
 
 const numberWithDot = (x) => {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -48,17 +48,21 @@ const CardWishlist = ({
     >
       <Box
         h="calc(100% - 2rem)"
-        w="45%"
+        w="50%"
         mx="1rem"
         my="1rem"
         d="flex"
-        alignItems="center"
         justifyContent="center"
-        backgroundImage={`url(${getImageUrl(image_path)})`}
         backgroundSize="contain"
         backgroundRepeat="no-repeat"
         backgroundPosition="center"
-      ></Box>
+      >
+        <Image
+          borderRadius="0.25rem"
+          src={getImageLink(image_path)}
+          objectFit="cover"
+        />
+      </Box>
       <Box
         h="100%"
         w="55%"

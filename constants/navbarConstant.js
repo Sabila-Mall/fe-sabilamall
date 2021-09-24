@@ -7,7 +7,7 @@ export const menuSidebar = {
   menu: [
     { text: "Kategori - Brand", id: "kb", href: "#" },
     { text: "Mengenal SabilaMall", id: "ms", href: "/about-us" },
-    { text: "Gabung Reseller Baju Murah", id: "grbm", href: "#" },
+    { text: "Gabung Reseller Baju Murah", id: "grbm", href: "/join-reseller" },
     { text: "Kebijakan Privasi", id: "kp", href: "/privacy-policy" },
     { text: "Syarat & Ketentuan", id: "sk", href: "/terms-and-conditions" },
     { text: "Hubungi Kami", id: "hk", href: "/contact-us" },

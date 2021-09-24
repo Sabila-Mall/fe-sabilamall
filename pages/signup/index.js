@@ -50,6 +50,8 @@ const SignUp = () => {
   const [namaBelakang, setNamaBelakang] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
+  const [konfirmasiPassword, setKonfirmasiPassword] = useState("");
+  const [showKonfirmasiPassword, setShowKonfirmasiPassword] = useState("");
   const [province, setProvince] = useState("");
   const [city, setCity] = useState("");
   const [alamat, setAlamat] = useState("");
@@ -304,6 +306,53 @@ const SignUp = () => {
                   )}
                 </Box>
               )}
+              <FormControl id="konfirmasipassword">
+                <InputGroup>
+                  <InputLeftElement
+                    pointerEvents="none"
+                    h="100%"
+                    children={
+                      <Icon
+                        as={BsFillLockFill}
+                        color="gray.500"
+                        boxSize="1.2em"
+                      />
+                    }
+                  />
+                  <Input
+                    pr=""
+                    type={showKonfirmasiPassword ? "text" : "password"}
+                    placeholder="Konfirmasi Password"
+                    size="md"
+                    fontSize="sm"
+                    onChange={(e) => setKonfirmasiPassword(e.target.value)}
+                  />
+                  <InputRightElement
+                    onClick={() =>
+                      setShowKonfirmasiPassword(!showKonfirmasiPassword)
+                    }
+                    h="100%"
+                    children={
+                      <Icon
+                        as={showKonfirmasiPassword ? BiShow : BiHide}
+                        color="gray.500"
+                        boxSize="1.2em"
+                        _hover={{ cursor: "pointer" }}
+                      />
+                    }
+                  />
+                </InputGroup>
+              </FormControl>
+              {Boolean(!(konfirmasiPassword === password)) && (
+                <Box
+                  mt="-4rem"
+                  fontSize="0.85rem"
+                  color="red.500"
+                  fontWeight="600"
+                >
+                  <Text>*Password tidak sama</Text>
+                </Box>
+              )}
               <Box
                 borderRadius="md"
                 borderWidth={1}
@@ -468,6 +517,8 @@ const SignUp = () => {
                   namaBelakang !== "" &&
                   emailAddress !== "" &&
                   password !== "" &&
+                  konfirmasiPassword !== "" &&
+                  konfirmasiPassword === password &&
                   province !== "" &&
                   city !== "" &&
                   alamat !== "" &&

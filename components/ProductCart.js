@@ -11,9 +11,9 @@ import {
 import { useState, createRef, useRef, useEffect } from "react";
 import { IoCreateOutline } from "react-icons/io5";
 
-import { IMAGE_HOST } from "../constants/api";
 import { useAuthContext } from "../contexts/authProvider";
 import { useCartContext } from "../contexts/cartProvider";
+import { getImageLink } from "../utils/functions";
 import { CartPrice } from "./CartPrice";
 
 export const ProductCart = ({ isDiscount, product }) => {
@@ -30,7 +30,7 @@ export const ProductCart = ({ isDiscount, product }) => {
   const productPath = product?.products_image_path;
   const productPrice = product?.final_price;
   const customerBasket = product?.customers_basket_id;
-  const productID = product?.products_id
+  const productID = product?.products_id;
 
   const focusOut = useRef(null);
 
@@ -78,7 +78,12 @@ export const ProductCart = ({ isDiscount, product }) => {
         as="label"
         _hover={{ cursor: "pointer" }}
       >
-        <Checkbox alignSelf="center" mr="20px" size="lg" ref={inputRef}></Checkbox>
+        <Checkbox
+          alignSelf="center"
+          mr="20px"
+          size="lg"
+          ref={inputRef}
+        ></Checkbox>
         <Flex
           flexDirection="column"
           justifyContent="center"
@@ -94,7 +99,7 @@ export const ProductCart = ({ isDiscount, product }) => {
               _hover={{ textStyle: "none" }}
               href={`product-detail/${productID}`}
             >
-              <Image h="100%" quality={100} src={IMAGE_HOST + productPath} />
+              <Image h="100%" quality={100} src={getImageLink(productPath)} />
             </Link>
           </Box>
         </Flex>
@@ -135,7 +140,7 @@ export const ProductCart = ({ isDiscount, product }) => {
         color={"gray.400"}
         fontSize={"0.75rem"}
         defaultValue={product?.customers_basket_notes || "tambahkan Catatan"}
-      // isPreviewFocusable={false}
+        // isPreviewFocusable={false}
       >
         <HStack spacing={"0.25rem"}>
           <EditableControls />

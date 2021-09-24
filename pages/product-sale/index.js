@@ -15,6 +15,7 @@ import {
 } from "../../contexts/homepageProvider";
 import { isRequestSuccess } from "../../utils/api";
 import { titleCase } from "../../utils/functions";
+import {useAuthContext} from "../../contexts/authProvider";
 
 const SaleProductsDisplay = () => {
   const router = useRouter();
@@ -26,6 +27,9 @@ const SaleProductsDisplay = () => {
     lastPage: Number.MAX_SAFE_INTEGER,
   });
   const type = router.query.type;
+
+  const {userData} = useAuthContext();
+  const userId = userData?.id;
 
   const toast = useToast();
   const errorToast = (errMessage) => {
@@ -43,9 +47,9 @@ const SaleProductsDisplay = () => {
     const newPage = products.currentPage + 1;
     let response = null;
     if (type === "flash-sale") {
-      response = getFlashSaleProducts(newPage);
+      response = getFlashSaleProducts(newPage, userId);
     } else if (type === "discount") {
-      response = getDiscountProducts(newPage);
+      response = getDiscountProducts(newPage, userId);
     }
 
     if (response) {

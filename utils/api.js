@@ -8,5 +8,3 @@ export const isRequestSuccess = (response) => {
 
   return false;
 };
-
-export const getImageUrl = (url) => IMAGE_HOST + url;

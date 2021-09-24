@@ -22,8 +22,8 @@ import { ButtonStatusUser } from "./ButtonProfile";
 export const SMCard = ({ w }) => {
   const { smPay, smPoint } = useSmPayPointContext();
   const sm = [
-    { text: "SM Pay", value: smPay },
-    { text: "SM Point", value: smPoint },
+    { text: "SM Pay", value: smPay ?? 0 },
+    { text: "SM Point", value: smPoint ?? 0 },
   ];
   return (
     <Flex mt="20px" mx="auto" w={w} justifyContent="center" alignItems="center">

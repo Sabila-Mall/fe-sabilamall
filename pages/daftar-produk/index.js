@@ -36,7 +36,7 @@ const DaftarProduk = () => {
     setProducts({...products, loading: true});
 
     const newPage = products.currentPage + 1;
-    getProductsByCategory(categoryId, newPage)
+    getProductsByCategory(categoryId, newPage, customerId)
       .then((res) => {
         setProducts({
           data: products.data.concat(res.data.data),

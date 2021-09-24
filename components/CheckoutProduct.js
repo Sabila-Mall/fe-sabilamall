@@ -15,11 +15,10 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { IoCreateOutline } from "react-icons/io5";
 
-import { IMAGE_HOST } from "../constants/api";
 import { useAuthContext } from "../contexts/authProvider";
 import { useCartContext } from "../contexts/cartProvider";
 import { useWindowSize } from "../hooks/useWindowSize";
-import { currencyFormat, formatNumber } from "../utils/functions";
+import { currencyFormat, formatNumber, getImageLink } from "../utils/functions";
 
 const CheckoutProduct = ({ product }) => {
   const { width } = useWindowSize();
@@ -99,7 +98,7 @@ const CheckoutProduct = ({ product }) => {
       <Box gridArea={"barang"}>
         <HStack spacing={"1rem"} align={"start"}>
           <Image
-            src={IMAGE_HOST + gambarURL}
+            src={getImageLink(gambarURL)}
             alt="Gambar produk"
             borderRadius={"0.625rem"}
             boxSize={"3rem"}

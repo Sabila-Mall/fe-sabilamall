@@ -1,10 +1,11 @@
 import { Box, Center, Img, Spinner } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useState } from "react";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import Slider from "react-slick";
 
-import { IMAGE_HOST } from "../constants/api";
 import { useWindowSize } from "../hooks/useWindowSize";
+import { getImageLink } from "../utils/functions";
 
 const settings = {
   centerMode: true,
@@ -21,6 +22,8 @@ const Banner = ({ data, loading }) => {
   const [display, setDisplay] = useState("none");
   const { width } = useWindowSize();
   let ref = null;
+
+  const router = useRouter();
 
   return loading ? (
     <Center>
@@ -72,6 +75,7 @@ const Banner = ({ data, loading }) => {
                   key={data?.id}
                   display="flex !important"
                   justifyContent="center"
+                  onClick={() => router.push(each.link)}
                 >
                   <Box
                     boxSizing="border-box"
@@ -80,16 +84,17 @@ const Banner = ({ data, loading }) => {
                     className="imageRound"
                     ml={{ base: "0.25rem", xl: "0.5rem" }}
                     mr={{ base: "0.25rem", xl: "0.5rem" }}
-                    backgroundImage={`url(${IMAGE_HOST + each.image_path})`}
+                    backgroundImage={`url(${getImageLink(each.image_path)})`}
                     backgroundPosition="center"
                     backgroundSize="cover"
-                  ></Box>
+                  />
                 </Box>
               ))
             : data.map((each) => (
                 <Img
+                  onClick={() => router.push(each.url)}
                   className="imageRound"
-                  src={IMAGE_HOST + each.image_path}
+                  src={getImageLink(each.image_path)}
                   pl={{ base: "0.2rem", xl: "0.5rem" }}
                   pr={{ base: "0.2rem", xl: "0.5rem" }}
                   key={each.id}
