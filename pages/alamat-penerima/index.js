@@ -140,7 +140,6 @@ const AlamatPenerima = () => {
   const [kodePosPenerima, setKodePosPenerima] = useState("");
   const [ponselPenerima, setPonselPenerima] = useState("");
   const [namaPengirimInput, setNamaPengirimInput] = useState("");
-  const [kelurahan, setKelurahan] = useState("");
 
   const addAddressPengirim = async () => {
     try {
