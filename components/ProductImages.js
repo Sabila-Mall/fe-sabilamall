@@ -13,14 +13,13 @@ export const ProductImages = ({
   products_image,
   images: images_list,
 }) => {
-  // Set which Image clicked
-  // To be implemented when APIs ready
   const [imageNum, setImageNum] = useState(0);
   const [image, setImage] = useState(products_image);
   const images = [
     { id: "podafae", image: products_image, sort_order: images_list?.lenght },
     ...images_list,
   ];
+  console.log(image);
 
   let ref = null;
 
@@ -64,7 +63,7 @@ export const ProductImages = ({
             <ReactImageZoom
               width={400}
               zoomPosition="original"
-              img={getImageLink(products_image)}
+              img={getImageLink(image)}
             />
           </Box>
         </Flex>
