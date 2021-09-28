@@ -265,9 +265,9 @@ const AlamatPenerima = () => {
         Number(provinsiPenerima?.split(" ")?.[0]),
       )
         .then((res) => {
-          const postalCodeList = res.data?.data?.map((d) => d?.postal_code);
+          const postalCodeList = res.data?.data;
 
-          setKodePos([...new Set(postalCodeList)]);
+          setKodePos(postalCodeList);
         })
         .catch((err) => console.error(err));
     };
@@ -978,8 +978,8 @@ const AlamatPenerima = () => {
                             {kodePos &&
                               kodePos.map((data, index) => {
                                 return (
-                                  <option key={data || index} value={data}>
-                                    {data}
+                                  <option key={index} value={data.postal_code}>
+                                    {data.subdistrict_name} ({data.postal_code})
                                   </option>
                                 );
                               })}
