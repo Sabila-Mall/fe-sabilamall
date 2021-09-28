@@ -6,6 +6,7 @@ import {
   Accordion,
   AccordionItem,
   AccordionButton,
+  AccordionPanel,
   Flex,
   Image,
   Link,
@@ -247,9 +248,15 @@ const Sidebar = ({
         </Box>
         <VStack spacing={1} px="10px" pt="5px">
           {isLoggedIn && <UserInfo useBorder={false} />}
-          <Accordion defaultIndex={[0]} borderWidth="0">
+          <Accordion
+            defaultIndex={[0]}
+            borderWidth="0"
+            allowToggle
+            allowMultiple
+          >
             {category &&
               category.data.map((item) => {
+                const subCategories = item.sub_categories[0];
                 return (
                   <AccordionItem key={item.id}>
                     <AccordionButton
@@ -273,6 +280,20 @@ const Sidebar = ({
                         </Heading>
                       </Box>
                     </AccordionButton>
+                    {subCategories && (
+                      <AccordionPanel
+                        fontSize="0.75em"
+                        lineHeight="150%"
+                        cursor="pointer"
+                        onClick={() =>
+                          router.push(
+                            `/daftar-produk?id=${subCategories.id}&nama=${subCategories.name}`,
+                          )
+                        }
+                      >
+                        {subCategories.name}
+                      </AccordionPanel>
+                    )}
                   </AccordionItem>
                 );
               })}
