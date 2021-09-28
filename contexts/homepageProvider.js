@@ -1,14 +1,14 @@
-import {useToast} from "@chakra-ui/toast";
-import {createContext, useContext, useEffect, useState} from "react";
+import { useToast } from "@chakra-ui/toast";
+import { createContext, useContext, useEffect, useState } from "react";
 
-import {getBanner, getCategory, getDiscountProducts, getFlashSaleProducts, getProducts,} from "../api/Homepage";
-import {isRequestSuccess} from "../utils/api";
-import {useAuthContext} from "./authProvider";
+import { getBanner, getCategory, getDiscountProducts, getFlashSaleProducts, getProducts, } from "../api/Homepage";
+import { isRequestSuccess } from "../utils/api";
+import { useAuthContext } from "./authProvider";
 
 const HomepageContext = createContext();
 
-export const HomepageProvider = ({children}) => {
-  const {userData, isLoggedIn} = useAuthContext();
+export const HomepageProvider = ({ children }) => {
+  const { userData, isLoggedIn } = useAuthContext();
   const userId = isLoggedIn ? userData?.id : "";
 
   const [filter, setFilter] = useState("");
@@ -75,7 +75,7 @@ export const HomepageProvider = ({children}) => {
             ...flashSaleProducts,
           });
         });
-  }
+    }
   }, [userId, isLoggedIn]);
 
   useEffect(() => {
@@ -120,7 +120,7 @@ export const HomepageProvider = ({children}) => {
       .catch((err) => {
         console.error(err);
         errorToast(err);
-        setBanner({...banner, loading: false});
+        setBanner({ ...banner, loading: false });
       });
   }, []);
 
@@ -139,7 +139,7 @@ export const HomepageProvider = ({children}) => {
       .catch((err) => {
         console.error(err);
         errorToast(err);
-        setCategory({data: [], loading: false});
+        setCategory({ data: [], loading: false });
       });
   }, []);
 
@@ -162,13 +162,13 @@ export const HomepageProvider = ({children}) => {
         .catch((err) => {
           console.error(err);
           errorToast("Gagal mendapatkan produk");
-          setProducts({...products, data: [], loading: false});
+          setProducts({ ...products, data: [], loading: false });
         });
     }
   }, [filter, userId, isLoggedIn]);
 
   function handleLoadMoreProducts() {
-    setProducts({...products, loading: true});
+    setProducts({ ...products, loading: true });
 
     const newPage = products.currentPage + 1;
     getProducts(newPage, filter, userId)
@@ -192,7 +192,7 @@ export const HomepageProvider = ({children}) => {
   }
 
   function handleFilterProducts(filter) {
-    setProducts({...products, loading: true});
+    setProducts({ ...products, loading: true });
     setFilter(filter);
   }
 
