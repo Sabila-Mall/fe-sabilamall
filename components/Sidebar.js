@@ -43,8 +43,9 @@ const UserInfo = ({ useBorder }) => {
         borderRadius="full"
       />
       <Box ml=".5rem" fontSize="14px">
-        <Text fontWeight="700" maxW="15ch" isTruncated>{`${userData?.first_name
-          } ${userData?.last_name ?? ""}`}</Text>
+        <Text fontWeight="700" maxW="15ch" isTruncated>{`${
+          userData?.first_name
+        } ${userData?.last_name ?? ""}`}</Text>
         <Flex>
           <Text>{userData?.memberid}</Text>
           <Flex
@@ -96,7 +97,6 @@ const Sidebar = ({
   useEffect(() => {
     getCategory()
       .then((res) => {
-        console.log(res);
         if (isRequestSuccess(res.data)) {
           setCategory({
             data: res.data.data ?? [],
@@ -248,34 +248,55 @@ const Sidebar = ({
         </Box>
         <VStack spacing={1} px="10px" pt="5px">
           {isLoggedIn && <UserInfo useBorder={false} />}
-          <Accordion defaultIndex={[0]} borderWidth="0" allowToggle allowMultiple>
-            {category && category.data.map((item) => {
-              const subCategories = item.sub_categories[0]
-              return (
-                <AccordionItem key={item.id} >
-                  <AccordionButton
-                    borderWidth="0"
-                    borderColor="transparent"
-                    _focus={{ outline: "none" }}
-                  >
-                    <Box className={styles.boxCategoryMenu} onClick={() => router.push(`/daftar-produk?id=${item.id}&nama=${item.name}`)}>
-                      <Heading
-                        className={styles.fontSizeSidebar}
-                        lineHeight="30px"
+          <Accordion
+            defaultIndex={[0]}
+            borderWidth="0"
+            allowToggle
+            allowMultiple
+          >
+            {category &&
+              category.data.map((item) => {
+                const subCategories = item.sub_categories[0];
+                return (
+                  <AccordionItem key={item.id}>
+                    <AccordionButton
+                      borderWidth="0"
+                      borderColor="transparent"
+                      _focus={{ outline: "none" }}
+                    >
+                      <Box
+                        className={styles.boxCategoryMenu}
+                        onClick={() =>
+                          router.push(
+                            `/daftar-produk?id=${item.id}&nama=${item.name}`,
+                          )
+                        }
                       >
-                        {item.name}
-                      </Heading>
-                    </Box>
-                  </AccordionButton>
-                  {subCategories &&
-                    <AccordionPanel fontSize="0.75em" lineHeight="150%" cursor="pointer" onClick={() => router.push(`/daftar-produk?id=${subCategories.id}&nama=${subCategories.name}`)}>
-                      {subCategories.name}
-                    </AccordionPanel>
-                  }
-
-                </AccordionItem>
-              );
-            })}
+                        <Heading
+                          className={styles.fontSizeSidebar}
+                          lineHeight="30px"
+                        >
+                          {item.name}
+                        </Heading>
+                      </Box>
+                    </AccordionButton>
+                    {subCategories && (
+                      <AccordionPanel
+                        fontSize="0.75em"
+                        lineHeight="150%"
+                        cursor="pointer"
+                        onClick={() =>
+                          router.push(
+                            `/daftar-produk?id=${subCategories.id}&nama=${subCategories.name}`,
+                          )
+                        }
+                      >
+                        {subCategories.name}
+                      </AccordionPanel>
+                    )}
+                  </AccordionItem>
+                );
+              })}
           </Accordion>
         </VStack>
       </Box>
