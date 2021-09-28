@@ -146,9 +146,10 @@ const CardPesanan = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const date = datePurchased.split(" ")[0].split("-");
-  const formatedDate = `${Number(date[2])} ${MONTH[Number(date[1])]} ${Number(
-    date[0],
-  )}`;
+  const formatedDate = `${Number(date[2])} ${
+    MONTH[Number(date[1]) - 1]
+  } ${Number(date[0])}`;
+
   return (
     <VStack
       p={width >= 320 && "1.5rem"}

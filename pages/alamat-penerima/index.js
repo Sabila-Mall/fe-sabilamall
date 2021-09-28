@@ -61,6 +61,7 @@ const AlamatPenerima = () => {
   const [kota, setKota] = useState([]);
   const [kecamatan, setKecamatan] = useState([]);
   const [kodePos, setKodePos] = useState([]);
+  const [subdistrictId, setSubsdistrictId] = useState("");
 
   const negara = ["Indonesia"];
 
@@ -174,6 +175,7 @@ const AlamatPenerima = () => {
         entry_city: Number(kotaPenerima?.split(" ")?.[0]),
         entry_district: Number(kecamatanPenerima?.split(" ")?.[0]),
         entry_postcode: Number(kodePosPenerima),
+        entry_subdistrict: subdistrictId,
         address_book_type: 1,
         customers_id: userId,
         is_default: 0,
@@ -265,9 +267,9 @@ const AlamatPenerima = () => {
         Number(provinsiPenerima?.split(" ")?.[0]),
       )
         .then((res) => {
-          const postalCodeList = res.data?.data?.map((d) => d?.postal_code);
+          const postalCodeList = res.data?.data;
 
-          setKodePos([...new Set(postalCodeList)]);
+          setKodePos(postalCodeList);
         })
         .catch((err) => console.error(err));
     };
@@ -973,13 +975,23 @@ const AlamatPenerima = () => {
                             placeholder="Pilih kode pos penerima"
                             marginTop="0.5rem"
                             fontSize="sm"
-                            onChange={(e) => setKodePosPenerima(e.target.value)}
+                            onChange={(e) => {
+                              let filterKodePos = kodePos.filter(
+                                (data) =>
+                                  data.subdistrict_name === e.target.value,
+                              );
+                              setKodePosPenerima(filterKodePos[0].postal_code);
+                              setSubsdistrictId(filterKodePos[0].id);
+                            }}
                           >
                             {kodePos &&
                               kodePos.map((data, index) => {
                                 return (
-                                  <option key={data || index} value={data}>
-                                    {data}
+                                  <option
+                                    key={index}
+                                    value={data.subdistrict_name}
+                                  >
+                                    {data.subdistrict_name} ({data.postal_code})
                                   </option>
                                 );
                               })}
