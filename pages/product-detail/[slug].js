@@ -283,7 +283,7 @@ const ProductDetails = () => {
                   mb="1rem"
                   colorScheme="orange"
                 >
-                  <a href={downloadImage}>
+                  <a href={downloadImage} download={products_name}>
                     <Flex alignItems="center">
                       <Text mr="0.5rem">Simpan Gambar</Text>
                       <Icon as={IoMdDownload} width="1.25em" height="1.25em" />
