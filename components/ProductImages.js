@@ -1,6 +1,6 @@
 import { Box, Image, Flex, HStack } from "@chakra-ui/react";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import ReactImageZoom from "react-image-zoom";
 import Slider from "react-slick";
@@ -12,16 +12,19 @@ export const ProductImages = ({
   slider,
   products_image,
   images: images_list,
+  setImgLink,
 }) => {
   const [imageNum, setImageNum] = useState(0);
   const [image, setImage] = useState(products_image);
   const images = [
-    { id: "podafae", image: products_image, sort_order: images_list?.lenght },
+    { id: "podafae", image: products_image, sort_order: images_list?.length },
     ...images_list,
   ];
-  console.log(image);
-
   let ref = null;
+
+  useEffect(() => {
+    setImgLink(getImageLink(image));
+  }, [image]);
 
   const [imageActive, setImageActive] = useState("podafae");
 
