@@ -1,7 +1,8 @@
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Button, Text, Icon } from "@chakra-ui/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { IoMdDownload } from "react-icons/io";
 
 import { checkStock } from "../../api/Stock";
 import { getProductDetail } from "../../api/product-detail";
@@ -32,7 +33,7 @@ const ProductDetails = () => {
   const [id, setId] = useState(null);
   const [pricePerUnit, setPricePerUnit] = useState(null);
   const [discountPricePerUnit, setDiscountPricePerUnit] = useState(null);
-  const [productSlug, setProductSlug] = useState("");
+  const [downloadImage, setDownloadImage] = useState("");
 
   const router = useRouter();
   const slug = router.query.slug;
@@ -270,7 +271,27 @@ const ProductDetails = () => {
             mb={{ base: "0.5rem", lg: "5rem" }}
           >
             <Box h="fit-content" position={{ lg: "sticky" }} top="6rem">
-              <ProductImages {...productImagesData} />
+              <ProductImages
+                {...productImagesData}
+                setImgLink={setDownloadImage}
+              />
+              <Flex justifyContent="center" w="full">
+                <Button
+                  w="full"
+                  size="sm"
+                  mt="-0.5rem"
+                  mb="1rem"
+                  colorScheme="orange"
+                >
+                  <a href={downloadImage} download={products_name}>
+                    <Flex alignItems="center">
+                      <Text mr="0.5rem">Simpan Gambar</Text>
+                      <Icon as={IoMdDownload} width="1.25em" height="1.25em" />
+                    </Flex>
+                  </a>
+                </Button>
+              </Flex>
+
               <Box display={{ base: "none", lg: "block" }}>
                 <ShareProduct />
               </Box>
