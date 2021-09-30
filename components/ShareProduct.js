@@ -21,11 +21,11 @@ export const ShareProduct = () => {
       link: `https://twitter.com/intent/tweet?url=${link}`,
       logo: <IoLogoTwitter size="1.5em" />,
     },
-    {
-      name: "whatsapp",
-      link: "https://api.whatsapp.com/send?phone=6282125023944",
-      logo: <IoLogoWhatsapp size="1.5em" />,
-    },
+    // {
+    //   name: "whatsapp",
+    //   link: "https://api.whatsapp.com/send?phone=6282125023944",
+    //   logo: <IoLogoWhatsapp size="1.5em" />,
+    // },
     {
       name: "link",
       link,

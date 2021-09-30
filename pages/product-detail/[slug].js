@@ -227,6 +227,11 @@ const ProductDetails = () => {
     },
   ];
 
+  const options = {
+    url: "",
+    dest: "/path/to/dest",
+  };
+
   const tempHeadImage = products_image.split("/");
   const headImage = tempHeadImage.slice(2, tempHeadImage.length).join("/");
 
@@ -275,22 +280,6 @@ const ProductDetails = () => {
                 {...productImagesData}
                 setImgLink={setDownloadImage}
               />
-              <Flex justifyContent="center" w="full">
-                <Button
-                  w="full"
-                  size="sm"
-                  mt="-0.5rem"
-                  mb="1rem"
-                  colorScheme="orange"
-                >
-                  <a href={downloadImage} download={products_name}>
-                    <Flex alignItems="center">
-                      <Text mr="0.5rem">Simpan Gambar</Text>
-                      <Icon as={IoMdDownload} width="1.25em" height="1.25em" />
-                    </Flex>
-                  </a>
-                </Button>
-              </Flex>
               <Box display={{ base: "none", lg: "block" }}>
                 <ShareProduct />
               </Box>

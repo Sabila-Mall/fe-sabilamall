@@ -1,6 +1,7 @@
-import { Box, Image, Flex, HStack } from "@chakra-ui/react";
+import { Box, Image, Flex, HStack, Button, Icon, Text } from "@chakra-ui/react";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import { IoMdDownload } from "react-icons/io";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import ReactImageZoom from "react-image-zoom";
 import Slider from "react-slick";
@@ -62,12 +63,8 @@ export const ProductImages = ({
       </Head>
       <Flex flexDir="column" justifyContent="center" mb="1.5rem">
         <Flex mb="1rem" justifyContent="center">
-          <Box cursor="crosshair" w="22rem">
-            <ReactImageZoom
-              width={400}
-              zoomPosition="original"
-              img={getImageLink(image)}
-            />
+          <Box w="22rem">
+            <Image src={getImageLink(image)} />
           </Box>
         </Flex>
 
