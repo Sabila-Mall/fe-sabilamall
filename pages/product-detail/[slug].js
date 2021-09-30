@@ -1,4 +1,5 @@
 import { Box, Flex, Button, Text, Icon } from "@chakra-ui/react";
+import axios from "axios";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -16,6 +17,7 @@ import ProductInformation from "../../components/ProductInformation";
 import ProductReview from "../../components/ProductReview";
 import RelatedProductContainer from "../../components/RelatedProductContainer";
 import { ShareProduct } from "../../components/ShareProduct";
+import { IMAGE_HOST } from "../../constants/api";
 import { useAuthContext } from "../../contexts/authProvider";
 import { isNumber, getPriceAfterDiscount } from "../../utils/functions";
 
@@ -234,6 +236,24 @@ const ProductDetails = () => {
 
   const tempHeadImage = products_image.split("/");
   const headImage = tempHeadImage.slice(2, tempHeadImage.length).join("/");
+  const handleDownloadImage = () => {
+    axios
+      .get(downloadImage, {
+        responseType: "blob",
+      })
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.setAttribute("download", "image.jpg");
+
+        document.body.appendChild(link);
+
+        link.click();
+      });
+  };
 
   return (
     <Layout hasNavbar sticky hasBreadCrumb breadCrumbItem={path} hasPadding>
@@ -280,6 +300,27 @@ const ProductDetails = () => {
                 {...productImagesData}
                 setImgLink={setDownloadImage}
               />
+              <Flex
+                justifyContent="center"
+                w="full"
+                onClick={() => {
+                  handleDownloadImage();
+                }}
+              >
+                <Button
+                  w="full"
+                  size="sm"
+                  mt="-0.5rem"
+                  mb="1rem"
+                  colorScheme="orange"
+                >
+                  <Flex alignItems="center">
+                    <Text mr="0.5rem">Simpan Gambar</Text>
+                    <Icon as={IoMdDownload} width="1.25em" height="1.25em" />
+                  </Flex>
+                </Button>
+              </Flex>
+
               <Box display={{ base: "none", lg: "block" }}>
                 <ShareProduct />
               </Box>
