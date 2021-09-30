@@ -9,7 +9,7 @@ import { copyToClipboard, getImageLink } from "../utils/functions";
 export const ShareProduct = () => {
   const toast = useToast();
   const router = useRouter();
-  const link = getImageLink(router.asPath);
+  const link = window.location.href;
   const d = [
     {
       name: "facebook",
@@ -21,11 +21,11 @@ export const ShareProduct = () => {
       link: `https://twitter.com/intent/tweet?url=${link}`,
       logo: <IoLogoTwitter size="1.5em" />,
     },
-    {
-      name: "whatsapp",
-      link: "https://api.whatsapp.com/send?phone=6282125023944",
-      logo: <IoLogoWhatsapp size="1.5em" />,
-    },
+    // {
+    //   name: "whatsapp",
+    //   link: "https://api.whatsapp.com/send?phone=6282125023944",
+    //   logo: <IoLogoWhatsapp size="1.5em" />,
+    // },
     {
       name: "link",
       link,

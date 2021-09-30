@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { IoMdMail } from "react-icons/io";
+import { IoMdMail, IoMdPhonePortrait } from "react-icons/io";
 
 import { apiResetPassword } from "../../api/Auth";
 import { Layout } from "../../components/Layout";
@@ -25,11 +25,12 @@ import { isRequestSuccess } from "../../utils/api";
 const ResetPassword = () => {
   const router = useRouter();
   const [resetEmail, setResetEmail] = useState("");
+  const [resetPhone, setResetPhone] = useState("");
   const toast = useToast();
 
   const submitHandler = (event) => {
     event.preventDefault();
-    apiResetPassword(resetEmail)
+    apiResetPassword(resetEmail ?? resetPhone)
       .then((res) => {
         const response = res.data;
         if (isRequestSuccess(response)) {
@@ -118,13 +119,34 @@ const ResetPassword = () => {
                     onChange={(event) => setResetEmail(event.target.value)}
                   />
                 </InputGroup>
+                <Text
+                  fontSize="14px"
+                  my="0.5rem"
+                  className="secondaryFont"
+                  align="center"
+                >
+                  Atau
+                </Text>
+                <InputGroup>
+                  <InputLeftElement
+                    pointerEvents="none"
+                    children={<IoMdPhonePortrait />}
+                    color="gray.500"
+                  />
+                  <Input
+                    placeholder="Nomor HP Anda Anda"
+                    onChange={(event) => setResetPhone(event.target.value)}
+                  />
+                </InputGroup>
               </FormControl>
 
               <Button
                 bgColor="red.500"
                 w="100%"
                 _hover={{ color: "red.500" }}
-                isDisabled={resetEmail === "" ? true : false}
+                isDisabled={
+                  resetEmail === "" && resetPhone === "" ? true : false
+                }
                 mt="16px"
                 type="submit"
                 onClick={(e) => submitHandler(e)}
