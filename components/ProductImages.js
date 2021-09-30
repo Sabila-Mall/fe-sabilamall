@@ -1,7 +1,6 @@
-import { Box, Image, Flex, HStack, Button, Icon, Text } from "@chakra-ui/react";
+import { Box, Image, Flex, HStack } from "@chakra-ui/react";
 import Head from "next/head";
-import { useEffect, useState } from "react";
-import { IoMdDownload } from "react-icons/io";
+import { useEffect, useRef, useState } from "react";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import ReactImageZoom from "react-image-zoom";
 import Slider from "react-slick";
@@ -28,6 +27,24 @@ export const ProductImages = ({
   }, [image]);
 
   const [imageActive, setImageActive] = useState("podafae");
+
+  function zoom(e) {
+    const zoomer = document.getElementById("zoom-product-image");
+    let offsetX;
+    let offsetY;
+    let x;
+    let y;
+    e.nativeEvent.offsetX
+      ? (offsetX = e.nativeEvent.offsetX)
+      : (offsetX = e.nativeEvent.touches[0].pageX);
+    e.nativeEvent.offsetY
+      ? (offsetY = e.nativeEvent.offsetY)
+      : (offsetX = e.nativeEvent.touches[0].pageX);
+    x = (offsetX / zoomer.offsetWidth) * 100;
+    y = (offsetY / zoomer.offsetHeight) * 100;
+    zoomer.style.backgroundPosition = x + "% " + y + "%";
+    console.log(zoomer.style.backgroundPosition);
+  }
 
   const settings = {
     arrows: false,
@@ -63,8 +80,19 @@ export const ProductImages = ({
       </Head>
       <Flex flexDir="column" justifyContent="center" mb="1.5rem">
         <Flex mb="1rem" justifyContent="center">
-          <Box w="22rem">
-            <Image src={getImageLink(image)} />
+          <Box
+            as="figure"
+            cursor="crosshair"
+            w="22rem"
+            h="22rem"
+            position="relative"
+            overflow="hidden"
+            className={styles.zoom}
+            backgroundImage={`url(${getImageLink(image)})`}
+            onMouseMove={(e) => zoom(e)}
+            id="zoom-product-image"
+          >
+            <Image height="full" src={getImageLink(image)} />
           </Box>
         </Flex>
 

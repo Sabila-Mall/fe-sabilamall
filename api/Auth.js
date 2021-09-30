@@ -32,10 +32,14 @@ export const apiRegister = (
   });
 };
 
-export const apiResetPassword = (email) => {
-  return axios.post(HOST + "/api/user/process_forgot_password", {
-    email: email,
-  });
+export const apiResetPassword = (email, phoneNumber) => {
+  let body;
+  if (email !== "") {
+    body = { email: email };
+  } else if (phoneNumber !== "") {
+    body = { phone: phoneNumber };
+  }
+  return axios.post(HOST + "/api/user/process_forgot_password", body);
 };
 
 export const apiGetUserProfile = (id) => {

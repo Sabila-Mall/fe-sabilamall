@@ -30,7 +30,7 @@ const ResetPassword = () => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    apiResetPassword(resetEmail ?? resetPhone)
+    apiResetPassword(resetEmail, resetPhone)
       .then((res) => {
         const response = res.data;
         if (isRequestSuccess(response)) {
