@@ -9,7 +9,7 @@ import { copyToClipboard, getImageLink } from "../utils/functions";
 export const ShareProduct = () => {
   const toast = useToast();
   const router = useRouter();
-  const link = getImageLink(router.asPath);
+  const link = window.location.href;
   const d = [
     {
       name: "facebook",

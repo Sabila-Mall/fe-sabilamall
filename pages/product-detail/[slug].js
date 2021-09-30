@@ -291,7 +291,6 @@ const ProductDetails = () => {
                   </a>
                 </Button>
               </Flex>
-
               <Box display={{ base: "none", lg: "block" }}>
                 <ShareProduct />
               </Box>
@@ -302,8 +301,6 @@ const ProductDetails = () => {
             maxW="100vw"
             px={{ lg: "1rem", xl: "0.5rem", "2xl": "2rem" }}
             mx={{ lg: "1rem" }}
-            // bg="blue"
-            // added
             w="full"
           >
             <ProductHeader {...productHeaderData} />
