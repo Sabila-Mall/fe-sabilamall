@@ -1,12 +1,12 @@
-import {Box, Text} from "@chakra-ui/react";
-import {useRouter} from "next/router";
-import {useEffect, useState} from "react";
+import { Box, Text } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/toast";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
-import {Layout} from "../../components/Layout";
-import {getProductsByCategory} from "../../api/DaftarProduk";
+import { getProductsByCategory } from "../../api/DaftarProduk";
+import { Layout } from "../../components/Layout";
 import LayoutProductList from "../../components/LayoutProductList";
-import {useToast} from "@chakra-ui/toast";
-import {useAuthContext} from "../../contexts/authProvider";
+import { useAuthContext } from "../../contexts/authProvider";
 
 const DaftarProduk = () => {
   const router = useRouter();
@@ -19,7 +19,7 @@ const DaftarProduk = () => {
   const categoryId = router.query.id;
   const categoryName = router.query.nama;
 
-  const {userData} = useAuthContext();
+  const { userData } = useAuthContext();
   const customerId = userData?.id;
 
   const toast = useToast();
@@ -33,7 +33,7 @@ const DaftarProduk = () => {
   };
 
   function handleLoadMore() {
-    setProducts({...products, loading: true});
+    setProducts({ ...products, loading: true });
 
     const newPage = products.currentPage + 1;
     getProductsByCategory(categoryId, newPage, customerId)
@@ -45,10 +45,10 @@ const DaftarProduk = () => {
           lastPage: res.data.last_page,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         errorToast("Gagal mengambil produk");
-        setProducts({...products, loading: false, data: []});
+        setProducts({ ...products, loading: false, data: [] });
       });
   }
 
@@ -63,22 +63,16 @@ const DaftarProduk = () => {
             lastPage: res.data.last_page,
           });
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(err);
-          setProducts({...products, loading: false});
+          setProducts({ ...products, loading: false });
         });
     }
-  }, [categoryId]);
+  }, [categoryId, customerId]);
 
   return (
     <Layout hasNavbar hasPadding>
-      <Box
-        as="main"
-        pb="12"
-        d="flex"
-        justifyContent="start"
-        w="full"
-      >
+      <Box as="main" pb="12" d="flex" justifyContent="start" w="full">
         <Box paddingTop="1.8rem" minH="100vh" w="full">
           <Text
             className="primaryFont"
@@ -91,8 +85,11 @@ const DaftarProduk = () => {
           </Text>
 
           <LayoutProductList
-            data={products} loading={products.loading}
-            handleLoadMore={handleLoadMore} sorting={false} title={false}
+            data={products}
+            loading={products.loading}
+            handleLoadMore={handleLoadMore}
+            sorting={false}
+            title={false}
           />
         </Box>
       </Box>
