@@ -32,6 +32,7 @@ const ProductHeader = ({
         style: "currency",
         currency: "IDR",
         maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
       }).format(Number(discount_price_be))
     : null;
   const price = current_price
@@ -39,6 +40,7 @@ const ProductHeader = ({
         style: "currency",
         currency: "IDR",
         maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
       }).format(Number(current_price))
     : null;
 
@@ -228,6 +230,10 @@ const ProductHeader = ({
       </Stack>
     </Box>
   );
+};
+
+ProductHeader.defaultProps = {
+  po_close_status: 1,
 };
 
 export default ProductHeader;

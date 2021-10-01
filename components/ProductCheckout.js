@@ -550,4 +550,8 @@ const ProductCheckout = ({
   );
 };
 
+ProductCheckout.defaultProps = {
+  po_close_status: 1,
+};
+
 export default ProductCheckout;
