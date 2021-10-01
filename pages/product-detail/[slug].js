@@ -185,14 +185,14 @@ const ProductDetails = () => {
     products_id: id,
     stocks,
     isLiked,
-    po_close_status,
+    po_close_status: null ? 1 : po_close_status,
     preOrder: products_jenis === "po",
     products_slug,
     products_quantity: quantity,
   };
 
   const productHeaderData = {
-    po_close_status,
+    po_close_status: null ? 1 : po_close_status,
     libur: isHoliday === 1,
     preOrder: products_jenis === "po",
     po_close_status,
