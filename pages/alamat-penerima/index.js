@@ -209,6 +209,7 @@ const AlamatPenerima = () => {
           addressDataPenerima && Array.isArray(addressDataPenerima)
             ? [
                 ...addressDataPenerima?.map((d) => ({
+                  delivery_id: d.address_id,
                   nama: d.firstname + " " + (d.lastname ?? ""),
                   nomor: d.phone,
                   alamat: `${d.street}, ${

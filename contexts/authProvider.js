@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (userData === null && !isLoggedIn) {
       const userId = nookies.get(null, "user_id");
+      // console.log(userId);
       if (document.cookie.indexOf("user_id") !== -1) {
         const devId = localStorage.getItem("device_id");
         const parsedDevId = devId ? JSON.parse(devId) : null;

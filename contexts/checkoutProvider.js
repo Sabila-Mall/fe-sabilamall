@@ -11,6 +11,7 @@ export const CheckoutProvider = ({ children }) => {
   const [orderNumber, setOrderNumber] = useState("");
   const [subtotal, setSubtotal] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [addressId, setAddressId] = useState(0);
   const router = useRouter();
 
   const addCheckoutData = (data) => {
