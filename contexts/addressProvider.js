@@ -10,6 +10,7 @@ const AddressContext = createContext();
 export const AddressProvider = ({ children }) => {
   const [addressDataPengirim, setaddressDataPengirim] = useState([]);
   const [addressDataPenerima, setaddressDataPenerima] = useState([]);
+  const [delivery_id, setDeliveryId] = useState(0);
   const [loading, setLoading] = useState(false);
   const { userData } = useAuthContext();
   const userId = userData?.id;
@@ -43,6 +44,7 @@ export const AddressProvider = ({ children }) => {
       getAddressByUserId(userId, 1)
         .then((res) => {
           setaddressDataPenerima(res);
+          console.log(res);
         })
         .finally(() => setLoading(false));
     }

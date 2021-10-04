@@ -529,11 +529,12 @@ const DetailPesanan = () => {
       setLoadingKurir(true);
       getKurir(
         userData?.id,
-        checkoutData?.postcode,
-        checkoutData?.city_id,
-        checkoutData?.zone_id,
-        checkoutData?.district_id,
-        checkoutData?.subdistrict_id,
+        // checkoutData?.postcode,
+        // checkoutData?.city_id,
+        // checkoutData?.zone_id,
+        // checkoutData?.district_id,
+        // checkoutData?.subdistrict_id,
+        checkoutData?.delivery_id,
         weight,
         vendors_id,
         vendor_origin,
