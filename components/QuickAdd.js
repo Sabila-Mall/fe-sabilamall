@@ -16,9 +16,10 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { useCartContext } from "../contexts/cartProvider";
 
+import { useCartContext } from "../contexts/cartProvider";
 import QuickAddListItem from "./QuickAddListItem";
+
 /**
  * Component untuk drawer yang menampilkan isi barang sekarang, perlu ada button yang memanggil component ini
  * @param products list dari produk, dimana tiap produk memiliki:
@@ -27,22 +28,27 @@ import QuickAddListItem from "./QuickAddListItem";
  * @param onDrawerClose callback function yang dipanggil untuk close modal [dapatkan dari useDisclosure()]
  */
 const QuickAdd = ({ isDrawerOpen, onDrawerClose }) => {
-  const { loading, selectedPrice, checkoutValidation, selectedDiscount } = useCartContext();
+  const {
+    loading,
+    selectedPrice,
+    checkoutValidation,
+    selectedDiscount,
+  } = useCartContext();
 
-  const size = useBreakpointValue({ base: "full", md: "md" });
+  const size = useBreakpointValue({ base: "xl", md: "md" });
 
   const formatPrice = (price) => {
-    return new Intl.NumberFormat(
-      "id-ID",
-      { style: "decimal", currency: "IDR" })
-      .format(price);
+    return new Intl.NumberFormat("id-ID", {
+      style: "decimal",
+      currency: "IDR",
+    }).format(price);
   };
 
-  const router = useRouter()
+  const router = useRouter();
 
   const handleCheckout = () => {
-    checkoutValidation()
-  }
+    checkoutValidation();
+  };
 
   return (
     <Drawer
@@ -62,67 +68,70 @@ const QuickAdd = ({ isDrawerOpen, onDrawerClose }) => {
           <Text className={"secondaryFont"}>Keranjang Saya</Text>
         </DrawerHeader>
 
-        {loading ? <Grid placeItems="center">
-          <Spinner></Spinner></Grid> : <>
-          <DrawerBody px={"2rem"}>
-            <QuickAddListItem />
-          </DrawerBody>
+        {loading ? (
+          <Grid placeItems="center">
+            <Spinner></Spinner>
+          </Grid>
+        ) : (
+          <>
+            <DrawerBody px={"2rem"}>
+              <QuickAddListItem />
+            </DrawerBody>
 
-          <DrawerFooter borderTopWidth={"1px"} flexDirection={"column"}>
-            <Flex align={"center"} justify={"space-between"} w={"full"}>
+            <DrawerFooter borderTopWidth={"1px"} flexDirection={"column"}>
+              <Flex align={"center"} justify={"space-between"} w={"full"}>
+                <Text
+                  className={"secondaryFont"}
+                  fontSize={"16px"}
+                  textColor={"gray.500"}
+                >
+                  Total
+                </Text>
+                <Text
+                  className={"primaryFont"}
+                  textColor={"orange.400"}
+                  fontSize={"20"}
+                  fontWeight={"bold"}
+                >
+                  Rp{formatPrice(selectedPrice - selectedDiscount)}
+                </Text>
+              </Flex>
               <Text
+                fontSize={{ base: "12px", md: "14px" }}
+                textColor={"gray.400"}
                 className={"secondaryFont"}
+                textAlign="center"
+                my="0.5rem"
+              >
+                Ongkos kirim akan dihitung saat proses checkout
+              </Text>
+              <Button
+                backgroundColor={"red.500"}
+                color={"white"}
                 fontSize={"16px"}
-                textColor={"gray.500"}
-              >
-                Total
-              </Text>
-              <Text
                 className={"primaryFont"}
-                textColor={"orange.400"}
-                fontSize={"20"}
-                fontWeight={"bold"}
+                width={"full"}
+                onClick={() => handleCheckout()}
+                _hover={{ bgColor: "red.600" }}
               >
-                Rp{formatPrice(selectedPrice - selectedDiscount)}
-              </Text>
-            </Flex>
-            <Text
-              fontSize={{ base: "12px", md: "14px" }}
-              textColor={"gray.400"}
-              className={"secondaryFont"}
-              textAlign="center"
-              my="0.5rem"
-            >
-              Ongkos kirim akan dihitung saat proses checkout
-            </Text>
-            <Button
-              backgroundColor={"red.500"}
-              color={"white"}
-              fontSize={"16px"}
-              className={"primaryFont"}
-              width={"full"}
-              onClick={() => handleCheckout()}
-              _hover={{ bgColor: "red.600" }}
-            >
-              Checkout
-            </Button>
-            <Link
-              href="/cart-details"
-            >
-              <Text
-                mt="0.5rem"
-                textColor={"red.500"}
-                fontWeight={"bold"}
-                fontSize={"14px"}
-                className={"primaryFont"}
-                cursor="pointer"
-                onClick={() => router.push("/cart-details")}>
-                Lihat detail keranjang belanja
-              </Text>
-            </Link>
-          </DrawerFooter>
-        </>}
-
+                Checkout
+              </Button>
+              <Link href="/cart-details">
+                <Text
+                  mt="0.5rem"
+                  textColor={"red.500"}
+                  fontWeight={"bold"}
+                  fontSize={"14px"}
+                  className={"primaryFont"}
+                  cursor="pointer"
+                  onClick={() => router.push("/cart-details")}
+                >
+                  Lihat detail keranjang belanja
+                </Text>
+              </Link>
+            </DrawerFooter>
+          </>
+        )}
       </DrawerContent>
     </Drawer>
   );
