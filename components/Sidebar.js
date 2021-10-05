@@ -11,10 +11,16 @@ import {
   Image,
   Link,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
+import {
+  BsChevronLeft,
+  BsChevronRight,
+  BsChevronUp,
+  BsChevronDown,
+} from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
 
 import { getCategory } from "../api/Homepage";
@@ -94,6 +100,23 @@ const Sidebar = ({
   const { userData, loading } = useAuthContext();
   const router = useRouter();
   const [category, setCategory] = useState(null);
+  const [categoryState, setCategoryState] = useState({});
+
+  const toast = useToast();
+  const errorToast = (errMessage) => {
+    toast({
+      position: "top",
+      title: errMessage,
+      status: "error",
+      isClosable: true,
+    });
+  };
+
+  const closeSidebar = () => {
+    setIsMainMenu(false);
+    setIsCategoryMenu(false);
+  };
+
   useEffect(() => {
     getCategory()
       .then((res) => {
@@ -102,6 +125,13 @@ const Sidebar = ({
             data: res.data.data ?? [],
             loading: false,
           });
+          let accordionState = {};
+          if (res.data.data) {
+            res.data.data.forEach((e) => {
+              accordionState[`${e.id}`] = false;
+            });
+          }
+          setCategoryState(accordionState);
         } else {
           throw "Gagal mendapatkan kategori";
         }
@@ -112,6 +142,9 @@ const Sidebar = ({
         setCategory({ data: [], loading: false });
       });
   }, []);
+
+  console.log(categoryState);
+
   return (
     <>
       <Box
@@ -248,52 +281,79 @@ const Sidebar = ({
         </Box>
         <VStack spacing={1} px="10px" pt="5px">
           {isLoggedIn && <UserInfo useBorder={false} />}
-          <Accordion
-            defaultIndex={[0]}
-            borderWidth="0"
-            allowToggle
-            allowMultiple
-          >
+          <Accordion borderWidth="0" allowToggle allowMultiple>
             {category &&
               category.data.map((item) => {
-                const subCategories = item.sub_categories[0];
+                const subCategories = item.sub_categories;
                 return (
                   <AccordionItem key={item.id}>
                     <AccordionButton
                       borderWidth="0"
                       borderColor="transparent"
                       _focus={{ outline: "none" }}
+                      onClick={() => {
+                        const temp = { ...categoryState };
+                        temp[`${item.id}`] = !temp[`${item.id}`];
+                        setCategoryState(temp);
+                      }}
                     >
-                      <Box
-                        className={styles.boxCategoryMenu}
-                        onClick={() =>
-                          router.push(
-                            `/daftar-produk?id=${item.id}&nama=${item.name}`,
-                          )
-                        }
-                      >
-                        <Heading
-                          className={styles.fontSizeSidebar}
-                          lineHeight="30px"
+                      <Box className={styles.boxCategoryMenu}>
+                        <Flex
+                          justifyContent="space-between"
+                          alignItems="center"
+                          w="full"
                         >
-                          {item.name}
-                        </Heading>
+                          <Heading
+                            className={styles.fontSizeSidebar}
+                            lineHeight="30px"
+                          >
+                            {item.name}
+                          </Heading>
+                          <Icon
+                            as={
+                              categoryState[`${item.id}`]
+                                ? BsChevronUp
+                                : BsChevronDown
+                            }
+                            ml="20px"
+                            mr="10px"
+                            w="20px"
+                            h="20px"
+                          />
+                        </Flex>
                       </Box>
                     </AccordionButton>
-                    {subCategories && (
-                      <AccordionPanel
-                        fontSize="0.75em"
-                        lineHeight="150%"
-                        cursor="pointer"
-                        onClick={() =>
-                          router.push(
-                            `/daftar-produk?id=${subCategories.id}&nama=${subCategories.name}`,
-                          )
-                        }
-                      >
-                        {subCategories.name}
-                      </AccordionPanel>
-                    )}
+                    <AccordionPanel
+                      fontSize="0.75em"
+                      lineHeight="150%"
+                      cursor="pointer"
+                      onClick={() => {
+                        closeSidebar();
+                        router.push(
+                          `/daftar-produk?id=${item.id}&nama=${item.name}`,
+                        );
+                      }}
+                    >
+                      Semua {item.name}
+                    </AccordionPanel>
+                    {subCategories &&
+                      subCategories.map((item) => {
+                        return (
+                          <AccordionPanel
+                            fontSize="0.75em"
+                            lineHeight="150%"
+                            cursor="pointer"
+                            onClick={() => {
+                              closeSidebar();
+                              router.push(
+                                `/daftar-produk?id=${item.id}&nama=${item.name}`,
+                              );
+                            }}
+                          >
+                            {item.name}
+                          </AccordionPanel>
+                        );
+                      })}
                   </AccordionItem>
                 );
               })}
