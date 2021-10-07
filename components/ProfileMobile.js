@@ -48,6 +48,7 @@ const ProfileMobile = () => {
       text: "Upgrade Akun",
       path: ["/profile/invoice-upgrade-akun", "/profile/upgrade-account"],
     },
+    { text: "Rekap Order Subreseller", path: "/profile/subreseller" },
     { text: "Pusat Bantuan", path: "/" },
     { text: "Keluar", path: "/login" },
   ];
@@ -163,16 +164,71 @@ const ProfileMobile = () => {
                 align="stretch"
               >
                 <StackDivider borderColor="gray.200" />
-                {profileMenu.map((menu) =>
-                  menu.text === "Upgrade Akun" &&
-                  userData?.user_level?.toLowerCase() !== "agent" ? (
-                    <VStack
-                      divider={<StackDivider borderColor="gray.200" />}
-                      align="stretch"
-                      key="Upgrade Akun"
-                    >
+                {profileMenu
+                  .filter((e) => {
+                    return userData?.user_level?.toLowerCase() === "agent"
+                      ? e.text !== "Upgrade Akun"
+                      : true;
+                  })
+                  .map((menu) =>
+                    menu.text === "Upgrade Akun" &&
+                    userData?.user_level?.toLowerCase() !== "agent" ? (
+                      <VStack
+                        divider={<StackDivider borderColor="gray.200" />}
+                        align="stretch"
+                        key="Upgrade Akun"
+                      >
+                        <Box key={menu.text}>
+                          <Text
+                            className="secondaryFont"
+                            fontSize="16px"
+                            fontWeight="500"
+                            lineHeight="24px"
+                          >
+                            {menu.text}
+                          </Text>
+                        </Box>
+                        <Box key={menu.text}>
+                          <Text
+                            onClick={
+                              menu.text === "Keluar"
+                                ? onOpen
+                                : () => router.push(menu.path[0])
+                            }
+                            className="secondaryFont"
+                            fontSize="16px"
+                            fontWeight="500"
+                            lineHeight="24px"
+                            ml="1rem"
+                          >
+                            Invoice Upgrade Akun
+                          </Text>
+                        </Box>
+                        <Box key={menu.text}>
+                          <Text
+                            onClick={
+                              menu.text === "Keluar"
+                                ? onOpen
+                                : () => router.push(menu.path[1])
+                            }
+                            className="secondaryFont"
+                            fontSize="16px"
+                            fontWeight="500"
+                            lineHeight="24px"
+                            ml="1rem"
+                          >
+                            Request Upgrade Akun
+                          </Text>
+                        </Box>
+                      </VStack>
+                    ) : (
                       <Box key={menu.text}>
                         <Text
+                          onClick={
+                            menu.text === "Keluar"
+                              ? onOpen
+                              : () => router.push(menu.path)
+                          }
                           className="secondaryFont"
                           fontSize="16px"
                           fontWeight="500"
@@ -181,57 +237,8 @@ const ProfileMobile = () => {
                           {menu.text}
                         </Text>
                       </Box>
-                      <Box key={menu.text}>
-                        <Text
-                          onClick={
-                            menu.text === "Keluar"
-                              ? onOpen
-                              : () => router.push(menu.path[0])
-                          }
-                          className="secondaryFont"
-                          fontSize="16px"
-                          fontWeight="500"
-                          lineHeight="24px"
-                          ml="1rem"
-                        >
-                          Invoice Upgrade Akun
-                        </Text>
-                      </Box>
-                      <Box key={menu.text}>
-                        <Text
-                          onClick={
-                            menu.text === "Keluar"
-                              ? onOpen
-                              : () => router.push(menu.path[1])
-                          }
-                          className="secondaryFont"
-                          fontSize="16px"
-                          fontWeight="500"
-                          lineHeight="24px"
-                          ml="1rem"
-                        >
-                          Request Upgrade Akun
-                        </Text>
-                      </Box>
-                    </VStack>
-                  ) : (
-                    <Box key={menu.text}>
-                      <Text
-                        onClick={
-                          menu.text === "Keluar"
-                            ? onOpen
-                            : () => router.push(menu.path)
-                        }
-                        className="secondaryFont"
-                        fontSize="16px"
-                        fontWeight="500"
-                        lineHeight="24px"
-                      >
-                        {menu.text}
-                      </Text>
-                    </Box>
-                  ),
-                )}
+                    ),
+                  )}
                 <Text
                   textAlign="center"
                   fontSize="12px"

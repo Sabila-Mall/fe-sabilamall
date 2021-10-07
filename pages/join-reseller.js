@@ -34,7 +34,7 @@ const Join = () => {
           pendaftaran reseller SabilaMall!
         </Text>
         <Text my={{ base: ".5rem", md: "1rem" }}>
-          Selamat bergabung bersama lebih dari 1800 orang di Indonesia yang
+          Selamat bergabung bersama lebih dari 7000 orang di Indonesia yang
           sudah bergabung lebih dulu.
           <br /> Selamat bergabung bersama orang-orang yang mau membangun
           Indonesia ini lebih baik, lebih produktif. Selamat bergabung bersama
@@ -67,7 +67,7 @@ const Join = () => {
         <Text mt={{ base: ".5rem", md: "1rem" }}>
           Baca info penawaran promo join reseller baju muslim{" "}
           <Link
-            href="https://sabilamall.co.id/lp/reseller-baju-muslim-terlengkap-dan-terbesar/"
+            href="https://sabilamall.co.id/lp/dropship-dan-reseller-baju-muslim/"
             color="orange.500"
           >
             di sini.

@@ -249,6 +249,12 @@ const CardPesanan = ({
       <Grid gridAutoColumns={{ base: "100%", md: "50% 50%" }} w="full">
         <GridItem colSpan={1}>
           <Text color="gray.500" fontWeight="normal">
+            Status Pesanan
+          </Text>
+          <Text fontSize="1rem" fontWeight="500" color={textColor}>
+            {orderStatus}
+          </Text>
+          <Text color="gray.500" fontWeight="normal">
             Pengirim
           </Text>
           <Text fontSize="1rem" fontWeight="500">
@@ -261,7 +267,7 @@ const CardPesanan = ({
             {deliverer}
           </Text>
         </GridItem>
-        <GridItem colStart={{ base: 0, md: 2 }} colEnd={{ base: 1, md: 3 }}>
+        <GridItem colStart={{ base: 0, md: 2 }} colEnd={{ base: 1, md: 5 }}>
           <Text color="gray.500" fontWeight="normal">
             Status Pembayaran
           </Text>

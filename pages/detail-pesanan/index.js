@@ -49,7 +49,6 @@ import {
   estimasiFormat,
   filterObject,
   formatNumber,
-  formatPhoneNumber,
   isEmpty,
 } from "../../utils/functions";
 
@@ -111,7 +110,7 @@ const RingkasanPesanan = () => {
             {checkoutData.namaPengirim}
           </Text>
           <Text className="primaryFont" fontWeight="normal">
-            {formatPhoneNumber(checkoutData.nomorPengirim)}
+            {checkoutData.nomorPengirim}
           </Text>
         </Box>
 
@@ -139,7 +138,7 @@ const RingkasanPesanan = () => {
             {checkoutData.namaPenerima}
           </Text>
           <Text className="primaryFont" fontWeight="normal">
-            {formatPhoneNumber(checkoutData.nomorPenerima)}
+            {checkoutData.nomorPenerima}
           </Text>
 
           <Spacer h="0.5rem" />

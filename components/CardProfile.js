@@ -10,7 +10,7 @@ import {
 import { useRouter } from "next/router";
 import { useRef } from "react";
 import { FaUser } from "react-icons/fa";
-import { IoHeart } from "react-icons/io5";
+import { IoHeart, IoPeople } from "react-icons/io5";
 import { IoWalletOutline } from "react-icons/io5";
 import { VscPackage } from "react-icons/vsc";
 
@@ -73,12 +73,17 @@ export const CardProfile = ({ sm, cardProfileText }) => {
     { text: "Wishlist", icon: IoHeart, path: "/wishlist" },
     { text: "Pesanan Saya", icon: VscPackage, path: "/profile/pesanan-saya" },
     { text: "SM Pay", icon: IoWalletOutline, path: "/top-up" },
+    {
+      text: "Rekap Order Subreseller",
+      icon: IoPeople,
+      path: "/profile/subreseller",
+    },
   ];
 
   return (
     <Box
       position="sticky"
-      top="90px"
+      top="0px"
       w={{ md: "260px", lg: "270px" }}
       boxShadow=" 0px 2px 4px -1px rgba(45, 55, 72, 0.06), 0px 4px 6px -1px rgba(45, 55, 72, 0.1)"
       pt="20px"

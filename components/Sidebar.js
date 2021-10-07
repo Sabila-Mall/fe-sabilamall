@@ -143,8 +143,6 @@ const Sidebar = ({
       });
   }, []);
 
-  console.log(categoryState);
-
   return (
     <>
       <Box
