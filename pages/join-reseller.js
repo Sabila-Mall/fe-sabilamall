@@ -9,6 +9,7 @@ import {
   Link,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 import { Layout } from "../components/Layout";
 
@@ -17,6 +18,21 @@ const Join = () => {
 
   return (
     <Layout hasNavbar hasFooter hasPadding>
+      <Head>
+        <title>
+          Join Reseller Baju Muslim - Sabilamall
+        </title>
+        <meta
+          name="keywords"
+          content="join reseller baju muslim, reseller baju muslim, reseller sabilamall, join reseller sabilamall"
+        />
+        <meta name="author" content="SabilaMall" />
+        <meta name="DC.title" content="true" />
+        <meta
+          name="description"
+          content="Terima kasih sudah tertarik untuk mendapatkan informasi terkait pendaftaran reseller SabilaMall! Selamat bergabung bersama lebih dari 7000 orang di Indonesia yang sudah bergabung lebih dulu."
+        />
+      </Head>
       <Box className="secondaryFont">
         <Text
           className="secondaryFont"
@@ -29,23 +45,24 @@ const Join = () => {
           borderColor="gray.400"
           my={{ base: ".6rem", md: "1rem", lg: "1.2rem" }}
         />
-        <Text>
-          Terima kasih sudah tertartik untuk mendapatkan informasi terkait
+        <Text marginBottom="10px">
+          Terima kasih sudah tertarik untuk mendapatkan informasi terkait
           pendaftaran reseller SabilaMall!
         </Text>
-        <Text my={{ base: ".5rem", md: "1rem" }}>
+        <Text marginBottom="10px">
           Selamat bergabung bersama lebih dari 7000 orang di Indonesia yang
           sudah bergabung lebih dulu.
-          <br /> Selamat bergabung bersama orang-orang yang mau membangun
-          Indonesia ini lebih baik, lebih produktif. Selamat bergabung bersama
-          komunitas orang-orang yang sukses mandiri secara ekonomi.
         </Text>
-        <Text fontSize="1.125rem">
+        <Text marginBottom="10px">
+          Selamat bergabung bersama orang-orang yang mau membangun
+          Indonesia ini lebih baik, lebih produktif. Selamat bergabung bersama komunitas orang-orang yang sukses mandiri secara ekonomi.
+        </Text>
+        <Text marginBottom="10px">
           Kami sangat menyambut baik Anda untuk jualan bareng, belajar bareng
           dan maju bareng karena kami sudah menyiapkan berbagai kemudahan dan
           fasilitas seperti:
         </Text>
-        <UnorderedList fontSize="1.125rem">
+        <UnorderedList marginBottom="10px">
           <ListItem>
             Website dan aplikasi agar kita bisa cek stok sendiri bahkan order
             sendiri 24 jam sehari tanpa harus menunggu admin online.
@@ -63,8 +80,8 @@ const Join = () => {
             malam!
           </ListItem>
         </UnorderedList>
-        <Text>dan masih banyak lagi kemudahan dan fasilitas lain.</Text>
-        <Text mt={{ base: ".5rem", md: "1rem" }}>
+        <Text marginBottom="10px">...dan masih banyak lagi kemudahan dan fasilitas lain.</Text>
+        <Text>
           Baca info penawaran promo join reseller baju muslim{" "}
           <Link
             href="https://sabilamall.co.id/lp/dropship-dan-reseller-baju-muslim/"
