@@ -242,6 +242,7 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
         onClick={() => setIsSearched(true)}
         display={{ base: "block", md: "none" }}
       />
+
       <Icon
         as={IoNotifications}
         className={styles.navbarIcon}
@@ -307,6 +308,14 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
         <Icon
           display={{ base: "none", md: "block" }}
           as={IoFileTrayStacked}
+          className={styles.navbarIcon}
+          color="gray.500"
+        />
+      </Link>
+      <Link href={"/profile/pesanan-saya"} w="fit-content">
+        <Icon
+          display={{ base: "none", lg: "block" }}
+          as={IoReceiptSharp}
           className={styles.navbarIcon}
           color="gray.500"
         />
@@ -482,7 +491,7 @@ const Navbar = () => {
               borderRadius="15px"
               borderWidth="0"
               bg="gray.100"
-              pl="55px"
+              pl="50px"
               focusBorderColor="gray.100"
               value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
