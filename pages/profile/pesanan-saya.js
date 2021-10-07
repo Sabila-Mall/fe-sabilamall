@@ -267,7 +267,7 @@ const CardPesanan = ({
             {deliverer}
           </Text>
         </GridItem>
-        <GridItem colStart={{ base: 0, md: 2 }} colEnd={{ base: 1, md: 5 }}>
+        <GridItem colStart={{ base: 0, md: 2 }} colEnd={{ base: 1, md: 3 }}>
           <Text color="gray.500" fontWeight="normal">
             Status Pembayaran
           </Text>
