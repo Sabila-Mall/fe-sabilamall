@@ -422,10 +422,11 @@ const OrderInformation = ({ order }) => {
                     color="gray.600"
                     textAlign="right"
                   >
-                    <Text>{resiData?.waybill_courrier}</Text>
-                    {resi && (
+                    <Text>{resiData?.found == 0 ? 'Kurir: -' : 'Kurir: ' + resiData?.waybill_courrier}</Text>
+                    {resiData != null && (
                       <Flex alignItems="center">
-                        <Text>{`No. Resi:  ${resi}`}</Text>
+                        <Text>{`No. Resi:  ${resiData?.found == 0 ? '-' : resi}`}</Text>
+                        {resiData?.found != 0 && (
                         <Tooltip
                           label={hasCopied ? "Copied!" : "Copy"}
                           placement="top"
@@ -441,6 +442,7 @@ const OrderInformation = ({ order }) => {
                             />
                           </Box>
                         </Tooltip>
+                        )}
                       </Flex>
                     )}
                   </Box>
