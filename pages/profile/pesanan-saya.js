@@ -188,14 +188,7 @@ const CardPesanan = ({
               Cetak Nota
             </Button>
           )}
-          <Text
-            display={{ base: "block", md: "none" }}
-            fontSize="1rem"
-            fontWeight="700"
-            color="orange.500"
-          >
-            {orderStatus}
-          </Text>
+          
         </Link>
         <Flex justifyContent="space-between" w="full" mb="0.5rem">
           <Flex alignItems="center">
@@ -223,14 +216,56 @@ const CardPesanan = ({
             </Text>
           </Flex>
           <Flex align="center" display={{ base: "none", md: "flex" }}>
-            <Text
-              fontSize="1rem"
-              fontWeight="700"
-              mr="0.5rem"
-              color="orange.500"
-            >
-              {orderStatus}
-            </Text>
+            {orderStatus === "Booking" && (
+              <Text
+                fontSize="1rem"
+                fontWeight="700"
+                mr="0.5rem"
+                color="grey"
+              >
+                {orderStatus}
+              </Text>
+            )}
+            {orderStatus === "Dalam Pengiriman" && (
+              <Text
+                fontSize="1rem"
+                fontWeight="700"
+                mr="0.5rem"
+                color="blue"
+              >
+                {orderStatus}
+              </Text>
+            )}
+            {orderStatus === "Selesai" && (
+              <Text
+                fontSize="1rem"
+                fontWeight="700"
+                mr="0.5rem"
+                color="green"
+              >
+                {orderStatus}
+              </Text>
+            )}
+            {orderStatus === "Batal" || orderStatus === "Ditolak" && (
+              <Text
+                fontSize="1rem"
+                fontWeight="700"
+                mr="0.5rem"
+                color="red"
+              >
+                {orderStatus}
+              </Text>
+            )}
+            {orderStatus === "Dalam Proses" && (
+              <Text
+                fontSize="1rem"
+                fontWeight="700"
+                mr="0.5rem"
+                color="orange.500"
+              >
+                {orderStatus}
+              </Text>
+            )}
           </Flex>
         </Flex>
       </Flex>
