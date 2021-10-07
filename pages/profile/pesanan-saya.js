@@ -187,7 +187,7 @@ const CardPesanan = ({
           display="flex"
           alignItems="center"
           justifyContent={
-            parentId == 0 && paymentStatus !== "Batal"
+            orderStatus !== "Ditolak"
               ? "space-between"
               : "flex-end"
           }
@@ -197,7 +197,7 @@ const CardPesanan = ({
           target="_blank"
           href={`${window.location.origin}/nota-pembayaran/${orderId}`}
         >
-          {parentId == 0 && paymentStatus !== "Batal" && (
+          {orderStatus !== "Ditolak" && (
             <Button
               mr="1rem"
               color="white"
