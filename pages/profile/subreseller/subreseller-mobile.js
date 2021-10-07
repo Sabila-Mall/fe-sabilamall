@@ -69,7 +69,7 @@ const SubresellerMobile = ({
                 Jumlah
               </Text>
             </Box>
-            {subResellerData.length > 0 ? (
+            {subResellerData?.length > 0 ? (
               subResellerData.map((data) => {
                 if (
                   data.memberId.toLowerCase().includes(search.toLowerCase()) ||
