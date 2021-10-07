@@ -48,6 +48,7 @@ const ProfileMobile = () => {
       text: "Upgrade Akun",
       path: ["/profile/invoice-upgrade-akun", "/profile/upgrade-account"],
     },
+    { text: "Rekap Order Subreseller", path: "/profile/subreseller" },
     { text: "Pusat Bantuan", path: "/" },
     { text: "Keluar", path: "/login" },
   ];
