@@ -219,10 +219,10 @@ const CardPesanan = ({
               style={{ marginTop: "2px" }}
               cursor="pointer"
               onClick={() => {
-                copyToClipboard(orderNum, "Nomor order berhasil disalin");
+                copyToClipboard(orderNum, "Nomor order berhasil disalin.");
                 toast({
                   position: "top",
-                  title: "Berhasil menyalin nomor order",
+                  title: "Berhasil menyalin nomor order.",
                   status: "success",
                   isClosable: true,
                 });
