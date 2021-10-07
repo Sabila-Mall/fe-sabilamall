@@ -145,6 +145,18 @@ const CardPesanan = ({
   const { userData } = useAuthContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
+  var textColor = "";
+  if(orderStatus === "Booking"){
+    textColor = "grey";
+  } else if (orderStatus === "Dalam Pengiriman") {
+    textColor = "blue";
+  } else if (orderStatus === "Selesai") {
+    textColor = "green";
+  }  else if (orderStatus === "Batal" || orderStatus === "Ditolak") {
+    textColor = "red";
+  } else {
+    textColor = "orange.500";
+  }
   const date = datePurchased.split(" ")[0].split("-");
   const formatedDate = `${Number(date[2])} ${
     MONTH[Number(date[1]) - 1]
@@ -216,56 +228,14 @@ const CardPesanan = ({
             </Text>
           </Flex>
           <Flex align="center" display={{ base: "none", md: "flex" }}>
-            {orderStatus === "Booking" && (
-              <Text
+            <Text
                 fontSize="1rem"
                 fontWeight="700"
                 mr="0.5rem"
-                color="grey"
+                color={textColor}
               >
-                {orderStatus}
-              </Text>
-            )}
-            {orderStatus === "Dalam Pengiriman" && (
-              <Text
-                fontSize="1rem"
-                fontWeight="700"
-                mr="0.5rem"
-                color="blue"
-              >
-                {orderStatus}
-              </Text>
-            )}
-            {orderStatus === "Selesai" && (
-              <Text
-                fontSize="1rem"
-                fontWeight="700"
-                mr="0.5rem"
-                color="green"
-              >
-                {orderStatus}
-              </Text>
-            )}
-            {orderStatus === "Batal" || orderStatus === "Ditolak" && (
-              <Text
-                fontSize="1rem"
-                fontWeight="700"
-                mr="0.5rem"
-                color="red"
-              >
-                {orderStatus}
-              </Text>
-            )}
-            {orderStatus === "Dalam Proses" && (
-              <Text
-                fontSize="1rem"
-                fontWeight="700"
-                mr="0.5rem"
-                color="orange.500"
-              >
-                {orderStatus}
-              </Text>
-            )}
+              {orderStatus}
+            </Text>
           </Flex>
         </Flex>
       </Flex>
