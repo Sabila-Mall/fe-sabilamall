@@ -153,6 +153,7 @@ const CardPesanan = ({
   orderId,
   parentId,
   shippingResi,
+  shippingMethod,
   totalPriceAgent,
 }) => {
   const router = useRouter();
@@ -260,7 +261,7 @@ const CardPesanan = ({
             {deliverer}
           </Text>
         </GridItem>
-        <GridItem colStart={{ base: 0, md: 2 }} colEnd={{ base: 1, md: 5 }}>
+        <GridItem colStart={{ base: 0, md: 2 }} colEnd={{ base: 1, md: 3 }}>
           <Text color="gray.500" fontWeight="normal">
             Status Pembayaran
           </Text>
@@ -292,6 +293,9 @@ const CardPesanan = ({
               />
             )}
           </Flex>
+          <Text fontSize="0.9rem" fontWeight="500" mr="0.5rem">
+              {shippingResi == null ? '' : shippingMethod}
+            </Text>
         </GridItem>
       </Grid>
       <Divider />
@@ -480,6 +484,7 @@ const PesananSayaDesktop = () => {
                       datePurchased={dataPesanan.date_purchased}
                       orderStatus={dataPesanan.orders_status}
                       shippingResi={dataPesanan.shipping_resi}
+                      shippingMethod={dataPesanan.shipping_method}
                       paymentStatus={dataPesanan.payments_status}
                       dropShip={dataPesanan.dropship_name}
                       deliverer={dataPesanan.delivery_name}
