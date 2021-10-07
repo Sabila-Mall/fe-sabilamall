@@ -138,6 +138,7 @@ const CardPesanan = ({
   totalPrice,
   orderId,
   parentId,
+  shippingResi,
   totalPriceAgent,
 }) => {
   const router = useRouter();
@@ -255,13 +256,38 @@ const CardPesanan = ({
             {deliverer}
           </Text>
         </GridItem>
-        <GridItem colStart={{ base: 0, md: 2 }} colEnd={{ base: 1, md: 3 }}>
+        <GridItem colStart={{ base: 0, md: 2 }} colEnd={{ base: 1, md: 5 }}>
           <Text color="gray.500" fontWeight="normal">
             Status Pembayaran
           </Text>
           <Text fontSize="1rem" fontWeight="500">
             {paymentStatus}
           </Text>
+          <Text color="gray.500" fontWeight="normal">
+            No. Resi
+          </Text>
+          <Flex alignItems="center">
+            <Text fontSize="1rem" fontWeight="500" mr="0.5rem">
+              {shippingResi == null ? "-" : shippingResi}
+            </Text>
+            {shippingResi != null && (
+              <IoCopy
+                size="1.25rem"
+                color="#DD6B20"
+                style={{ marginTop: "2px" }}
+                cursor="pointer"
+                onClick={() => {
+                  copyToClipboard(shippingResi, "No. resi berhasil disalin.");
+                  toast({
+                    position: "top",
+                    title: "No. resi berhasil disalin.",
+                    status: "success",
+                    isClosable: true,
+                  });
+                }}
+              />
+            )}
+          </Flex>
         </GridItem>
       </Grid>
       <Divider />
@@ -449,6 +475,7 @@ const PesananSayaDesktop = () => {
                       orderNum={dataPesanan.orders_number}
                       datePurchased={dataPesanan.date_purchased}
                       orderStatus={dataPesanan.orders_status}
+                      shippingResi={dataPesanan.shipping_resi}
                       paymentStatus={dataPesanan.payments_status}
                       dropShip={dataPesanan.dropship_name}
                       deliverer={dataPesanan.delivery_name}
@@ -545,6 +572,7 @@ const PesananSayaMobile = () => {
                     orderNum={dataPesanan.orders_number}
                     datePurchased={dataPesanan.date_purchased}
                     orderStatus={dataPesanan.orders_status}
+                    shippingResi={dataPesanan.shipping_resi}
                     paymentStatus={dataPesanan.payments_status}
                     dropShip={dataPesanan.dropship_name}
                     deliverer={dataPesanan.delivery_name}
