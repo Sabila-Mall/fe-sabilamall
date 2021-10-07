@@ -46,6 +46,20 @@ import {
 } from "../../utils/functions";
 import { needForLogin } from "../../utils/functions";
 
+const getOrderStatusColor = (orderStatus) => {
+  if (orderStatus === "Booking") {
+    return "grey";
+  } else if (orderStatus === "Dalam Pengiriman") {
+    return "blue";
+  } else if (orderStatus === "Selesai") {
+    return "green";
+  } else if (orderStatus === "Batal" || orderStatus === "Ditolak") {
+    return "red";
+  } else {
+    return "orange.500";
+  }
+};
+
 const handleSearch = (
   search,
   setFetchOrder,
@@ -145,6 +159,9 @@ const CardPesanan = ({
   const { userData } = useAuthContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
+
+  const textColor = getOrderStatusColor(orderStatus);
+
   const date = datePurchased.split(" ")[0].split("-");
   const formatedDate = `${Number(date[2])} ${
     MONTH[Number(date[1]) - 1]
@@ -188,14 +205,6 @@ const CardPesanan = ({
               Cetak Nota
             </Button>
           )}
-          <Text
-            display={{ base: "block", md: "none" }}
-            fontSize="1rem"
-            fontWeight="700"
-            color="orange.500"
-          >
-            {orderStatus}
-          </Text>
         </Link>
         <Flex justifyContent="space-between" w="full" mb="0.5rem">
           <Flex alignItems="center">
@@ -227,7 +236,7 @@ const CardPesanan = ({
               fontSize="1rem"
               fontWeight="700"
               mr="0.5rem"
-              color="orange.500"
+              color={textColor}
             >
               {orderStatus}
             </Text>
