@@ -52,6 +52,7 @@ export default function PDF() {
 
   return (
     <Box h="100%">
+      {console.log(data)}
       {data && detailprice.length > 0 ? (
         <MyDocument
           nomorPesanan={data.orders_number}
