@@ -46,6 +46,20 @@ import {
 } from "../../utils/functions";
 import { needForLogin } from "../../utils/functions";
 
+const getOrderStatusColor = (orderStatus) => {
+  if (orderStatus === "Booking") {
+    return "grey";
+  } else if (orderStatus === "Dalam Pengiriman") {
+    return "blue";
+  } else if (orderStatus === "Selesai") {
+    return "green";
+  } else if (orderStatus === "Batal" || orderStatus === "Ditolak") {
+    return "red";
+  } else {
+    return "orange.500";
+  }
+};
+
 const handleSearch = (
   search,
   setFetchOrder,
@@ -138,6 +152,7 @@ const CardPesanan = ({
   totalPrice,
   orderId,
   parentId,
+  shippingResi,
   totalPriceAgent,
 }) => {
   const router = useRouter();
@@ -145,6 +160,9 @@ const CardPesanan = ({
   const { userData } = useAuthContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
+
+  const textColor = getOrderStatusColor(orderStatus);
+
   const date = datePurchased.split(" ")[0].split("-");
   const formatedDate = `${Number(date[2])} ${
     MONTH[Number(date[1]) - 1]
@@ -188,14 +206,6 @@ const CardPesanan = ({
               Cetak Nota
             </Button>
           )}
-          <Text
-            display={{ base: "block", md: "none" }}
-            fontSize="1rem"
-            fontWeight="700"
-            color="orange.500"
-          >
-            {orderStatus}
-          </Text>
         </Link>
         <Flex justifyContent="space-between" w="full" mb="0.5rem">
           <Flex alignItems="center">
@@ -227,7 +237,7 @@ const CardPesanan = ({
               fontSize="1rem"
               fontWeight="700"
               mr="0.5rem"
-              color="orange.500"
+              color={textColor}
             >
               {orderStatus}
             </Text>
@@ -237,6 +247,12 @@ const CardPesanan = ({
       <Divider />
       <Grid gridAutoColumns={{ base: "100%", md: "50% 50%" }} w="full">
         <GridItem colSpan={1}>
+          <Text color="gray.500" fontWeight="normal">
+            Status Pesanan
+          </Text>
+          <Text fontSize="1rem" fontWeight="500" color={textColor}>
+            {orderStatus}
+          </Text>
           <Text color="gray.500" fontWeight="normal">
             Pengirim
           </Text>
@@ -250,13 +266,38 @@ const CardPesanan = ({
             {deliverer}
           </Text>
         </GridItem>
-        <GridItem colStart={{ base: 0, md: 2 }} colEnd={{ base: 1, md: 3 }}>
+        <GridItem colStart={{ base: 0, md: 2 }} colEnd={{ base: 1, md: 5 }}>
           <Text color="gray.500" fontWeight="normal">
             Status Pembayaran
           </Text>
           <Text fontSize="1rem" fontWeight="500">
             {paymentStatus}
           </Text>
+          <Text color="gray.500" fontWeight="normal">
+            No. Resi
+          </Text>
+          <Flex alignItems="center">
+            <Text fontSize="1rem" fontWeight="500" mr="0.5rem">
+              {shippingResi == null ? "-" : shippingResi}
+            </Text>
+            {shippingResi != null && (
+              <IoCopy
+                size="1.25rem"
+                color="#DD6B20"
+                style={{ marginTop: "2px" }}
+                cursor="pointer"
+                onClick={() => {
+                  copyToClipboard(shippingResi, "No. resi berhasil disalin.");
+                  toast({
+                    position: "top",
+                    title: "No. resi berhasil disalin.",
+                    status: "success",
+                    isClosable: true,
+                  });
+                }}
+              />
+            )}
+          </Flex>
         </GridItem>
       </Grid>
       <Divider />
@@ -444,6 +485,7 @@ const PesananSayaDesktop = () => {
                       orderNum={dataPesanan.orders_number}
                       datePurchased={dataPesanan.date_purchased}
                       orderStatus={dataPesanan.orders_status}
+                      shippingResi={dataPesanan.shipping_resi}
                       paymentStatus={dataPesanan.payments_status}
                       dropShip={dataPesanan.dropship_name}
                       deliverer={dataPesanan.delivery_name}
@@ -540,6 +582,7 @@ const PesananSayaMobile = () => {
                     orderNum={dataPesanan.orders_number}
                     datePurchased={dataPesanan.date_purchased}
                     orderStatus={dataPesanan.orders_status}
+                    shippingResi={dataPesanan.shipping_resi}
                     paymentStatus={dataPesanan.payments_status}
                     dropShip={dataPesanan.dropship_name}
                     deliverer={dataPesanan.delivery_name}

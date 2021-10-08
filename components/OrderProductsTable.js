@@ -169,7 +169,7 @@ export function OrderProductsTableMobile({ products }) {
                 fontSize="0.8rem"
                 className="secondaryFont"
               >
-                Subtotal: {product.subTotal}
+                Subtotal:
               </Text>
               <Spacer />
               <Text
@@ -177,7 +177,7 @@ export function OrderProductsTableMobile({ products }) {
                 fontSize="0.8rem"
                 className="secondaryFont"
               >
-                {currencyFormat(product.totalPrice)}
+                {product.subTotal}
               </Text>
             </Flex>
             <Divider border="1px solid gray.200" my="16px" />

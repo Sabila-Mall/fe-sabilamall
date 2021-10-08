@@ -44,7 +44,6 @@ export const AddressProvider = ({ children }) => {
       getAddressByUserId(userId, 1)
         .then((res) => {
           setaddressDataPenerima(res);
-          console.log(res);
         })
         .finally(() => setLoading(false));
     }

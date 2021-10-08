@@ -43,7 +43,6 @@ export const ProductImages = ({
     x = (offsetX / zoomer.offsetWidth) * 100;
     y = (offsetY / zoomer.offsetHeight) * 100;
     zoomer.style.backgroundPosition = x + "% " + y + "%";
-    console.log(zoomer.style.backgroundPosition);
   }
 
   const settings = {

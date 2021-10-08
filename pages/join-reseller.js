@@ -67,7 +67,7 @@ const Join = () => {
         <Text mt={{ base: ".5rem", md: "1rem" }}>
           Baca info penawaran promo join reseller baju muslim{" "}
           <Link
-            href="https://sabilamall.co.id/lp/reseller-baju-muslim-terlengkap-dan-terbesar/"
+            href="https://sabilamall.co.id/lp/dropship-dan-reseller-baju-muslim/"
             color="orange.500"
           >
             di sini.

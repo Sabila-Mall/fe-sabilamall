@@ -40,7 +40,7 @@ const ProfileDesktop = ({ section, element, cardProfileText }) => {
       {smLoading ? (
         <Spinner />
       ) : (
-        <Box bg="gray.50" h="100%" display={{ base: "none", md: "block" }}>
+        <Box bg="gray.50" minH="100%" display={{ base: "none", md: "block" }}>
           <Flex
             justify="center"
             pt="120px"
