@@ -23,6 +23,7 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { BiSearch } from "react-icons/bi";
 import { IoIosAddCircle } from "react-icons/io";
 
 import { apiKecamatan, apiKodePos, apiKota, apiProvinsi } from "../api/Zone";
@@ -30,7 +31,6 @@ import { useAddressContext } from "../contexts/addressProvider";
 import { useAuthContext } from "../contexts/authProvider";
 import AddressBoxReceiver from "./AddressBox";
 import InputBoxAndLabel from "./InputBoxAndLabel";
-import { BiSearch } from "react-icons/bi";
 
 const ReceiverAddresses = ({ isMobile }) => {
   const [penerimaSearch, setPenerimaSearch] = useState("");
@@ -85,7 +85,7 @@ const ReceiverAddresses = ({ isMobile }) => {
           const response = res.data.data;
           setdistrictData(response);
         })
-        .catch((err) => { });
+        .catch((err) => {});
     }
   }, [cityId]);
 
@@ -96,7 +96,7 @@ const ReceiverAddresses = ({ isMobile }) => {
           const response = res.data.data;
           setpostalCodeData(response);
         })
-        .catch((err) => { });
+        .catch((err) => {});
     }
   }, [districtId]);
 
@@ -193,9 +193,7 @@ const ReceiverAddresses = ({ isMobile }) => {
           fontSize="sm"
           onChange={(e) => setPenerimaSearch(e.target.value)}
         />
-        <InputRightElement
-          children={<BiSearch color="black" />}
-        />
+        <InputRightElement children={<BiSearch color="black" />} />
       </InputGroup>
       <Divider mt="0.5rem" />
       <Stack>
@@ -214,8 +212,9 @@ const ReceiverAddresses = ({ isMobile }) => {
               );
             } else {
               const nama = address?.firstname + " " + address?.lastname;
-              if ((nama.toLowerCase().includes(penerimaSearch.toLowerCase()) ||
-                address?.phone.includes(penerimaSearch))
+              if (
+                nama.toLowerCase().includes(penerimaSearch.toLowerCase()) ||
+                address?.phone?.includes(penerimaSearch)
               ) {
                 return (
                   <Box key={index}>
