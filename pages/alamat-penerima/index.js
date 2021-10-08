@@ -593,10 +593,10 @@ const AlamatPenerima = () => {
                           {dataPengirim &&
                             dataPengirim.map((data, index) => {
                               if (
-                                data.nama
-                                  .toLowerCase()
-                                  .includes(pengirimSearch.toLowerCase()) ||
-                                data.nomor.includes(pengirimSearch)
+                                data?.nama
+                                  ?.toLowerCase()
+                                  ?.includes(pengirimSearch.toLowerCase()) ||
+                                data?.nomor?.includes(pengirimSearch)
                               ) {
                                 return (
                                   <Box
@@ -750,15 +750,15 @@ const AlamatPenerima = () => {
                           {dataPenerima &&
                             dataPenerima.map((data, index) => {
                               if (
-                                data.nama
-                                  .toLowerCase()
-                                  .includes(penerimaSearch.toLowerCase()) ||
-                                data.nomor
-                                  .toLowerCase()
-                                  .includes(penerimaSearch.toLowerCase()) ||
-                                data.alamat
-                                  .toLowerCase()
-                                  .includes(penerimaSearch.toLowerCase())
+                                data?.nama
+                                  ?.toLowerCase()
+                                  ?.includes(penerimaSearch.toLowerCase()) ||
+                                data?.nomor
+                                  ?.toLowerCase()
+                                  ?.includes(penerimaSearch.toLowerCase()) ||
+                                data?.alamat
+                                  ?.toLowerCase()
+                                  ?.includes(penerimaSearch.toLowerCase())
                               ) {
                                 return (
                                   <Box
