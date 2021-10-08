@@ -63,7 +63,7 @@ import {
  * @param {CheckoutProduct[]} daftarProduk
  */
 
-const ACCEPTED_PAYMENT_METHODS = ["transferbank", "deposit"];
+const ACCEPTED_PAYMENT_METHODS = ["transferbank", "deposit", "midtrans"];
 
 const RingkasanPesanan = () => {
   const { width } = useWindowSize();

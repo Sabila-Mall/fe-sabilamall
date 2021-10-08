@@ -8,7 +8,8 @@ import {
 } from "@chakra-ui/react";
 
 import RelatedProductCard from "../components/RelatedProductCard";
-import CardProduct from "./CardProduct";
+// import CardProduct from "./CardProduct";
+import RelatedCard from "./RelatedCard";
 
 const RelatedProductContainer = ({ related_products, customers_id }) => {
   return (
@@ -20,12 +21,14 @@ const RelatedProductContainer = ({ related_products, customers_id }) => {
       </Stack>
       <Grid
         templateColumns={`repeat(${related_products?.length}, 1fr)`}
-        gap="24px"
-        mt="16px"
-        overflowX="auto"
+        w="100%"
+        position="relative"
+        columnGap={2}
+        rowGap={4}
+        
       >
         {related_products.map(({ id, isLiked, ...product }, i) => (
-          <CardProduct
+          <RelatedCard
             {...product}
             isWishlist={isLiked == 1}
             key={id}
