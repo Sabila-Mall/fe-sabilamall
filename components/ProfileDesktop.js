@@ -23,8 +23,13 @@ const ProfileDesktop = ({ section, element, cardProfileText }) => {
   const menu = [
     { text: "Profil Saya", path: "/profile", icon: FaUser },
     {
-      text: "Data Pengiriman",
-      path: "/profile/alamat-pengiriman",
+      text: "Data Pengirim",
+      path: "/profile/data-pengirim",
+      icon: VscPackage,
+    },
+    {
+      text: "Alamat Penerima",
+      path: "/profile/alamat-penerima",
       icon: VscPackage,
     },
     {

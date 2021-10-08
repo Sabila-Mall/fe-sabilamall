@@ -42,12 +42,8 @@ export default function PDF() {
             price: currencyFormat(d.shipping_cost),
           },
           {
-            name: "Total Diskon",
-            price: currencyFormat(subtotal + d.shipping_cost - d.order_price),
-          },
-          {
             name: "Total Biaya",
-            price: currencyFormat(d.order_price),
+            price: currencyFormat(subtotal + d.shipping_cost),
           },
         ]);
       });

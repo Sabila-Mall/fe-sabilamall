@@ -153,6 +153,7 @@ const CardPesanan = ({
   orderId,
   parentId,
   shippingResi,
+  shippingMethod,
   totalPriceAgent,
 }) => {
   const router = useRouter();
@@ -186,7 +187,7 @@ const CardPesanan = ({
           display="flex"
           alignItems="center"
           justifyContent={
-            parentId == 0 && paymentStatus !== "Batal"
+            orderStatus !== "Ditolak"
               ? "space-between"
               : "flex-end"
           }
@@ -196,7 +197,7 @@ const CardPesanan = ({
           target="_blank"
           href={`${window.location.origin}/nota-pembayaran/${orderId}`}
         >
-          {parentId == 0 && paymentStatus !== "Batal" && (
+          {orderStatus !== "Ditolak" && (
             <Button
               mr="1rem"
               color="white"
@@ -218,10 +219,10 @@ const CardPesanan = ({
               style={{ marginTop: "2px" }}
               cursor="pointer"
               onClick={() => {
-                copyToClipboard(orderNum, "Nomor order berhasil disalin");
+                copyToClipboard(orderNum, "Nomor order berhasil disalin.");
                 toast({
                   position: "top",
-                  title: "Berhasil menyalin nomor order",
+                  title: "Berhasil menyalin nomor order.",
                   status: "success",
                   isClosable: true,
                 });
@@ -266,7 +267,7 @@ const CardPesanan = ({
             {deliverer}
           </Text>
         </GridItem>
-        <GridItem colStart={{ base: 0, md: 2 }} colEnd={{ base: 1, md: 5 }}>
+        <GridItem colStart={{ base: 0, md: 2 }} colEnd={{ base: 1, md: 3 }}>
           <Text color="gray.500" fontWeight="normal">
             Status Pembayaran
           </Text>
@@ -298,6 +299,9 @@ const CardPesanan = ({
               />
             )}
           </Flex>
+          <Text fontSize="0.9rem" fontWeight="500" mr="0.5rem">
+              {shippingResi == null ? '' : shippingMethod}
+            </Text>
         </GridItem>
       </Grid>
       <Divider />
@@ -486,6 +490,7 @@ const PesananSayaDesktop = () => {
                       datePurchased={dataPesanan.date_purchased}
                       orderStatus={dataPesanan.orders_status}
                       shippingResi={dataPesanan.shipping_resi}
+                      shippingMethod={dataPesanan.shipping_method}
                       paymentStatus={dataPesanan.payments_status}
                       dropShip={dataPesanan.dropship_name}
                       deliverer={dataPesanan.delivery_name}

@@ -40,7 +40,8 @@ const ProfileMobile = () => {
 
   const profileMenu = [
     { text: "Ubah Password", path: "/profile/ubah-password" },
-    { text: "Alamat Pengiriman", path: "/profile/alamat-pengiriman" },
+    { text: "Data Pengirim", path: "/profile/data-pengirim" },
+    { text: "Alamat Penerima", path: "/profile/alamat-penerima" },
     { text: "Edit Profile", path: "/profile/edit-profile" },
     { text: "Top Up SM Pay", path: "/top-up" },
     { text: "Riwayat Top Up", path: "/riwayat" },
@@ -172,7 +173,7 @@ const ProfileMobile = () => {
                   })
                   .map((menu) =>
                     menu.text === "Upgrade Akun" &&
-                    userData?.user_level?.toLowerCase() !== "agent" ? (
+                      userData?.user_level?.toLowerCase() !== "agent" ? (
                       <VStack
                         divider={<StackDivider borderColor="gray.200" />}
                         align="stretch"
