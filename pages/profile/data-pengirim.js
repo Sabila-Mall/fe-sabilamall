@@ -7,11 +7,11 @@ import ProfileDesktop from "../../components/ProfileDesktop";
 const editAddress = () => {
   return (
     <>
-      <ChangeAddressMobile />
+      <ChangeAddressMobile menu="Data Pengirim" section="pengirim" />
       <ProfileDesktop
         cardProfileText={"Akun Saya"}
-        section="Data Pengiriman"
-        element={<ChangeAddress isMobile={false} />}
+        section="Data Pengirim"
+        element={<ChangeAddress isMobile={false} section="pengirim" />}
       />
     </>
   );

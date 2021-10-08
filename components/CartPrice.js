@@ -19,7 +19,7 @@ export const CartPrice = ({ discount, initialPrice }) => {
               fontSize="0.8rem"
               color="gray.500"
             >
-              {`Rp${formatPrice(initialPrice)}`}
+              {`Rp${formatPrice(initialPrice ?? 0)}`}
             </Text>
             <Flex mb="12px" flexDir={{ base: "row", md: "column" }}>
               <Text
@@ -29,7 +29,7 @@ export const CartPrice = ({ discount, initialPrice }) => {
                 fontWeight="500"
                 my={{ md: "0.5rem" }}
               >
-                {`Rp${formatPrice(getPriceAfterDiscount(initialPrice, discount))}`}
+                {`Rp${formatPrice(getPriceAfterDiscount(initialPrice ?? 0, discount ?? 0))}`}
               </Text>
               <Box
                 w={{ lg: "6rem" }}
