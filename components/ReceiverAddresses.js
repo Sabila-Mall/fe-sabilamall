@@ -17,6 +17,9 @@ import {
   Grid,
   GridItem,
   Spinner,
+  InputGroup,
+  Input,
+  InputRightElement,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -27,8 +30,10 @@ import { useAddressContext } from "../contexts/addressProvider";
 import { useAuthContext } from "../contexts/authProvider";
 import AddressBoxReceiver from "./AddressBox";
 import InputBoxAndLabel from "./InputBoxAndLabel";
+import { BiSearch } from "react-icons/bi";
 
 const ReceiverAddresses = ({ isMobile }) => {
+  const [penerimaSearch, setPenerimaSearch] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { register, handleSubmit } = useForm();
   const { addressDataPenerima, loading, addItemPenerima } = useAddressContext();
@@ -80,7 +85,7 @@ const ReceiverAddresses = ({ isMobile }) => {
           const response = res.data.data;
           setdistrictData(response);
         })
-        .catch((err) => {});
+        .catch((err) => { });
     }
   }, [cityId]);
 
@@ -91,7 +96,7 @@ const ReceiverAddresses = ({ isMobile }) => {
           const response = res.data.data;
           setpostalCodeData(response);
         })
-        .catch((err) => {});
+        .catch((err) => { });
     }
   }, [districtId]);
 
@@ -177,6 +182,22 @@ const ReceiverAddresses = ({ isMobile }) => {
         </Button>
       </Flex>
       <Divider mt="0.5rem" />
+      <InputGroup
+        width={{ base: "100%", lg: "48%" }}
+        marginTop="0.5rem"
+        marginBottom="1rem"
+      >
+        <Input
+          placeholder="Cari alamat"
+          color="gray.500"
+          fontSize="sm"
+          onChange={(e) => setPenerimaSearch(e.target.value)}
+        />
+        <InputRightElement
+          children={<BiSearch color="black" />}
+        />
+      </InputGroup>
+      <Divider mt="0.5rem" />
       <Stack>
         {loading ? (
           <Grid placeItems="center">
@@ -185,11 +206,24 @@ const ReceiverAddresses = ({ isMobile }) => {
         ) : (
           addressDataPenerima &&
           addressDataPenerima.map((address, index) => {
-            return (
-              <Box key={index}>
-                <AddressBoxReceiver data={address} />
-              </Box>
-            );
+            if (penerimaSearch === "") {
+              return (
+                <Box key={index}>
+                  <AddressBoxReceiver data={address} />
+                </Box>
+              );
+            } else {
+              const nama = address?.firstname + " " + address?.lastname;
+              if ((nama.toLowerCase().includes(penerimaSearch.toLowerCase()) ||
+                address?.phone.includes(penerimaSearch))
+              ) {
+                return (
+                  <Box key={index}>
+                    <AddressBoxReceiver data={address} />
+                  </Box>
+                );
+              }
+            }
           })
         )}
         {isMobile ? (

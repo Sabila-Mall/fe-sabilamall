@@ -16,6 +16,9 @@ import {
   Divider,
   Grid,
   Spinner,
+  InputGroup,
+  Input,
+  InputRightElement,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { IoIosAddCircle } from "react-icons/io";
@@ -24,8 +27,11 @@ import { useAddressContext } from "../contexts/addressProvider";
 import { useAuthContext } from "../contexts/authProvider";
 import { AddressBoxSender } from "./AddressBox";
 import InputBoxAndLabel from "./InputBoxAndLabel";
+import { BiSearch } from "react-icons/bi";
+import { useState } from "react";
 
 const SenderAddresses = ({ isMobile }) => {
+  const [pengirimSearch, setPengirimSearch] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { register, handleSubmit } = useForm();
   const { addressDataPengirim, loading, addItemPengirim } = useAddressContext();
@@ -87,6 +93,22 @@ const SenderAddresses = ({ isMobile }) => {
         </Button>
       </Flex>
       <Divider mt="0.5rem" />
+      <InputGroup
+        width={{ base: "100%", lg: "48%" }}
+        marginTop="0.5rem"
+        marginBottom="1rem"
+      >
+        <Input
+          placeholder="Cari alamat"
+          color="gray.500"
+          fontSize="sm"
+          onChange={(e) => setPengirimSearch(e.target.value)}
+        />
+        <InputRightElement
+          children={<BiSearch color="black" />}
+        />
+      </InputGroup>
+      <Divider mt="0.5rem" />
       {loading ? (
         <Grid placeItems="center">
           <Spinner />
@@ -94,11 +116,25 @@ const SenderAddresses = ({ isMobile }) => {
       ) : (
         addressDataPengirim &&
         addressDataPengirim.map((address, index) => {
-          return (
-            <Box key={index}>
-              <AddressBoxSender data={address} />
-            </Box>
-          );
+          if (pengirimSearch === "") {
+            return (
+              <Box key={index}>
+                <AddressBoxSender data={address} />
+              </Box>
+            );
+          } else {
+            const nama = address?.firstname + " " + address?.lastname;
+            if ((nama.toLowerCase().includes(pengirimSearch.toLowerCase()) ||
+              address?.phone.includes(pengirimSearch))
+            ) {
+              return (
+                <Box key={index}>
+                  <AddressBoxSender data={address} />
+                </Box>
+              );
+            }
+          }
+
         })
       )}
       <Modal
