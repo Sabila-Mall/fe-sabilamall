@@ -8,8 +8,8 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useRef } from "react";
 import { FaUser } from "react-icons/fa";
+import { IoAnalyticsSharp } from "react-icons/io5";
 import { IoHeart, IoPeople } from "react-icons/io5";
 import { IoWalletOutline } from "react-icons/io5";
 import { VscPackage } from "react-icons/vsc";
@@ -70,6 +70,7 @@ export const CardProfile = ({ sm, cardProfileText }) => {
   const { userData } = useAuthContext();
   const profileMenu = [
     { text: "Akun Saya", icon: FaUser, path: "/profile" },
+    { text: "Point Rewards", icon: IoAnalyticsSharp, path: "/profile/point-rewards" },
     { text: "Wishlist", icon: IoHeart, path: "/wishlist" },
     { text: "Pesanan Saya", icon: VscPackage, path: "/profile/pesanan-saya" },
     { text: "SM Pay", icon: IoWalletOutline, path: "/top-up" },
