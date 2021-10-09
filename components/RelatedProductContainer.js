@@ -30,7 +30,7 @@ const RelatedProductContainer = ({ related_products, customers_id }) => {
             isWishlist={isLiked == 1}
             key={id}
             id={id}
-            // responsive={true}
+            // responsive={true} comments
             liked_customers_id={customers_id}
           />
         ))}
