@@ -12,7 +12,7 @@ import {
 import { useDisclosure } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { IoHeart } from "react-icons/io5";
+import { IoAnalyticsSharp, IoHeart } from "react-icons/io5";
 import { VscPackage } from "react-icons/vsc";
 
 import { useSmPayPointContext } from "../contexts/SMPayPointProvider";
@@ -36,6 +36,7 @@ const ProfileMobile = () => {
   const wisPack = [
     { text: "Wishlist", icon: IoHeart, href: "/wishlist" },
     { text: "Pesanan Saya", icon: VscPackage, href: "/profile/pesanan-saya" },
+    { text: "Point Rewards", icon: IoAnalyticsSharp, href: "/profile/point-rewards" }
   ];
 
   const profileMenu = [

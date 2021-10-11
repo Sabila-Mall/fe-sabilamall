@@ -21,6 +21,7 @@ import {
   Grid,
   InputGroup,
   InputRightElement,
+  Spinner,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
@@ -141,6 +142,10 @@ const AlamatPenerima = () => {
   const [kodePosPenerima, setKodePosPenerima] = useState("");
   const [ponselPenerima, setPonselPenerima] = useState("");
   const [namaPengirimInput, setNamaPengirimInput] = useState("");
+  const [provinsiOnFly, setProvinsiOnFly] = useState(false);
+  const [kotaOnFly, setKotaOnFly] = useState(false);
+  const [kecamatanOnFly, setKecamatanOnFly] = useState(false);
+  const [kodeOnFly, setKodeOnFly] = useState(false);
 
   const addAddressPengirim = async () => {
     try {
@@ -191,6 +196,7 @@ const AlamatPenerima = () => {
   };
 
   useEffect(() => {
+    setProvinsiOnFly(true);
     const getDataPengirim = () => {
       try {
         setDataPengirim(
@@ -228,6 +234,10 @@ const AlamatPenerima = () => {
 
         apiProvinsi().then((res) => {
           setProvinsi([...res.data.data]);
+          setProvinsiOnFly(false);
+          setKota([]);
+          setKecamatan([]);
+          setKodePos([]);
         });
       } catch (err) {
       } finally {
@@ -240,9 +250,12 @@ const AlamatPenerima = () => {
 
   useEffect(() => {
     const getKota = () => {
-      apiKota(Number(provinsiPenerima?.split(" ")?.[0]))
+      apiKota(Number(provinsiPenerima?.split(" ")?.[0]), setKotaOnFly)
         .then((res) => {
           setKota([...res.data.data]);
+          setKotaOnFly(false);
+          setKecamatan([]);
+          setKodePos([]);
         })
         .catch(() => setKota([]));
     };
@@ -252,8 +265,13 @@ const AlamatPenerima = () => {
 
   useEffect(() => {
     const getKecamatan = () => {
-      apiKecamatan(Number(kotaPenerima?.split(" ")?.[0])).then((res) => {
+      apiKecamatan(
+        Number(kotaPenerima?.split(" ")?.[0]),
+        setKecamatanOnFly,
+      ).then((res) => {
         setKecamatan([...res.data.data]);
+        setKecamatanOnFly(false);
+        setKodePos([]);
       });
     };
 
@@ -266,11 +284,13 @@ const AlamatPenerima = () => {
         Number(kotaPenerima?.split(" ")?.[0]),
         Number(kecamatanPenerima?.split(" ")?.[0]),
         Number(provinsiPenerima?.split(" ")?.[0]),
+        setKodeOnFly,
       )
         .then((res) => {
           const postalCodeList = res.data?.data;
 
           setKodePos(postalCodeList);
+          setKodeOnFly(false);
         })
         .catch((err) => console.error(err));
     };
@@ -573,10 +593,10 @@ const AlamatPenerima = () => {
                           {dataPengirim &&
                             dataPengirim.map((data, index) => {
                               if (
-                                data.nama
-                                  .toLowerCase()
-                                  .includes(pengirimSearch.toLowerCase()) ||
-                                data.nomor.includes(pengirimSearch)
+                                data?.nama
+                                  ?.toLowerCase()
+                                  ?.includes(pengirimSearch.toLowerCase()) ||
+                                data?.nomor?.includes(pengirimSearch)
                               ) {
                                 return (
                                   <Box
@@ -730,15 +750,15 @@ const AlamatPenerima = () => {
                           {dataPenerima &&
                             dataPenerima.map((data, index) => {
                               if (
-                                data.nama
-                                  .toLowerCase()
-                                  .includes(penerimaSearch.toLowerCase()) ||
-                                data.nomor
-                                  .toLowerCase()
-                                  .includes(penerimaSearch.toLowerCase()) ||
-                                data.alamat
-                                  .toLowerCase()
-                                  .includes(penerimaSearch.toLowerCase())
+                                data?.nama
+                                  ?.toLowerCase()
+                                  ?.includes(penerimaSearch.toLowerCase()) ||
+                                data?.nomor
+                                  ?.toLowerCase()
+                                  ?.includes(penerimaSearch.toLowerCase()) ||
+                                data?.alamat
+                                  ?.toLowerCase()
+                                  ?.includes(penerimaSearch.toLowerCase())
                               ) {
                                 return (
                                   <Box
@@ -865,26 +885,31 @@ const AlamatPenerima = () => {
                           >
                             Provinsi
                           </Text>
-                          <Select
-                            placeholder="Pilih provinsi penerima"
-                            marginTop="0.5rem"
-                            fontSize="sm"
-                            onChange={(e) =>
-                              setProvinsiPenerima(e.target.value)
-                            }
-                          >
-                            {provinsi &&
-                              provinsi.map((data, index) => {
-                                return (
-                                  <option
-                                    key={index}
-                                    value={`${data.zone_apicityid} ${data.zone_name}`}
-                                  >
-                                    {data.zone_name}
-                                  </option>
-                                );
-                              })}
-                          </Select>
+                          {provinsiOnFly ? (
+                            <Spinner />
+                          ) : (
+                            <Select
+                              // disabled={provinsi.length === 0}
+                              placeholder="Pilih provinsi penerima"
+                              marginTop="0.5rem"
+                              fontSize="sm"
+                              onChange={(e) => {
+                                setProvinsiPenerima(e.target.value);
+                              }}
+                            >
+                              {provinsi &&
+                                provinsi.map((data, index) => {
+                                  return (
+                                    <option
+                                      key={index}
+                                      value={`${data.zone_apicityid} ${data.zone_name}`}
+                                    >
+                                      {data.zone_name}
+                                    </option>
+                                  );
+                                })}
+                            </Select>
+                          )}
                         </Box>
                       </Box>
                       <Box
@@ -905,24 +930,31 @@ const AlamatPenerima = () => {
                           >
                             Kota Tujuan
                           </Text>
-                          <Select
-                            placeholder="Pilih kota tujuan penerima"
-                            marginTop="0.5rem"
-                            fontSize="sm"
-                            onChange={(e) => setKotaPenerima(e.target.value)}
-                          >
-                            {kota &&
-                              kota.map((data, index) => {
-                                return (
-                                  <option
-                                    key={index}
-                                    value={`${data.city_id} ${data.city_name}`}
-                                  >
-                                    {data.city_name}
-                                  </option>
-                                );
-                              })}
-                          </Select>
+                          {kotaOnFly ? (
+                            <Spinner />
+                          ) : (
+                            <Select
+                              // disabled={kota.length === 0}
+                              placeholder="Pilih kota tujuan penerima"
+                              marginTop="0.5rem"
+                              fontSize="sm"
+                              onChange={(e) => {
+                                setKotaPenerima(e.target.value);
+                              }}
+                            >
+                              {kota.length > 0 &&
+                                kota.map((data, index) => {
+                                  return (
+                                    <option
+                                      key={index}
+                                      value={`${data.city_id} ${data.city_name}`}
+                                    >
+                                      {data.city_name}
+                                    </option>
+                                  );
+                                })}
+                            </Select>
+                          )}
                         </Box>
                         <Box w={{ base: "100%", lg: "47.5%" }} marginTop="1rem">
                           <Text
@@ -932,26 +964,34 @@ const AlamatPenerima = () => {
                           >
                             Kecamatan
                           </Text>
-                          <Select
-                            placeholder="Pilih kecamatan penerima"
-                            marginTop="0.5rem"
-                            fontSize="sm"
-                            onChange={(e) =>
-                              setKecamatanPenerima(e.target.value)
-                            }
-                          >
-                            {kecamatan &&
-                              kecamatan.map((data, index) => {
-                                return (
-                                  <option
-                                    key={data?.subdistrict_id || index}
-                                    value={`${data?.subdistrict_id} ${data?.subdistrict_name}`}
-                                  >
-                                    {data?.subdistrict_name}
-                                  </option>
-                                );
-                              })}
-                          </Select>
+                          {kecamatanOnFly ? (
+                            <Spinner />
+                          ) : (
+                            <Select
+                              // disabled={kecamatanPenerima.length === 0}
+                              placeholder="Pilih kecamatan penerima"
+                              marginTop="0.5rem"
+                              fontSize="sm"
+                              onChange={(e) => {
+                                setKecamatanPenerima(e.target.value);
+                              }}
+                            >
+                              {kecamatan.length > 0 ? (
+                                kecamatan.map((data, index) => {
+                                  return (
+                                    <option
+                                      key={data?.subdistrict_id || index}
+                                      value={`${data?.subdistrict_id} ${data?.subdistrict_name}`}
+                                    >
+                                      {data?.subdistrict_name}
+                                    </option>
+                                  );
+                                })
+                              ) : (
+                                <option>Pilih kecamatan penerima</option>
+                              )}
+                            </Select>
+                          )}
                         </Box>
                       </Box>
                       <Box
@@ -972,31 +1012,42 @@ const AlamatPenerima = () => {
                           >
                             Kode Pos
                           </Text>
-                          <Select
-                            placeholder="Pilih kode pos penerima"
-                            marginTop="0.5rem"
-                            fontSize="sm"
-                            onChange={(e) => {
-                              let filterKodePos = kodePos.filter(
-                                (data) =>
-                                  data.subdistrict_name === e.target.value,
-                              );
-                              setKodePosPenerima(filterKodePos[0].postal_code);
-                              setSubsdistrictId(filterKodePos[0].id);
-                            }}
-                          >
-                            {kodePos &&
-                              kodePos.map((data, index) => {
-                                return (
-                                  <option
-                                    key={index}
-                                    value={data.subdistrict_name}
-                                  >
-                                    {data.subdistrict_name} ({data.postal_code})
-                                  </option>
+                          {kodeOnFly ? (
+                            <Spinner />
+                          ) : (
+                            <Select
+                              placeholder="Pilih kode pos penerima"
+                              // disabled={kodePosPenerima.length === 0}
+                              marginTop="0.5rem"
+                              fontSize="sm"
+                              onChange={(e) => {
+                                let filterKodePos = kodePos.filter(
+                                  (data) =>
+                                    data.subdistrict_name === e.target.value,
                                 );
-                              })}
-                          </Select>
+                                setKodePosPenerima(
+                                  filterKodePos[0].postal_code,
+                                );
+                                setSubsdistrictId(filterKodePos[0].id);
+                              }}
+                            >
+                              {kodePos.length > 0 ? (
+                                kodePos.map((data, index) => {
+                                  return (
+                                    <option
+                                      key={index}
+                                      value={data.subdistrict_name}
+                                    >
+                                      {data.subdistrict_name} (
+                                      {data.postal_code})
+                                    </option>
+                                  );
+                                })
+                              ) : (
+                                <option>Pilih kode pos penerima</option>
+                              )}
+                            </Select>
+                          )}
                         </Box>
                         <Box w={{ base: "100%", lg: "47.5%" }} marginTop="1rem">
                           <Text
