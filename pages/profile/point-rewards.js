@@ -55,7 +55,7 @@ const PointRewards = () => {
                     onClick={() => router.push("/profile")}
                 />
             )}
-            <Layout hasPadding={!isMobile} background="gray.50" pt={{ base: "32px", md: "90px" }} sticky noFooter>
+            <Layout hasPadding={!isMobile} background="gray.50" pt={{ base: "32px", md: "90px" }} sticky noFooter hasNavbar>
                 <Flex
                     justify="center"
                     pb="32px"
