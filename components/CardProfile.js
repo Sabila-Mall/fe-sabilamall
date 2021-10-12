@@ -70,7 +70,11 @@ export const CardProfile = ({ sm, cardProfileText }) => {
   const { userData } = useAuthContext();
   const profileMenu = [
     { text: "Akun Saya", icon: FaUser, path: "/profile" },
-    { text: "Point Rewards", icon: IoAnalyticsSharp, path: "/profile/point-rewards" },
+    {
+      text: "Point Rewards",
+      icon: IoAnalyticsSharp,
+      path: "/profile/point-rewards",
+    },
     { text: "Wishlist", icon: IoHeart, path: "/wishlist" },
     { text: "Pesanan Saya", icon: VscPackage, path: "/profile/pesanan-saya" },
     { text: "SM Pay", icon: IoWalletOutline, path: "/top-up" },
@@ -153,14 +157,14 @@ export const CardProfile = ({ sm, cardProfileText }) => {
           >
             <Icon
               as={menu.icon}
-              color={cardProfileText === menu.text ? "orange.500" : "black"}
+              color={menu.path === router.asPath ? "orange.500" : "black"}
               fontSize="20px"
               mr="10px"
             />
             <Text
               onClick={() => router.push(menu.path)}
               className="secondaryFont"
-              color={cardProfileText === menu.text ? "orange.500" : "black"}
+              color={menu.path === router.asPath ? "orange.500" : "black"}
               fontWeight="500"
               lineHeight="24px"
             >
