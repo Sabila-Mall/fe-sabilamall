@@ -27,6 +27,7 @@ import { apiStock } from "../../api/Stock";
 import Footer from "../../components/Footer";
 import { Layout } from "../../components/Layout";
 import Navbar from "../../components/Navbar";
+import Pagination from "../../components/Pagination";
 import StokItem from "../../components/StokItem";
 import { stocks } from "../../constants/stokData";
 import { fetchingStock } from "../../utils/stok/fetchStock";
@@ -49,8 +50,10 @@ const Stok = () => {
   const [supplierName, setSupplierName] = useState("");
   const [data, setData] = useState([]);
   const [totalProduct, setTotalProduct] = useState(-1);
-  const [tempData, setTempData] = useState([]);
   const [noProduct, setNoProduct] = useState(false);
+  const [currPage, setCurrPage] = useState(1);
+  const [lastPage, setLastPage] = useState(0);
+  const [range, setRange] = useState([]);
 
   const objToArray = (d) => {
     if (typeof d === "object") {
@@ -72,52 +75,41 @@ const Stok = () => {
   }, []);
 
   useEffect(() => {
-    if (data != 0 && totalProduct == tempData.length) {
-      data.map((product) => {
+    if (data.length !== 0) {
+      let dataArray = objToArray(data);
+      dataArray.map((product) => {
         try {
           const stocksPush = fetchingStock(product, supplierName);
           setStocks((curr) => [...curr, stocksPush]);
           setLoading(false);
         } catch (err) {
-          () => {};
+          () => {
+            console.log(err);
+          };
         }
       });
     }
   }, [data]);
 
+  // fetch stock here
   useEffect(() => {
-    if (totalProduct == tempData.length) {
-      setData(tempData);
-    }
-  }, [tempData]);
-
-  useEffect(() => {
-    let currPage = 1;
     if (brandId != 0) {
+      setLoading(true);
+      setStocks([]);
+      setData([]);
       apiGetProductBrandPage(brandId, currPage).then((res) => {
         let d = res.data.data.data;
 
         if (d.length == 0) setNoProduct(true);
         else setNoProduct(false);
 
-        const lastPage = res.data.data.last_page;
+        setLastPage(res.data.data.last_page);
         setTotalProduct(res.data.data.total);
-        setTempData((curr) => [...curr, ...d]);
-        currPage++;
-        if (d.length != 0) setLoading(true);
-        else setLoading(false);
-
-        if (lastPage > 1) {
-          for (let i = 1; i < lastPage; i++, currPage++) {
-            apiGetProductBrandPage(brandId, currPage).then((res) => {
-              let d = objToArray(res.data.data.data);
-              setTempData((curr) => [...curr, ...d]);
-            });
-          }
-        }
+        setData(d);
+        setLoading(false);
       });
     }
-  }, [brandId]);
+  }, [brandId, currPage]);
 
   return (
     <Layout hasNavbar hasPadding hasBreadCrumb breadCrumbItem={path}>
@@ -144,12 +136,10 @@ const Stok = () => {
               onChange={(e) => {
                 let split = e.target.value.split(" ");
                 setBrandId(Number(split[0]));
+                setCurrPage(1);
                 setSupplierName(split[1]);
                 setFirstTime(false);
                 setLoading(true);
-                setStocks([]);
-                setData([]);
-                setTempData([]);
               }}
             >
               {supplier.length != 0 ? (
@@ -181,6 +171,16 @@ const Stok = () => {
               />
             </InputGroup>
           </Box>
+          <Flex w="full" justify="center" mt="1rem">
+            <Pagination
+              setCurrPage={setCurrPage}
+              currPage={currPage}
+              lastPage={lastPage}
+              range={range}
+              setRange={setRange}
+            />
+          </Flex>
+
           <Box
             w="full"
             marginTop="1rem"
@@ -203,7 +203,6 @@ const Stok = () => {
                       nama={stock.nama}
                       supplier={stock.supplier}
                       tag={stock.tag}
-                      // variant={stock.variant}
                       productId={stock.productId}
                     />
                   );
@@ -239,6 +238,18 @@ const Stok = () => {
               </Flex>
             )}
           </Box>
+
+          {lastPage !== 1 && (
+            <Flex w="full" justify="center" mt="1rem">
+              <Pagination
+                setCurrPage={setCurrPage}
+                currPage={currPage}
+                lastPage={lastPage}
+                range={range}
+                setRange={setRange}
+              />
+            </Flex>
+          )}
         </Box>
       </Box>
     </Layout>
