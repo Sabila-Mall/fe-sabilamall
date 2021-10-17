@@ -5,6 +5,7 @@ import {
   Grid,
   Heading,
   HStack,
+  Icon,
   Input,
   InputGroup,
   InputLeftAddon,
@@ -13,33 +14,26 @@ import {
   NumberInput,
   NumberInputField,
   Select,
-  Spinner,
   SimpleGrid,
   Spacer,
+  Spinner,
   StackDivider,
   Textarea,
   useOutsideClick,
-  VStack,
   useToast,
-  Icon,
+  VStack
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useRef, useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaShippingFast } from "react-icons/fa";
-
-import { getKurir, getPaymentMethod, apiPlaceOrder } from "../../api/Order";
+import { apiApplyVoucherToCart, apiPlaceOrder, getKurir, getPaymentMethod } from "../../api/Order";
 import CheckoutBreadcrumb from "../../components/CheckoutBreadcrumb";
 import CheckoutProduct from "../../components/CheckoutProduct";
 import CheckoutStepper from "../../components/CheckoutStepper";
 import CheckoutSummary from "../../components/CheckoutSummary";
 import { Layout } from "../../components/Layout";
-import {
-  dataPenerima,
-  dataPengirim,
-  daftarMetodePembayaran,
-  daftarProduk,
-} from "../../constants/dummyData";
+import { daftarProduk } from "../../constants/dummyData";
 import { useAuthContext } from "../../contexts/authProvider";
 import { useCheckoutContext } from "../../contexts/checkoutProvider";
 import { useWindowSize } from "../../hooks/useWindowSize";
@@ -368,7 +362,7 @@ const MetodePembayaran = ({
                 allowMouseWheel
                 textAlign="right"
                 onChange={(e) => handleDiskonPengiriman(e)}
-                // isDisabled={true}
+              // isDisabled={true}
               >
                 <NumberInputField textAlign="right" />
               </NumberInput>
@@ -389,24 +383,52 @@ const MetodePembayaran = ({
 };
 
 const Voucher = ({ voucher, setVoucher }) => {
+  const { userData } = useAuthContext();
+  const userId = userData?.id;
   const { register, handleSubmit } = useForm();
+  let vouchers = []
 
-  const checkVoucher = (voucher) => {
-    // Handle logic untuk ngecek apa vouchernya valid atau engga
-    return voucher === "GRATISONGKIR21";
+  const toast = useToast();
+  const errorToast = (errMessage) => {
+    toast({
+      position: "top",
+      title: errMessage,
+      status: "error",
+      isClosable: true,
+    });
+  };
+  const successToast = (successMessage) => {
+    toast({
+      position: "top",
+      title: successMessage,
+      status: "success",
+      isClosable: true,
+    });
   };
 
   const onSubmit = (input) => {
-    if (checkVoucher(input.voucher)) {
-      // Kalo voucher valid, ambil nama voucher sama harga vouchernya
-      // Ganti juga nama sama harganya di setValue
-      setVoucher({ nama: input.voucher, harga: 10000 });
-    } else {
-      // Kalo vouchernya ga valid set voucher jadi empty object,
-      // penting buat logic nampilin banner vouchernya
-      setVoucher({});
-    }
-  };
+    apiApplyVoucherToCart(userId, input.voucher)
+      .then(res => {
+        if (isRequestSuccess(res.data)) {
+          setVoucher({
+            nama: input.voucher,
+            harga: res.data.data.amount,
+          })
+          successToast("Kupon berhasil digunakan");
+        } else {
+          errorToast(
+            typeof res.data.message === 'string' || res.data.message instanceof String
+              ? res.data.message
+              : "Server error"
+          )
+          setVoucher({})
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        vouchers = []
+      })
+  }
 
   return (
     <VStack spacing="1rem" align="stretch">
@@ -430,27 +452,37 @@ const Voucher = ({ voucher, setVoucher }) => {
           </Button>
         </InputRightElement>
       </InputGroup>
-      {!isEmpty(voucher) && (
-        <Box
-          padding="1rem"
-          borderRadius="0.5rem"
-          border="1px"
-          borderColor="orange.200"
-          bg="orange.50"
-          color="orange.500"
-          className="primaryFont"
-        >
-          <HStack justify="space-between">
-            <Box fontWeight="bold">
-              <Text color="orange.700" fontSize="0.75rem" fontWeight="bold">
+      <Box
+        padding="1rem"
+        borderRadius="0.5rem"
+        border="1px"
+        borderColor="orange.200"
+        bg="orange.50"
+        color="orange.500"
+        className="primaryFont"
+      >
+        <HStack justify="space-between">
+          <Box fontWeight="bold">
+            {isEmpty(voucher)
+              ? <>
+                <Text color="#e53e3e" fontSize="1rem" fontWeight="bold">
+                  Peringatan!
+                </Text>
+                <Text color="#e53e3e" fontSize="0.75rem" fontWeight="bold">
+                  Voucher akan otomatis terpakai setelah tombol klaim ditekan
+                </Text>
+              </>
+              : <Text color="orange.700" fontSize="0.75rem" fontWeight="bold">
                 Voucher berhasil di klaim!
               </Text>
-              <Text>{voucher.nama}</Text>
-            </Box>
+            }
+            <Text>{voucher.nama}</Text>
+          </Box>
+          {!isEmpty(voucher) &&
             <Text fontWeight="bold">Rp{formatNumber(voucher.harga)}</Text>
-          </HStack>
-        </Box>
-      )}
+          }
+        </HStack>
+      </Box>
     </VStack>
   );
 };
@@ -643,7 +675,7 @@ const DetailPesanan = () => {
     if (
       metodePembayaran.payment_method === "deposit" &&
       totalPrice + pengiriman.harga - totalDiscount >
-        paymentMethod.filter((e) => e.method === "deposit")[0].memberdeposit
+      paymentMethod.filter((e) => e.method === "deposit")[0].memberdeposit
     ) {
       toast({
         title: "Saldo SM Pay tidak mencukupi",
