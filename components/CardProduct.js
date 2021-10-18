@@ -145,10 +145,10 @@ const CardProduct = ({
             <Flex
               direction="column"
               justifyContent="flex-start"
-              height="5.0rem"
+              height="6.0rem"
             >
               <Box className={styles.productName} mb="8px">
-                <Text fontSize="0.8em" fontWeight="400" lineHeight="20px">
+                <Text fontSize="0.8em" fontWeight="400" lineHeight="16px">
                   {name.toUpperCase()}
                 </Text>
               </Box>
