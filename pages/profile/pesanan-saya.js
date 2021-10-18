@@ -187,9 +187,7 @@ const CardPesanan = ({
           display="flex"
           alignItems="center"
           justifyContent={
-            orderStatus !== "Ditolak"
-              ? "space-between"
-              : "flex-end"
+            orderStatus !== "Ditolak" ? "space-between" : "flex-end"
           }
           _hover={{ textDecoration: "none" }}
           mb={{ base: "1rem", md: "0" }}
@@ -300,8 +298,8 @@ const CardPesanan = ({
             )}
           </Flex>
           <Text fontSize="0.9rem" fontWeight="500" mr="0.5rem">
-              {shippingResi == null ? '' : shippingMethod}
-            </Text>
+            {shippingResi == null ? "" : shippingMethod}
+          </Text>
         </GridItem>
       </Grid>
       <Divider />
@@ -351,28 +349,26 @@ const CardPesanan = ({
               Lihat Detail Transaksi
             </Button>
           </Link>
-          {orderStatus === "Booking" &&
-            paymentStatus === "Pending" &&
-            parentId === 0 && (
-              <>
-                <Button
-                  bg="red.600"
-                  color="white"
-                  ml={width > 365 && "1rem"}
-                  w={width < 365 ? "full" : "auto"}
-                  onClick={onOpen}
-                >
-                  Batalkan
-                </Button>
-                <CancelOrder
-                  id={userData.id}
-                  isOpen={isOpen}
-                  onClose={onClose}
-                  orderNum={orderNum}
-                  orderId={orderId}
-                />
-              </>
-            )}
+          {orderStatus === "Booking" && paymentStatus === "Pending" && (
+            <>
+              <Button
+                bg="red.600"
+                color="white"
+                ml={width > 365 && "1rem"}
+                w={width < 365 ? "full" : "auto"}
+                onClick={onOpen}
+              >
+                Batalkan
+              </Button>
+              <CancelOrder
+                id={userData.id}
+                isOpen={isOpen}
+                onClose={onClose}
+                orderNum={orderNum}
+                orderId={orderId}
+              />
+            </>
+          )}
           {orderStatus === "Selesai" && (
             <Button
               bg="orange.500"

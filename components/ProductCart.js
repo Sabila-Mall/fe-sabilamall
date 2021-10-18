@@ -114,7 +114,12 @@ export const ProductCart = ({ isDiscount, product }) => {
             href={`product-detail/${productID}`}
             w="fit-content"
           >
-            <Text as="h1" isTruncated mb="8px">
+            <Text
+              as="h1"
+              isTruncated
+              maxW={{ base: "150px", sm: "300px" }}
+              mb="8px"
+            >
               {productName}
             </Text>
           </Link>
@@ -130,7 +135,11 @@ export const ProductCart = ({ isDiscount, product }) => {
               })}
           </VStack>
           <Box display={{ md: "none" }}>
-            <CartPrice isDiscount={isDiscount} price={productPrice} />
+            <CartPrice
+              isDiscount={isDiscount}
+              initialPrice={product?.final_price}
+              discount={product?.customers_discount}
+            />
           </Box>
         </Flex>
       </Flex>

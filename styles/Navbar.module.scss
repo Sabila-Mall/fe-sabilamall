@@ -102,6 +102,56 @@
   font-weight: 500 !important;
 }
 
+.boxNavbar {
+  & > button {
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    background-color: #edf2f7;
+    border-right: 1px solid #cbd5e0;
+    cursor: pointer;
+  }
+  .category {
+    svg {
+      margin-left: 16px;
+      transform: translateY(2px);
+    }
+  }
+  input {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+}
+
+.menuList {
+  overflow-x: hidden;
+  /* width */
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: #cecece;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #9b9b9b;
+  }
+}
+
+.menuItem {
+  padding: 8px 8px 8px 32px;
+  &:hover {
+    background-color: #e2e8f0;
+  }
+}
+
 @media only screen and (max-width: 300px) {
   .fontSizeSidebar {
     font-size: 0.8em !important;

@@ -1,27 +1,92 @@
-import { Box, Grid, Spinner, Text } from "@chakra-ui/react";
+import { Box, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-
 import { getSearchResult } from "../../api/Search";
-import CardProduct from "../../components/CardProduct";
 import { Layout } from "../../components/Layout";
+import LayoutProductList from "../../components/LayoutProductList";
 import { isRequestSuccess } from "../../utils/api";
 
 const Search = () => {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
+  const [search, setSearch] = useState({
+    data: [],
+    loading: true,
+    currentPage: 1,
+    lastPage: Number.MAX_SAFE_INTEGER,
+  })
 
-  const query = router.query.q;
+  const query = router.query.q ?? "";
+
+  function handleLoadMoreProducts() {
+    setSearch({ ...search, loading: true });
+
+    const newPage = search.currentPage + 1;
+    getSearchResult(query, newPage)
+      .then((res) => {
+        console.log(res)
+        if (isRequestSuccess(res)) {
+          if (res.data.data.constructor = Object) { // Quick hack to check if the response is a dictionary instead of array
+            let temp = Object.values(res.data.data)
+            temp.pop()
+            setSearch({
+              data: search.data.concat(temp),
+              loading: false,
+              currentPage: newPage,
+              lastPage: res.data.last_page,
+            })
+          } else {
+            let temp = res.data.data
+            temp.pop()
+            setSearch({
+              data: search.data.concat(temp),
+              loading: false,
+              currentPage: newPage,
+              lastPage: res.data.last_page,
+            })
+          }
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
 
   useEffect(() => {
     if (query) {
-      setLoading(true);
-      getSearchResult(query)
+      getSearchResult(query, 1)
         .then((res) => {
-          if (isRequestSuccess(res)) setData(res.data.data);
+          if (isRequestSuccess(res)) {
+            if (res.data.data.constructor = Object) { // Quick hack to check if the response is a dictionary instead of array
+              let temp = Object.values(res.data.data)
+              temp.pop()
+              setSearch({
+                data: temp ?? [],
+                loading: false,
+                currentPage: 1,
+                lastPage: res.data.last_page,
+              })
+            } else {
+              let temp = res.data.data
+              temp.pop()
+              setSearch({
+                data: temp ?? [],
+                loading: false,
+                currentPage: 1,
+                lastPage: res.data.last_page,
+              })
+            }
+          } else {
+            throw "Gagal mendapatkan hasil pencarian";
+          }
         })
-        .finally(() => setLoading(false));
+        .catch((err) => {
+          console.error(err);
+          setSearch({
+            data: [],
+            loading: false,
+            ...search,
+          });
+        });
     }
   }, [query]);
 
@@ -29,8 +94,6 @@ const Search = () => {
     <Layout hasNavbar hasPadding>
       <Box
         as="main"
-        pt={{ base: "51px", md: "71px" }}
-        pb="12"
         d="flex"
         justifyContent="start"
         w="full"
@@ -45,7 +108,14 @@ const Search = () => {
           >
             Hasil pencarian untuk {`"${query}"`}
           </Text>
-          <Grid
+          <LayoutProductList
+            data={search}
+            loading={search.loading}
+            sorting={false}
+            title={false}
+            handleLoadMore={handleLoadMoreProducts}
+          />
+          {/* <Grid
             templateColumns={{
               base: "repeat(1, 1fr)",
               md: "repeat(3, 1fr)",
@@ -60,10 +130,12 @@ const Search = () => {
               <Spinner />
             ) : (
               data.map((item) => {
-                return <CardProduct {...item} key={item.id} />;
+                if (item.id) {
+                  return <CardProduct {...item} key={item.id} />;
+                }
               })
             )}
-          </Grid>
+          </Grid> */}
         </Box>
       </Box>
     </Layout>

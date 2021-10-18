@@ -1,7 +1,7 @@
 import axios from "axios";
-
 import { HOST } from "../constants/api";
 import { getDeviceId } from "../utils/functions";
+
 
 export const apiPlaceOrder = (
   vendorId,
@@ -63,7 +63,8 @@ export const getKurir = (
         customers_basket_id.push(el.customers_basket_id);
       },
     );
-  } catch (error) {}
+  } catch (error) {
+  }
 
   return axios.post(HOST + "/api/shipping/get_all_shipping", {
     customers_id: customerId,
@@ -98,7 +99,8 @@ export const getPaymentMethod = (
         customers_basket_id.push(el.customers_basket_id);
       },
     );
-  } catch (error) {}
+  } catch (error) {
+  }
   return axios.post(HOST + "/api/payment/get_payment_method", {
     language_id: "1",
     vendors_id: [`${vendors_id}`],
@@ -109,3 +111,39 @@ export const getPaymentMethod = (
     customers_basket_id: customers_basket_id,
   });
 };
+
+export const apiGetVoucher = (customerId) => {
+  return axios.post(HOST + "/api/coupon/get_all_active", {
+    customers_id: customerId,
+    currency_code: "IDR",
+  }, {
+    headers: {
+      apikey: "32c9284bfd35879a8dce97f8db9e0c2c",
+    }
+  })
+}
+
+export const apiApplyVoucherToCart = (customerId, code) => {
+  let deviceId = getDeviceId();
+  let arrayOfCustomerBasket = [];
+
+  if (typeof window !== "undefined") {
+    const products = JSON.parse(localStorage.getItem("selectedProduct"));
+    const productItems = products.products;
+    if (productItems) {
+      productItems.forEach((element) => {
+        arrayOfCustomerBasket.push(element.customers_basket_id);
+      });
+    }
+
+    console.log("Customer Basket ID", arrayOfCustomerBasket);
+    console.log("DEVICE ID", deviceId);
+
+    return axios.post(HOST + "/api/coupon/apply_to_cart", {
+      "customers_id": customerId,
+      "device_id": deviceId,
+      "coupon_code": code,
+      "customers_basket_id": arrayOfCustomerBasket
+    })
+  }
+}

@@ -15,6 +15,11 @@ import {
   MenuList,
   MenuItem,
   Spacer,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -29,9 +34,11 @@ import {
   IoNotifications,
   IoCart,
   IoFileTrayStacked,
+  IoChevronDown,
 } from "react-icons/io5";
 import { IoHomeSharp, IoReceiptSharp } from "react-icons/io5";
 
+import { getCategory } from "../api/Homepage";
 import { productList } from "../constants/dummyData";
 import { useAuthContext } from "../contexts/authProvider";
 import { useCartContext } from "../contexts/cartProvider";
@@ -169,7 +176,7 @@ const SearchedElement = ({ isSearched, setIsSearched }) => {
   return (
     <Box
       className={styles.boxSearch}
-      display={{ base: "flex", md: "none" }}
+      display={{ base: "flex", lg: "none" }}
       zIndex={isSearched ? "6" : "-6"}
       w={isSearched ? "100vw" : "128px"}
       bg={isSearched ? "white" : "transparent"}
@@ -228,7 +235,7 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
       templateColumns={{
         base: "repeat(3, 1.3rem)",
         sm: "repeat(3, 2rem)",
-        md: isLoggedIn ? "repeat(5, 2.75rem) 6rem" : "repeat(5, 2.5rem) 6rem",
+        md: "repeat(6, 2.75rem)",
         lg: isLoggedIn ? "repeat(5, 2.75rem) 6rem" : "repeat(5, 3rem) 6rem",
       }}
       w="auto"
@@ -240,7 +247,7 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
         className={styles.navbarIcon}
         color="gray.500"
         onClick={() => setIsSearched(true)}
-        display={{ base: "block", md: "none" }}
+        display={{ base: "block", lg: "none" }}
       />
 
       <Icon
@@ -312,14 +319,6 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
           color="gray.500"
         />
       </Link>
-      <Link href={"/profile/pesanan-saya"} w="fit-content">
-        <Icon
-          display={{ base: "none", lg: "block" }}
-          as={IoReceiptSharp}
-          className={styles.navbarIcon}
-          color="gray.500"
-        />
-      </Link>
       <Box
         w="fit-content"
         display={{ base: "none", md: "block" }}
@@ -336,7 +335,7 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
                 />
                 <Box
                   w="fit-content"
-                  display={{ base: "none", md: "block" }}
+                  display={{ base: "none", lg: "block" }}
                   fontSize="12px"
                   ml="1rem"
                 >
@@ -365,15 +364,26 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
             </MenuButton>
             <MenuList zIndex="popover">
               <MenuItem
-                icon={<BiUser />}
+                icon={<BiUser color="gray.500" />}
                 onClick={() => router.push("/profile")}
+                color="gray.500"
+                _hover={{ color: "black" }}
               >
                 Profil
               </MenuItem>
               <MenuItem
-                icon={<Icon as={BiLogOut} color="red.400" />}
-                color="red.400"
+                icon={<IoReceiptSharp color="gray.500" />}
+                onClick={() => router.push("/profile/pesanan-saya")}
+                color="gray.500"
+                _hover={{ color: "black" }}
+              >
+                Pesanan Saya
+              </MenuItem>
+              <MenuItem
+                icon={<BiLogOut />}
+                color="gray.500"
                 onClick={() => logout()}
+                _hover={{ color: "black" }}
               >
                 Keluar
               </MenuItem>
@@ -392,6 +402,82 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
         )}
       </Box>
     </Grid>
+  );
+};
+
+const CustomAccordion = () => {
+  const [category, setCategory] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    setLoading(true);
+    getCategory().then((e) => {
+      console.info(e.data?.data);
+      setCategory(e.data?.data);
+      setLoading(false);
+    });
+  }, []);
+
+  return (
+    <Menu>
+      <MenuButton>
+        <Flex
+          pl="16px"
+          pr="8px"
+          alignItems="center"
+          className={styles.category}
+        >
+          <Text>Kategori</Text>
+          <IoChevronDown color="#999999" />
+        </Flex>
+      </MenuButton>
+      <MenuList className={styles.menuList} maxH="80vh" overflowY="auto">
+        {loading ? (
+          <Flex justifyContent="center" width="full">
+            <Spinner m="1rem" />
+          </Flex>
+        ) : (
+          <Accordion width="320px" allowToggle>
+            {category?.map((el) => (
+              <AccordionItem id={el.id}>
+                <h2>
+                  <AccordionButton>
+                    <Box flex="1" textAlign="left">
+                      {el.name}
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                </h2>
+                <AccordionPanel p={0}>
+                  <MenuItem
+                    className={styles.menuItem}
+                    onClick={() =>
+                      router.push(`/daftar-produk?id=${el.id}&nama=${el.name}`)
+                    }
+                  >
+                    Semua {el.name}
+                  </MenuItem>
+                  {el?.sub_categories?.map((sub) => (
+                    <MenuItem
+                      className={styles.menuItem}
+                      onClick={() =>
+                        router.push(
+                          `/daftar-produk?id=${sub.id}&nama=${sub.name}`,
+                        )
+                      }
+                    >
+                      {sub.name}
+                    </MenuItem>
+                  ))}
+                </AccordionPanel>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        )}
+      </MenuList>
+    </Menu>
   );
 };
 
@@ -447,7 +533,7 @@ const Navbar = () => {
           <Icon
             as={IoMenu}
             className={styles.navbarIcon}
-            display={{ base: "block", md: "none" }}
+            display={{ base: "block", lg: "none" }}
             onClick={() => {
               setIsMainMenu((prev) => !prev);
               setIsCategoryMenu(false);
@@ -460,44 +546,48 @@ const Navbar = () => {
               _hover={{ cursor: "pointer" }}
             />
           </Link>
-          <InputGroup
+          <Flex
             mx={isLoggedIn ? { base: "15px", xl: "30px" } : "30px"}
-            w="100%"
-            // minW={{ base: "auto", xl: "70vw" }}
-            display={{ base: "none", md: "block" }}
+            w="full"
+            alignItems="stretch"
+            className={styles.boxNavbar}
+            display={{ base: "none", lg: "flex" }}
           >
-            <InputLeftElement
-              children={
-                <Icon
-                  as={IoSearch}
-                  h="23px"
-                  w="23px"
-                  sx={{
-                    _hover: {
-                      cursor: "pointer",
-                    },
-                  }}
-                  color="orange.400"
-                  ml="17px"
-                  onClick={() => {
-                    if (searchQuery) router.push(`/search?q=${searchQuery}`);
-                  }}
-                />
-              }
-            />
-            <Input
-              type="text"
-              placeholder="Cari di toko..."
-              borderRadius="15px"
-              borderWidth="0"
-              bg="gray.100"
-              pl="50px"
-              focusBorderColor="gray.100"
-              value={searchQuery}
-              onChange={(event) => setSearchQuery(event.target.value)}
-              onKeyDown={(event) => handleKeyDown(event)}
-            />
-          </InputGroup>
+            <CustomAccordion />
+            <InputGroup w="100%">
+              <InputLeftElement
+                children={
+                  <Icon
+                    as={IoSearch}
+                    h="23px"
+                    w="23px"
+                    sx={{
+                      _hover: {
+                        cursor: "pointer",
+                      },
+                    }}
+                    color="orange.400"
+                    ml="12px"
+                    onClick={() => {
+                      if (searchQuery) router.push(`/search?q=${searchQuery}`);
+                    }}
+                  />
+                }
+              />
+              <Input
+                type="text"
+                placeholder="Cari di toko..."
+                borderRadius="15px"
+                borderWidth="0"
+                bg="gray.100"
+                pl="50px"
+                focusBorderColor="gray.100"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                onKeyDown={(event) => handleKeyDown(event)}
+              />
+            </InputGroup>
+          </Flex>
         </Box>
 
         <IconRightElements

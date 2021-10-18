@@ -106,6 +106,7 @@ const cartDetails = () => {
                         fontSize="1rem"
                         fontWeight="700"
                         mt="1rem"
+                        mb="1rem"
                       >
                         {el.vendors_name}
                       </Text>
