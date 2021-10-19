@@ -711,6 +711,7 @@ const DetailPesanan = () => {
         "1.0.2",
         "",
         0,
+        pengiriman.shipping_promo,
       )
         .then((res) => {
           if (isRequestSuccess(res.data)) {

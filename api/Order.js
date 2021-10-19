@@ -18,6 +18,7 @@ export const apiPlaceOrder = (
   appVersion,
   paymentAddCostMethod,
   paymentAddCostValue,
+  shippingPromo,
 ) => {
   let device_id = getDeviceId();
   return axios.post(HOST + "/api/order/place_order", {
@@ -26,6 +27,7 @@ export const apiPlaceOrder = (
         vendors_id: vendorId,
         customers_basket_id: customerBasketId,
         destination: destination,
+        shipping_promo: shippingPromo,
       },
     ],
     customers_id: customerId,
