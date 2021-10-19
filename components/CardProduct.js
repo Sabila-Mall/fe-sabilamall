@@ -1,5 +1,5 @@
 import { Link } from "@chakra-ui/layout";
-import { Box, Text, Icon, Flex, Image } from "@chakra-ui/react";
+import { Box, Text, Icon, Flex, Image, Badge } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { FaShippingFast } from "react-icons/fa";
@@ -27,6 +27,7 @@ const CardProduct = ({
   customerdiscount,
   responsive,
   isfreeshipping,
+  jenis,
 }) => {
   const { isLoggedIn, userData } = useAuthContext();
   const { wishlistData } = useWishlistContext();
@@ -87,6 +88,7 @@ const CardProduct = ({
       <Box
         className={styles.secondaryFont}
         w={responsive ? "100%" : { base: "160px", md: "200px" }}
+        h={flash_end ? "" : { base: "320px" }}
         border="1px solid #CBD5E0"
         borderRadius="8px"
         bg="white"
@@ -116,6 +118,12 @@ const CardProduct = ({
             <Image src={getImageLink(image_path)} objectFit="cover" />
           </Box>
           <Box padding="2" w="100%">
+            {jenis == "po" && (
+            <Badge borderRadius="full" bg="#479af1" color="white">
+              Pre Order
+            </Badge>
+            )}
+
             {flash_end && timeLeft && (
               <Box
                 px="4px"
