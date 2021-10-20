@@ -8,8 +8,10 @@ export const apiProvinsi = () => {
   });
 };
 
-export const apiKota = (id, setKotaOnFly) => {
-  setKotaOnFly(true);
+export const apiKota = (id, setKotaOnFly = null) => {
+  if (!setKotaOnFly) {
+    setKotaOnFly(true);
+  }
   return axios.post(HOST + "/api/location/get_cities", {
     city_zone_id: id,
   });
