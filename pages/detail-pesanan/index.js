@@ -413,7 +413,7 @@ const Voucher = ({ voucher, setVoucher, setCouponAppliedId, setIsCouponApplied }
             harga: res.data.data.amount,
           })
           setIsCouponApplied(true);
-          setCouponAppliedId(res.data.data.coupons_to_customers_basket_id);
+          setCouponAppliedId(res.data.data.coupons_applied_id);
           successToast("Kupon berhasil digunakan");
         } else {
           errorToast(
