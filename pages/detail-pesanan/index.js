@@ -40,10 +40,8 @@ import { useWindowSize } from "../../hooks/useWindowSize";
 import { isRequestSuccess } from "../../utils/api";
 import {
   currencyFormat,
-  estimasiFormat,
-  filterObject,
-  formatNumber,
-  isEmpty,
+  estimasiFormat, formatNumber,
+  isEmpty
 } from "../../utils/functions";
 
 /**
@@ -382,7 +380,7 @@ const MetodePembayaran = ({
   );
 };
 
-const Voucher = ({ voucher, setVoucher }) => {
+const Voucher = ({ voucher, setVoucher, setCouponAppliedId, setIsCouponApplied }) => {
   const { userData } = useAuthContext();
   const userId = userData?.id;
   const { register, handleSubmit } = useForm();
@@ -414,6 +412,8 @@ const Voucher = ({ voucher, setVoucher }) => {
             nama: input.voucher,
             harga: res.data.data.amount,
           })
+          setIsCouponApplied(true);
+          setCouponAppliedId(res.data.data.coupons_to_customers_basket_id);
           successToast("Kupon berhasil digunakan");
         } else {
           errorToast(
@@ -526,6 +526,8 @@ const DetailPesanan = () => {
   const [metodePembayaran, setMetodePembayaran] = useState({});
   const [voucher, setVoucher] = useState({});
   const [persetujuan, setPersetujuan] = useState(false);
+  const [isCouponApplied, setIsCouponApplied] = useState(false);
+  const [couponsAppliedId, setCouponAppliedId] = useState(0);
 
   const [kurir, setKurir] = useState([]);
   const [loadingKurir, setLoadingKurir] = useState(false);
@@ -704,8 +706,8 @@ const DetailPesanan = () => {
         checkoutData.delivery_id,
         checkoutData.dropshipper_id,
         metodePembayaran.payment_method,
-        false,
-        0,
+        isCouponApplied,
+        couponsAppliedId,
         0,
         catatanPesanan,
         "1.0.2",
@@ -779,7 +781,10 @@ const DetailPesanan = () => {
                   paymentMethod={paymentMethod}
                   handleDiskonPengiriman={handleDiskonPengiriman}
                 />
-                <Voucher voucher={voucher} setVoucher={setVoucher} />
+                <Voucher
+                  voucher={voucher} setVoucher={setVoucher}
+                  setIsCouponApplied={setIsCouponApplied} setCouponAppliedId={setCouponAppliedId}
+                />
               </SimpleGrid>
               <Confirmation setPersetujuan={setPersetujuan} />
               <Flex
