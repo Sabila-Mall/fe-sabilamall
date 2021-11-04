@@ -29,7 +29,6 @@ const PointRewards = () => {
     const getAllData = () => {
         if (memberID) {
             getRewards(memberID).then((res) => {
-                console.log(res);
                 setPointRewards(res?.daftar_reward)
                 setMemberPoint(res?.member_reward.point)
             });
