@@ -195,11 +195,25 @@ const DesktopFooter = () => {
                 alt="SiCepat"
               />
             </GridItem>
-            <GridItem colSpan={{ lg: 3 }} justifySelf="center">
+            <GridItem>
               <Image
                 className={styles.partnerLogo}
                 src="/images/Footer/jne-express.png"
                 alt="JNE Express"
+              />
+            </GridItem>
+            <GridItem>
+              <Image
+                className={styles.partnerLogo}
+                src="/images/Footer/ncs.png"
+                alt="NCS"
+              />
+            </GridItem>
+            <GridItem>
+              <Image
+                className={styles.partnerLogo}
+                src="/images/Footer/wahana.png"
+                alt="Wahana"
               />
             </GridItem>
           </Grid>
