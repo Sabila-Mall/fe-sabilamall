@@ -14,6 +14,17 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 
+import { FaPhoneAlt } from "react-icons/fa";
+import { IoLogoFacebook } from "react-icons/io";
+import {
+  IoMail,
+  IoPeopleSharp,
+  IoLocation,
+  IoLogoTwitter,
+  IoLogoInstagram,
+  IoLogoLinkedin,
+} from "react-icons/io5";
+
 import styles from "../styles/Footer.module.scss";
 import { socialMedia } from "../utils/socialMediaLink";
 
@@ -46,6 +57,18 @@ const DesktopFooter = () => {
               Tugu, Kec. Cimanggis, Kota Depok, Jawa Barat, Indonesia. Kode pos
               16451.
             </Text>
+            <Flex alignItems="center">
+              <FaPhoneAlt color="orange" className={styles.icon} />
+              <Text className={styles.secondaryFont} pl="0.64rem">
+                +62 851-5653-6861
+              </Text>
+            </Flex>
+            <Flex alignItems="center">
+              <IoMail color="orange" className={styles.icon} />
+              <Text className={styles.secondaryFont} pl="0.64rem">
+                bisnis@sabilamall.co.id
+              </Text>
+            </Flex>
           </Box>
 
           <Box pb={{ base: 5, md: 0 }}>
