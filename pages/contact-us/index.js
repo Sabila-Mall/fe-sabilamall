@@ -107,7 +107,7 @@ const contactUs = () => {
                   <Flex alignItems="center">
                     <FaPhoneAlt color="orange" className={styles.icon} />
                     <Text fontSize={{ base: "14px", xl: "1rem" }} pl="0.64rem">
-                      +62 851-5995-4161
+                      +62 851-5653-6861
                     </Text>
                   </Flex>
                   <Divider
@@ -117,7 +117,7 @@ const contactUs = () => {
                   <Flex alignItems="center">
                     <IoMail color="orange" className={styles.icon} />
                     <Text fontSize={{ base: "14px", xl: "1rem" }} pl="0.64rem">
-                      customer@sabilamall.co.id
+                      bisnis@sabilamall.co.id
                     </Text>
                   </Flex>
                 </Stack>
