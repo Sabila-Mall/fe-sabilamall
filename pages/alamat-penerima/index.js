@@ -163,7 +163,6 @@ const AlamatPenerima = () => {
 
       return res;
     } catch (err) {
-      console.error(err, "EERRORR PENGIRIM");
       throw new Error(err);
     }
   };
@@ -190,7 +189,6 @@ const AlamatPenerima = () => {
       SuccessToast("Berhasil menambahkan alamat penerima");
       return res;
     } catch (err) {
-      console.error(err, "EERRORR PENERIMA");
       throw new Error(err);
     }
   };
