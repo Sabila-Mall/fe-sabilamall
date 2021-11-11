@@ -1,6 +1,7 @@
 import { Box, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+
 import { getSearchResult } from "../../api/Search";
 import { Layout } from "../../components/Layout";
 import LayoutProductList from "../../components/LayoutProductList";
@@ -13,7 +14,7 @@ const Search = () => {
     loading: true,
     currentPage: 1,
     lastPage: Number.MAX_SAFE_INTEGER,
-  })
+  });
 
   const query = router.query.q ?? "";
 
@@ -23,26 +24,26 @@ const Search = () => {
     const newPage = search.currentPage + 1;
     getSearchResult(query, newPage)
       .then((res) => {
-        console.log(res)
         if (isRequestSuccess(res)) {
-          if (res.data.data.constructor = Object) { // Quick hack to check if the response is a dictionary instead of array
-            let temp = Object.values(res.data.data)
-            temp.pop()
+          if ((res.data.data.constructor = Object)) {
+            // Quick hack to check if the response is a dictionary instead of array
+            let temp = Object.values(res.data.data);
+            temp.pop();
             setSearch({
               data: search.data.concat(temp),
               loading: false,
               currentPage: newPage,
               lastPage: res.data.last_page,
-            })
+            });
           } else {
-            let temp = res.data.data
-            temp.pop()
+            let temp = res.data.data;
+            temp.pop();
             setSearch({
               data: search.data.concat(temp),
               loading: false,
               currentPage: newPage,
               lastPage: res.data.last_page,
-            })
+            });
           }
         }
       })
@@ -56,24 +57,25 @@ const Search = () => {
       getSearchResult(query, 1)
         .then((res) => {
           if (isRequestSuccess(res)) {
-            if (res.data.data.constructor = Object) { // Quick hack to check if the response is a dictionary instead of array
-              let temp = Object.values(res.data.data)
-              temp.pop()
+            if ((res.data.data.constructor = Object)) {
+              // Quick hack to check if the response is a dictionary instead of array
+              let temp = Object.values(res.data.data);
+              temp.pop();
               setSearch({
                 data: temp ?? [],
                 loading: false,
                 currentPage: 1,
                 lastPage: res.data.last_page,
-              })
+              });
             } else {
-              let temp = res.data.data
-              temp.pop()
+              let temp = res.data.data;
+              temp.pop();
               setSearch({
                 data: temp ?? [],
                 loading: false,
                 currentPage: 1,
                 lastPage: res.data.last_page,
-              })
+              });
             }
           } else {
             throw "Gagal mendapatkan hasil pencarian";
@@ -92,12 +94,7 @@ const Search = () => {
 
   return (
     <Layout hasNavbar hasPadding>
-      <Box
-        as="main"
-        d="flex"
-        justifyContent="start"
-        w="full"
-      >
+      <Box as="main" d="flex" justifyContent="start" w="full">
         <Box paddingTop="1.8rem" minH="100vh" w="full">
           <Text
             className="primaryFont"

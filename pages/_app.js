@@ -1,4 +1,6 @@
 import { ChakraProvider } from "@chakra-ui/react";
+import * as Sentry from "@sentry/react";
+import { Integrations } from "@sentry/tracing";
 import axios from "axios";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -10,6 +12,16 @@ import { GlobalProvider } from "../contexts/globalProvider";
 import * as fbq from "../lib/fpixel";
 import * as gtag from "../lib/gtag";
 import "../styles/globals.scss";
+
+Sentry.init({
+  dsn:
+    "https://dba0f9b6ca7c4d888e4244ebe44efc55@o1066506.ingest.sentry.io/6059331",
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+});
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
