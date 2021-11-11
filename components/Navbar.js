@@ -414,7 +414,6 @@ const CustomAccordion = () => {
   useEffect(() => {
     setLoading(true);
     getCategory().then((e) => {
-      console.info(e.data?.data);
       setCategory(e.data?.data);
       setLoading(false);
     });
