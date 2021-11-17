@@ -38,7 +38,10 @@ export const CheckoutProvider = ({ children }) => {
     const parsedDataLocal = dataLocal && JSON.parse(dataLocal);
 
     if (parsedDataLocal) {
-      if (parsedDataLocal.userId == JSON.parse(cookies.user_id)) {
+      if (
+        cookies.user_id &&
+        parsedDataLocal.userId == JSON.parse(cookies.user_id)
+      ) {
         setCheckoutData(parsedDataLocal);
       } else {
         // destroyCookie(null, "checkoutData");
