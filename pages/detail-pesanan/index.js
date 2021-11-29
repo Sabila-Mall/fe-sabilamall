@@ -21,13 +21,19 @@ import {
   Textarea,
   useOutsideClick,
   useToast,
-  VStack
+  VStack,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaShippingFast } from "react-icons/fa";
-import { apiApplyVoucherToCart, apiPlaceOrder, getKurir, getPaymentMethod } from "../../api/Order";
+
+import {
+  apiApplyVoucherToCart,
+  apiPlaceOrder,
+  getKurir,
+  getPaymentMethod,
+} from "../../api/Order";
 import CheckoutBreadcrumb from "../../components/CheckoutBreadcrumb";
 import CheckoutProduct from "../../components/CheckoutProduct";
 import CheckoutStepper from "../../components/CheckoutStepper";
@@ -40,8 +46,9 @@ import { useWindowSize } from "../../hooks/useWindowSize";
 import { isRequestSuccess } from "../../utils/api";
 import {
   currencyFormat,
-  estimasiFormat, formatNumber,
-  isEmpty
+  estimasiFormat,
+  formatNumber,
+  isEmpty,
 } from "../../utils/functions";
 
 /**
@@ -360,7 +367,7 @@ const MetodePembayaran = ({
                 allowMouseWheel
                 textAlign="right"
                 onChange={(e) => handleDiskonPengiriman(e)}
-              // isDisabled={true}
+                // isDisabled={true}
               >
                 <NumberInputField textAlign="right" />
               </NumberInput>
@@ -380,11 +387,16 @@ const MetodePembayaran = ({
   );
 };
 
-const Voucher = ({ voucher, setVoucher, setCouponAppliedId, setIsCouponApplied }) => {
+const Voucher = ({
+  voucher,
+  setVoucher,
+  setCouponAppliedId,
+  setIsCouponApplied,
+}) => {
   const { userData } = useAuthContext();
   const userId = userData?.id;
   const { register, handleSubmit } = useForm();
-  let vouchers = []
+  let vouchers = [];
 
   const toast = useToast();
   const errorToast = (errMessage) => {
@@ -406,29 +418,30 @@ const Voucher = ({ voucher, setVoucher, setCouponAppliedId, setIsCouponApplied }
 
   const onSubmit = (input) => {
     apiApplyVoucherToCart(userId, input.voucher)
-      .then(res => {
+      .then((res) => {
         if (isRequestSuccess(res.data)) {
           setVoucher({
             nama: input.voucher,
             harga: res.data.data.amount,
-          })
+          });
           setIsCouponApplied(true);
           setCouponAppliedId(res.data.data.coupons_applied_id);
           successToast("Kupon berhasil digunakan");
         } else {
           errorToast(
-            typeof res.data.message === 'string' || res.data.message instanceof String
+            typeof res.data.message === "string" ||
+              res.data.message instanceof String
               ? res.data.message
-              : "Server error"
-          )
-          setVoucher({})
+              : "Server error",
+          );
+          setVoucher({});
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
-        vouchers = []
-      })
-  }
+        vouchers = [];
+      });
+  };
 
   return (
     <VStack spacing="1rem" align="stretch">
@@ -463,8 +476,8 @@ const Voucher = ({ voucher, setVoucher, setCouponAppliedId, setIsCouponApplied }
       >
         <HStack justify="space-between">
           <Box fontWeight="bold">
-            {isEmpty(voucher)
-              ? <>
+            {isEmpty(voucher) ? (
+              <>
                 <Text color="#e53e3e" fontSize="1rem" fontWeight="bold">
                   Peringatan!
                 </Text>
@@ -472,15 +485,16 @@ const Voucher = ({ voucher, setVoucher, setCouponAppliedId, setIsCouponApplied }
                   Voucher akan otomatis terpakai setelah tombol klaim ditekan
                 </Text>
               </>
-              : <Text color="orange.700" fontSize="0.75rem" fontWeight="bold">
+            ) : (
+              <Text color="orange.700" fontSize="0.75rem" fontWeight="bold">
                 Voucher berhasil di klaim!
               </Text>
-            }
+            )}
             <Text>{voucher.nama}</Text>
           </Box>
-          {!isEmpty(voucher) &&
+          {!isEmpty(voucher) && (
             <Text fontWeight="bold">Rp{formatNumber(voucher.harga)}</Text>
-          }
+          )}
         </HStack>
       </Box>
     </VStack>
@@ -518,7 +532,7 @@ const DetailPesanan = () => {
     checkoutData,
     setOrderNumber,
     setSubtotal,
-    setCheckoutResponse,
+    saveCheckoutResponse,
   } = useCheckoutContext();
 
   const [catatanPesanan, setCatatanPesanan] = useState("");
@@ -677,7 +691,7 @@ const DetailPesanan = () => {
     if (
       metodePembayaran.payment_method === "deposit" &&
       totalPrice + pengiriman.harga - totalDiscount >
-      paymentMethod.filter((e) => e.method === "deposit")[0].memberdeposit
+        paymentMethod.filter((e) => e.method === "deposit")[0].memberdeposit
     ) {
       toast({
         title: "Saldo SM Pay tidak mencukupi",
@@ -717,7 +731,7 @@ const DetailPesanan = () => {
       )
         .then((res) => {
           if (isRequestSuccess(res.data)) {
-            setCheckoutResponse(res.data);
+            saveCheckoutResponse(res.data);
             router.push("/invoice");
           } else {
             toast({
@@ -782,8 +796,10 @@ const DetailPesanan = () => {
                   handleDiskonPengiriman={handleDiskonPengiriman}
                 />
                 <Voucher
-                  voucher={voucher} setVoucher={setVoucher}
-                  setIsCouponApplied={setIsCouponApplied} setCouponAppliedId={setCouponAppliedId}
+                  voucher={voucher}
+                  setVoucher={setVoucher}
+                  setIsCouponApplied={setIsCouponApplied}
+                  setCouponAppliedId={setCouponAppliedId}
                 />
               </SimpleGrid>
               <Confirmation setPersetujuan={setPersetujuan} />

@@ -4,4 +4,5 @@ export const PAYMENT_METHOD = {
   VA_BCA: "Midtrans - Virtual Account BCA",
   VA_MANDIRI: "Midtrans - Virtual Account Mandiri",
   VIRTUAL_ACCOUNT_PREFIX: "Midtrans - Virtual Account",
+  SHOPEE_PAY: "Midtrans - Shopeepay",
 };
