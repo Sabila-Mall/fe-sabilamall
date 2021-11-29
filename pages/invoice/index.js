@@ -33,6 +33,16 @@ const Invoice = () => {
           <Text as="h1" mb="1rem" fontWeight="700" fontSize="18px">
             Terima Kasih
           </Text>
+          <Text
+            className="primaryFont"
+            color="#ED8936"
+            mb="1rem"
+            fontSize="1rem"
+            fontWeight="700"
+          >
+            Halaman ini tidak dapat diakses kembali. Mohon screenshot/cetak
+            halaman ini untuk menyimpan tata cara pembayaran.
+          </Text>
           <Text mb="1rem" as="h1" fontWeight="500">
             Konfirmasi pembayaran di menu KONFIRMASI pada web ini. Jika sukses,
             tunggu beberapa jam akan menjadi PAID.
