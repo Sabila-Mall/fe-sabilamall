@@ -5,4 +5,5 @@ export const PAYMENT_METHOD = {
   VA_MANDIRI: "Midtrans - Virtual Account Mandiri",
   VIRTUAL_ACCOUNT_PREFIX: "Midtrans - Virtual Account",
   QRIS: "Midtrans - QRIS",
+  SHOPEE_PAY: "Midtrans - Shopeepay",
 };

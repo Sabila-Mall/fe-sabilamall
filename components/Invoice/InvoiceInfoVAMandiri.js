@@ -6,11 +6,11 @@ import { CetakTataCaraPembayaranButton } from "../CetakTataCaraPembayaranButton"
 import { Bank } from "./InvoiceInfoBank";
 import PaymentMethodStepsTabs from "./PaymentMethodStepsTabs";
 
-export const InvoiceInfoVirtualAccount = ({ checkoutResponse }) => {
+export const InvoiceInfoVAMandiri = ({ checkoutResponse }) => {
   const router = useRouter();
 
-  const bankname = checkoutResponse?.payment_gateways?.bankname;
-  const va_number = checkoutResponse?.payment_gateways?.va_number;
+  const bill_key = checkoutResponse?.payment_gateways?.bill_key;
+  const biller_code = checkoutResponse?.payment_gateways?.biller_code;
   const payment_due_date = checkoutResponse?.payment_gateways?.expiry_date;
 
   const paymentMethodSteps = checkoutResponse?.payment_gateways?.howtopaypage?.data?.map(
@@ -28,9 +28,14 @@ export const InvoiceInfoVirtualAccount = ({ checkoutResponse }) => {
       </Text>
       <Flex flexDir="column" w={{ base: "60%", lg: "40%" }} mb="0.5rem">
         <Bank
-          key={bankname}
-          bank={`${bankname?.toUpperCase()}`}
-          number={va_number}
+          key={"Kode Perusahaan"}
+          bank={"Kode Perusahaan"}
+          number={biller_code}
+        />
+        <Bank
+          key={"Kode Pembayaran"}
+          bank={"Kode Pembayaran"}
+          number={bill_key}
         />
       </Flex>
       <Text mb="0.5rem">Lakukan pembayaran sebelum {payment_due_date}</Text>

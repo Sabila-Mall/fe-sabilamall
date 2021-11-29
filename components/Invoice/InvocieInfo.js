@@ -5,12 +5,15 @@ import { useCheckoutContext } from "../../contexts/checkoutProvider";
 import { InvoiceInfoBankTransfer } from "./InvoiceInfoBankTransfer";
 import { InvoiceInfoQRIS } from "./InvoiceInfoQRIS";
 import { InvoiceInfoSMPay } from "./InvoiceInfoSMPay";
+import { InvoiceInfoVAMandiri } from "./InvoiceInfoVAMandiri";
 import { InvoiceInfoVirtualAccount } from "./InvoiceInfoVirtualAccount";
-import VAMandiri from "./VAMandiri";
+import { InvoiceInfoShopeePay } from "./PaymentInfoShopeePay";
 
 export const InvoiceInfo = () => {
   const { checkoutResponse } = useCheckoutContext();
   const paymentMethod = checkoutResponse?.data?.payment_method || "";
+
+  console.log(checkoutResponse);
 
   switch (paymentMethod) {
     case PAYMENT_METHOD.BANK_TRANSFER:
@@ -18,7 +21,9 @@ export const InvoiceInfo = () => {
     case PAYMENT_METHOD.SM_PAY:
       return <InvoiceInfoSMPay />;
     case PAYMENT_METHOD.VA_MANDIRI:
-      return <VAMandiri checkoutResponse={checkoutResponse} />;
+      return <InvoiceInfoVAMandiri checkoutResponse={checkoutResponse} />;
+    case PAYMENT_METHOD.SHOPEE_PAY:
+      return <InvoiceInfoShopeePay checkoutResponse={checkoutResponse} />;
     case PAYMENT_METHOD.QRIS:
       return <InvoiceInfoQRIS checkoutResponse={checkoutResponse} />;
     default:
