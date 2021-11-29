@@ -50,6 +50,35 @@ export const CheckoutProvider = ({ children }) => {
     }
   }, [router]);
 
+  useEffect(() => {
+    const savedCheckoutResponse = window.sessionStorage.getItem(
+      "checkoutResponse",
+    );
+    console.log(savedCheckoutResponse);
+    if (savedCheckoutResponse) {
+      try {
+        setCheckoutResponse(JSON.parse(savedCheckoutResponse));
+      } catch (err) {
+        saveCheckoutResponse({});
+      }
+    }
+  }, []);
+
+  const saveCheckoutResponse = (data) => {
+    setCheckoutResponse(data);
+    window.sessionStorage.setItem("checkoutResponse", JSON.stringify(data));
+  };
+
+  const clearCheckoutResponse = () => {
+    const savedCheckoutResponse = window.sessionStorage.getItem(
+      "checkoutResponse",
+    );
+    if (savedCheckoutResponse)
+      window.sessionStorage.removeItem("checkoutResponse");
+
+    setCheckoutResponse({});
+  };
+
   const value = {
     checkoutData,
     setCheckoutData,
@@ -61,7 +90,8 @@ export const CheckoutProvider = ({ children }) => {
     subtotal,
     setSubtotal,
     checkoutResponse,
-    setCheckoutResponse,
+    clearCheckoutResponse,
+    saveCheckoutResponse,
   };
 
   return (

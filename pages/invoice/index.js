@@ -33,10 +33,6 @@ const Invoice = () => {
           <Text as="h1" mb="1rem" fontWeight="700" fontSize="18px">
             Terima Kasih
           </Text>
-          <Text mb="1rem" as="h1" fontWeight="500">
-            Konfirmasi pembayaran di menu KONFIRMASI pada web ini. Jika sukses,
-            tunggu beberapa jam akan menjadi PAID.
-          </Text>
           <Flex justifyContent="space-between" w={{ base: "75%", lg: "60%" }}>
             <Text>Nomor Order/Invoice</Text>
             <Text fontWeight="bold">{checkoutResponse.orders_number}</Text>

@@ -12,12 +12,12 @@ const PaymentMethodStepsTabs = ({ tabsData }) => {
   return (
     <Tabs isFitted variant="enclosed">
       <TabList>
-        {tabsData.map((data, index) => (
+        {tabsData?.map((data, index) => (
           <Tab key={index}>{data.title}</Tab>
         ))}
       </TabList>
       <TabPanels>
-        {tabsData.map((data, index) => (
+        {tabsData?.map((data, index) => (
           <TabPanel p={4} key={index}>
             <UnorderedList>
               {data.steps.map((step, index) => (
