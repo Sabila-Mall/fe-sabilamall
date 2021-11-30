@@ -12,8 +12,6 @@ export const InvoiceInfo = () => {
   const { checkoutResponse } = useCheckoutContext();
   const paymentMethod = checkoutResponse?.data?.payment_method || "";
 
-  console.log(checkoutResponse);
-
   switch (paymentMethod) {
     case PAYMENT_METHOD.BANK_TRANSFER:
       return <InvoiceInfoBankTransfer checkoutResponse={checkoutResponse} />;
