@@ -4,8 +4,9 @@ import { PAYMENT_METHOD } from "../../constants/paymentMethod";
 import { useCheckoutContext } from "../../contexts/checkoutProvider";
 import { InvoiceInfoBankTransfer } from "./InvoiceInfoBankTransfer";
 import { InvoiceInfoSMPay } from "./InvoiceInfoSMPay";
-import { InvoiceShopeePay } from "./InvoiceInfoShopeePay";
+import { InvoiceInfoVAMandiri } from "./InvoiceInfoVAMandiri";
 import { InvoiceInfoVirtualAccount } from "./InvoiceInfoVirtualAccount";
+import { InvoiceInfoShopeePay } from "./PaymentInfoShopeePay";
 
 export const InvoiceInfo = () => {
   const { checkoutResponse } = useCheckoutContext();
@@ -16,6 +17,10 @@ export const InvoiceInfo = () => {
       return <InvoiceInfoBankTransfer checkoutResponse={checkoutResponse} />;
     case PAYMENT_METHOD.SM_PAY:
       return <InvoiceInfoSMPay />;
+    case PAYMENT_METHOD.VA_MANDIRI:
+      return <InvoiceInfoVAMandiri checkoutResponse={checkoutResponse} />;
+    case PAYMENT_METHOD.SHOPEE_PAY:
+      return <InvoiceInfoShopeePay checkoutResponse={checkoutResponse} />;
     default:
       if (paymentMethod.startsWith(PAYMENT_METHOD.VIRTUAL_ACCOUNT_PREFIX)) {
         return (
