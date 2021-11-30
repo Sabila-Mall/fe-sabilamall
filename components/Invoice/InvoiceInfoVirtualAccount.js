@@ -2,7 +2,6 @@ import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
 import { dateFormat } from "../../utils/functions";
-import { CetakTataCaraPembayaranButton } from "../CetakTataCaraPembayaranButton";
 import { Bank } from "./InvoiceInfoBank";
 import PaymentMethodStepsTabs from "./PaymentMethodStepsTabs";
 
@@ -34,8 +33,7 @@ export const InvoiceInfoVirtualAccount = ({ checkoutResponse }) => {
         />
       </Flex>
       <Text mb="0.5rem">Lakukan pembayaran sebelum {payment_due_date}</Text>
-      <CetakTataCaraPembayaranButton />
-      <Box>
+      <Box marginTop={6}>
         <Text>Cara Membayar:</Text>
         <PaymentMethodStepsTabs tabsData={paymentMethodSteps} />
       </Box>

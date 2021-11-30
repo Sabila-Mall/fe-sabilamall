@@ -1,14 +1,12 @@
 import { Button, Flex, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
-import { CetakTataCaraPembayaranButton } from "../CetakTataCaraPembayaranButton";
 import { Bank } from "./InvoiceInfoBank";
 
 export const InvoiceInfoBankTransfer = ({ checkoutResponse }) => {
   const router = useRouter();
   return (
     <>
-      <CetakTataCaraPembayaranButton />
       <Text mb="0.5rem">
         Pembayaran dilakukan dengan melakukan Transfer ke Rekening berikut:
       </Text>
