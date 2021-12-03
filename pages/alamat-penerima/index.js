@@ -41,6 +41,7 @@ import {
   currencyFormat,
   extractName,
   getPriceAfterDiscount,
+  isValidJson,
   numberWithDot,
 } from "../../utils/functions";
 
@@ -79,11 +80,13 @@ const AlamatPenerima = () => {
     },
   ];
 
+  const selectedProductJson = localStorage.getItem("selectedProduct")
+
   if (
-    typeof window !== "undefined" &&
-    !JSON.parse(localStorage.getItem("selectedProduct"))
+    typeof window !== "undefined" && isValidJson(selectedProductJson) &&
+    !JSON.parse(selectedProductJson)
   )
-    router.push("/404");
+    router.push("/");
 
   useEffect(() => {
     getAllData();
@@ -96,7 +99,8 @@ const AlamatPenerima = () => {
     totalWeight = 0;
 
   if (typeof window !== "undefined") {
-    const checkoutData = JSON.parse(localStorage.getItem("selectedProduct"));
+    const checkoutDataJSON = localStorage.getItem("selectedProduct")
+    const checkoutData = isValidJson(checkoutDataJSON) && JSON.parse(checkoutDataJSON);
     if (checkoutData) {
       totalPrice = checkoutData.total_price;
       totalQuantity = checkoutData.quantity;

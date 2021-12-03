@@ -249,3 +249,12 @@ export const logout = () => {
 export const getImageLink = (link) => {
   return IMAGE_HOST + link?.replace("images/media/", "");
 };
+
+export const isValidJson = (str) => {
+  try {
+    JSON.parse(str)
+  } catch (e) {
+    return false
+  }
+  return true
+}

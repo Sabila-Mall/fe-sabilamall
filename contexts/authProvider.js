@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { apiGetUserProfile } from "../api/Auth";
 import { USER_FIELDS } from "../constants/authConstants";
 import { isRequestSuccess } from "../utils/api";
-import { filterObject } from "../utils/functions";
+import { filterObject, isValidJson } from "../utils/functions";
 import { useCartContext } from "./cartProvider";
 import { useCheckoutContext } from "./checkoutProvider";
 import { useWishlistContext } from "./wishlistProvider";
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
       const userId = nookies.get(null, "user_id");
       if (document.cookie.indexOf("user_id") !== -1) {
         const devId = localStorage.getItem("device_id");
-        const parsedDevId = devId ? JSON.parse(devId) : null;
+        const parsedDevId = isValidJson(devId) ? JSON.parse(devId) : null
         if (!parsedDevId) {
           localStorage.setItem("device_id", JSON.stringify(uuidv4()));
         }
