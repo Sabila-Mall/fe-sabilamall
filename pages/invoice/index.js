@@ -1,5 +1,6 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 
+import { CetakTataCaraPembayaranButton } from "../../components/CetakTataCaraPembayaranButton";
 import { InvoiceInfo } from "../../components/Invoice/InvocieInfo";
 import { Layout } from "../../components/Layout";
 import { path } from "../../constants/breadcrumbInvoice";
@@ -32,6 +33,21 @@ const Invoice = () => {
         >
           <Text as="h1" mb="1rem" fontWeight="700" fontSize="18px">
             Terima Kasih
+          </Text>
+          <Text
+            className="primaryFont"
+            color="#ED8936"
+            mb="1rem"
+            fontSize="1rem"
+            fontWeight="700"
+          >
+            Halaman ini tidak dapat diakses kembali. Mohon screenshot/cetak
+            halaman ini untuk menyimpan tata cara pembayaran.
+          </Text>
+          <CetakTataCaraPembayaranButton />
+          <Text mb="1rem" as="h1" fontWeight="500">
+            Konfirmasi pembayaran di menu KONFIRMASI pada web ini. Jika sukses,
+            tunggu beberapa jam akan menjadi PAID.
           </Text>
           <Flex justifyContent="space-between" w={{ base: "75%", lg: "60%" }}>
             <Text>Nomor Order/Invoice</Text>

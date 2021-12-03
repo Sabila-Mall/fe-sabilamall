@@ -38,12 +38,10 @@ export const InvoiceInfoVAMandiri = ({ checkoutResponse }) => {
         />
       </Flex>
       <Text mb="0.5rem">Lakukan pembayaran sebelum {payment_due_date}</Text>
-
       <Box marginTop={6}>
         <Text>Cara Membayar:</Text>
         <PaymentMethodStepsTabs tabsData={paymentMethodSteps} />
       </Box>
-
       <Flex justifyContent={{ lg: "flex-end" }} w="full">
         <Button
           colorScheme="orange"
