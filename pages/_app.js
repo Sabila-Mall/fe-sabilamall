@@ -13,16 +13,6 @@ import * as fbq from "../lib/fpixel";
 import * as gtag from "../lib/gtag";
 import "../styles/globals.scss";
 
-Sentry.init({
-  dsn:
-    "https://dba0f9b6ca7c4d888e4244ebe44efc55@o1066506.ingest.sentry.io/6059331",
-
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 1.0,
-});
-
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   axios.defaults.headers["apikey"] = "32c9284bfd35879a8dce97f8db9e0c2c";
