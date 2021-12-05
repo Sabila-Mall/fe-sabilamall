@@ -49,6 +49,7 @@ import {
   estimasiFormat,
   formatNumber,
   isEmpty,
+  isValidJson,
 } from "../../utils/functions";
 
 /**
@@ -74,7 +75,8 @@ const RingkasanPesanan = () => {
   let products = [];
 
   if (typeof window !== "undefined") {
-    const localCheckout = JSON.parse(localStorage.getItem("selectedProduct"));
+    const localCheckoutJson = localStorage.getItem("selectedProduct")
+    const localCheckout = isValidJson(localCheckoutJson) && JSON.parse(localCheckoutJson);
     if (localCheckout) {
       products = localCheckout.products;
     }
@@ -204,7 +206,8 @@ const Pengiriman = ({ kurir, pengiriman, handler, loadingKurir }) => {
   let totalWeight = 0;
 
   if (typeof window !== "undefined") {
-    const checkoutData = JSON.parse(localStorage.getItem("selectedProduct"));
+    const checkoutDataJson = localStorage.getItem("selectedProduct")
+    const checkoutData = isValidJson(checkoutDataJson) && JSON.parse(checkoutDataJson);
     if (checkoutData) {
       totalWeight = checkoutData.weight;
     }
@@ -555,7 +558,8 @@ const DetailPesanan = () => {
   let weight, vendors_id, vendor_origin, totalOrder, products_jenis;
 
   if (typeof window !== "undefined") {
-    const products = JSON.parse(localStorage.getItem("selectedProduct"));
+    const productsJson = localStorage.getItem("selectedProduct")
+    const products = isValidJson(productsJson) && JSON.parse(productsJson);
     const productItems = products.products;
     if (productItems) {
       productItems.forEach((element) => {
@@ -571,7 +575,7 @@ const DetailPesanan = () => {
 
   useEffect(() => {
     let device_id = window.localStorage.getItem("device_id");
-    device_id = JSON.parse(device_id);
+    device_id = isValidJson(device_id) && JSON.parse(device_id);
     if (userData !== null && checkoutData) {
       setLoadingKurir(true);
       getKurir(
@@ -677,8 +681,9 @@ const DetailPesanan = () => {
     totalWeight = 0;
 
   if (typeof window !== "undefined") {
-    const checkoutData = JSON.parse(localStorage.getItem("selectedProduct"));
-    if (checkoutData) {
+    const checkoutDataJson = localStorage.getItem("selectedProduct")
+    const checkoutData = isValidJson(checkoutDataJson) && JSON.parse(checkoutDataJson);
+    if (checkoutData) { 
       totalPrice = checkoutData.total_price;
       totalQuantity = checkoutData.quantity;
       totalWeight = checkoutData.weight;

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 import { HOST } from "../constants/api";
-import { getDeviceId } from "../utils/functions";
+import { getDeviceId, isValidJson } from "../utils/functions";
 
 export const apiPlaceOrder = (
   vendorId,
@@ -132,8 +132,9 @@ export const apiApplyVoucherToCart = (customerId, code) => {
   let arrayOfCustomerBasket = [];
 
   if (typeof window !== "undefined") {
-    const products = JSON.parse(localStorage.getItem("selectedProduct"));
-    const productItems = products.products;
+    const json = localStorage.getItem("selectedProduct")
+    const products = isValidJson(json) ? JSON.parse(json) : {}
+    const productItems = products?.products;
     if (productItems) {
       productItems.forEach((element) => {
         arrayOfCustomerBasket.push(element.customers_basket_id);

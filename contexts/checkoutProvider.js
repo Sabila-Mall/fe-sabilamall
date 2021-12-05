@@ -2,6 +2,7 @@ import { useToast } from "@chakra-ui/toast";
 import { useRouter } from "next/router";
 import { parseCookies, setCookie, destroyCookie } from "nookies";
 import { createContext, useContext, useEffect, useState } from "react";
+import { isValidJson } from '../utils/functions';
 
 const CheckoutContext = createContext();
 
@@ -16,7 +17,9 @@ export const CheckoutProvider = ({ children }) => {
 
   const addCheckoutData = (data) => {
     const dataLocal = localStorage.getItem("checkoutData");
-    const parsedDataLocal = dataLocal && JSON.parse(dataLocal);
+    let parsedDataLocal;
+    if (dataLocal && isValidJson(dataLocal))
+      parsedDataLocal = JSON.parse(dataLocal)
     const cookie = parseCookies();
 
     if (parsedDataLocal?.userId !== cookie?.user_id) {
@@ -35,11 +38,13 @@ export const CheckoutProvider = ({ children }) => {
   useEffect(() => {
     const cookies = parseCookies();
     const dataLocal = localStorage.getItem("checkoutData");
-    const parsedDataLocal = dataLocal && JSON.parse(dataLocal);
+    let parsedDataLocal;
+    if (dataLocal && isValidJson(dataLocal))
+      parsedDataLocal = JSON.parse(dataLocal)
 
     if (parsedDataLocal) {
       if (
-        cookies.user_id &&
+        cookies.user_id && isValidJson(cookies.user_id) &&
         parsedDataLocal.userId == JSON.parse(cookies.user_id)
       ) {
         setCheckoutData(parsedDataLocal);
