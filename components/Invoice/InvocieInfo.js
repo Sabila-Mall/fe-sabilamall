@@ -3,6 +3,7 @@ import { Text } from "@chakra-ui/react";
 import { PAYMENT_METHOD } from "../../constants/paymentMethod";
 import { useCheckoutContext } from "../../contexts/checkoutProvider";
 import { InvoiceInfoBankTransfer } from "./InvoiceInfoBankTransfer";
+import { InvoiceInfoGopay } from "./InvoiceInfoGopay";
 import { InvoiceInfoQRIS } from "./InvoiceInfoQRIS";
 import { InvoiceInfoSMPay } from "./InvoiceInfoSMPay";
 import { InvoiceInfoVAMandiri } from "./InvoiceInfoVAMandiri";
@@ -24,6 +25,8 @@ export const InvoiceInfo = () => {
       return <InvoiceInfoShopeePay checkoutResponse={checkoutResponse} />;
     case PAYMENT_METHOD.QRIS:
       return <InvoiceInfoQRIS checkoutResponse={checkoutResponse} />;
+    case PAYMENT_METHOD.GOPAY:
+      return <InvoiceInfoGopay checkoutResponse={checkoutResponse} />;
     default:
       if (paymentMethod.startsWith(PAYMENT_METHOD.VIRTUAL_ACCOUNT_PREFIX)) {
         return (

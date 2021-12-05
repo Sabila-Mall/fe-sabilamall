@@ -1,6 +1,10 @@
-import { Text, Box, Image, OrderedList, ListItem } from "@chakra-ui/react";
+import { Text, Box, Image, Button } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+
+import PaymentMethodStepsTabs from "./PaymentMethodStepsTabs";
 
 export const InvoiceInfoQRIS = ({ checkoutResponse }) => {
+  const router = useRouter();
   const howToPay =
     checkoutResponse?.payment_gateways?.howtopaypage?.data?.[0]?.step || [];
   return (
@@ -15,17 +19,23 @@ export const InvoiceInfoQRIS = ({ checkoutResponse }) => {
           w="40%"
         />
       </Box>
+
       <Text mt="0.6rem" mb="0.4rem" className="secondaryFont">
         {/* {checkoutResponse?.payment_gateways?.howtopaypage.name} */}
         Pembayaran dapat dilakukan dengan melakukan langkah-langkah berikut:
       </Text>
-      {!!howToPay && (
-        <OrderedList>
-          {howToPay.map((data) => {
-            return <ListItem>{data}</ListItem>;
-          })}
-        </OrderedList>
-      )}
+      <PaymentMethodStepsTabs tabsData={howToPay} />
+
+      <Flex justifyContent={{ lg: "flex-end" }} w="full">
+        <Button
+          colorScheme="orange"
+          w={{ base: "full", lg: "15rem" }}
+          mt="1rem"
+          onClick={() => router.push("/")}
+        >
+          Kembali Berbelanja
+        </Button>
+      </Flex>
     </>
   );
 };
