@@ -2,6 +2,7 @@ import { Text } from "@chakra-ui/react";
 
 import { PAYMENT_METHOD } from "../../constants/paymentMethod";
 import { useCheckoutContext } from "../../contexts/checkoutProvider";
+import { InvoiceInfoCStore } from "./InvoiceCStore";
 import { InvoiceInfoBankTransfer } from "./InvoiceInfoBankTransfer";
 import { InvoiceInfoSMPay } from "./InvoiceInfoSMPay";
 import { InvoiceInfoVAMandiri } from "./InvoiceInfoVAMandiri";
@@ -21,6 +22,8 @@ export const InvoiceInfo = () => {
       return <InvoiceInfoVAMandiri checkoutResponse={checkoutResponse} />;
     case PAYMENT_METHOD.SHOPEE_PAY:
       return <InvoiceInfoShopeePay checkoutResponse={checkoutResponse} />;
+    case PAYMENT_METHOD.CSTORE:
+      return <InvoiceInfoCStore checkoutResponse={checkoutResponse} />;
     default:
       if (paymentMethod.startsWith(PAYMENT_METHOD.VIRTUAL_ACCOUNT_PREFIX)) {
         return (
