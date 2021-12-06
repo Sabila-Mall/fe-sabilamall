@@ -7,4 +7,5 @@ export const PAYMENT_METHOD = {
   QRIS: "Midtrans - QRIS",
   GOPAY: "Midtrans - Gopay",
   SHOPEE_PAY: "Midtrans - Shopeepay",
+  CSTORE: "Midtrans - Alfamart",
 };
