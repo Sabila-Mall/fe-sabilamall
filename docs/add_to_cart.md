@@ -60,7 +60,9 @@ Location: cartProvider.js
 Description: make an array of set of product variants
 Parameter: varian  
 Return: array of set of variants of the same product    
-Input example: [  
+Input example: 
+```json 
+[
     {  
         customers_basket_attributes_id: 364067  
         customers_basket_id: 188209  
@@ -92,9 +94,13 @@ Input example: [
         session_id: "EfajNts9ZVZpHzIZiPTmiwishJVLS1NcUPkbT5s1"  
         values_price: "0.00"  
         values_weight: "0.00"  
-    }  
-]  
-Output example: {1: 840, 2: 1013}  
+    }
+]
+```  
+Output example: 
+```json   
+{1: 840, 2: 1013}
+```  
 
 ## Process
 1. If isLoggedIn(), add-to-cart button on ProductCheckout.js will call addCartItem function which contains specific product details, that is customers_id, user_level, products_id, numberOfItem, option_id, and option_values_id.

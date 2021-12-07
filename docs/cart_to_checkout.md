@@ -75,8 +75,8 @@ Location: cartProvider.js
 Description: delete specific product from cart 
 Parameter: userId, productId  
 Return:
-  + Success: displays success toast
   + Failed: displays error toast
+  + Success: displays success toast
 
 * deleteFromCheckout  
 Location: cartProvider.js  
