@@ -13,7 +13,7 @@ Description: return true if user is logged in and false if otherwise
   
 * cartDataByVendor  
 Location: cartProvider.js  
-Description: Splited cart products by vendor  
+Description: Splitted cart products by vendor  
 
 * totalPrice  
 Location: cartProvider.js  
@@ -25,7 +25,7 @@ Description: total discount of all products
 
 * cartData    
 Location: cartrProvider.js  
-Description: Splited cart products by customer_basket_id
+Description: Splitted cart products by customer_basket_id
 
 ### Function Used
 * apiGetCartByCustomerID  
@@ -38,9 +38,11 @@ Return: all cart products
 Location: cartProvider.js  
 Description: add product to cart  
 Parameter: customers_id, user_level, products_id, quantity, option_id, option_values_id  
-Return: Displays an error toast if it fails to add to the cart or displays succcess toast and add product to cart if otherwise    
+Return:
+    + Failed: error toast     
+    + Success: succcess toast and add product to cart if otherwise      
+    
   
-
 * updateQuantity  
 Location: cartProvider.js  
 Description: update the quantity of a product  
@@ -55,9 +57,44 @@ Return: Displays an error toast if it fails to delete cart item from the cart or
   
 * makeObjectOfVariant   
 Location: cartProvider.js  
-Description: make a array of set of product variants
+Description: make an array of set of product variants
 Parameter: varian  
 Return: array of set of variants of the same product    
+Input example: [  
+    {  
+        customers_basket_attributes_id: 364067  
+        customers_basket_id: 188209  
+        customers_id: 3  
+        prefix: "+"  
+        products_attributes_id: 53716  
+        products_id: "8164"  
+        products_options_id: 2  
+        products_options_name: "Warna"  
+        products_options_values_id: 1013  
+        products_options_values_name: "Pale Pink"  
+        seq_id: null  
+        session_id: "EfajNts9ZVZpHzIZiPTmiwishJVLS1NcUPkbT5s1"  
+        values_price: "0.00"  
+        values_weight: "0.00  
+    },   
+    {  
+        customers_basket_attributes_id: 364068  
+        customers_basket_id: 188209  
+        customers_id: 3  
+        prefix: "+"  
+        products_attributes_id: 53713  
+        products_id: "8164"  
+        products_options_id: 1  
+        products_options_name: "Ukuran"  
+        products_options_values_id: 840  
+        products_options_values_name: "Dewasa"  
+        seq_id: null  
+        session_id: "EfajNts9ZVZpHzIZiPTmiwishJVLS1NcUPkbT5s1"  
+        values_price: "0.00"  
+        values_weight: "0.00"  
+    }  
+]  
+Output example: {1: 840, 2: 1013}  
 
 ## Process
 1. If isLoggedIn(), add-to-cart button on ProductCheckout.js will call addCartItem function which contains specific product details, that is customers_id, user_level, products_id, numberOfItem, option_id, and option_values_id.

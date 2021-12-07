@@ -54,7 +54,9 @@ Return: -
 Location: cartProvider.js  
 Description: do the validation for the checkout, that is from the same vendor and same type of product    
 Parameter: -   
-Return: displays an error toast if there is an error and redirect to checkout page if otherwise    
+Return:
+  + Failed: displays an error toast  
+  + Success: redirect to checkout page    
 
 * addToCheckout  
 Location: cartProvider.js  
@@ -72,7 +74,9 @@ Return: -
 Location: cartProvider.js  
 Description: delete specific product from cart 
 Parameter: userId, productId  
-Return: displays success toast if product is deleted from the cart and displays error toast if otherwise
+Return:
+  + Success: displays success toast
+  + Failed: displays error toast
 
 * deleteFromCheckout  
 Location: cartProvider.js  
@@ -93,7 +97,7 @@ Parameter: event
 Return: -
 
 ## Process
-1. add and minus button on each products on cart drawer(QuickAddItem) will trigger handleModifyNumberOfItem
+1. plus and minus button on each products on cart drawer(QuickAddItem) will trigger handleModifyNumberOfItem
 2. Checkbox on each products will trigger handleCheckbox function which will call addToCheckout or deleteFromCheckout function
 3. addToCheckout and deleteFromCheckout will set the selectedItem, selectedPrice, and selectedPrice
 4. delete button on each products(trash icon) will trigger the handleDelete function
