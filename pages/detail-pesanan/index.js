@@ -75,8 +75,9 @@ const RingkasanPesanan = () => {
   let products = [];
 
   if (typeof window !== "undefined") {
-    const localCheckoutJson = localStorage.getItem("selectedProduct")
-    const localCheckout = isValidJson(localCheckoutJson) && JSON.parse(localCheckoutJson);
+    const localCheckoutJson = localStorage.getItem("selectedProduct");
+    const localCheckout =
+      isValidJson(localCheckoutJson) && JSON.parse(localCheckoutJson);
     if (localCheckout) {
       products = localCheckout.products;
     }
@@ -206,8 +207,9 @@ const Pengiriman = ({ kurir, pengiriman, handler, loadingKurir }) => {
   let totalWeight = 0;
 
   if (typeof window !== "undefined") {
-    const checkoutDataJson = localStorage.getItem("selectedProduct")
-    const checkoutData = isValidJson(checkoutDataJson) && JSON.parse(checkoutDataJson);
+    const checkoutDataJson = localStorage.getItem("selectedProduct");
+    const checkoutData =
+      isValidJson(checkoutDataJson) && JSON.parse(checkoutDataJson);
     if (checkoutData) {
       totalWeight = checkoutData.weight;
     }
@@ -558,7 +560,7 @@ const DetailPesanan = () => {
   let weight, vendors_id, vendor_origin, totalOrder, products_jenis;
 
   if (typeof window !== "undefined") {
-    const productsJson = localStorage.getItem("selectedProduct")
+    const productsJson = localStorage.getItem("selectedProduct");
     const products = isValidJson(productsJson) && JSON.parse(productsJson);
     const productItems = products.products;
     if (productItems) {
@@ -604,19 +606,31 @@ const DetailPesanan = () => {
 
   useEffect(() => {
     setLoadingPayment(true);
-    getPaymentMethod(
-      vendors_id,
-      userData?.id,
-      products_jenis,
-      totalOrder,
-      pengiriman.name,
-    )
-      .then((res) => {
-        setPaymentMethod(res.data.data);
-      })
-      .catch((err) => console.error(err))
-      .finally(() => setLoadingPayment(false));
-  }, []);
+    const getPaymentMethodData = () => {
+      getPaymentMethod(
+        vendors_id,
+        userData?.id,
+        products_jenis,
+        totalOrder,
+        pengiriman.name,
+      )
+        .then((res) => {
+          const data = res?.data?.data;
+
+          const filteredData = data?.filter((item) => {
+            return item.name?.toLowerCase() !== "shopeepay";
+          });
+
+          const selectedData = isDesktop ? filteredData : data;
+
+          setPaymentMethod(selectedData);
+        })
+        .catch((err) => console.error(err))
+        .finally(() => setLoadingPayment(false));
+    };
+
+    width && getPaymentMethodData();
+  }, [width]);
 
   const handleSelectedPengirman = (selected) => {
     // Ambil data tegantung id pengiriman yg dipilih, setPengiriman ke data yg didapet dari server
@@ -681,9 +695,10 @@ const DetailPesanan = () => {
     totalWeight = 0;
 
   if (typeof window !== "undefined") {
-    const checkoutDataJson = localStorage.getItem("selectedProduct")
-    const checkoutData = isValidJson(checkoutDataJson) && JSON.parse(checkoutDataJson);
-    if (checkoutData) { 
+    const checkoutDataJson = localStorage.getItem("selectedProduct");
+    const checkoutData =
+      isValidJson(checkoutDataJson) && JSON.parse(checkoutDataJson);
+    if (checkoutData) {
       totalPrice = checkoutData.total_price;
       totalQuantity = checkoutData.quantity;
       totalWeight = checkoutData.weight;
