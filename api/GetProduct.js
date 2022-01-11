@@ -17,3 +17,9 @@ export const apiGetProductBrandPage = (id, page) => {
     `https://api.sabilamall.co.id/api/brand/get_all_products_by_brand/${id}?page=${page}`,
   );
 };
+
+export const apiGetProductByNamePage = (searchQuery, page) => {
+  return axios.get(
+    `https://api.sabilamall.co.id/api/product/search/${searchQuery}?page=${page}`,
+  );
+};

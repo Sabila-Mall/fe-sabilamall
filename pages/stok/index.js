@@ -22,6 +22,7 @@ import {
   apiGetProduct,
   apiGetProductBrand,
   apiGetProductBrandPage,
+  apiGetProductByNamePage,
 } from "../../api/GetProduct";
 import { apiStock } from "../../api/Stock";
 import Footer from "../../components/Footer";
@@ -54,6 +55,9 @@ const Stok = () => {
   const [currPage, setCurrPage] = useState(1);
   const [lastPage, setLastPage] = useState(0);
   const [range, setRange] = useState([]);
+  const [typeSearch, setTypeSearch] = useState("");
+  const [sabiconSearch, setSabiconSearch] = useState(1);
+  
 
   const objToArray = (d) => {
     if (typeof d === "object") {
@@ -77,9 +81,11 @@ const Stok = () => {
   useEffect(() => {
     if (data.length !== 0) {
       let dataArray = objToArray(data);
+      console.log(dataArray);
       dataArray.map((product) => {
         try {
-          const stocksPush = fetchingStock(product, supplierName);
+          const supName = supplierName == "" ? product.manufacturer_name : supplierName;
+          const stocksPush = fetchingStock(product, supName);
           setStocks((curr) => [...curr, stocksPush]);
           setLoading(false);
         } catch (err) {
@@ -105,9 +111,136 @@ const Stok = () => {
         setTotalProduct(res.data.data.total);
         setData(d);
         setLoading(false);
+        setNameSearch("");
+        setSupplierName(supplierName);
       });
     }
   }, [brandId, currPage]);
+
+  useEffect(() => {
+    if (nameSearch != "") {
+      setLoading(true);
+      setStocks([]);
+      setData([]);
+      apiGetProductByNamePage(nameSearch, currPage).then((res) => {
+        let d = res.data.data.data;
+
+        if (d.length == 0) setNoProduct(true);
+        else setNoProduct(false);
+
+        setLastPage(res.data.data.last_page);
+        setTotalProduct(res.data.data.total);
+        setData(d);
+        setLoading(false);
+      });
+    }
+  }, [nameSearch, currPage]);
+
+  useEffect(() => {
+    if (typeSearch != "") {
+      console.log(typeSearch);
+    }
+  }, [typeSearch]);
+
+  function SelectBoxType() {
+    return (
+      <>
+      <Select
+        placeholder="Pilih Tipe Pencarian"
+        w={typeSearch == "" ? { base: "100%", md: "100%" } : { base: "100%", md: "50%" }}
+        value={typeSearch}
+        onChange={(e) => {
+          let val = e.target.value;
+          setTypeSearch(val);
+          setStocks([]);
+          setData([]);
+          setBrandId(0);
+          setCurrPage(1);
+          setLastPage(0);
+          setSupplierName("");
+          setFirstTime(true);
+          if(val == 1){
+            setSabiconSearch(1);
+          } else {
+            setSabiconSearch(2);
+          }
+        }}
+      >
+        <option key="1" value="1">Berdasarkan Brand</option>
+        <option key="2" value="2">Input Nama Produk</option>
+      </Select>
+      {typeSearch == "1" && 
+        <SelectBoxBrand/>
+      }
+      {typeSearch == "2" && 
+        <InputKeyword/>
+      }
+      </>
+    );
+  }
+
+  function SelectBoxBrand() {
+    return (
+      <>
+      <Select
+        disabled={loading}
+        w={{ base: "100%", md: "49%" }}
+        onChange={(e) => {
+          let split = e.target.value.split(" ");
+          setBrandId(Number(split[0]));
+          setCurrPage(1);
+          setSupplierName(split[1]);
+          setFirstTime(false);
+          setLoading(true);
+        }}
+      >
+        <option value="" key="0">Pilih Brand</option>
+        {supplier.length != 0 ? (
+          supplier.map((child) => {
+            const brandName = child.name;
+            return (
+              <option key={child.id} value={`${child.id} ${child.name}`} selected={brandName == supplierName ? "selected" : ""}>
+                {child.name}
+              </option>
+            );
+          })
+        ) : (
+          <option key={"loading"} disabled value={"loading"}>
+            {"Loading..."}
+          </option>
+        )}
+      </Select>
+      </>
+    );
+  }
+
+  function InputKeyword() {
+    return (
+      <>
+      <InputGroup
+          w={{ base: "100%", md: "49%" }}
+          mt={{ base: "1rem", md: "0rem" }}
+        >
+          <InputLeftElement children={<FiSearch color="red.500" />} />
+          <Input
+            placeholder={nameSearch == "" ? "Cari Produk" : nameSearch}
+            fontSize="sm"
+            onKeyPress={(e) => {
+              if(e.key === 'Enter'){
+                let val = e.target.value;
+                setNameSearch(val);
+                setFirstTime(false);
+                setLoading(true);
+
+                setBrandId(0);
+                setCurrPage(1);
+              }
+            }}
+          />
+        </InputGroup>
+      </>
+    );
+  }
 
   return (
     <Layout hasNavbar hasPadding hasBreadCrumb breadCrumbItem={path}>
@@ -127,47 +260,7 @@ const Stok = () => {
             flexDir={{ base: "column", md: "row" }}
             justifyContent="space-between"
           >
-            <Select
-              disabled={loading}
-              placeholder={firstTime && "Cari supplier"}
-              w={{ base: "100%", md: "30%" }}
-              onChange={(e) => {
-                let split = e.target.value.split(" ");
-                setBrandId(Number(split[0]));
-                setCurrPage(1);
-                setSupplierName(split[1]);
-                setFirstTime(false);
-                setLoading(true);
-              }}
-            >
-              {supplier.length != 0 ? (
-                supplier.map((child) => {
-                  return (
-                    <option key={child.id} value={`${child.id} ${child.name}`}>
-                      {child.name}
-                    </option>
-                  );
-                })
-              ) : (
-                <option key={"loading"} disabled value={"loading"}>
-                  {"Loading..."}
-                </option>
-              )}
-            </Select>
-            <InputGroup
-              w={{ base: "100%", md: "69%" }}
-              mt={{ base: "1rem", md: "0rem" }}
-            >
-              <InputLeftElement children={<FiSearch color="red.500" />} />
-              <Input
-                disabled={firstTime}
-                placeholder="Cari produk"
-                fontSize="sm"
-                onChange={(e) => {
-                  setNameSearch(e.target.value);
-                }}
-              />
-            </InputGroup>
+            <SelectBoxType/>
           </Box>
           <Flex w="full" justify="center" mt="1rem">
             <Pagination
@@ -230,8 +323,7 @@ const Stok = () => {
                   textAlign="center"
                   className="secondaryFont"
                 >
-                  Silakan pilih supplier berdasarkan nama produk untuk melihat
-                  data stok yang tersedia.
+                  {sabiconSearch == 1 ? "Silakan pilih brand berdasarkan nama produk untuk melihat data stok yang tersedia." : "Silakan input nama produk untuk melihat data stok yang tersedia." }
                 </Text>
               </Flex>
             )}
