@@ -80,7 +80,8 @@ const AlamatPenerima = () => {
     },
   ];
 
-  const selectedProductJson = localStorage.getItem("selectedProduct")
+  let selectedProductJson;
+  if (typeof window !== "undefined") selectedProductJson = localStorage.getItem("selectedProduct")
 
   if (
     typeof window !== "undefined" && isValidJson(selectedProductJson) &&
@@ -204,33 +205,32 @@ const AlamatPenerima = () => {
         setDataPengirim(
           addressDataPengirim
             ? [
-                ...addressDataPengirim?.map((d) => ({
-                  nama: d.firstname + " " + (d.lastname ?? ""),
-                  nomor: d.phone,
-                  ...d,
-                })),
-              ]
+              ...addressDataPengirim?.map((d) => ({
+                nama: d.firstname + " " + (d.lastname ?? ""),
+                nomor: d.phone,
+                ...d,
+              })),
+            ]
             : [],
         );
 
         setDataPenerima(
           addressDataPenerima && Array.isArray(addressDataPenerima)
             ? [
-                ...addressDataPenerima?.map((d) => ({
-                  delivery_id: d.address_id,
-                  nama: d.firstname + " " + (d.lastname ?? ""),
-                  nomor: d.phone,
-                  alamat: `${d.street}, ${
-                    d.subdistrict_type + " " + d.subdistrict_name
+              ...addressDataPenerima?.map((d) => ({
+                delivery_id: d.address_id,
+                nama: d.firstname + " " + (d.lastname ?? ""),
+                nomor: d.phone,
+                alamat: `${d.street}, ${d.subdistrict_type + " " + d.subdistrict_name
                   }, ${d.city_type + " " + d.city_name}, ${d.zone_name}`,
-                  address_id: d.address_id,
-                  city_id: d.city_id,
-                  zone_id: d.zone_apicityid,
-                  subdistrict_id: d.subdistrict_id,
-                  postcode: d.postcode,
-                  district_id: d.district,
-                })),
-              ]
+                address_id: d.address_id,
+                city_id: d.city_id,
+                zone_id: d.zone_apicityid,
+                subdistrict_id: d.subdistrict_id,
+                postcode: d.postcode,
+                district_id: d.district,
+              })),
+            ]
             : [],
         );
 
@@ -324,7 +324,7 @@ const AlamatPenerima = () => {
     try {
       addCheckoutData(data);
     } catch {
-      () => {};
+      () => { };
     }
   };
 
