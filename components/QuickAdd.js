@@ -30,6 +30,7 @@ import QuickAddListItem from "./QuickAddListItem";
 const QuickAdd = ({ isDrawerOpen, onDrawerClose }) => {
   const {
     loading,
+    checkoutLoading,
     selectedPrice,
     checkoutValidation,
     selectedDiscount,
@@ -113,6 +114,7 @@ const QuickAdd = ({ isDrawerOpen, onDrawerClose }) => {
                 width={"full"}
                 onClick={() => handleCheckout()}
                 _hover={{ bgColor: "red.600" }}
+                isLoading={checkoutLoading}
               >
                 Checkout
               </Button>

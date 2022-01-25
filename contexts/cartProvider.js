@@ -17,6 +17,7 @@ const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [cartData, setcartData] = useState([]);
   const [loading, setloading] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState(false)
   const [totalPrice, settotalPrice] = useState(0);
   const [totalDiscount, settotalDiscount] = useState(0);
   const [selectedPrice, setselectedPrice] = useState(0);
@@ -324,6 +325,7 @@ export const CartProvider = ({ children }) => {
     customers_basket_id,
     customers_basket_quantity,
   ) => {
+    setCheckoutLoading(true)
     updateCartQuantity({
       customers_id,
       customers_basket_id,
@@ -335,7 +337,8 @@ export const CartProvider = ({ children }) => {
         } else {
         }
       })
-      .catch(() => { });
+      .catch(() => { })
+      .finally(() => setCheckoutLoading(false))
   };
 
   useEffect(() => {
@@ -347,6 +350,7 @@ export const CartProvider = ({ children }) => {
       value={{
         cartData,
         loading,
+        checkoutLoading,
         addCartItem,
         deleteCartItem,
         updateQuantity,

@@ -4,7 +4,7 @@ import { css } from "@emotion/react";
 import { useCartContext } from "../contexts/cartProvider";
 
 export const CardCheckout = () => {
-  const { selectedDiscount, selectedPrice, checkoutValidation } = useCartContext();
+  const { selectedDiscount, selectedPrice, checkoutValidation, checkoutLoading } = useCartContext();
   const idr = Intl.NumberFormat("id-ID");
   // const subtotal = subTotal.replace(/\./g, "");
   // const disc = totalDiscount.replace(/\./g, "");
@@ -45,6 +45,7 @@ export const CardCheckout = () => {
           size="md"
           color="white"
           onClick={() => { handleCheckout() }}
+          isLoading={checkoutLoading}
         >
           Proses ke Checkout
         </Button>
