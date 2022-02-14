@@ -88,22 +88,22 @@ export const CartProvider = ({ children }) => {
                           el.customers_basket_id,
                           newQuantity,
                         );
-                        deleteCartItem(
-                          userId,
-                          secondItem.customers_basket_id,
-                          false,
-                        );
+                        // deleteCartItem(
+                        //   userId,
+                        //   secondItem.customers_basket_id,
+                        //   false,
+                        // );
                       } else {
                         updateQuantity(
                           userId,
                           el.customers_basket_id,
                           el.products_stok,
                         );
-                        deleteCartItem(
-                          userId,
-                          secondItem.customers_basket_id,
-                          false,
-                        );
+                        // deleteCartItem(
+                        //   userId,
+                        //   secondItem.customers_basket_id,
+                        //   false,
+                        // );
                       }
                     }
                   });
