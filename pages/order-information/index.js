@@ -67,6 +67,7 @@ const OrderInformation = ({ order }) => {
   const status = orderData?.payment_status;
   const productDiscount = orderData?.level_discount;
   const voucherDiscount = orderData?.shipping_promo_amount;
+  const couponAmount = orderData?.coupon_amount;
   const notes = orderData?.order_notes;
   const resi = resiData?.waybill_cognote;
 
@@ -568,6 +569,15 @@ const OrderInformation = ({ order }) => {
                 ) : (
                   <></>
                 )}
+                {couponAmount ? (
+                  <Flex mt="8px">
+                    <Text>Diskon Kupon</Text>
+                    <Spacer />
+                    <Text>- {currencyFormat(couponAmount)}</Text>
+                  </Flex>
+                ) : (
+                  <></>
+                )}
                 <Flex mt="8px">
                   <Text>Total Pesanan</Text>
                   <Spacer />
@@ -581,7 +591,8 @@ const OrderInformation = ({ order }) => {
                       parseInt(subTotalProduk) +
                         parseInt(orderData?.shipping_cost) +
                         parseInt(orderData?.addcostvalue) -
-                        parseInt(voucherDiscount),
+                        parseInt(voucherDiscount) - 
+                        parseInt(couponAmount),
                     )}
                   </Text>
                 </Flex>
