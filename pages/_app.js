@@ -13,9 +13,14 @@ import * as fbq from "../lib/fpixel";
 import * as gtag from "../lib/gtag";
 import "../styles/globals.scss";
 
+import nookies from "nookies";
+
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   axios.defaults.headers["apikey"] = "32c9284bfd35879a8dce97f8db9e0c2c";
+
+  const myToken = nookies.get(null, "token");
+  axios.defaults.headers['Authorization'] = `Bearer ` + myToken.token;
 
   useEffect(() => {
     // This pageview only triggers the first time (it's important for Pixel to have real information)
