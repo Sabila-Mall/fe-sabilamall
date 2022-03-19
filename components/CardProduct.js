@@ -70,7 +70,7 @@ const CardProduct = ({
     function handleResize() {
       let width = responsive
         ? document.getElementsByClassName("card-product-responsive")[0]
-            .clientWidth
+          .clientWidth
         : document.getElementsByClassName("card-product")[0].clientWidth;
       setImageHeight(width);
     }
@@ -119,9 +119,9 @@ const CardProduct = ({
           </Box>
           <Box padding="2" w="100%">
             {jenis == "po" && (
-            <Badge borderRadius="full" bg="#479af1" color="white">
-              Pre Order
-            </Badge>
+              <Badge borderRadius="full" bg="#479af1" color="white">
+                Pre Order
+              </Badge>
             )}
 
             {flash_end && timeLeft && (
@@ -200,14 +200,6 @@ const CardProduct = ({
               >
                 <Text>{currencyFormat(priceAfterDiscount ?? price)}</Text>
                 <Flex align="center">
-                  {isfreeshipping !== 0 && (
-                    <Icon
-                      width="1.3em"
-                      height="1.3em"
-                      as={FaShippingFast}
-                      color={"green.500"}
-                    />
-                  )}
                   {isLoggedIn && (
                     <Icon
                       width="1.15em"
@@ -224,6 +216,20 @@ const CardProduct = ({
                   )}
                 </Flex>
               </Box>
+              {isfreeshipping !== 0 && (
+                // <Icon
+                //   width="1.3em"
+                //   height="1.3em"
+                //   as={FaShippingFast}
+                //   color={"green.500"}
+                // />
+                <Box
+                  bgRepeat="no-repeat"
+                  position="relative"
+                >
+                  <Image w="2.3em" mt="0.7em" float="right" src="/images/free-ongkir.svg" objectFit="cover" />
+                </Box>
+              )}
             </Flex>
           </Box>
         </Box>
