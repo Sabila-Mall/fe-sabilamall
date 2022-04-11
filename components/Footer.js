@@ -53,14 +53,14 @@ const DesktopFooter = () => {
               Kunjungi Kami
             </Heading>
             <Text className={styles.secondaryFont}>
-              Satria Building 2nd Lt 2 Unit A204-A206, Jl. Akses UI No.24-26,
+              Satria Building 2nd Lt 2 Unit A204-A205, Jl. Akses UI No.24-26,
               Tugu, Kec. Cimanggis, Kota Depok, Jawa Barat, Indonesia. Kode pos
               16451.
             </Text>
             <Flex alignItems="center">
               <FaPhoneAlt color="orange" className={styles.icon} />
               <Text className={styles.secondaryFont} pl="0.64rem">
-                +62 851-5653-6861
+                +62 838-2054-8149
               </Text>
             </Flex>
             <Flex alignItems="center">
