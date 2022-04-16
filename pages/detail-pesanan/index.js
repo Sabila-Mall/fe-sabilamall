@@ -372,7 +372,7 @@ const MetodePembayaran = ({
                 allowMouseWheel
                 textAlign="right"
                 onChange={(e) => handleDiskonPengiriman(e)}
-                // isDisabled={true}
+              // isDisabled={true}
               >
                 <NumberInputField textAlign="right" />
               </NumberInput>
@@ -594,7 +594,8 @@ const DetailPesanan = () => {
         .catch((err) => {
           toast({
             position: "top",
-            title: "Gagal Mendapatkan Kurir",
+            //            title: "Gagal Mendapatkan Kurir",
+            title: res.data.message,
             status: "error",
             isClosable: true,
           });
@@ -711,7 +712,7 @@ const DetailPesanan = () => {
     if (
       metodePembayaran.payment_method === "deposit" &&
       totalPrice + pengiriman.harga - totalDiscount >
-        paymentMethod.filter((e) => e.method === "deposit")[0].memberdeposit
+      paymentMethod.filter((e) => e.method === "deposit")[0].memberdeposit
     ) {
       toast({
         title: "Saldo SM Pay tidak mencukupi",
