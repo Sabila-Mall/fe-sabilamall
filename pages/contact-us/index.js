@@ -107,7 +107,7 @@ const contactUs = () => {
                   <Flex alignItems="center">
                     <FaPhoneAlt color="orange" className={styles.icon} />
                     <Text fontSize={{ base: "14px", xl: "1rem" }} pl="0.64rem">
-                      +62 851-5653-6861
+                      +62 838-2054-8149
                     </Text>
                   </Flex>
                   <Divider
@@ -149,7 +149,7 @@ const contactUs = () => {
                   <Flex direction="column">
                     <Box>
                       <Text fontSize="14px" fontWeight="500">
-                        Satria Building 2nd Lt 2 Unit A204-A206, Jl. Akses UI
+                        Satria Building 2nd Lt 2 Unit A204-A205, Jl. Akses UI
                         No.24-26, Tugu, Kec. Cimanggis, Kota Depok, Jawa Barat
                         Depok Jawa Barat, 16451 Indonesia
                       </Text>

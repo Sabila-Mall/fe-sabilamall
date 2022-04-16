@@ -124,13 +124,13 @@ const About = () => {
           <TextStyled
             mt=".5rem"
             fontSize={{ base: ".875rem", lg: "1rem" }}
-            text="Karena SabilaMall merupakan solusi terbaik atas permasalahan Anda. Berdiri sejak tahun 2015,  bermula dari penjualan fashion dan kini merambah produk makanan, kecantikan hingga peralatan rumah tangga. Ada lebih dari 50 brand serta berbagai macam produk yang bisa anda jual tanpa perlu takut biaya tambahan bila mendaftar dan memikirkan stok yang tidak terjual sampai packingan. Cukup kendalikan semua penjualan dari tangan anda."
+            text="SabilaMall didirikan pada  akhir 2018 oleh Nasirudin MeC, seorang pengusaha multitalenta yang aktif juga sebagai internet marketer, trainer, penulis dan coach bisnis sejak 2007. Bermula dari penjualan fashion, kini merambah produk makanan, kecantikan hingga peralatan rumah tangga. Ada lebih dari 50 brand serta ribuan produk yang bisa anda jual tanpa perlu takut biaya tambahan bila mendaftar. Anda juga tidak perlu memikirkan stok, packingan hingga pengiriman. Cukup kendalikan semua penjualan dari smartphone Anda"
           />
           <TextStyled
             mt=".5rem"
             color="orange.500"
             fontSize={{ base: ".875rem", lg: "1rem" }}
-            text="Bagi yang ingin join reseller SabilaMall silakan hubungi admin kami di nomor Whatsapp 0812-8389-4161"
+            text="Bagi yang ingin join reseller SabilaMall silakan hubungi admin kami di nomor Whatsapp +62 838-2054-8149"
           />
         </Box>
 
