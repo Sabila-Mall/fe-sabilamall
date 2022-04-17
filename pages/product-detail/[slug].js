@@ -150,6 +150,8 @@ const ProductDetails = () => {
     normal_price,
     final_price,
     isfreeshipping,
+    promos,
+    manufacturer_name,
   } = data;
 
   const productImagesData = {
@@ -209,16 +211,17 @@ const ProductDetails = () => {
     po_shippingdate,
     products_name,
     isfreeshipping,
+    promos,
   };
 
   const path = [
     {
-      name: "Kategori",
+      name: vendors_name,
       link: "/",
       isOnPage: false,
     },
     {
-      name: "Supplier",
+      name: manufacturer_name,
       link: "/",
       isOnPage: false,
     },
