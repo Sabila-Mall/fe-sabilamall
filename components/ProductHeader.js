@@ -112,7 +112,7 @@ const ProductHeader = ({
           < Flex alignItems="center">
             <IoTimeOutline size="1.4em" color="#ECC94B" as="span" />
             <Text color="yellow.400" pl="0.5rem">
-              Promo
+              Promo Produk
             </Text>
           </Flex>
         )}
