@@ -24,24 +24,27 @@ const ProductHeader = ({
   po_shippingdate,
   po_close_status,
   isfreeshipping,
+  promos,
 }) => {
   const isClose = preOrder && po_close_status == 1;
 
+  const isPromo = JSON.parse(promos);
+
   const discount_price = discount_price_be
     ? new Intl.NumberFormat("id-ID", {
-        style: "currency",
-        currency: "IDR",
-        maximumFractionDigits: 0,
-        minimumFractionDigits: 0,
-      }).format(Number(discount_price_be))
+      style: "currency",
+      currency: "IDR",
+      maximumFractionDigits: 0,
+      minimumFractionDigits: 0,
+    }).format(Number(discount_price_be))
     : null;
   const price = current_price
     ? new Intl.NumberFormat("id-ID", {
-        style: "currency",
-        currency: "IDR",
-        maximumFractionDigits: 0,
-        minimumFractionDigits: 0,
-      }).format(Number(current_price))
+      style: "currency",
+      currency: "IDR",
+      maximumFractionDigits: 0,
+      minimumFractionDigits: 0,
+    }).format(Number(current_price))
     : null;
 
   return (
@@ -100,6 +103,14 @@ const ProductHeader = ({
             <IoTimeOutline size="1.4em" color="#ECC94B" as="span" />
             <Text color="yellow.400" pl="0.5rem">
               Pre Order
+            </Text>
+          </Flex>
+        )}
+        {isPromo && (
+          <Flex alignItems="center">
+            <IoTimeOutline size="1.4em" color="#ECC94B" as="span" />
+            <Text color="yellow.400" pl="0.5rem">
+              {isPromo.promoname}
             </Text>
           </Flex>
         )}
