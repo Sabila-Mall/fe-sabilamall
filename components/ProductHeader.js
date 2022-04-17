@@ -28,7 +28,9 @@ const ProductHeader = ({
 }) => {
   const isClose = preOrder && po_close_status == 1;
 
-  const isPromo = JSON.parse(promos);
+  if (promos != "") {
+    //    const isPromo = JSON.parse(promos);
+  }
 
   const discount_price = discount_price_be
     ? new Intl.NumberFormat("id-ID", {
@@ -106,11 +108,11 @@ const ProductHeader = ({
             </Text>
           </Flex>
         )}
-        {isPromo && (
-          <Flex alignItems="center">
+        {promos != "" && (
+          < Flex alignItems="center">
             <IoTimeOutline size="1.4em" color="#ECC94B" as="span" />
             <Text color="yellow.400" pl="0.5rem">
-              {isPromo.promoname}
+              Promo
             </Text>
           </Flex>
         )}
@@ -129,87 +131,95 @@ const ProductHeader = ({
         )}
       </Stack>
 
-      {libur && (
-        <Box
-          my="1rem"
-          w={{ lg: "95%", xl: "full" }}
-          bg="red.50"
-          color="red.400"
-          fontWeight="500"
-          px="1rem"
-          py={{ base: "0.5rem", xl: "1rem" }}
-          border="1px red solid"
-          borderRadius="8px"
-          textAlign="center"
-          fontSize="1rem"
-        >
-          Toko ini sedang libur. {isholidaydata ?? ""}
-        </Box>
-      )}
-
-      {po_opendate && po_closedate && po_shippingdate && !isClose && (
-        <Box
-          my="1rem"
-          w={{ lg: "95%", xl: "full" }}
-          bg="orange.50"
-          color="orange.400"
-          fontWeight="500"
-          px="1rem"
-          py="0.5rem"
-          border="1px red solid"
-          borderRadius="8px"
-          fontSize="1rem"
-        >
-          <Flex justifyContent="space-between" px="1rem">
-            <Box>
-              <Text>Periode Pemesanan</Text>
-              <Text fontWeight="400" fontSize="1.2rem">
-                {po_opendate} s.d. {po_closedate}
-              </Text>
-            </Box>
-            <Box>
-              <Text>Estimasi Pengiriman</Text>
-              <Text fontWeight="400" fontSize="1.2rem">
-                {po_shippingdate}
-              </Text>
-            </Box>
-          </Flex>
-        </Box>
-      )}
-
-      {isClose && (
-        <Flex
-          my="1rem"
-          w={{ lg: "95%", xl: "full" }}
-          bg="orange.50"
-          color="orange.400"
-          fontWeight="500"
-          px="1rem"
-          py="0.5rem"
-          border="1px red solid"
-          borderRadius="8px"
-          fontSize="1rem"
-          justify="center"
-          align="center"
-        >
-          <Text>Pre Order Telah Berakhir</Text>
-        </Flex>
-      )}
-      {discount_price && discount_price !== price ? (
-        <Box>
-          <Text
-            as="del"
-            color="gray.300"
-            className="secondaryFont"
-            fontSize="16px"
-            h="24px"
+      {
+        libur && (
+          <Box
+            my="1rem"
+            w={{ lg: "95%", xl: "full" }}
+            bg="red.50"
+            color="red.400"
+            fontWeight="500"
+            px="1rem"
+            py={{ base: "0.5rem", xl: "1rem" }}
+            border="1px red solid"
+            borderRadius="8px"
+            textAlign="center"
+            fontSize="1rem"
           >
-            {price}
-          </Text>
-        </Box>
-      ) : (
-        ""
-      )}
+            Toko ini sedang libur. {isholidaydata ?? ""}
+          </Box>
+        )
+      }
+
+      {
+        po_opendate && po_closedate && po_shippingdate && !isClose && (
+          <Box
+            my="1rem"
+            w={{ lg: "95%", xl: "full" }}
+            bg="orange.50"
+            color="orange.400"
+            fontWeight="500"
+            px="1rem"
+            py="0.5rem"
+            border="1px red solid"
+            borderRadius="8px"
+            fontSize="1rem"
+          >
+            <Flex justifyContent="space-between" px="1rem">
+              <Box>
+                <Text>Periode Pemesanan</Text>
+                <Text fontWeight="400" fontSize="1.2rem">
+                  {po_opendate} s.d. {po_closedate}
+                </Text>
+              </Box>
+              <Box>
+                <Text>Estimasi Pengiriman</Text>
+                <Text fontWeight="400" fontSize="1.2rem">
+                  {po_shippingdate}
+                </Text>
+              </Box>
+            </Flex>
+          </Box>
+        )
+      }
+
+      {
+        isClose && (
+          <Flex
+            my="1rem"
+            w={{ lg: "95%", xl: "full" }}
+            bg="orange.50"
+            color="orange.400"
+            fontWeight="500"
+            px="1rem"
+            py="0.5rem"
+            border="1px red solid"
+            borderRadius="8px"
+            fontSize="1rem"
+            justify="center"
+            align="center"
+          >
+            <Text>Pre Order Telah Berakhir</Text>
+          </Flex>
+        )
+      }
+      {
+        discount_price && discount_price !== price ? (
+          <Box>
+            <Text
+              as="del"
+              color="gray.300"
+              className="secondaryFont"
+              fontSize="16px"
+              h="24px"
+            >
+              {price}
+            </Text>
+          </Box>
+        ) : (
+          ""
+        )
+      }
 
       <Stack direction="row">
         <Text
@@ -239,7 +249,7 @@ const ProductHeader = ({
           )}
         </Box>
       </Stack>
-    </Box>
+    </Box >
   );
 };
 
