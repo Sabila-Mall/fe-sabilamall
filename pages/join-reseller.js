@@ -84,8 +84,8 @@ const Join = () => {
         <Text>
           Baca info penawaran promo join reseller baju muslim{" "}
           <Link
-            href="https://sabilamall.co.id/lp/dropship-dan-reseller-baju-muslim/"
-            color="orange.500"
+            href="https://office.sabilamall.co.id/warotator.php?pos=jv&src=web"
+            target="_blank" color="orange.500"
           >
             di sini.
           </Link>
@@ -101,7 +101,7 @@ const Join = () => {
             w={{ base: "full", md: "12.7rem" }}
             onClick={() =>
               router.push(
-                "https://api.whatsapp.com/send?phone=6282125023944&text=Kak%20Ninu,%20Saya%20tertarik%20menjadi%20reseller%20SabilaMall.%20Mohon%20bantuannya.%20Saya%20tahu%20dari%20Google.%20Terimakasih",
+                "https://office.sabilamall.co.id/warotator.php?pos=jv&src=web",
               )
             }
           >

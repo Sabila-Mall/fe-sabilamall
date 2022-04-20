@@ -31,6 +31,7 @@ const ProductHeader = ({
   if (promos != "") {
     //    const isPromo = JSON.parse(promos);
   }
+  const isPromo = promos ? JSON.parse(promos) : null;
 
   const discount_price = discount_price_be
     ? new Intl.NumberFormat("id-ID", {
@@ -108,14 +109,6 @@ const ProductHeader = ({
             </Text>
           </Flex>
         )}
-        {promos != "" && (
-          < Flex alignItems="center">
-            <IoTimeOutline size="1.4em" color="#ECC94B" as="span" />
-            <Text color="yellow.400" pl="0.5rem">
-              Promo Produk
-            </Text>
-          </Flex>
-        )}
         {isfreeshipping == 1 && (
           <Flex alignItems="center">
             <Icon
@@ -130,6 +123,23 @@ const ProductHeader = ({
           </Flex>
         )}
       </Stack>
+      {isPromo != null && (
+        <Box
+          my="1rem"
+          w={{ lg: "95%", xl: "full" }}
+          bg="#e53e3e"
+          color="#ffffff"
+          fontWeight="500"
+          px="1rem"
+          py={{ base: "0.5rem", xl: "1rem" }}
+          border="1px red solid"
+          borderRadius="8px"
+          textAlign="center"
+          fontSize="1rem"
+        >
+          {isPromo.promoname}
+        </Box>
+      )}
 
       {
         libur && (
