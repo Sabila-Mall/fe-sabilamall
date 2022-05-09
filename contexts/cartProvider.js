@@ -289,7 +289,8 @@ export const CartProvider = ({ children }) => {
           successToast("Produk berhasil ditambahkan ke keranjang belanja");
           getAllData();
         } else {
-          errorToast("Produk gagal ditambahkan ke keranjang belanja");
+          //          errorToast("Produk gagal ditambahkan ke keranjang belanja");
+          errorToast(res.message);
           getAllData();
         }
       })

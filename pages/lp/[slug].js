@@ -2,6 +2,18 @@
 
 import Link from 'next/link';
 import Head from 'next/head';
+import { StrictMode } from "react";
+import ReactDOM from "react-dom";
+import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+
+const rootElement = document.getElementById("elementor-frontend-inline-css");
+ReactDOM.render(
+    <StrictMode>
+        <App />
+    </StrictMode>,
+    rootElement
+);
 
 import { getPage, getSlugs } from '../../utils/wordpress';
 
