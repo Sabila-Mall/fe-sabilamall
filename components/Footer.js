@@ -220,7 +220,7 @@ const DesktopFooter = () => {
         </VStack>
       </Stack>
       <Center fontSize="14px" pb={20}>
-        © 2021 PT Sabilamall Niaga Digital.
+        © 2022 PT Cipta Niaga Digital.
       </Center>
     </Box>
   );
