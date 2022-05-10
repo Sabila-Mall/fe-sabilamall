@@ -308,7 +308,6 @@ const ProductDetails = () => {
             maxW="100vw"
             px={{ lg: "1rem", xl: "0.5rem", "2xl": "2rem" }}
             mx={{ lg: "1rem" }}
-            w="full"
           >
             <ProductHeader {...productHeaderData} />
             <Box display={{ base: "none", lg: "block" }}>
