@@ -167,8 +167,9 @@ export const CartProvider = ({ children }) => {
       router.push("/alamat-penerima");
 
       selectedItem.forEach((element) => {
+        let tempAddWeight = element.varian.reduce((partialSum, data) => partialSum + parseInt(data.values_weight), 0);
         tempWeight +=
-          element.products_weight * element.customers_basket_quantity;
+          (parseInt(element.products_weight) + tempAddWeight) * parseInt(element.customers_basket_quantity);
         tempQuantity += element.customers_basket_quantity;
         if (element.customers_discount) {
           tempDiscount +=

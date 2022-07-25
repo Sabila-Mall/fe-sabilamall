@@ -30,6 +30,7 @@ const CheckoutProduct = ({ product }) => {
 
   const gambarURL = product.products_image_path_medium;
   const discount = Number(product.customers_discount);
+  const beratAdd = Number(product.varian.reduce((sum, item) => sum + parseInt(item.values_weight), 0));
   const berat = Number(product.products_weight);
   const harga = Number(product.final_price);
   const nama = product.products_name;
@@ -111,7 +112,7 @@ const CheckoutProduct = ({ product }) => {
               {deskripsi}
             </Text>
             <Text color="gray.500" fontSize="0.875rem">
-              Berat: {`${formatNumber(berat)} gr`}
+              Berat: {`${formatNumber(berat + beratAdd)} gr`}
             </Text>
           </Box>
         </HStack>
