@@ -191,7 +191,7 @@ export const ProductImages = ({
                 }}
                 {...settings}
               >
-                {videos.map((e, index) => {
+                {videos && videos.map((e, index) => {
                   return (
                     <Box key={e} pr="5rem">
                       <Box
