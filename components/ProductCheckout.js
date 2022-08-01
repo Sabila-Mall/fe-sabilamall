@@ -41,6 +41,7 @@ const formatPrice = (price) => {
 };
 
 const ProductCheckout = ({
+  warehouse,
   attributes,
   customerdiscount,
   current_price,
@@ -57,6 +58,7 @@ const ProductCheckout = ({
   setDiscountPricePerUnit,
   setPricePerUnit,
 }) => {
+
   const toast = useToast();
   const router = useRouter();
   const isHidden = preOrder && po_close_status == 1;
@@ -68,6 +70,8 @@ const ProductCheckout = ({
   const [stocks, setStocks] = useState(stockss);
   const [stock, setStock] = useState(null);
   const [filterStock, setFilterStock] = useState({ warna: null, ukuran: null });
+
+  const [warehouseId, setWarehouseId] = useState();
 
   const [isLiked, setIsLiked] = useState(is_liked == "1");
 
@@ -93,9 +97,9 @@ const ProductCheckout = ({
   if (colorId && sizeId) {
     option_id = [colorId, sizeId];
   } else if (colorId && !sizeId) {
-    option_id = colorId;
+    option_id = [colorId];
   } else if (!colorId && sizeId) {
-    option_id = sizeId;
+    option_id = [sizeId];
   }
 
   const colorVariance = colors?.length;
@@ -107,23 +111,36 @@ const ProductCheckout = ({
 
   // const realPrice = current_price * numberOfItem;
 
-  const checkStockCl = (dataFilter) => {
-    if (!sizes || !colors) return setStock(products_quantity);
+  const checkStockCl = (dataFilter, warehouseId) => {
+
+    if (!sizes || !colors) {
+      warehouseId = warehouseId == 'null' ? null : warehouseId;
+
+      const data = stocks?.find(
+        (stock) => stock?.warehouse_id == warehouseId,
+      );
+
+      setStock(data?.stock < 1 || data?.stock == undefined ? 0 : data?.stock);
+      setNumberOfItem(data?.stock < 1 || data?.stock == undefined ? 0 : 1);
+      return;
+    }
+
     if (!dataFilter) return;
 
     const { warna, ukuran } = dataFilter;
+    if (!warna || !ukuran || !warehouseId) return setStock(0);
 
-    if (!warna || !ukuran) return;
+    warehouseId = warehouseId == 'null' ? null : warehouseId;
 
-    const c = colors?.find((c) => c.id == warna);
-    const s = sizes?.find((s) => s.id == ukuran);
+    const c = colors?.find((color) => color.id == warna);
+    const s = sizes?.find((warna) => warna.id == ukuran);
 
-    const data = stocks?.[c.value]?.find(
-      (stock) => stock?.attr_ukuran == s.products_attributes_id,
+    const data = stocks?.find(
+      (stock) => stock?.attributes_color_id == c?.products_attributes_id && stock?.attributes_size_id == s?.products_attributes_id && stock?.warehouse_id == warehouseId,
     );
 
-    setStock(data?.stock ?? 0);
-    setNumberOfItem(data?.stock ? 1 : 0);
+    setStock(data?.stock < 1 || data?.stock == undefined ? 0 : data?.stock);
+    setNumberOfItem(data?.stock < 1 || data?.stock == undefined ? 0 : 1);
   };
 
   const handleModifyNumberOfItem = (event) => {
@@ -196,22 +213,23 @@ const ProductCheckout = ({
 
     return isSuccess
       ? toast({
-          title,
-          description,
-          status: "success",
-          ...configToast,
-          ...others,
-        })
+        title,
+        description,
+        status: "success",
+        ...configToast,
+        ...others,
+      })
       : toast({
-          title,
-          description,
-          status: "error",
-          ...configToast,
-          ...others,
-        });
+        title,
+        description,
+        status: "error",
+        ...configToast,
+        ...others,
+      });
   };
 
   const calculateTotalPrice = (isDiscount = false) => {
+
     let addedPrice = 0;
 
     if (pricePrefixColor === "+" && pricePrefixSize === "+") {
@@ -270,6 +288,40 @@ const ProductCheckout = ({
         padding={"12px 14px"}
         borderRadius={"12px"}
       >
+
+        {warehouse && (
+          <Box width={"full"}>
+            <Text textColor={"gray.500"} fontSize={"16px"}>
+              Gudang: {warehouse.length} item
+            </Text>
+            <Spacer height={"10px"} />
+            <Select
+              placeholder={"Pilih Gudang"}
+              borderColor={"gray.200"}
+              textColor={"gray.400"}
+              color={"gray.400"}
+              {...register("warehouse")}
+              onChange={(e) => {
+                setWarehouseId(e.target.value);
+
+                checkStockCl({
+                  ...filterStock,
+                }, e.target.value);
+
+              }}
+            >
+              {warehouse?.map(({ id, value }) => (
+                <option
+                  key={id}
+                  value={`${id}`}
+                >
+                  {value}
+                </option>
+              ))}
+            </Select>
+          </Box>
+        )}
+
         {colors && (
           <Box width={"full"}>
             <Text textColor={"gray.500"} fontSize={"16px"}>
@@ -291,7 +343,7 @@ const ProductCheckout = ({
                 checkStockCl({
                   ...filterStock,
                   warna: e.target.value?.split(" ")?.[0],
-                });
+                }, warehouseId);
                 const prefix_price = e.target.value?.split(" ")?.[2];
                 const price = e.target.value
                   ?.split(" ")?.[3]
@@ -304,7 +356,7 @@ const ProductCheckout = ({
               {colors?.map(({ value, id, price_prefix = "+", price = 0 }) => (
                 <option
                   key={id}
-                  value={`${id} p ${price_prefix}  ${(price + "")?.replace(
+                  value={`${id} p ${price_prefix} ${(price + "")?.replace(
                     /\D/g,
                     "",
                   )}`}
@@ -336,7 +388,7 @@ const ProductCheckout = ({
                 checkStockCl({
                   ...filterStock,
                   ukuran: e.target.value?.split(" ")?.[0],
-                });
+                }, warehouseId);
                 const prefix_price = e.target.value?.split(" ")?.[2];
                 const price = e.target.value
                   ?.split(" ")?.[3]
@@ -346,7 +398,7 @@ const ProductCheckout = ({
                 setPriceSize(Number(price));
               }}
             >
-              {sizes?.map(({ value, id, prefix_price = "+", price = 0 }) => (
+              {sizes?.map(({ value, id, products_attributes_id, prefix_price = "+", price = 0 }) => (
                 <option
                   key={id}
                   value={`${id} p ${prefix_price} ${(price + "")?.replace(
@@ -453,7 +505,7 @@ const ProductCheckout = ({
           fontWeight={"bold"}
           className={"primaryFont"}
           _hover={{ bgColor: "red.600" }}
-          isDisabled={(!stock || !numberOfItem) && colors && sizes}
+          isDisabled={(!stock || !numberOfItem)}
           onClick={() => {
             if (!isLoggedIn)
               return callToast({ title: "Silakan login terlebih dahulu" });
@@ -474,9 +526,9 @@ const ProductCheckout = ({
                 Number(ukuran.split(" ")[0]),
               ];
             } else if (warna && !ukuran) {
-              option_values_id = Number(warna.split(" ")[0]);
+              option_values_id = [Number(warna.split(" ")[0])];
             } else if (!warna && ukuran) {
-              option_values_id = Number(ukuran.split(" ")[0]);
+              option_values_id = [Number(ukuran.split(" ")[0])];
             }
 
             if (Array.isArray(option_values_id)) {
@@ -487,6 +539,8 @@ const ProductCheckout = ({
               option_id = JSON.stringify(option_id);
             }
 
+            const warehouse_id = warehouseId == "null" ? null : warehouseId;
+
             addCartItem(
               customers_id,
               user_level,
@@ -494,6 +548,7 @@ const ProductCheckout = ({
               numberOfItem,
               option_id,
               option_values_id,
+              warehouse_id
             );
           }}
         >
@@ -546,7 +601,7 @@ const ProductCheckout = ({
           </HStack>
         </Link>
       </Flex>
-    </VStack>
+    </VStack >
   );
 };
 

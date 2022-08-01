@@ -1,4 +1,5 @@
 import { useToast } from "@chakra-ui/react";
+import { data } from "jquery";
 import { useRouter } from "next/router";
 import { createContext, useContext, useEffect, useState } from "react";
 
@@ -51,14 +52,13 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  const getAllData = (checkDouble = true) => {
+  const getAllData = (checkDouble = false) => {
     checkDouble && setloading(true);
     if (userId) {
       apiGetCartByCustomerID(userId)
         .then((res) => {
           let tempCart = [];
           let allData = res;
-
           allData.forEach((vendor) => {
             for (let i = 0; i < vendor.keranjang.length; i++) {
               for (let j = 0; j < i; j++) {
@@ -68,10 +68,7 @@ export const CartProvider = ({ children }) => {
                 const secondVarian = makeObjectOfVariant(secondItem?.varian);
 
                 // delete object two product has same variant
-                if (
-                  checkDouble &&
-                  JSON.stringify(firstVarian) === JSON.stringify(secondVarian)
-                ) {
+                if (checkDouble && JSON.stringify(firstVarian) === JSON.stringify(secondVarian)) {
                   let tempKeranjang = [];
                   vendor.keranjang.forEach((el) => {
                     if (
@@ -150,6 +147,7 @@ export const CartProvider = ({ children }) => {
       localStorage.setItem("selectedProduct", []);
       let tempVendor = selectedItem[0].vendors_id;
       let tempJenis = selectedItem[0].products_jenis;
+      let tempWarehouse = selectedItem[0].warehouse_id;
       let tempWeight = 0;
       let tempQuantity = 0;
       let tempDiscount = 0;
@@ -161,10 +159,16 @@ export const CartProvider = ({ children }) => {
         } else if (selectedItem[i].products_jenis != tempJenis) {
           errorToast("Jenis pembelian yang dipilih harus sama");
           return;
+        } else if (selectedItem[i].warehouse_id != tempWarehouse) {
+          errorToast("Jenis pembelian yang dipilih harus sama");
+          return;
         }
         tempVendor = selectedItem[i].vendors_id;
       }
       router.push("/alamat-penerima");
+
+      // console.log(selectedItem);
+      // console.log(selectedItem[0].varian);
 
       selectedItem.forEach((element) => {
         let tempAddWeight = element.varian.reduce((partialSum, data) => partialSum + parseInt(data.values_weight), 0);
@@ -276,6 +280,7 @@ export const CartProvider = ({ children }) => {
     quantity,
     option_id,
     option_values_id,
+    warehouse_id
   ) => {
     addCart({
       customers_id,
@@ -284,6 +289,7 @@ export const CartProvider = ({ children }) => {
       quantity,
       option_id,
       option_values_id,
+      warehouse_id
     })
       .then((res) => {
         if (isRequestSuccess(res)) {

@@ -158,6 +158,9 @@ const QuickAddItem = ({ product, my }) => {
               ) : (
                 <></>
               )}
+              <Text color="gray.500" fontSize="14px">
+                Gudang : {product.origincity}
+              </Text>
               {varian &&
                 varian.map((el, index) => {
                   return (
@@ -202,7 +205,6 @@ const QuickAddItem = ({ product, my }) => {
                 aria-label={"Remove Item"}
                 icon={<IoRemoveCircleOutline size={"1.5rem"} />}
                 variant={"ghost"}
-                color={"gray.400"}
                 color={quantity === 1 ? "gray.200" : "gray.400"}
                 _hover={{ cursor: "pointer" }}
                 onClick={() => handleModifyNumberOfItem("decrease")}

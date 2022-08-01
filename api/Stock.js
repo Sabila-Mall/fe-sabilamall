@@ -4,7 +4,7 @@ import { HOST } from "../constants/api";
 import { isRequestSuccess } from "../utils/api";
 
 export const apiStock = (productId) => {
-  return axios.post(HOST + "/api/product/get_stock", {
+  return axios.post(HOST + "/api/product/get_stock_2", {
     products_id: productId,
     type: "json",
   });
@@ -12,7 +12,7 @@ export const apiStock = (productId) => {
 
 export const checkStock = async (dataPost) => {
   try {
-    const res = await axios.post(HOST + "/api/product/get_stock", {
+    const res = await axios.post(HOST + "/api/product/get_stock_2", {
       type: "json",
       ...dataPost,
     });

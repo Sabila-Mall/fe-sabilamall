@@ -86,15 +86,11 @@ const ProductDetails = () => {
         });
         setStocks(resStock);
 
-        const stockData = Object.entries(resStock);
+        const stockData = resStock;
         let quantity = 0;
 
-        stockData.forEach((d) => {
-          d?.[1]?.forEach((ds) => {
-            if (ds.stock && ds.ukuran !== "" && ds.stock > 0) {
-              quantity += ds?.stock;
-            }
-          });
+        stockData.forEach((item) => {
+          quantity += item.stock;
         });
 
         setQuantity(quantity);
@@ -109,7 +105,7 @@ const ProductDetails = () => {
     };
 
     slug && getData();
-  }, [slug, userId]);
+  }, [slug]);
 
   if (loading) {
     return <Loading />;
@@ -134,6 +130,7 @@ const ProductDetails = () => {
     customerdiscount,
     vendors_address,
     attributes,
+    warehouse,
     products_id,
     total_user_rated,
     one_ratio,
@@ -175,6 +172,7 @@ const ProductDetails = () => {
   };
 
   const productCheckoutData = {
+    warehouse,
     attributes,
     products_quantity,
     customerdiscount,

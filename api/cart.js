@@ -7,7 +7,7 @@ import { getDeviceId } from "../utils/functions";
 export const apiGetCartByCustomerID = async (customers_id) => {
   let device_id = getDeviceId();
 
-  const res = await axios.post(HOST + "/api/cart/get_cart_by_customer", {
+  const res = await axios.post(HOST + "/api/cart/get_cart_by_customer_2", {
     customers_id,
     device_id,
   });

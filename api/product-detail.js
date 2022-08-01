@@ -9,7 +9,7 @@ export const getProductDetail = async ({
   products_id,
 }) => {
   try {
-    const res = await axios.post(HOST + "/api/product/get_products", {
+    const res = await axios.post(HOST + "/api/product/get_products_2", {
       products_slug,
       customers_id,
       products_id,
