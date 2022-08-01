@@ -19,7 +19,7 @@ export const ProductImages = ({
   const [viewType, setViewType] = useState(products_video?.length > 0 ? 'video' : 'image');
   const [indexView, setIndexView] = useState(0);
   const [imageNum, setImageNum] = useState(0);
-  const videos = products_video?.length > 0 ? products_video : [];
+  const videos = products_video != null ? products_video : [];
   const [video, setVideo] = useState(products_video?.length > 0 ? products_video[0].youtube : '');
   const [image, setImage] = useState(products_image);
   const images = [
@@ -191,7 +191,7 @@ export const ProductImages = ({
                 }}
                 {...settings}
               >
-                {videos && videos.map((e, index) => {
+                {videos.length > 0 && videos.map((e, index) => {
                   return (
                     <Box key={e} pr="5rem">
                       <Box
