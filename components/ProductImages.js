@@ -16,11 +16,11 @@ export const ProductImages = ({
   setImgLink,
   products_video,
 }) => {
-  const [viewType, setViewType] = useState(products_video?.length > 0 ? 'video' : 'image');
+  const [viewType, setViewType] = useState(products_video != null && products_video?.length > 0 ? 'video' : 'image');
   const [indexView, setIndexView] = useState(0);
   const [imageNum, setImageNum] = useState(0);
   const videos = products_video != null ? products_video : [];
-  const [video, setVideo] = useState(products_video?.length > 0 ? products_video[0].youtube : '');
+  const [video, setVideo] = useState(products_video != null && products_video?.length > 0 ? products_video[0].youtube : '');
   const [image, setImage] = useState(products_image);
   const images = [
     { id: "podafae", image: products_image, sort_order: images_list?.length },
