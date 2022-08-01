@@ -306,7 +306,7 @@ const ProductDetails = () => {
             </Box>
           </Box>
           <Box
-            w={{ base: "100%", lg: "fit-content" }}
+            w={{ base: "100%" }}
             maxW="100vw"
             px={{ lg: "1rem", xl: "0.5rem", "2xl": "2rem" }}
             mx={{ lg: "1rem" }}
