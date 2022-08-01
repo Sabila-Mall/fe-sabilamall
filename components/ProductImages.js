@@ -55,7 +55,7 @@ export const ProductImages = ({
     arrows: false,
     infinite: true,
     speed: 500,
-    slidesToShow: images.length < 5 ? images.length : 5,
+    slidesToShow: images.length + videos.length < 5 ? images.length + videos.length : 5,
     slidesToScroll: 4,
     centerMode: false,
     responsive: [
@@ -159,7 +159,7 @@ export const ProductImages = ({
                 }
               }}
               className={styles.slickButton}
-              display={images.length < 5 ? "none" : "block"}
+              display={images.length + videos.length < 5 ? "none" : "block"}
             >
               <MdKeyboardArrowLeft size="2em" color="white" />
             </Box>
@@ -171,7 +171,7 @@ export const ProductImages = ({
               cursor="pointer"
               zIndex="20"
               className={styles.slickButton}
-              display={images.length < 5 ? "none" : "block"}
+              display={images.length + videos.length < 5 ? "none" : "block"}
               onClick={() => {
                 if (ref !== null) {
                   ref.slickNext();
@@ -182,7 +182,7 @@ export const ProductImages = ({
             </Box>
             <Box
               width={
-                images.length < 5 ? `calc(${images.length} * 4rem)` : "full"
+                images.length + videos.length < 5 ? `calc(${images.length + videos.length} * 4rem)` : "full"
               }
             >
               <Slider
