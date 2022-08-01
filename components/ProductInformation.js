@@ -273,7 +273,7 @@ const ProductInformation = ({
               </Button>
             </Box>
           </TabPanel>
-          <TabPanel id="ratingPanel" w="100%">
+          <TabPanel id="ratingPanel" w="100%" minH='75vh'>
             <Box display="flex">
               <Center
                 w="40%"
