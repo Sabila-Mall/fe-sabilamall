@@ -1,7 +1,8 @@
-import { Box, Image, Flex, HStack } from "@chakra-ui/react";
+import { Box, Image, Flex, HStack, Icon } from "@chakra-ui/react";
+import { View } from "@react-pdf/renderer";
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
-import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight, MdPlayArrow, MdPlayCircleFilled } from "react-icons/md";
 import ReactImageZoom from "react-image-zoom";
 import Slider from "react-slick";
 
@@ -13,8 +14,13 @@ export const ProductImages = ({
   products_image,
   images: images_list,
   setImgLink,
+  products_video,
 }) => {
+  const [viewType, setViewType] = useState(products_video?.length > 0 ? 'video' : 'image');
+  const [indexView, setIndexView] = useState(0);
   const [imageNum, setImageNum] = useState(0);
+  const videos = products_video;
+  const [video, setVideo] = useState(products_video?.length > 0 ? products_video[0].youtube : '');
   const [image, setImage] = useState(products_image);
   const images = [
     { id: "podafae", image: products_image, sort_order: images_list?.length },
@@ -62,6 +68,14 @@ export const ProductImages = ({
     ],
   };
 
+
+  function getThumbnailYoutube(payload) {
+    // https://www.youtube.com/embed/KJ37_Yd2Nfs
+    // https://img.youtube.com/vi/i7LF6aeKZhI/default.jpg
+    var video_id = payload.split('/')[payload.split('/').length - 1];
+    return `https://img.youtube.com/vi/${video_id}/default.jpg`;
+  };
+
   return (
     <Box w="100%">
       <Head>
@@ -78,7 +92,43 @@ export const ProductImages = ({
         />
       </Head>
       <Flex flexDir="column" justifyContent="center" mb="1.5rem">
-        <Flex mb="1rem" justifyContent="center">
+
+        {
+          viewType == 'image' ?
+            <Flex mb="1rem" justifyContent="center">
+              <Box
+                as="figure"
+                cursor="crosshair"
+                w="22rem"
+                h="22rem"
+                position="relative"
+                overflow="hidden"
+                className={styles.zoom}
+                backgroundImage={`url(${getImageLink(image)})`}
+                onMouseMove={(e) => zoom(e)}
+                id="zoom-product-image"
+              >
+                <Image height="full" src={getImageLink(image)} />
+              </Box>
+            </Flex>
+            :
+            <Flex mb="1rem" justifyContent="center">
+              <Box
+                as="figure"
+                cursor="crosshair"
+                w="22rem"
+                h="22rem"
+                position="relative"
+                overflow="hidden"
+                className={styles.zoom}
+                onMouseMove={(e) => zoom(e)}
+                id="zoom-product-image"
+              >
+                <iframe style={{ 'width': '22rem', 'height': '22rem' }} src={video} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+              </Box>
+            </Flex>
+        }
+        {/* <Flex mb="1rem" justifyContent="center">
           <Box
             as="figure"
             cursor="crosshair"
@@ -93,7 +143,7 @@ export const ProductImages = ({
           >
             <Image height="full" src={getImageLink(image)} />
           </Box>
-        </Flex>
+        </Flex> */}
 
         <Flex justifyContent="center">
           <Box className={styles.slickWidth} pos="relative">
@@ -141,7 +191,42 @@ export const ProductImages = ({
                 }}
                 {...settings}
               >
-                {images.map((e) => {
+                {videos.map((e, index) => {
+                  return (
+                    <Box key={e} pr="5rem">
+                      <Box
+                        position='relative'
+                        w="3rem"
+                        h="3rem"
+                        backgroundRepeat="no-repeat"
+                        backgroundSize="cover"
+                        border={viewType === 'video' && indexView === index ? "3px solid #f6ad55" : ""}
+                        backgroundPosition="center"
+                        cursor="pointer"
+                        backgroundImage={getThumbnailYoutube(e.youtube)}
+                        onClick={() => {
+                          setVideo(e.youtube);
+                          setIndexView(index);
+                          setViewType('video');
+                        }}
+                      >
+                        <Box
+                          position='absolute'
+                          top='0'
+                          bottom='0'
+                          left='0'
+                          right='0'
+                          display='flex'
+                          alignItems='center'
+                          justifyContent='center'
+                        >
+                          <Icon as={MdPlayCircleFilled} w='8' h='8' opacity='80%' color='black' />
+                        </Box>
+                      </Box>
+                    </Box>
+                  );
+                })}
+                {images.map((e, index) => {
                   return (
                     <Box key={e.image} pr="5rem">
                       <Box
@@ -149,12 +234,13 @@ export const ProductImages = ({
                         h="3rem"
                         backgroundRepeat="no-repeat"
                         backgroundSize="cover"
-                        border={imageActive === e.id ? "3px solid #f6ad55" : ""}
+                        border={viewType === 'image' && indexView === index ? "3px solid #f6ad55" : ""}
                         backgroundPosition="center"
                         cursor="pointer"
                         onClick={() => {
                           setImage(e.image);
-                          setImageActive(e.id);
+                          setIndexView(index);
+                          setViewType('image');
                         }}
                       >
                         <Image src={getImageLink(e.image)} objectFit="cover" />

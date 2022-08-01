@@ -152,11 +152,13 @@ const ProductDetails = () => {
     isfreeshipping,
     promos,
     manufacturer_name,
+    products_video,
   } = data;
 
   const productImagesData = {
     images,
     products_image,
+    products_video,
   };
 
   const productInformationData = {
