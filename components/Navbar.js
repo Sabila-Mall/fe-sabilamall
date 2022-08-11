@@ -347,18 +347,36 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
                   >
                     {userData?.first_name} {userData?.last_name}
                   </Text>
-                  <Flex w="full" justify="space-between">
-                    <Text mr=".7rem">{userData?.memberid}</Text>
-                    <Box
-                      bg={setBadgeColor(userData?.user_level)}
-                      color="white"
-                      px=".4rem"
-                      py=".1rem"
-                      borderRadius="30px"
-                    >
-                      {userData?.user_level}
-                    </Box>
-                  </Flex>
+                  {
+                    userData?.admin_id != null
+                      ?
+                      <Box>
+                        <Text>{userData?.memberid}</Text>
+                        <Box
+                          bg={setBadgeColor(userData?.user_level)}
+                          color="white"
+                          px=".4rem"
+                          py=".1rem"
+                          borderRadius="30px"
+                          whiteSpace="nowrap"
+                        >
+                          {userData?.user_level} {userData?.admin_id ? 'by admin' : ''}
+                        </Box>
+                      </Box>
+                      :
+                      <Flex w="full" justify="space-between">
+                        <Text mr=".7rem">{userData?.memberid}</Text>
+                        <Box
+                          bg={setBadgeColor(userData?.user_level)}
+                          color="white"
+                          px=".4rem"
+                          py=".1rem"
+                          borderRadius="30px"
+                        >
+                          {userData?.user_level}
+                        </Box>
+                      </Flex>
+                  }
                 </Box>
               </Flex>
             </MenuButton>

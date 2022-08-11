@@ -276,6 +276,7 @@ export const CartProvider = ({ children }) => {
     quantity,
     option_id,
     option_values_id,
+    admin_id,
   ) => {
     addCart({
       customers_id,
@@ -284,6 +285,7 @@ export const CartProvider = ({ children }) => {
       quantity,
       option_id,
       option_values_id,
+      admin_id,
     })
       .then((res) => {
         if (isRequestSuccess(res)) {

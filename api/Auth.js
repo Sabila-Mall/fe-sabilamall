@@ -10,6 +10,12 @@ export const apiLogin = (email, password) => {
   });
 };
 
+export const apiLoginByAdmin = (token) => {
+  return axios.post(HOST + "/api/user/proses_login_by_admin", {
+    token: token,
+  });
+}
+
 export const apiRegister = (
   first_name,
   last_name,
@@ -95,6 +101,13 @@ export const saveUserIdToCookies = (userId) => {
 
 export const saveTokenToCookies = (token) => {
   nookies.set(null, "token", token, {
+    maxAge: 30 * 24 * 60 * 60,
+    path: "/",
+  });
+};
+
+export const saveAdminIdToCookies = (adminId) => {
+  nookies.set(null, "admin_id", adminId, {
     maxAge: 30 * 24 * 60 * 60,
     path: "/",
   });

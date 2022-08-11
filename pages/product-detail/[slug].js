@@ -26,6 +26,7 @@ const ProductDetails = () => {
 
   const userId = userData?.id;
   const userLevel = userData?.user_level;
+  const adminId = userData?.admin_id;
 
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
@@ -52,11 +53,14 @@ const ProductDetails = () => {
         dataPost = {
           customers_id: isLoggedIn ? userId : null,
           products_id: slug,
+          admin_id: adminId,
         };
       } else {
         dataPost = {
           customers_id: isLoggedIn ? userId : null,
           products_slug: slug,
+          admin_id: adminId,
+
         };
       }
 
@@ -153,6 +157,7 @@ const ProductDetails = () => {
     promos,
     manufacturer_name,
     products_video,
+    admindiscount,
   } = data;
 
   const productImagesData = {
@@ -193,6 +198,7 @@ const ProductDetails = () => {
     preOrder: products_jenis === "po",
     products_slug,
     products_quantity: quantity,
+    admin_id: adminId,
   };
 
   const productHeaderData = {
@@ -214,6 +220,8 @@ const ProductDetails = () => {
     products_name,
     isfreeshipping,
     promos,
+    admindiscount,
+
   };
 
   const path = [
