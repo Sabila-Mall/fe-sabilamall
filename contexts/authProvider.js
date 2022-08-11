@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (userData === null && !isLoggedIn) {
       const userId = nookies.get(null, "user_id");
+      const adminId = nookies.get();
       if (document.cookie.indexOf("user_id") !== -1) {
         const devId = localStorage.getItem("device_id");
         const parsedDevId = isValidJson(devId) ? JSON.parse(devId) : null
@@ -34,7 +35,7 @@ export const AuthProvider = ({ children }) => {
             if (isRequestSuccess(response)) {
               const tempData = filterObject(response.data, USER_FIELDS);
               const finalData = filterObject(response, USER_FIELDS);
-              setUserData({ ...tempData, ...finalData });
+              setUserData({ ...tempData, ...finalData, ...{ 'admin_id': adminId.admin_id } });
             } else {
             }
           })

@@ -65,7 +65,7 @@ export const getKurir = (
         customers_basket_id.push(el.customers_basket_id);
       },
     );
-  } catch (error) {}
+  } catch (error) { }
 
   return axios.post(HOST + "/api/shipping/get_all_shipping", {
     customers_id: customerId,
@@ -100,7 +100,7 @@ export const getPaymentMethod = (
         customers_basket_id.push(el.customers_basket_id);
       },
     );
-  } catch (error) {}
+  } catch (error) { }
   return axios.post(HOST + "/api/payment/get_payment_method", {
     language_id: "1",
     vendors_id: [`${vendors_id}`],

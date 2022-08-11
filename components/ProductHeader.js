@@ -25,6 +25,7 @@ const ProductHeader = ({
   po_close_status,
   isfreeshipping,
   promos,
+  admindiscount,
 }) => {
   const isClose = preOrder && po_close_status == 1;
 
@@ -243,6 +244,7 @@ const ProductHeader = ({
         <Box alignSelf="center">
           {discount ? (
             <Text
+
               className="secondaryFont"
               color="white"
               bg="red.500"
@@ -252,7 +254,7 @@ const ProductHeader = ({
               py="4px"
               borderRadius="4px"
             >
-              Diskon {discount}%
+              Diskon {admindiscount > 0 ? <s>{discount + admindiscount}%</s> : ''} <span>{discount}%</span>
             </Text>
           ) : (
             ""
