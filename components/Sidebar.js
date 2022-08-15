@@ -49,26 +49,45 @@ const UserInfo = ({ useBorder }) => {
         borderRadius="full"
       />
       <Box ml=".5rem" fontSize="14px">
-        <Text fontWeight="700" maxW="15ch" isTruncated>{`${
-          userData?.first_name
-        } ${userData?.last_name ?? ""}`}</Text>
-        <Flex>
-          <Text>{userData?.memberid}</Text>
-          <Flex
-            h="22px"
-            px=".5rem"
-            py=".5rem"
-            bg={setBadgeColor(userData?.user_level)}
-            align="center"
-            justify="center"
-            borderRadius="30px"
-            color="white"
-            fontSize="12px"
-            ml="2rem"
-          >
-            {userData?.user_level}
+        <Text fontWeight="700" maxW="15ch" isTruncated>{`${userData?.first_name
+          } ${userData?.last_name ?? ""}`}</Text>
+        {userData?.admin_id != null ?
+          <Box>
+            <Text>{userData?.memberid}</Text>
+            <Flex
+              h="22px"
+              px=".5rem"
+              py=".5rem"
+              bg={setBadgeColor(userData?.user_level)}
+              align="center"
+              justify="center"
+              borderRadius="30px"
+              color="white"
+              fontSize="12px"
+            >
+              {userData?.user_level} by admin
+            </Flex>
+          </Box>
+          :
+          <Flex>
+            <Text>{userData?.memberid}</Text>
+            <Flex
+              h="22px"
+              px=".5rem"
+              py=".5rem"
+              bg={setBadgeColor(userData?.user_level)}
+              align="center"
+              justify="center"
+              borderRadius="30px"
+              color="white"
+              fontSize="12px"
+              ml="2rem"
+            >
+              {userData?.user_level}
+            </Flex>
           </Flex>
-        </Flex>
+        }
+
       </Box>
     </Flex>
   );
