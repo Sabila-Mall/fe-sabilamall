@@ -590,6 +590,7 @@ const PesananSayaMobile = () => {
                     totalPrice={dataPesanan.total_price}
                     parentId={dataPesanan.parent_id}
                     totalPriceAgent={totalPriceAgent}
+                    handlingFeeAdmin={dataPesanan.handling_fee_admin}
                   />
                 </>
               );
