@@ -533,6 +533,7 @@ const DetailPesanan = () => {
   const router = useRouter();
 
   const { userData } = useAuthContext();
+  const adminId = userData?.admin_id;
   const {
     checkoutData,
     setOrderNumber,
@@ -693,7 +694,9 @@ const DetailPesanan = () => {
   let totalPrice = 0,
     totalQuantity = 0,
     totalDiscount = 0,
-    totalWeight = 0;
+    totalWeight = 0,
+    handlingFeeAdmin = 0,
+    handlingFeeAdminDiscount = 0;
 
   if (typeof window !== "undefined") {
     const checkoutDataJson = localStorage.getItem("selectedProduct");
@@ -704,6 +707,10 @@ const DetailPesanan = () => {
       totalQuantity = checkoutData.quantity;
       totalWeight = checkoutData.weight;
       totalDiscount = checkoutData.discount;
+      if (adminId != null) {
+        handlingFeeAdmin = checkoutData.handling_fee_admin;
+        handlingFeeAdminDiscount = checkoutData.handling_fee_admin_discount;
+      }
     }
   }
   const onSubmit = () => {
@@ -749,6 +756,9 @@ const DetailPesanan = () => {
         "",
         0,
         pengiriman.shipping_promo,
+        adminId,
+        handlingFeeAdmin,
+        handlingFeeAdminDiscount,
       )
         .then((res) => {
           if (isRequestSuccess(res.data)) {
@@ -858,6 +868,7 @@ const DetailPesanan = () => {
             subtotal={totalPrice}
             tambahan={metodePembayaran.biaya}
             pengiriman={pengiriman.harga}
+            handlingFeeAdmin={handlingFeeAdmin}
             diskon={totalDiscount}
             voucher={voucher.harga}
           />
