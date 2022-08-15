@@ -38,6 +38,7 @@ const CheckoutSummary = ({
   subtotal = 0,
   pengiriman = 0,
   tambahan = 0,
+  handlingFeeAdmin = 0,
   diskon = 0,
   voucher = 0,
 }) => (
@@ -75,6 +76,7 @@ const CheckoutSummary = ({
         Tagihan
       </Text>
       <SummaryEntry text="Subtotal" data={subtotal} />
+      <SummaryEntry text="Fee Admin" data={handlingFeeAdmin} />
       <SummaryEntry text="Pengiriman" data={pengiriman} />
       <SummaryEntry text="Tambahan" data={tambahan} />
       <SummaryEntry text="Diskon" data={diskon} isNegative={true} />
@@ -84,6 +86,7 @@ const CheckoutSummary = ({
       <SummaryEntry
         text="Total"
         data={
+          Number(handlingFeeAdmin) +
           Number(subtotal) +
           Number(pengiriman) +
           Number(tambahan) -

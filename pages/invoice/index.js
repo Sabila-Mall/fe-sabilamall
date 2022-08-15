@@ -59,7 +59,7 @@ const Invoice = () => {
             w={{ base: "75%", lg: "60%" }}
           >
             <Text>Total Tagihan</Text>
-            <Text>{currencyFormat(checkoutResponse.subtotal)}</Text>
+            <Text>{currencyFormat(checkoutResponse.subtotal + checkoutResponse.handling_fee_admin)}</Text>
           </Flex>
           <InvoiceInfo />
         </Box>

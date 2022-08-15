@@ -55,6 +55,7 @@ const AlamatPenerima = () => {
     getAllData,
   } = useAddressContext();
   const userId = userData?.id;
+  const adminId = userData?.admin_id;
   const router = useRouter();
   // const userId = 6089;
   const [dataPengirim, setDataPengirim] = useState(null);
@@ -97,6 +98,8 @@ const AlamatPenerima = () => {
     totalQuantity = 0,
     totalDiscount = 0,
     priceAfterDiscount = 0,
+    handlingFeeAdmin = 0,
+    handlingFeeAdminDiscount = 0,
     totalWeight = 0;
 
   if (typeof window !== "undefined") {
@@ -107,7 +110,11 @@ const AlamatPenerima = () => {
       totalQuantity = checkoutData.quantity;
       totalWeight = checkoutData.weight;
       totalDiscount = checkoutData.discount;
-      priceAfterDiscount = totalPrice - totalDiscount;
+      if (adminId != null) {
+        handlingFeeAdmin = checkoutData.handling_fee_admin;
+        handlingFeeAdminDiscount = checkoutData.handling_fee_admin_discount;
+      }
+      priceAfterDiscount = totalPrice - totalDiscount + handlingFeeAdmin;
     }
   }
 
@@ -354,6 +361,7 @@ const AlamatPenerima = () => {
           jalanPenerima: splittedAlamatPenerima
             .slice(0, splittedAlamatPenerima.length - 3)
             .join(", "),
+          handlingFeeAdmin,
         });
         router.push("/detail-pesanan");
       } catch (err) {
@@ -1204,6 +1212,34 @@ const AlamatPenerima = () => {
                   {currencyFormat(totalPrice)}
                 </Text>
               </Box>
+              {adminId != null ?
+                <Box
+                  width="100%"
+                  d="flex"
+                  justifyContent="space-between"
+                  marginTop="0.3rem"
+                >
+                  <Text
+                    color="gray.500"
+                    className="primaryFont"
+                    fontWeight="700"
+                    isTruncated
+                  >
+                    Fee Admin
+                  </Text>
+                  <Text
+                    color="gray.500"
+                    className="secondaryFont"
+                    fontWeight="500"
+                    isTruncated
+                  >
+                    {currencyFormat(handlingFeeAdmin)}
+                  </Text>
+                </Box>
+                :
+                <Box />
+              }
+
               <Box
                 width="100%"
                 d="flex"
@@ -1227,6 +1263,7 @@ const AlamatPenerima = () => {
                   {currencyFormat(totalDiscount)}
                 </Text>
               </Box>
+
               <Box
                 width="100%"
                 d="flex"

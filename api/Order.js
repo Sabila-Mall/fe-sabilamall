@@ -19,6 +19,9 @@ export const apiPlaceOrder = (
   paymentAddCostMethod,
   paymentAddCostValue,
   shippingPromo,
+  adminId,
+  handlingFeeAdmin,
+  handlingFeeAdminDiscount,
 ) => {
   let device_id = getDeviceId();
   return axios.post(HOST + "/api/order/place_order", {
@@ -42,8 +45,15 @@ export const apiPlaceOrder = (
     payment_addcostmethod: paymentAddCostMethod,
     payment_addcostvalue: paymentAddCostValue,
     device_id,
+    admin_id: adminId,
+    handling_fee_admin: handlingFeeAdmin,
+    handling_fee_admin_discount: handlingFeeAdminDiscount,
   });
 };
+
+export const getHandlingFeeAdminDiscount = () => {
+  return axios.post(HOST + "/api/order/get_handling_fee_admin_discount");
+}
 
 export const getKurir = (
   customerId,
