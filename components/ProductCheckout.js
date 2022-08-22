@@ -57,6 +57,7 @@ const ProductCheckout = ({
   products_quantity,
   setDiscountPricePerUnit,
   setPricePerUnit,
+  // setStocks
 }) => {
 
   const toast = useToast();
@@ -71,7 +72,7 @@ const ProductCheckout = ({
   const [stock, setStock] = useState(null);
   const [filterStock, setFilterStock] = useState({ warna: null, ukuran: null });
 
-  const [warehouseId, setWarehouseId] = useState();
+  const [warehouseId, setWarehouseId] = useState(warehouse.length == 1 ? String(warehouse[0].id) : null);
 
   const [isLiked, setIsLiked] = useState(is_liked == "1");
 
@@ -112,9 +113,11 @@ const ProductCheckout = ({
   // const realPrice = current_price * numberOfItem;
 
   const checkStockCl = (dataFilter, warehouseId) => {
+    console.log(dataFilter, warehouseId);
 
     if (!sizes || !colors) {
       warehouseId = warehouseId == 'null' ? null : warehouseId;
+
 
       const data = stocks?.find(
         (stock) => stock?.warehouse_id == warehouseId,
@@ -122,6 +125,7 @@ const ProductCheckout = ({
 
       setStock(data?.stock < 1 || data?.stock == undefined ? 0 : data?.stock);
       setNumberOfItem(data?.stock < 1 || data?.stock == undefined ? 0 : 1);
+
       return;
     }
 
@@ -268,7 +272,7 @@ const ProductCheckout = ({
   };
 
   useEffect(() => {
-    checkStockCl();
+    checkStockCl(null, warehouseId);
   }, []);
 
   return (
@@ -289,7 +293,7 @@ const ProductCheckout = ({
         borderRadius={"12px"}
       >
 
-        {warehouse && (
+        {warehouse && warehouse.length > 1 && (
           <Box width={"full"}>
             <Text textColor={"gray.500"} fontSize={"16px"}>
               Gudang: {warehouse.length} item

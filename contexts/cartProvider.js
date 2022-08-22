@@ -160,7 +160,7 @@ export const CartProvider = ({ children }) => {
           errorToast("Jenis pembelian yang dipilih harus sama");
           return;
         } else if (selectedItem[i].warehouse_id != tempWarehouse) {
-          errorToast("Jenis pembelian yang dipilih harus sama");
+          errorToast("Gudang pembelian yang dipilih harus sama");
           return;
         }
         tempVendor = selectedItem[i].vendors_id;

@@ -557,7 +557,7 @@ const DetailPesanan = () => {
   const toast = useToast();
 
   let arrayOfCustomerBasket = [];
-  let weight, vendors_id, vendor_origin, totalOrder, products_jenis;
+  let weight, vendors_id, vendor_origin, totalOrder, products_jenis, warehouse_id;
 
   if (typeof window !== "undefined") {
     const productsJson = localStorage.getItem("selectedProduct");
@@ -566,12 +566,14 @@ const DetailPesanan = () => {
     if (productItems) {
       productItems.forEach((element) => {
         arrayOfCustomerBasket.push(element.customers_basket_id);
+        console.log(element);
       });
       weight = products.weight;
       totalOrder = products.total_price;
       vendors_id = productItems[0].vendors_id;
       vendor_origin = productItems[0].vendors_origin;
       products_jenis = productItems[0].products_jenis;
+      warehouse_id = productItems[0].warehouse_id;
     }
   }
 
@@ -587,6 +589,7 @@ const DetailPesanan = () => {
         vendors_id,
         vendor_origin,
         device_id,
+        warehouse_id
       )
         .then((res) => {
           setKurir(res.data.data.kurirIndonesia.services);

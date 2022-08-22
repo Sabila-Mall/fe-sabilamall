@@ -84,14 +84,10 @@ const ProductDetails = () => {
         const resStock = await checkStock({
           products_id: Number(resProductDetails?.products_id),
         });
+
         setStocks(resStock);
 
-        const stockData = resStock;
-        let quantity = 0;
-
-        stockData.forEach((item) => {
-          quantity += item.stock;
-        });
+        quantity = resProductDetails.defaultStock;
 
         setQuantity(quantity);
 
@@ -105,7 +101,7 @@ const ProductDetails = () => {
     };
 
     slug && getData();
-  }, [slug]);
+  }, [slug, userId]);
 
   if (loading) {
     return <Loading />;

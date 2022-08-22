@@ -18,7 +18,7 @@ export const apiGetCartByCustomerID = async (customers_id) => {
 export const addCart = async (dataPost) => {
   let device_id = getDeviceId();
   try {
-    const res = await axios.post(HOST + "/api/cart/add_to_cart", {
+    const res = await axios.post(HOST + "/api/cart/add_to_cart_2", {
       ...dataPost,
       device_id,
     });
@@ -60,7 +60,7 @@ export const editCartNotes = async (dataPost) => {
 export const updateCartQuantity = async (dataPost) => {
   let device_id = getDeviceId();
   try {
-    const res = await axios.post(HOST + "/api/cart/update_qty_item", {
+    const res = await axios.post(HOST + "/api/cart/update_qty_item_2", {
       ...dataPost,
       device_id,
     });

@@ -24,3 +24,18 @@ export const checkStock = async (dataPost) => {
     throw new Error(err);
   }
 };
+
+export const checkStockByAttribute = async (dataPost) => {
+  try {
+    const res = await axios.post(HOST + "/api/product/get_quantity_2", {
+      type: "json",
+      ...dataPost,
+    });
+    // jangan cek request
+
+    const data = await res.data;
+    return data;
+  } catch (err) {
+    throw new Error(err);
+  }
+}

@@ -135,6 +135,7 @@ const ProductInformation = ({
             pt="1rem"
             w="100%"
             id="informationPanel"
+            minH='75vh'
           >
             <Stack
               spacing="24px"

@@ -21,7 +21,7 @@ export const apiPlaceOrder = (
   shippingPromo,
 ) => {
   let device_id = getDeviceId();
-  return axios.post(HOST + "/api/order/place_order", {
+  return axios.post(HOST + "/api/order/place_order_2", {
     dataorder: [
       {
         vendors_id: vendorId,
@@ -57,6 +57,7 @@ export const getKurir = (
   vendorId,
   vendorOrigin,
   deviceId,
+  warehouse_id,
 ) => {
   const customers_basket_id = [];
   try {
@@ -65,7 +66,7 @@ export const getKurir = (
         customers_basket_id.push(el.customers_basket_id);
       },
     );
-  } catch (error) {}
+  } catch (error) { }
 
   return axios.post(HOST + "/api/shipping/get_all_shipping", {
     customers_id: customerId,
@@ -83,6 +84,8 @@ export const getKurir = (
     vendors_origin: vendorOrigin,
     device_id: deviceId,
     customers_basket_id: customers_basket_id,
+    warehouse_id: warehouse_id,
+    debug: true,
   });
 };
 
@@ -100,7 +103,7 @@ export const getPaymentMethod = (
         customers_basket_id.push(el.customers_basket_id);
       },
     );
-  } catch (error) {}
+  } catch (error) { }
   return axios.post(HOST + "/api/payment/get_payment_method", {
     language_id: "1",
     vendors_id: [`${vendors_id}`],
