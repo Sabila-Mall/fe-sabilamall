@@ -57,7 +57,7 @@ const ProductCheckout = ({
   products_quantity,
   setDiscountPricePerUnit,
   setPricePerUnit,
-  // setStocks
+  admin_id,
 }) => {
 
   const toast = useToast();
@@ -553,6 +553,7 @@ const ProductCheckout = ({
               option_id,
               option_values_id,
               warehouse_id
+              admin_id,
             );
           }}
         >

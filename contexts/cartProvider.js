@@ -10,6 +10,7 @@ import {
   editCartNotes,
   updateCartQuantity,
 } from "../api/cart";
+import { getHandlingFeeAdminDiscount } from "../api/Order";
 import { isRequestSuccess } from "../utils/api";
 import { useAuthContext } from "./authProvider";
 
@@ -27,10 +28,12 @@ export const CartProvider = ({ children }) => {
   const [selectedWeight, setselectedWeight] = useState(0);
   const [selectedQuantity, setselectedQuantity] = useState(0);
   const [selectedDiscount, setselectedDiscount] = useState(0);
+  const [handlingFeeAdminData, setHandlingFeeAdminData] = useState(null);
   const router = useRouter();
 
   const { userData } = useAuthContext();
   const userId = userData?.id;
+  const adminId = userData?.admin_id;
 
   const toast = useToast();
 
@@ -142,8 +145,9 @@ export const CartProvider = ({ children }) => {
     return temp;
   };
 
-  const checkoutValidation = () => {
+  const checkoutValidation = async () => {
     if (selectedItem.length) {
+
       localStorage.setItem("selectedProduct", []);
       let tempVendor = selectedItem[0].vendors_id;
       let tempJenis = selectedItem[0].products_jenis;
@@ -151,6 +155,8 @@ export const CartProvider = ({ children }) => {
       let tempWeight = 0;
       let tempQuantity = 0;
       let tempDiscount = 0;
+      let tempHandlingFeeAdminDiscount = 0;
+      let tempHandlingFeeAdmin = 0;
 
       for (let i = 0; i < selectedItem.length; i++) {
         if (selectedItem[i].vendors_id != tempVendor) {
@@ -165,12 +171,27 @@ export const CartProvider = ({ children }) => {
         }
         tempVendor = selectedItem[i].vendors_id;
       }
+
+      if (adminId != null) {
+        // get data handling admin discount
+        let handling_fee_admin = await getHandlingFeeAdminDiscount();
+        if (handling_fee_admin.status == 200) {
+          tempHandlingFeeAdminDiscount = handling_fee_admin.data.data;
+          setHandlingFeeAdminData(tempHandlingFeeAdminDiscount);
+        } else {
+          tempHandlingFeeAdminDiscount = 0;
+          setHandlingFeeAdminData(tempHandlingFeeAdminDiscount);
+        }
+      }
+
+
       router.push("/alamat-penerima");
 
       // console.log(selectedItem);
       // console.log(selectedItem[0].varian);
 
       selectedItem.forEach((element) => {
+
         let tempAddWeight = element.varian.reduce((partialSum, data) => partialSum + parseInt(data.values_weight), 0);
         tempWeight +=
           (parseInt(element.products_weight) + tempAddWeight) * parseInt(element.customers_basket_quantity);
@@ -181,7 +202,13 @@ export const CartProvider = ({ children }) => {
             element.customers_basket_quantity *
             element.final_price;
         }
+
+        let disc_customer = parseInt(element.final_price) - ((parseInt(element.final_price) * (parseInt(element.customers_discount) / 100)))
+        let disc_admin = parseInt(element.final_price) - ((parseInt(element.final_price) * ((parseInt(element.customers_discount) - parseInt(tempHandlingFeeAdminDiscount)) / 100)))
+
+        tempHandlingFeeAdmin += (disc_admin - disc_customer) * parseInt(element.customers_basket_quantity);
       });
+
 
       const checkoutData = {
         weight: tempWeight,
@@ -189,6 +216,8 @@ export const CartProvider = ({ children }) => {
         products: selectedItem,
         discount: tempDiscount,
         total_price: selectedPrice,
+        handling_fee_admin: tempHandlingFeeAdmin,
+        handling_fee_admin_discount: tempHandlingFeeAdminDiscount,
       };
 
       localStorage.setItem("selectedProduct", JSON.stringify(checkoutData));
@@ -281,6 +310,7 @@ export const CartProvider = ({ children }) => {
     option_id,
     option_values_id,
     warehouse_id
+    admin_id,
   ) => {
     addCart({
       customers_id,
@@ -290,6 +320,7 @@ export const CartProvider = ({ children }) => {
       option_id,
       option_values_id,
       warehouse_id
+      admin_id,
     })
       .then((res) => {
         if (isRequestSuccess(res)) {
