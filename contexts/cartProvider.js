@@ -309,7 +309,7 @@ export const CartProvider = ({ children }) => {
     quantity,
     option_id,
     option_values_id,
-    warehouse_id
+    warehouse_id,
     admin_id,
   ) => {
     addCart({
@@ -319,7 +319,7 @@ export const CartProvider = ({ children }) => {
       quantity,
       option_id,
       option_values_id,
-      warehouse_id
+      warehouse_id,
       admin_id,
     })
       .then((res) => {
