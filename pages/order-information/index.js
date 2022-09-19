@@ -246,7 +246,7 @@ const OrderInformation = ({ order }) => {
                 {(() => {
                   if (
                     status?.toLowerCase() == "pending" &&
-                    orderData?.payment_method === TRANSFER_BANK
+                    orderData?.payment_method === TRANSFER_BANK && !([5, 6].includes(orderData?.orders_status_id))
                   ) {
                     return (
                       <>
