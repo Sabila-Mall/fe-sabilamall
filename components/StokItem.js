@@ -40,8 +40,8 @@ const StokItem = ({ img, nama, supplier, tag, link, productId }) => {
         data.forEach((item) => {
           variants.push({
             warehouse: item.warehouse,
-            warna: item.color,
-            ukuran: item.size,
+            warna: item.value_color,
+            ukuran: item.value_size,
             stok: item.stock,
           });
         });
