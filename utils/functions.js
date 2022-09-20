@@ -32,7 +32,7 @@ export const copyToClipboard = (text, onSuccess, onFail) => {
   }
   navigator.clipboard
     .writeText(text)
-    .then(onSuccess ? onSuccess : () => {})
+    .then(onSuccess ? onSuccess : () => { })
     .catch(() => console.error("Unable to copy", err));
 };
 
@@ -176,15 +176,13 @@ export const currencyFormat = (amount) => {
  * date: MM/DD/YYYY
  */
 export const dateFormat = (date) => {
-  return `${new Date(date).getFullYear()}-${
-    new Date(date).getMonth() + 1 < 10
-      ? "0" + (new Date(date).getMonth() + 1).toString()
-      : new Date(date).getMonth() + 1
-  }-${
-    new Date(date).getDate() < 10
+  return `${new Date(date).getFullYear()}-${new Date(date).getMonth() + 1 < 10
+    ? "0" + (new Date(date).getMonth() + 1).toString()
+    : new Date(date).getMonth() + 1
+    }-${new Date(date).getDate() < 10
       ? "0" + new Date(date).getDate().toString()
       : new Date(date).getDate()
-  }`;
+    }`;
 };
 
 export const titleCase = (str) => {
@@ -239,10 +237,9 @@ export const getPriceAfterDiscount = (finalPrice, customerDiscount) => {
 export const logout = () => {
   localStorage.clear();
   // clear cookie
-  document.cookie =
-    "user_id" + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;";
+  document.cookie = "user_id" + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;";
   document.cookie = "token" + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;";
-
+  document.cookie = "admin_id" + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;";
   window.location.href = "/";
 };
 
