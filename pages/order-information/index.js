@@ -66,7 +66,7 @@ const OrderInformation = ({ order }) => {
 
   const status = orderData?.payment_status;
   const productDiscount = orderData?.level_discount;
-  const voucherDiscount = orderData?.shipping_promo_amount;
+  const voucherDiscount = orderData?.shipping_cost == 0 ? 0 : orderData?.shipping_promo_amount;
   const couponAmount = orderData?.coupon_amount;
   const notes = orderData?.order_notes;
   const resi = resiData?.waybill_cognote;
