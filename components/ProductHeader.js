@@ -374,7 +374,7 @@ const PriceProducts = ({ price_product_data }) => {
           <>
             <PriceValue as={'del'} price={price} isDiscount={false} size={18} />
             <PriceValue as={'del'} price={pricePromo} isDiscount={true} infoDiscount={'Flash Sale Price'} size={24} />
-            <PriceValue as={'text'} price={price_after_discount} infoDiscount={'Diskon ' + customers_discount + '% +' + event} isDiscount={true} size={32} bold={'bold'} isPrimary={true} />
+            <PriceValue as={'text'} price={price_after_discount} infoDiscount={'Diskon ' + customers_discount + '% + ' + event} isDiscount={true} size={32} bold={'bold'} isPrimary={true} />
           </>
         )
       } else if (discountPromo > 0 && price == pricePromo) {
@@ -382,7 +382,7 @@ const PriceProducts = ({ price_product_data }) => {
         return (
           <>
             <PriceValue as={'del'} price={pricePromo} isDiscount={false} size={24} />
-            <PriceValue as={'text'} price={price_after_discount} infoDiscount={'Diskon ' + customers_discount + '% +' + event} isDiscount={true} size={32} bold={'bold'} isPrimary={true} />
+            <PriceValue as={'text'} price={price_after_discount} infoDiscount={'Diskon ' + customers_discount + '% + ' + event} isDiscount={true} size={32} bold={'bold'} isPrimary={true} />
           </>
         )
       } else if (discountPromo <= 0 && price != pricePromo) {
@@ -496,7 +496,7 @@ const PriceValue = ({ as, price, isDiscount, infoDiscount, size, bold = 300, isP
         </Text>
         {
           isDiscount && (
-            <Box alignSelf="center">
+            <Box alignSelf="center" textAlign={'center'}>
               <Text
                 className="secondaryFont"
                 color="white"
