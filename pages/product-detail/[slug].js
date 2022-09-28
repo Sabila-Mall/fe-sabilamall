@@ -85,7 +85,36 @@ const ProductDetails = () => {
   }
 
   if (loading) {
-    return <Loading />;
+    return (
+      <>
+        <Head>
+          <title>{`Detail Produk - SabilaMall`}</title>
+          <meta
+            property="og:url"
+            content={`https://sabilamall.co.id/product-detail`}
+          />
+          <meta property="og:type" content="website" />
+          <meta property="og:title" content={'test title'} />
+          <meta property="og:description" content={'test description'} />
+          <meta
+            property="og:image"
+            content={`https://www.sabilamall.co.id/images/Navbar/logo.svg`}
+          />
+          <meta name="keywords" content="" />
+          <meta name="author" content="SabilaMall" />
+          <meta name="DC.title" content="" />
+          <meta
+            name="description"
+            content="Distributor Grosir Supplier Baju Muslim, Gamis, Hijab Nibras, Endomoda, Ethica, Seply, Labella, Yasmeera. Dropship  Terpercaya & Murah Open Reseller."
+          />
+          <meta
+            name="csrf-token"
+            content="jpDOUlWRa9ZovRrM3JYK7D6McJnWKCeU19SmLZqV"
+          />
+        </Head>
+        <Loading />
+      </>
+    );
   }
 
   // ==== path
