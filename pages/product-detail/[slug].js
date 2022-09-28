@@ -98,11 +98,11 @@ const ProductDetails = () => {
           <meta property="og:description" content={'test description'} />
           <meta
             property="og:image"
-            content={`https://www.sabilamall.co.id/images/Navbar/logo.svg`}
+            content={`https://i0.wp.com/www.lenterabisnis.com/wp-content/uploads/2018/07/atribut-produk.jpg`}
           />
-          <meta name="keywords" content="" />
+          <meta name="keywords" content="test" />
           <meta name="author" content="SabilaMall" />
-          <meta name="DC.title" content="" />
+          <meta name="DC.title" content="test asd" />
           <meta
             name="description"
             content="Distributor Grosir Supplier Baju Muslim, Gamis, Hijab Nibras, Endomoda, Ethica, Seply, Labella, Yasmeera. Dropship  Terpercaya & Murah Open Reseller."
