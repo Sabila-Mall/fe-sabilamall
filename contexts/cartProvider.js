@@ -187,8 +187,6 @@ export const CartProvider = ({ children }) => {
 
       router.push("/alamat-penerima");
 
-      // console.log(selectedItem);
-      // console.log(selectedItem[0].varian);
 
       selectedItem.forEach((element) => {
 

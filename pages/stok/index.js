@@ -17,6 +17,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
 import { FiChevronRight, FiSearch } from "react-icons/fi";
+import { useRouter } from 'next/router';
 
 import {
   apiGetProduct,
@@ -57,7 +58,21 @@ const Stok = () => {
   const [range, setRange] = useState([]);
   const [typeSearch, setTypeSearch] = useState("");
   const [sabiconSearch, setSabiconSearch] = useState(1);
-  
+
+  const router = useRouter()
+  const { product_name } = router.query
+
+  useEffect(() => {
+    if (product_name != null) {
+      setTypeSearch(2);
+      setNameSearch(product_name);
+      setFirstTime(false);
+      setLoading(true);
+
+      setBrandId(0);
+      setCurrPage(1);
+    }
+  }, [product_name])
 
   const objToArray = (d) => {
     if (typeof d === "object") {
@@ -81,7 +96,6 @@ const Stok = () => {
   useEffect(() => {
     if (data.length !== 0) {
       let dataArray = objToArray(data);
-      console.log(dataArray);
       dataArray.map((product) => {
         try {
           const supName = supplierName == "" ? product.manufacturer_name : supplierName;
@@ -89,7 +103,7 @@ const Stok = () => {
           setStocks((curr) => [...curr, stocksPush]);
           setLoading(false);
         } catch (err) {
-          () => {};
+          () => { };
         }
       });
     }
@@ -138,43 +152,42 @@ const Stok = () => {
 
   useEffect(() => {
     if (typeSearch != "") {
-      console.log(typeSearch);
     }
   }, [typeSearch]);
 
   function SelectBoxType() {
     return (
       <>
-      <Select
-        placeholder="Pilih Tipe Pencarian"
-        w={typeSearch == "" ? { base: "100%", md: "100%" } : { base: "100%", md: "50%" }}
-        value={typeSearch}
-        onChange={(e) => {
-          let val = e.target.value;
-          setTypeSearch(val);
-          setStocks([]);
-          setData([]);
-          setBrandId(0);
-          setCurrPage(1);
-          setLastPage(0);
-          setSupplierName("");
-          setFirstTime(true);
-          if(val == 1){
-            setSabiconSearch(1);
-          } else {
-            setSabiconSearch(2);
-          }
-        }}
-      >
-        <option key="1" value="1">Berdasarkan Brand</option>
-        <option key="2" value="2">Input Nama Produk</option>
-      </Select>
-      {typeSearch == "1" && 
-        <SelectBoxBrand/>
-      }
-      {typeSearch == "2" && 
-        <InputKeyword/>
-      }
+        <Select
+          placeholder="Pilih Tipe Pencarian"
+          w={typeSearch == "" ? { base: "100%", md: "100%" } : { base: "100%", md: "50%" }}
+          value={typeSearch}
+          onChange={(e) => {
+            let val = e.target.value;
+            setTypeSearch(val);
+            setStocks([]);
+            setData([]);
+            setBrandId(0);
+            setCurrPage(1);
+            setLastPage(0);
+            setSupplierName("");
+            setFirstTime(true);
+            if (val == 1) {
+              setSabiconSearch(1);
+            } else {
+              setSabiconSearch(2);
+            }
+          }}
+        >
+          <option key="1" value="1">Berdasarkan Brand</option>
+          <option key="2" value="2">Input Nama Produk</option>
+        </Select>
+        {typeSearch == "1" &&
+          <SelectBoxBrand />
+        }
+        {typeSearch == "2" &&
+          <InputKeyword />
+        }
       </>
     );
   }
@@ -182,34 +195,34 @@ const Stok = () => {
   function SelectBoxBrand() {
     return (
       <>
-      <Select
-        disabled={loading}
-        w={{ base: "100%", md: "49%" }}
-        onChange={(e) => {
-          let split = e.target.value.split(" ");
-          setBrandId(Number(split[0]));
-          setCurrPage(1);
-          setSupplierName(split[1]);
-          setFirstTime(false);
-          setLoading(true);
-        }}
-      >
-        <option value="" key="0">Pilih Brand</option>
-        {supplier.length != 0 ? (
-          supplier.map((child) => {
-            const brandName = child.name;
-            return (
-              <option key={child.id} value={`${child.id} ${child.name}`} selected={brandName == supplierName ? "selected" : ""}>
-                {child.name}
-              </option>
-            );
-          })
-        ) : (
-          <option key={"loading"} disabled value={"loading"}>
-            {"Loading..."}
-          </option>
-        )}
-      </Select>
+        <Select
+          disabled={loading}
+          w={{ base: "100%", md: "49%" }}
+          onChange={(e) => {
+            let split = e.target.value.split(" ");
+            setBrandId(Number(split[0]));
+            setCurrPage(1);
+            setSupplierName(split[1]);
+            setFirstTime(false);
+            setLoading(true);
+          }}
+        >
+          <option value="" key="0">Pilih Brand</option>
+          {supplier.length != 0 ? (
+            supplier.map((child) => {
+              const brandName = child.name;
+              return (
+                <option key={child.id} value={`${child.id} ${child.name}`} selected={brandName == supplierName ? "selected" : ""}>
+                  {child.name}
+                </option>
+              );
+            })
+          ) : (
+            <option key={"loading"} disabled value={"loading"}>
+              {"Loading..."}
+            </option>
+          )}
+        </Select>
       </>
     );
   }
@@ -217,7 +230,7 @@ const Stok = () => {
   function InputKeyword() {
     return (
       <>
-      <InputGroup
+        <InputGroup
           w={{ base: "100%", md: "49%" }}
           mt={{ base: "1rem", md: "0rem" }}
         >
@@ -226,7 +239,7 @@ const Stok = () => {
             placeholder={nameSearch == "" ? "Cari Produk" : nameSearch}
             fontSize="sm"
             onKeyPress={(e) => {
-              if(e.key === 'Enter'){
+              if (e.key === 'Enter') {
                 let val = e.target.value;
                 setNameSearch(val);
                 setFirstTime(false);
@@ -260,7 +273,7 @@ const Stok = () => {
             flexDir={{ base: "column", md: "row" }}
             justifyContent="space-between"
           >
-            <SelectBoxType/>
+            <SelectBoxType />
           </Box>
           <Flex w="full" justify="center" mt="1rem">
             <Pagination
@@ -323,7 +336,7 @@ const Stok = () => {
                   textAlign="center"
                   className="secondaryFont"
                 >
-                  {sabiconSearch == 1 ? "Silakan pilih brand berdasarkan nama produk untuk melihat data stok yang tersedia." : "Silakan input nama produk untuk melihat data stok yang tersedia." }
+                  {sabiconSearch == 1 ? "Silakan pilih brand berdasarkan nama produk untuk melihat data stok yang tersedia." : "Silakan input nama produk untuk melihat data stok yang tersedia."}
                 </Text>
               </Flex>
             )}

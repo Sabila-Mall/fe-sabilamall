@@ -29,6 +29,9 @@ const CardProduct = ({
   isfreeshipping,
   jenis,
 }) => {
+  console.log('Debug', image_path);
+
+  const router = useRouter();
   const { isLoggedIn, userData } = useAuthContext();
   const { wishlistData } = useWishlistContext();
   const [imageHeight, setImageHeight] = useState(144);
@@ -84,6 +87,7 @@ const CardProduct = ({
       _hover={{ textStyle: "none" }}
       href={`/product-detail/${products_slug}`}
       target="_blank"
+    // onClick={(e) => router.push(`/product-detail/${products_slug}`)}
     >
       <Box
         className={styles.secondaryFont}
@@ -127,7 +131,7 @@ const CardProduct = ({
             {flash_end && timeLeft && (
               <Box
                 px="4px"
-                h="26px"
+                py="4px"
                 bg="red.500"
                 borderRadius="4px"
                 boxSizing="border"
@@ -136,7 +140,7 @@ const CardProduct = ({
                 justifyContent="center"
                 alignItems="center"
                 mb="8px"
-                w="fit-content"
+                w="full"
               >
                 <Text
                   as="p"
@@ -146,7 +150,7 @@ const CardProduct = ({
                   fontWeight="500"
                 >
                   <Icon as={IoTimeSharp} />{" "}
-                  {`${timeLeft.hours} Jam ${timeLeft.minutes} Menit lagi`}
+                  {`${timeLeft.days} Hari ${timeLeft.hours} Jam ${timeLeft.minutes} Menit lagi`}
                 </Text>
               </Box>
             )}

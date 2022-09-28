@@ -567,7 +567,6 @@ const DetailPesanan = () => {
     if (productItems) {
       productItems.forEach((element) => {
         arrayOfCustomerBasket.push(element.customers_basket_id);
-        console.log(element);
       });
       weight = products.weight;
       totalOrder = products.total_price;

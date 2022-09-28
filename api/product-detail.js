@@ -10,7 +10,7 @@ export const getProductDetail = async ({
   admin_id,
 }) => {
   try {
-    const res = await axios.post(HOST + "/api/product/get_products_2", {
+    const res = await axios.post(HOST + "/api/product/get_products_3", {
       products_slug,
       customers_id,
       products_id,
@@ -20,7 +20,7 @@ export const getProductDetail = async ({
 
     if (!isRequestSuccess(res.data)) throw new Error();
 
-    const data = await res.data?.product_data?.[0];
+    const data = await res.data?.data;
     return data;
   } catch (err) {
     throw new Error(err);

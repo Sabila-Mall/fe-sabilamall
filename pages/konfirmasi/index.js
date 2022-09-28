@@ -62,7 +62,6 @@ const Konfirmasi = () => {
               handling_fee_admin: res.data[0].handling_fee_admin ?? 0,
               loading: false,
             });
-            console.log(res);
           } else {
             errorToast(res.message ?? "Request gagal");
           }

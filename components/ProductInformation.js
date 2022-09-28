@@ -26,17 +26,12 @@ const StarRatings = dynamic(() => import("react-star-ratings"), {
 
 const ProductInformation = ({
   products_description,
-  vendors_name: vendor,
-  vendor_rating: vendorRating, // still hardcode
+  vendors_name,
   vendors_address,
-  id,
-  total_user_rated: ratingAmount,
-  rating,
-  one_ratio,
-  two_ratio,
-  three_ratio,
-  four_ratio,
-  five_ratio,
+  vendors_origincity,
+  reviews,
+  vendors_success_rate,
+  vendors_originsubsname
 }) => {
   const [description, setDescription] = useState(false);
   const [isOverflow, setIsOverflow] = useState(() => {
@@ -55,44 +50,31 @@ const ProductInformation = ({
     return false
   })
 
-  const ratingArray = {
-    1: one_ratio,
-    2: two_ratio,
-    3: three_ratio,
-    4: four_ratio,
-    5: five_ratio,
-  };
-  let totalRating = 0;
-  for (var ratingInt in ratingArray) {
-    totalRating += ratingArray[ratingInt];
+  const rating = JSON.parse(reviews ?? "[]");
+  let avgRating = 0;
+  let oneRating = 0;
+  let twoRating = 0;
+  let threeRating = 0;
+  let fourRating = 0;
+  let fiveRating = 0;
+
+  if (rating.length > 0) {
+    rating.forEach((item) => {
+      if (item.reviews_rating == 1) {
+        oneRating++;
+      } else if (item.reviews_rating == 2) {
+        twoRating++;
+      } else if (item.reviews_rating == 3) {
+        threeRating++;
+      } else if (item.reviews_rating == 4) {
+        fourRating++;
+      } else if (item.reviews_rating == 5) {
+        fiveRating++;
+      }
+    });
+
+    avgRating = rating.reduce((old, item) => old + item.reviews_rating, 0) / rating.length;
   }
-  const ratingList = [
-    {
-      label: 5,
-      percentage:
-        (ratingArray[5] * 100) / (totalRating === 0 ? 1 : totalRating),
-    },
-    {
-      label: 4,
-      percentage:
-        (ratingArray[4] * 100) / (totalRating === 0 ? 1 : totalRating),
-    },
-    {
-      label: 3,
-      percentage:
-        (ratingArray[3] * 100) / (totalRating === 0 ? 1 : totalRating),
-    },
-    {
-      label: 2,
-      percentage:
-        (ratingArray[2] * 100) / (totalRating === 0 ? 1 : totalRating),
-    },
-    {
-      label: 1,
-      percentage:
-        (ratingArray[1] * 100) / (totalRating === 0 ? 1 : totalRating),
-    },
-  ];
 
   const showDescription = () => {
     const descriptionText = document.getElementById("descriptionText");
@@ -135,7 +117,7 @@ const ProductInformation = ({
             pt="1rem"
             w="100%"
             id="informationPanel"
-            minH='75vh'
+            minH={{ base: "fit-content", md: "75vh" }}
           >
             <Stack
               spacing="24px"
@@ -165,7 +147,7 @@ const ProductInformation = ({
                   fontSize="16px"
                   color="gray.600"
                 >
-                  {vendor}
+                  {vendors_name}
                 </Text>
                 <Text
                   d="inline"
@@ -183,7 +165,7 @@ const ProductInformation = ({
                   color="orange.400"
                   d="inline"
                 >
-                  {vendorRating}
+                  {Number(vendors_success_rate).toFixed(2)}%
                 </Text>
               </Box>
               <Box
@@ -208,7 +190,7 @@ const ProductInformation = ({
                   fontSize="16px"
                   color="orange.400"
                 >
-                  {vendors_address}
+                  {vendors_originsubsname + ', ' + vendors_origincity}
                 </Text>
               </Box>
             </Stack>
@@ -274,7 +256,7 @@ const ProductInformation = ({
               </Button>
             </Box>
           </TabPanel>
-          <TabPanel id="ratingPanel" w="100%" minH='75vh'>
+          <TabPanel id="ratingPanel" w="100%" minH={{ base: "fit-content", md: "75vh" }}>
             <Box display="flex">
               <Center
                 w="40%"
@@ -292,12 +274,12 @@ const ProductInformation = ({
                     as="h3"
                     size="2xl"
                   >
-                    {Number(rating).toFixed(2)}
+                    {Number(avgRating).toFixed(2)}
                   </Heading>
                   <Text display="inline"> dari 5</Text>
                 </Box>
                 <StarRatings
-                  rating={Number(rating)}
+                  rating={Number(avgRating)}
                   starRatedColor="orange"
                   starDimension="24px"
                   starSpacing="2px"
@@ -307,22 +289,23 @@ const ProductInformation = ({
                   className="secondaryFont"
                   fontWeight="500"
                 >
-                  {`${ratingAmount} penilaian`}
+                  {`${rating.length} penilaian`}
                 </Text>
               </Center>
               <Stack w="60%" spacing="4px" ml="4px">
-                {ratingList.map((el, index) => {
+                {[fiveRating, fourRating, threeRating, twoRating, oneRating].map((item, index) => {
+                  const percentage = item == 0 ? 0 : item / rating.length * 100;
                   let color;
-                  {
-                    el.percentage > 10
-                      ? (color = "#ffffff")
-                      : (color = "#ffa726");
+                  if (percentage > 10) {
+                    color = "#ffffff"
+                  } else {
+                    color = "#ffa726"
                   }
                   return (
                     <HStack key={index}>
                       <GoStar size={24} color="orange" />
                       <Progress
-                        value={el.percentage}
+                        value={percentage}
                         colorScheme="orange"
                         w="100%"
                         h="16px"

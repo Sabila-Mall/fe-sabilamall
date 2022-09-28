@@ -11,8 +11,9 @@ import { IoStar } from "react-icons/io5";
 
 import { getImageLink } from "../utils/functions";
 
-const ProductReview = ({ reviewed_customers }) => {
-  const totalReview = reviewed_customers ? reviewed_customers.length : 0;
+const ProductReview = ({ reviews }) => {
+  const reviewData = JSON.parse(reviews ?? "[]");
+  const totalReview = reviewData ? reviewData.length : 0;
 
   const renderStar = (numberOfStars) => {
     const ret = [];
@@ -50,7 +51,7 @@ const ProductReview = ({ reviewed_customers }) => {
       <HStack></HStack>
 
       <VStack spacing={"16px"} w="full">
-        {reviewed_customers?.map(
+        {reviewData?.map(
           ({
             customers_name,
             reviews_rating,

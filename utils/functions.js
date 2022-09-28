@@ -107,6 +107,10 @@ export const calculateTimeLeft = (endTime) => {
   return timeLeft;
 };
 
+export const pad = (value) => {
+  return (value < 10) ? '0' + value.toString() : value.toString();
+}
+
 export const calculateDiscountedPrice = (realPrice, discount) => {
   if (!discount) {
     return realPrice;
@@ -227,7 +231,7 @@ export const getDeviceId = () => {
 export const getUserId = () => {
   if (document.cookie.indexOf("user_id") !== -1)
     return nookies.get(null, "user_id");
-  return null;
+  return '';
 };
 
 export const getPriceAfterDiscount = (finalPrice, customerDiscount) => {
@@ -237,14 +241,19 @@ export const getPriceAfterDiscount = (finalPrice, customerDiscount) => {
 export const logout = () => {
   localStorage.clear();
   // clear cookie
-  document.cookie = "user_id" + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;";
+  document.cookie =
+    "user_id" + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;";
   document.cookie = "token" + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;";
-  document.cookie = "admin_id" + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;";
+
   window.location.href = "/";
 };
 
 export const getImageLink = (link) => {
-  return IMAGE_HOST + link?.replace("images/media/", "");
+  if (link == '') {
+    return 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg'
+  } else {
+    return IMAGE_HOST + link?.replace("images/media/", "");
+  }
 };
 
 export const isValidJson = (str) => {
