@@ -8,6 +8,7 @@ import { IoMdDownload } from "react-icons/io";
 import { getStockData } from "../../api/Stock";
 import { getProductDetail } from "../../api/product-detail";
 import { getRelatedProduct } from "../../api/related-products";
+import { HOST } from "../../constants/api";
 import { getReviewProduct } from "../../api/review";
 import { Layout } from "../../components/Layout";
 import Loading from "../../components/Loading";
@@ -20,9 +21,9 @@ import RelatedProductContainer from "../../components/RelatedProductContainer";
 import { ShareProduct } from "../../components/ShareProduct";
 import { IMAGE_HOST } from "../../constants/api";
 import { useAuthContext } from "../../contexts/authProvider";
-import { isNumber, getPriceAfterDiscount } from "../../utils/functions";
+import { isNumber, getPriceAfterDiscount, getImageLink } from "../../utils/functions";
 
-const ProductDetails = () => {
+const ProductDetails = ({ initialData }) => {
   const auth = useAuthContext();
 
   const userId = auth.userData?.id;
@@ -87,31 +88,7 @@ const ProductDetails = () => {
   if (loading) {
     return (
       <>
-        <Head>
-          <title>{`Detail Produk - SabilaMall`}</title>
-          <meta
-            property="og:url"
-            content={`https://sabilamall.co.id/product-detail`}
-          />
-          <meta property="og:type" content="website" />
-          <meta property="og:title" content={'test title'} />
-          <meta property="og:description" content={'test description'} />
-          <meta
-            property="og:image"
-            content={`https://i0.wp.com/www.lenterabisnis.com/wp-content/uploads/2018/07/atribut-produk.jpg`}
-          />
-          <meta name="keywords" content="test" />
-          <meta name="author" content="SabilaMall" />
-          <meta name="DC.title" content="test asd" />
-          <meta
-            name="description"
-            content="Distributor Grosir Supplier Baju Muslim, Gamis, Hijab Nibras, Endomoda, Ethica, Seply, Labella, Yasmeera. Dropship  Terpercaya & Murah Open Reseller."
-          />
-          <meta
-            name="csrf-token"
-            content="jpDOUlWRa9ZovRrM3JYK7D6McJnWKCeU19SmLZqV"
-          />
-        </Head>
+        <CustomHead initialData={initialData} />
         <Loading />
       </>
     );
@@ -165,31 +142,7 @@ const ProductDetails = () => {
 
   return (
     <Layout hasNavbar sticky hasBreadCrumb breadCrumbItem={path} hasPadding>
-      <Head>
-        <title>{`${dataProduct.products_name} - SabilaMall`}</title>
-        <meta
-          property="og:url"
-          content={`https://sabilamall.co.id/product-detail/${slug}`}
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={dataProduct.products_name} />
-        <meta property="og:description" content={dataProduct.products_description} />
-        <meta
-          property="og:image"
-          content={`https://media.sabilamall.co.id/${headImage}`}
-        />
-        <meta name="keywords" content="" />
-        <meta name="author" content="SabilaMall" />
-        <meta name="DC.title" content="" />
-        <meta
-          name="description"
-          content="Distributor Grosir Supplier Baju Muslim, Gamis, Hijab Nibras, Endomoda, Ethica, Seply, Labella, Yasmeera. Dropship  Terpercaya & Murah Open Reseller."
-        />
-        <meta
-          name="csrf-token"
-          content="jpDOUlWRa9ZovRrM3JYK7D6McJnWKCeU19SmLZqV"
-        />
-      </Head>
+      <CustomHead initialData={initialData} />
       <Box w="full">
         <Flex
           flexDirection={{ base: "column", lg: "row" }}
@@ -248,5 +201,50 @@ const ProductDetails = () => {
     </Layout>
   );
 };
+
+const CustomHead = ({ initialData }) => {
+  return (
+    <Head>
+      <title>{`${initialData.products_name} - SabilaMall`}</title>
+      <meta
+        property="og:url"
+        content={initialData.products_link}
+      />
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content={initialData.products_name} />
+      <meta property="og:description" content={initialData.products_description} />
+      <meta
+        property="og:image"
+        content={initialData.products_image}
+      />
+      <meta name="keywords" content={initialData.products_keywords} />
+      <meta name="author" content="SabilaMall" />
+      <meta name="DC.title" content={initialData.products_name} />
+      <meta
+        name="description"
+        content={initialData.products_description}
+      />
+    </Head>
+
+  )
+}
+
+export async function getServerSideProps(context) {
+  const products_slug = context.params.slug;
+  const res = await axios.post(HOST + "/api/product/get_products_info", { products_slug: products_slug });
+
+  const initialData = res.data.data;
+
+  initialData.products_image = getImageLink(initialData.products_image);
+  initialData.products_link = `https://www.sabilamall.co.id/product-detail/${initialData.products_slug}`;
+
+  initialData.products_keywords = `reseller baju muslim, supplier dropship, open reseller gamis, supplier hijab, dropship terpercaya, ${initialData.products_name}, ${initialData.manufacturer_name}, ${JSON.parse(initialData.categories ?? "[]").join(', ')}, ${initialData.origin_city}`;
+
+  initialData.products_description = initialData.products_description == '' ? initialData.products_keywords : initialData.products_description;
+
+  return {
+    props: { initialData },
+  }
+}
 
 export default ProductDetails;

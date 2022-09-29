@@ -29,7 +29,6 @@ const CardProduct = ({
   isfreeshipping,
   jenis,
 }) => {
-  console.log('Debug', image_path);
 
   const router = useRouter();
   const { isLoggedIn, userData } = useAuthContext();
