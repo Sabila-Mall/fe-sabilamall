@@ -139,7 +139,6 @@ const ProductDetails = ({ initialData }) => {
   //     });
   // };
 
-
   return (
     <Layout hasNavbar sticky hasBreadCrumb breadCrumbItem={path} hasPadding>
       <CustomHead initialData={initialData} />
@@ -205,24 +204,24 @@ const ProductDetails = ({ initialData }) => {
 const CustomHead = ({ initialData }) => {
   return (
     <Head>
-      <title>{`${initialData.products_name} - SabilaMall`}</title>
+      <title>{`${initialData?.products_name} - SabilaMall`}</title>
       <meta
         property="og:url"
-        content={initialData.products_link}
+        content={initialData?.products_link}
       />
       <meta property="og:type" content="website" />
-      <meta property="og:title" content={initialData.products_name} />
-      <meta property="og:description" content={initialData.products_description} />
+      <meta property="og:title" content={initialData?.products_name} />
+      <meta property="og:description" content={initialData?.products_description} />
       <meta
         property="og:image"
-        content={initialData.products_image}
+        content={initialData?.products_image}
       />
-      <meta name="keywords" content={initialData.products_keywords} />
+      <meta name="keywords" content={initialData?.products_keywords} />
       <meta name="author" content="SabilaMall" />
-      <meta name="DC.title" content={initialData.products_name} />
+      <meta name="DC.title" content={initialData?.products_name} />
       <meta
         name="description"
-        content={initialData.products_description}
+        content={initialData?.products_description}
       />
     </Head>
 
@@ -233,7 +232,7 @@ export async function getServerSideProps(context) {
   const products_slug = context.params.slug;
   const res = await axios.post(HOST + "/api/product/get_products_info", { products_slug: products_slug });
 
-  const initialData = res.data.data;
+  let initialData = res.data.data;
 
   initialData.products_image = getImageLink(initialData.products_image);
   initialData.products_link = `https://www.sabilamall.co.id/product-detail/${initialData.products_slug}`;
