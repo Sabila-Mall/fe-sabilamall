@@ -1,5 +1,6 @@
 import { Box, Image, Flex, HStack, Icon } from "@chakra-ui/react";
 import { View } from "@react-pdf/renderer";
+import axios from "axios";
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight, MdPlayArrow, MdPlayCircleFilled } from "react-icons/md";
@@ -84,6 +85,24 @@ export const ProductImages = ({
     return `https://img.youtube.com/vi/${video_id}/default.jpg`;
   };
 
+  const handleDownloadImage = (downloadImage) => {
+    axios
+      .get(downloadImage, {
+        responseType: "blob",
+      })
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.setAttribute("download", "image.jpg");
+
+        document.body.appendChild(link);
+
+        link.click();
+      }).catch((err) => console.log(err));
+  };
+
   return (
     <Box w="100%" minWidth={'22rem'}>
       <Head>
@@ -118,6 +137,8 @@ export const ProductImages = ({
               // borderColor={'gray.300'}
               onMouseEnter={() => setIsHoverImage(true)}
               onMouseLeave={() => setIsHoverImage(false)}
+              onDoubleClick={() => handleDownloadImage(getImageLink(image))}
+
             >
               <Box h="22rem" hidden={isHoverImage} bgColor={'white'} backgroundImage={`url(${getImageLink(image)})`} bgSize={'contain'} bgRepeat={'no-repeat'} bgPosition={'center'} ></Box>
             </Box>
