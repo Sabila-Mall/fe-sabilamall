@@ -137,10 +137,11 @@ export const ProductImages = ({
               // borderColor={'gray.300'}
               onMouseEnter={() => setIsHoverImage(true)}
               onMouseLeave={() => setIsHoverImage(false)}
-              onDoubleClick={() => handleDownloadImage(getImageLink(image))}
+            // onDoubleClick={() => handleDownloadImage(getImageLink(image))}
 
             >
               <Box h="22rem" hidden={isHoverImage} bgColor={'white'} backgroundImage={`url(${getImageLink(image)})`} bgSize={'contain'} bgRepeat={'no-repeat'} bgPosition={'center'} ></Box>
+              <Image height="full" width={"full"} src={getImageLink(image)} style={{ opacity: '0' }} />
             </Box>
             // </Flex>
             :
