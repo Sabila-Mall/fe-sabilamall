@@ -26,6 +26,8 @@ const RelatedProductContainer = ({ relatedProducts }) => {
         overflowX="auto"
       >
         {relatedProducts.map((item, index) => {
+
+          const final_price = item.products_event == 'flash_sale' ? item.flash_sale_price : item.price;
           const data = {
             image_path: item.image_medium,
             name: item.products_name,
@@ -33,7 +35,7 @@ const RelatedProductContainer = ({ relatedProducts }) => {
             products_id: item.products_id,
             products_slug: item.products_slug,
             normal_price: item.price,
-            final_price: item.price_after_discount,
+            final_price: final_price,
             customerdiscount: item.customers_discount,
             isfreeshipping: item.is_free_shipping,
             jenis: item.products_jenis,
