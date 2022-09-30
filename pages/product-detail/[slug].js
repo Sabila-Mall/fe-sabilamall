@@ -81,7 +81,6 @@ const ProductDetails = ({ initialData }) => {
       const res = await getRelatedProduct({ products_slug: slug, customers_id: userId });
       setRelatedProducts(res);
     } catch (e) {
-      router.replace('/404');
     }
   }
 
