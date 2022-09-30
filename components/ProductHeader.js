@@ -241,7 +241,7 @@ const ProductHeader = ({
               <Box>
                 <Text fontWeight={'600'}>Periode Pemesanan</Text>
                 <Text fontSize="1rem">
-                  {moment(po_opendate).format('DD/MMM/YYYY')} s.d. {moment(po_closedate).format('DD/MMM/YYYY')}
+                  {moment(po_opendate).format('DD/MMM/YYYY HH:mm')} s.d. {moment(po_closedate).format('DD/MMM/YYYY HH:mm')}
                 </Text>
               </Box>
               <Box>
