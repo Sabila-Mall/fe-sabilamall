@@ -58,8 +58,6 @@ const ProductCheckout = ({
   flash_sale_price,
   is_liked_product,
   products_slug,
-  variantPrice,
-  setVariantPrice,
 }) => {
 
   const product_wa = products_slug?.replace("-", "+")
@@ -166,10 +164,12 @@ const ProductCheckout = ({
 
   if (products_type == 1) {
     const [itemQty, setItemQty] = useState(0);
-    // const [variantPrice, setVariantPrice] = useState(0);
     const [itemPrice, setItemPrice] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
     const [totalNormalPrice, setTotalNormalPrice] = useState(0);
+
+    const [variantPrice, setVariantPrice] = useState(0);
+    const [variantPriceAfterDiscount, setVariantPriceAfterDiscount] = useState(0);
 
     const [numberOfItem, setNumberOfItem] = useState(0);
     const [normalPrice, setNormalPrice] = useState(0);
@@ -212,15 +212,19 @@ const ProductCheckout = ({
         setNumberOfItem((stock?.stock ?? 0) == 0 ? 0 : 1);
 
         const variantPrice = Number(pricePrefixColor + priceColor) + Number(pricePrefixSize + priceSize);
-        setVariantPrice(variantPrice);
 
         const itemPrice = isPromo ? (Number(pricePromo) + variantPrice) : (Number(price) + variantPrice);
 
-        if (products_event != 'flash_sale') {
-          itemPrice = itemPrice - (itemPrice * (customers_discount / 100))
-        } else if (products_event == 'flash_sale') {
+        if (products_event == 'flash_sale') {
           itemPrice = itemPrice - (itemPrice * ((discountPromo + customers_discount) / 100))
+          const variantPriceAfterDiscount = variantPrice - (variantPrice * ((discountPromo + customers_discount) / 100))
+        } else {
+          itemPrice = itemPrice - (itemPrice * (customers_discount / 100))
+          const variantPriceAfterDiscount = variantPrice - (variantPrice * (customers_discount / 100))
         }
+
+        setVariantPrice(variantPrice);
+        setVariantPriceAfterDiscount(variantPriceAfterDiscount);
 
         const normalPrice = Number(price) + Number(variantPrice);
 
@@ -230,6 +234,7 @@ const ProductCheckout = ({
         setStock(0);
         setNumberOfItem(0);
         setVariantPrice(0);
+        setVariantPriceAfterDiscount(0);
         setNormalPrice(0);
         setItemPrice(0);
       }
@@ -408,29 +413,48 @@ const ProductCheckout = ({
               </Text>
               <VStack alignItems={"flex-end"}>
                 <Text
+                  as={'del'}
+                  color={"gray.400"}
+                  fontSize="14px"
+                >
+                  Rp {formatPrice(variantPrice)}/item
+                </Text>
+              </VStack>
+            </Flex>
+            <Flex
+              flexDirection={"row"}
+              alignItems={"center"}
+              justifyContent={"end"}
+            >
+              <VStack alignItems={"flex-end"}>
+                <Text
                   className={styles.subtotal}
                   color={"orange.400"}
                   fontSize="14px"
                   fontWeight={"bold"}
                 >
-                  Rp {formatPrice(variantPrice)}
+                  Rp {formatPrice(variantPriceAfterDiscount)}/item
                 </Text>
               </VStack>
             </Flex>
-            <Flex flexDirection={"row"} alignItems={'end'} justifyContent={'end'}>
+            <Box height={'10px'} />
 
+            <Flex
+              flexDirection={"row"}
+              alignItems={"flex-end"}
+              justifyContent={"end"}
+            >
               <VStack alignItems={"flex-end"}>
                 <Text
+                  as={'del'}
                   className={styles.subtotal}
                   color={"gray.400"}
                   fontSize="14px"
-                  as={'del'}
                 >
                   Rp {formatPrice(totalNormalPrice)}
                 </Text>
               </VStack>
             </Flex>
-            {/* <Box height={'10px'} /> */}
             <Flex
               flexDirection={"row"}
               alignItems={"flex-end"}

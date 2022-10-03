@@ -37,9 +37,6 @@ const ProductDetails = ({ initialData }) => {
   const [stockData, setStockData] = useState([]);
   const [relatedProducts, setRelatedProducts] = useState([]);
 
-  const [variantPrice, setVariantPrice] = useState(0);
-
-
   const router = useRouter();
   const slug = router.query.slug;
 
@@ -154,14 +151,14 @@ const ProductDetails = ({ initialData }) => {
             px={{ lg: "1rem", xl: "0.5rem", "2xl": "2rem" }}
             mx={{ lg: "1rem" }}
           >
-            <ProductHeader {...dataProduct} variantPrice={variantPrice} setVariantPrice={setVariantPrice} />
+            <ProductHeader {...dataProduct} />
             <Box display={{ base: "none", lg: "block" }}>
               <ProductInformation {...dataProduct} />
             </Box>
           </Box>
           <Box w={{ base: "100%", lg: "25%" }} maxW="100vw" mt={{ base: '3', lg: '0' }}>
             <ProductCheckout
-              {...dataProduct} stockData={stockData} variantPrice={variantPrice} setVariantPrice={setVariantPrice}
+              {...dataProduct} stockData={stockData}
             />
           </Box>
           <Box

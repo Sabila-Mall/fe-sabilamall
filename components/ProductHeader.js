@@ -77,8 +77,6 @@ const ProductHeader = ({
   reviews,
   is_free_shipping,
   free_shipping_data,
-  variantPrice,
-  setVariantPrice,
 }) => {
   const auth = useAuthContext();
 
@@ -92,12 +90,12 @@ const ProductHeader = ({
   let color = '';
   let bgImage = '';
 
-  let price = Number(normalPrice) + Number(variantPrice);
+  let price = Number(normalPrice);
 
   if (products_event == 'flash_sale' && (flash_sale_price != price || flash_sale_discount > 0)) {
     isPromo = true;
     promoData = flash_sale_name
-    pricePromo = Number(flash_sale_price) + Number(variantPrice);
+    pricePromo = Number(flash_sale_price);
     discountPromo = flash_sale_discount;
     event = flash_sale_discount == 0 ? '' : `Flash Sale ${discountPromo}%`;
     promoExpiredTime = flash_sale_expires_date;
@@ -106,7 +104,7 @@ const ProductHeader = ({
   } else if (products_event == 'special') {
     isPromo = true;
     promoData = special_name;
-    pricePromo = Number(special_products_price) + Number(variantPrice);
+    pricePromo = Number(special_products_price);
     discountPromo = (price - pricePromo) / price * 100
     event = `Special ${parseInt(discountPromo)}%`;
     promoExpiredTime = special_expires_date;
