@@ -58,6 +58,8 @@ const ProductCheckout = ({
   flash_sale_price,
   is_liked_product,
   products_slug,
+  variantPrice,
+  setVariantPrice,
 }) => {
 
   const product_wa = products_slug?.replace("-", "+")
@@ -164,7 +166,7 @@ const ProductCheckout = ({
 
   if (products_type == 1) {
     const [itemQty, setItemQty] = useState(0);
-    const [variantPrice, setVariantPrice] = useState(0);
+    // const [variantPrice, setVariantPrice] = useState(0);
     const [itemPrice, setItemPrice] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
     const [totalNormalPrice, setTotalNormalPrice] = useState(0);
@@ -265,7 +267,6 @@ const ProductCheckout = ({
     return (
       <>
         <VStack minW={{ base: '100%', md: '300px' }} borderColor={"gray.300"} borderWidth={"1px"} spacing={'12px'} className={"secondaryFont"} p={'1rem'} borderRadius={"12px"}>
-
           {warehouseData && warehouseData.length > 1 && (
             <Box width={"full"}>
               <Text textColor={"gray.500"} fontSize={"16px"}>

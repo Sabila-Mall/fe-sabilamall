@@ -65,7 +65,7 @@ const ProductHeader = ({
   po_status,
   promo_flash_sale,
   special_name,
-  price,
+  price: normalPrice,
   special_products_price,
   flash_sale_price,
   customers_discount,
@@ -77,6 +77,8 @@ const ProductHeader = ({
   reviews,
   is_free_shipping,
   free_shipping_data,
+  variantPrice,
+  setVariantPrice,
 }) => {
   const auth = useAuthContext();
 
@@ -90,10 +92,12 @@ const ProductHeader = ({
   let color = '';
   let bgImage = '';
 
+  let price = Number(normalPrice) + Number(variantPrice);
+
   if (products_event == 'flash_sale' && (flash_sale_price != price || flash_sale_discount > 0)) {
     isPromo = true;
     promoData = flash_sale_name
-    pricePromo = flash_sale_price;
+    pricePromo = Number(flash_sale_price) + Number(variantPrice);
     discountPromo = flash_sale_discount;
     event = flash_sale_discount == 0 ? '' : `Flash Sale ${discountPromo}%`;
     promoExpiredTime = flash_sale_expires_date;
@@ -102,13 +106,15 @@ const ProductHeader = ({
   } else if (products_event == 'special') {
     isPromo = true;
     promoData = special_name;
-    pricePromo = special_products_price;
+    pricePromo = Number(special_products_price) + Number(variantPrice);
     discountPromo = (price - special_products_price) / price * 100
     event = `Special ${parseInt(discountPromo)}%`;
     promoExpiredTime = special_expires_date;
     color = '#ED8936';
     bgImage = '/images/labels/5.svg'
   }
+
+  console.log('Debug', pricePromo);
 
   const price_product_data = { price, pricePromo, discountPromo, isPromo, event, customers_discount, products_event };
 
@@ -214,12 +220,9 @@ const ProductHeader = ({
             backgroundSize={{ base: '1000%', md: '200%' }}
             bgPosition={'center'}
           >
-            <Flex justifyContent="space-between" px="1rem" direction={{ base: 'column', md: 'row' }}>
-              <Text fontWeight={'600'}>Periode Pemesanan</Text>
-              <Flex justifyContent="left" alignItems={"center"}>
-                <IoIosCloseCircle size="1.2em" ></IoIosCloseCircle>
-                <Text fontWeight={'600'} ml={1}> Pre Order Telah Berakhir</Text>
-              </Flex>
+            <Flex justifyContent="left" alignItems={"center"}>
+              <IoIosCloseCircle size="1.2em" ></IoIosCloseCircle>
+              <Text fontWeight={'600'} ml={1}> Pre Order Telah Berakhir</Text>
             </Flex>
           </Box>
         )
