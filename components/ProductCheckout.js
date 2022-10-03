@@ -212,16 +212,19 @@ const ProductCheckout = ({
         setNumberOfItem((stock?.stock ?? 0) == 0 ? 0 : 1);
 
         const variantPrice = Number(pricePrefixColor + priceColor) + Number(pricePrefixSize + priceSize);
+        const variantPriceAfterDiscount = 0;
 
         const itemPrice = isPromo ? (Number(pricePromo) + variantPrice) : (Number(price) + variantPrice);
 
         if (products_event == 'flash_sale') {
           itemPrice = itemPrice - (itemPrice * ((discountPromo + customers_discount) / 100))
-          const variantPriceAfterDiscount = variantPrice - (variantPrice * ((discountPromo + customers_discount) / 100))
+          variantPriceAfterDiscount = variantPrice - (variantPrice * ((discountPromo + customers_discount) / 100))
         } else {
           itemPrice = itemPrice - (itemPrice * (customers_discount / 100))
-          const variantPriceAfterDiscount = variantPrice - (variantPrice * (customers_discount / 100))
+          variantPriceAfterDiscount = variantPrice - (variantPrice * (customers_discount / 100))
         }
+
+        console.log('debuaga', variantPriceAfterDiscount);
 
         setVariantPrice(variantPrice);
         setVariantPriceAfterDiscount(variantPriceAfterDiscount);
@@ -403,40 +406,64 @@ const ProductCheckout = ({
           </Box>
           <Divider orientation="horizontal" height={"1px"} />
           <Box w={'full'}>
-            <Flex
-              flexDirection={"row"}
-              alignItems={"center"}
-              justifyContent={"space-between"}
-            >
-              <Text textColor={"gray.500"} fontSize={"14px"} mr="0.5rem">
-                Tambahan Variasi
-              </Text>
-              <VStack alignItems={"flex-end"}>
-                <Text
-                  as={'del'}
-                  color={"gray.400"}
-                  fontSize="14px"
-                >
-                  Rp {formatPrice(variantPrice)}/item
-                </Text>
-              </VStack>
-            </Flex>
-            <Flex
-              flexDirection={"row"}
-              alignItems={"center"}
-              justifyContent={"end"}
-            >
-              <VStack alignItems={"flex-end"}>
-                <Text
-                  className={styles.subtotal}
-                  color={"orange.400"}
-                  fontSize="14px"
-                  fontWeight={"bold"}
-                >
-                  Rp {formatPrice(variantPriceAfterDiscount)}/item
-                </Text>
-              </VStack>
-            </Flex>
+            {
+              variantPrice > 0 && (
+                <>
+                  <Flex
+                    flexDirection={"row"}
+                    alignItems={"center"}
+                    justifyContent={"space-between"}
+                  >
+                    <Text textColor={"gray.500"} fontSize={"14px"} mr="0.5rem">
+                      Tambahan Variasi
+                    </Text>
+                    <VStack alignItems={"flex-end"}>
+                      {
+                        variantPrice != variantPriceAfterDiscount
+                          ?
+                          <Text
+                            as={'del'}
+                            color={"gray.400"}
+                            fontSize="14px"
+                          >
+                            Rp {formatPrice(variantPrice)}/item
+                          </Text>
+                          :
+                          <Text
+                            className={styles.subtotal}
+                            color={"orange.400"}
+                            fontSize="14px"
+                            fontWeight={"bold"}
+                          >
+                            Rp {formatPrice(variantPrice)}/item
+                          </Text>
+                      }
+
+                    </VStack>
+                  </Flex>
+                  {
+                    variantPrice != variantPriceAfterDiscount && (
+                      <Flex
+                        flexDirection={"row"}
+                        alignItems={"center"}
+                        justifyContent={"end"}
+                      >
+                        <VStack alignItems={"flex-end"}>
+                          <Text
+                            className={styles.subtotal}
+                            color={"orange.400"}
+                            fontSize="14px"
+                            fontWeight={"bold"}
+                          >
+                            Rp {formatPrice(variantPriceAfterDiscount)}/item
+                          </Text>
+                        </VStack>
+                      </Flex>
+                    )
+                  }
+                </>
+              )
+            }
             <Box height={'10px'} />
 
             <Flex
