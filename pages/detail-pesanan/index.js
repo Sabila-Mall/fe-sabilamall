@@ -235,19 +235,28 @@ const Pengiriman = ({ kurir, pengiriman, handler, loadingKurir }) => {
           {loadingKurir ? (
             <Spinner m="3" />
           ) : (
-            <Select
-              className="secondaryFont"
-              placeholder="Pilih jasa pengiriman"
-              onChange={(event) => {
-                handler(event.target.value);
-              }}
-            >
-              {kurir.map((jasa, index) => (
-                <option value={jasa.name} key={index}>
-                  {jasa.name} ({currencyFormat(jasa.rate)})
-                </option>
-              ))}
-            </Select>
+            <>
+              {
+                kurir
+                  ?
+                  <Select
+                    className="secondaryFont"
+                    placeholder="Pilih jasa pengiriman"
+                    onChange={(event) => {
+                      handler(event.target.value);
+                    }}
+                  >
+                    {kurir?.map((jasa, index) => (
+                      <option value={jasa.name} key={index}>
+                        {jasa.name} ({currencyFormat(jasa.rate)})
+                      </option>
+                    ))}
+                  </Select>
+                  :
+                  <Text className="primaryFont" >Kurir tidak ditemukan, silakan hubungi admin!</Text>
+              }
+
+            </>
           )}
         </Flex>
         <Flex justify="space-between">
