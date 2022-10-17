@@ -96,17 +96,23 @@ const ProductDetails = ({ initialData }) => {
   // ==== path
   let path = [];
   const breadCrumbItem = JSON.parse(dataProduct.categories ?? "[]");
-  path.push(breadCrumbItem.find((i) => i.parent_id == 0));
-
   let count_item = breadCrumbItem.length;
 
-  while (path.length != count_item) {
+  if (count_item > 0) {
+    path.push(breadCrumbItem.find((i) => i.parent_id == 0));
+  }
+
+  let while_count = count_item * count_item;
+  while (path.length != count_item || while_count != 0) {
     const data = breadCrumbItem.find((i) => i.parent_id == path[path.length - 1].categories_id);
     if (data == null) {
       break;
     }
     path.push(data)
+    while_count--;
   }
+
+  console.log(path);
 
   path = path.map((item) => {
     return {
