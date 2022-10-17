@@ -35,11 +35,11 @@ const CardProduct = ({
   const { wishlistData } = useWishlistContext();
   const [imageHeight, setImageHeight] = useState(144);
   const price = isLoggedIn
-    ? parseNumber(final_price)
-    : parseNumber(normal_price);
+    ? Number(final_price)
+    : Number(normal_price);
   const priceAfterDiscount = isLoggedIn
     ? getPriceAfterDiscount(final_price, customerdiscount)
-    : parseNumber(final_price);
+    : Number(final_price);
   const timeLeft = flash_end && calculateTimeLeft(flash_end);
   const discount =
     priceAfterDiscount && Math.round(100 - 100 * (priceAfterDiscount / price));
@@ -160,7 +160,7 @@ const CardProduct = ({
             >
               <Box className={styles.productName} mb="8px">
                 <Text fontSize="0.8em" fontWeight="400" lineHeight="16px">
-                  {name.toUpperCase()}
+                  {name?.toUpperCase()}
                 </Text>
               </Box>
               {priceAfterDiscount && priceAfterDiscount !== price && (
