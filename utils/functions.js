@@ -221,7 +221,11 @@ export const isNumber = (n) => {
 };
 
 export const parseNumber = (str) => {
-  return typeof str == "number" ? str : Number(str.slice(0, -3));
+  try {
+    return typeof str == "number" ? str : Number(str);
+  } catch (_) {
+    console.log(str);
+  }
 };
 
 export const getDeviceId = () => {
