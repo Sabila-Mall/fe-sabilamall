@@ -387,12 +387,28 @@ const ShowDetailCicilan = ({ cicilan_data }) => {
               cicilan_data.map((item) =>
                 <Box shadow={'base'} border={'1px'} borderColor={'gray.200'} borderRadius={'base'} p={3} mb={4} >
                   <Text fontWeight={'600'}>{item.promos_desc}</Text>
-                  <table style={{ 'fontSize': '14px', 'marginTop': '5px' }} className="info_free_shipping_table">
+                  <table style={{ 'fontSize': '14px', 'marginTop': '5px' }} >
                     <tbody>
                       <tr>
-                        <td style={{ whiteSpace: 'nowrap' }}>Produk Termasuk&emsp;</td>
-                        <td>:</td>
-                        <td>{item.list_products}</td>
+                        <td style={{ whiteSpace: 'nowrap' }} valign="top">Produk Termasuk&emsp;</td>
+                        <td valign="top">:</td>
+                        <td valign="top">
+                          {item.list_products.map((item2, index) =>
+                            <Link
+                              _hover={{ textStyle: "none" }}
+                              href={`/product-detail/${item2.products_slug}`}
+                              target="_blank"
+                              fontWeight={"bold"}
+                              color={"orange.400"}
+                              mr="1"
+                            >
+                              {item2.products_name}{((index + 1) == item.list_products.length ? '' : ',')}
+                            </Link>
+                          )}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colSpan={3}><hr style={{ marginTop: 10, marginBottom: 10 }} /></td>
                       </tr>
                       <tr>
                         <td style={{ whiteSpace: 'nowrap' }}>Termin 1&emsp;</td>
