@@ -34,6 +34,7 @@ import {
   IoFileTrayStacked,
   IoChevronDown,
 } from "react-icons/io5";
+import { FaPercent } from "react-icons/fa";
 import { IoTimeOutline } from "react-icons/io5";
 import { RiCalendarEventFill } from "react-icons/ri";
 import { useAuthContext } from "../contexts/authProvider";
@@ -77,6 +78,7 @@ const ProductHeader = ({
   reviews,
   is_free_shipping,
   free_shipping_data,
+  is_instalment,
 }) => {
   const auth = useAuthContext();
 
@@ -198,6 +200,14 @@ const ProductHeader = ({
             <IoTimeOutline size="1.4em" color="#ED477A" as="span" />
             <Text color="#ED477A" pl="0.5rem">
               Pre Order
+            </Text>
+          </Flex>
+        )}
+        {is_instalment != null && (
+          <Flex alignItems="center">
+            <FaPercent size="1em" color="blueviolet" as="span" />
+            <Text color="blueviolet" pl="0.5rem">
+              Cicilan
             </Text>
           </Flex>
         )}
