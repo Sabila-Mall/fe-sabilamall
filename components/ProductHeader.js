@@ -203,13 +203,8 @@ const ProductHeader = ({
             </Text>
           </Flex>
         )}
-        {is_instalment != null && (
-          <Flex alignItems="center">
-            <FaPercent size="1em" color="blueviolet" as="span" />
-            <Text color="blueviolet" pl="0.5rem">
-              Cicilan
-            </Text>
-          </Flex>
+        {is_instalment.length > 0 && (
+          <ShowDetailCicilan cicilan_data={is_instalment} />
         )}
         {is_free_shipping == 1 && (
           <ShowDetailFreeShipping free_shipping_data={free_shipping_data} />
@@ -359,6 +354,63 @@ const ShowDetailFreeShipping = ({ free_shipping_data }) => {
                     </tbody>
                   </table>
 
+                </Box>
+              )
+            }
+
+          </ModalBody>
+
+        </ModalContent>
+      </Modal>
+    </>
+  )
+}
+
+const ShowDetailCicilan = ({ cicilan_data }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  return (
+    <>
+      <Flex alignItems="center" onClick={onOpen} style={{ cursor: 'pointer' }}>
+        <FaPercent size="1em" color="blueviolet" as="span" />
+        <Text color="blueviolet" pl="0.5rem">
+          Cicilan
+        </Text>
+      </Flex>
+
+      <Modal isOpen={isOpen} onClose={onClose} size={'xl'}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Cicilan</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {
+              cicilan_data.map((item) =>
+                <Box shadow={'base'} border={'1px'} borderColor={'gray.200'} borderRadius={'base'} p={3} mb={4} >
+                  <Text fontWeight={'600'}>{item.promos_desc}</Text>
+                  <table style={{ 'fontSize': '14px', 'marginTop': '5px' }} className="info_free_shipping_table">
+                    <tbody>
+                      <tr>
+                        <td style={{ whiteSpace: 'nowrap' }}>Produk Termasuk&emsp;</td>
+                        <td>:</td>
+                        <td>{item.list_products}</td>
+                      </tr>
+                      <tr>
+                        <td style={{ whiteSpace: 'nowrap' }}>Termin 1&emsp;</td>
+                        <td>:</td>
+                        <td>{item.termin_1} | <Badge colorScheme='green'>DP 50%</Badge></td>
+                      </tr>
+                      <tr>
+                        <td style={{ whiteSpace: 'nowrap' }}>Termin 2&emsp;</td>
+                        <td>:</td>
+                        <td>{item.termin_2} | <Badge colorScheme='green'>Cicilan 25%</Badge></td>
+                      </tr>
+                      <tr>
+                        <td style={{ whiteSpace: 'nowrap' }}>Termin 3&emsp;</td>
+                        <td>:</td>
+                        <td>{item.termin_3} | <Badge colorScheme='green'>Cicilan 25%</Badge></td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </Box>
               )
             }
