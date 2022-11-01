@@ -169,7 +169,7 @@ const ProductHeader = ({
         {holiday ? (
           <Flex alignItems="center">
             <RiCalendarEventFill size="1.4em" color="#DD6B20" as="span" />
-            <Text color="orange.400" pl="0.5rem">
+            <Text color="orange.400" pl="0.25rem">
               Toko Libur
             </Text>
           </Flex>
@@ -187,7 +187,7 @@ const ProductHeader = ({
                 align="center"
                 cursor={'pointer'}
               >
-                <IoIosCheckmarkCircleOutline as="span" size="1.2em" />
+                <IoIosCheckmarkCircleOutline as="span" size="1.4em" />
                 <Text alignSelf="center">
                   {products_stock > 0 ? `Stok Tersedia (${products_stock})` : "Stok habis"}
                 </Text>
@@ -198,7 +198,7 @@ const ProductHeader = ({
         {products_jenis == 'po' && (
           <Flex alignItems="center">
             <IoTimeOutline size="1.4em" color="#ED477A" as="span" />
-            <Text color="#ED477A" pl="0.5rem">
+            <Text color="#ED477A" pl="0.25rem">
               Pre Order
             </Text>
           </Flex>
@@ -313,7 +313,7 @@ const ShowDetailFreeShipping = ({ free_shipping_data }) => {
           width="1.25em"
           height="1.25em"
         />
-        <Text color="green.400" pl="0.5rem">
+        <Text color="green.400" pl="0.25rem">
           Free Ongkir
         </Text>
       </Flex>
@@ -372,7 +372,7 @@ const ShowDetailCicilan = ({ cicilan_data }) => {
     <>
       <Flex alignItems="center" onClick={onOpen} style={{ cursor: 'pointer' }}>
         <FaPercent size="1em" color="blueviolet" as="span" />
-        <Text color="blueviolet" pl="0.5rem">
+        <Text color="blueviolet" pl="0.25rem">
           Cicilan
         </Text>
       </Flex>
