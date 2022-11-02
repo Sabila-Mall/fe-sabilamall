@@ -377,7 +377,7 @@ const ShowDetailCicilan = ({ cicilan_data }) => {
         </Text>
       </Flex>
 
-      <Modal isOpen={isOpen} onClose={onClose} size={'xl'}>
+      <Modal isOpen={isOpen} onClose={onClose} size={'2xl'}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Cicilan</ModalHeader>
@@ -390,40 +390,51 @@ const ShowDetailCicilan = ({ cicilan_data }) => {
                   <table style={{ 'fontSize': '14px', 'marginTop': '5px' }} >
                     <tbody>
                       <tr>
-                        <td style={{ whiteSpace: 'nowrap' }} valign="top">Produk Termasuk&emsp;</td>
-                        <td valign="top">:</td>
+                        <td style={{ whiteSpace: 'nowrap' }} valign="top">Produk<br></br>Cicilan&emsp;</td>
+                        <td valign="top">:&ensp;</td>
                         <td valign="top">
-                          {item.list_products.map((item2, index) =>
-                            <Link
-                              _hover={{ textStyle: "none" }}
-                              href={`/product-detail/${item2.products_slug}`}
-                              target="_blank"
-                              fontWeight={"bold"}
-                              color={"orange.400"}
-                              mr="1"
-                            >
-                              {item2.products_name}{((index + 1) == item.list_products.length ? '' : ',')}
-                            </Link>
-                          )}
+                          <table>
+                            <tbody>
+                              {item.list_products.map((item2, index) =>
+                                <tr>
+                                  <td valign="top">{(index) + 1}. </td>
+                                  <td valign="top"><Link
+                                    _hover={{ textStyle: "none" }}
+                                    href={`/product-detail/${item2.products_slug}`}
+                                    target="_blank"
+                                    fontWeight={"bold"}
+                                    color={"orange.400"}
+                                    mr="1"
+                                    mb="1"
+                                    display={'inline-block'}
+                                  >
+                                    {item2.products_name}
+                                  </Link></td>
+                                </tr>
+                              )}
+
+                            </tbody>
+                          </table>
+
                         </td>
                       </tr>
                       <tr>
                         <td colSpan={3}><hr style={{ marginTop: 10, marginBottom: 10 }} /></td>
                       </tr>
                       <tr>
+                        <td style={{ whiteSpace: 'nowrap' }}>DP&emsp;</td>
+                        <td>:&ensp;</td>
+                        <td><Badge colorScheme='green'>DP 50%</Badge></td>
+                      </tr>
+                      <tr>
                         <td style={{ whiteSpace: 'nowrap' }}>Termin 1&emsp;</td>
-                        <td>:</td>
-                        <td>{item.termin_1} | <Badge colorScheme='green'>DP 50%</Badge></td>
+                        <td>:&ensp;</td>
+                        <td>{item.termin_1} | <Badge colorScheme='green'>Cicilan 25%</Badge></td>
                       </tr>
                       <tr>
                         <td style={{ whiteSpace: 'nowrap' }}>Termin 2&emsp;</td>
-                        <td>:</td>
+                        <td>:&ensp;</td>
                         <td>{item.termin_2} | <Badge colorScheme='green'>Cicilan 25%</Badge></td>
-                      </tr>
-                      <tr>
-                        <td style={{ whiteSpace: 'nowrap' }}>Termin 3&emsp;</td>
-                        <td>:</td>
-                        <td>{item.termin_3} | <Badge colorScheme='green'>Cicilan 25%</Badge></td>
                       </tr>
                     </tbody>
                   </table>
