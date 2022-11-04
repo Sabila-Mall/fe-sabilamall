@@ -1,6 +1,8 @@
 import nookies from "nookies";
 
 import { IMAGE_HOST } from "../constants/api";
+import { deleteAllCookies } from "../utils/cookies";
+
 
 const fallbackCopyTextToClipboard = (text) => {
   var textArea = document.createElement("textarea");
@@ -244,10 +246,7 @@ export const getPriceAfterDiscount = (finalPrice, customerDiscount) => {
 
 export const logout = () => {
   localStorage.clear();
-  // clear cookie
-  document.cookie =
-    "user_id" + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;";
-  document.cookie = "token" + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;";
+  deleteAllCookies();
 
   window.location.href = "/";
 };
