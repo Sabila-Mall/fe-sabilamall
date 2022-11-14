@@ -28,9 +28,12 @@ const HomeDisplay = () => {
     category,
     handleLoadMoreProducts,
     handleFilterProducts,
+    filter
   } = useHomePageContext();
   const [scrollVisible, setScrollVisible] = useState(false);
   const { width } = useWindowSize();
+
+  console.log(products);
 
   useEffect(() => {
     const scrollLogger = () => {
@@ -147,6 +150,7 @@ const HomeDisplay = () => {
           loading={products.loading}
           handleLoadMore={handleLoadMoreProducts}
           handleFilter={handleFilterProducts}
+          filterData={filter}
         />
       </Layout>
     </>

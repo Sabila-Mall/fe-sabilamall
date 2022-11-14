@@ -103,12 +103,11 @@ const ProductDetails = ({ initialData }) => {
   }
 
   let while_count = count_item * count_item;
-  while (path.length != count_item || while_count != 0) {
+  while (path.length != count_item || while_count > 0) {
     const data = breadCrumbItem.find((i) => i.parent_id == path[path.length - 1].categories_id);
-    if (data == null) {
-      break;
+    if (data != null) {
+      path.push(data);
     }
-    path.push(data)
     while_count--;
   }
 

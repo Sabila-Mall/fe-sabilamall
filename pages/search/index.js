@@ -1,13 +1,22 @@
 import { Box, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { getAllProductsByFilters } from "../../api/Homepage";
 
-import { getSearchResult } from "../../api/Search";
 import { Layout } from "../../components/Layout";
 import LayoutProductList from "../../components/LayoutProductList";
+import { useAuthContext } from "../../contexts/authProvider";
 import { isRequestSuccess } from "../../utils/api";
 
 const Search = () => {
+  const auth = useAuthContext();
+
+  const userId = auth.userData?.id;
+  const userLevel = auth.userData?.user_level;
+  const adminId = auth.userData?.admin_id;
+  const isLoggedIn = auth.isLoggedIn;
+  const authIsLoading = auth.loading;
+
   const router = useRouter();
   const [search, setSearch] = useState({
     data: [],
@@ -22,29 +31,16 @@ const Search = () => {
     setSearch({ ...search, loading: true });
 
     const newPage = search.currentPage + 1;
-    getSearchResult(query, newPage)
+    getAllProductsByFilters(newPage, userId, '', query)
       .then((res) => {
-        if (isRequestSuccess(res)) {
-          if ((res.data.data.constructor = Object)) {
-            // Quick hack to check if the response is a dictionary instead of array
-            let temp = Object.values(res.data.data);
-            temp.pop();
-            setSearch({
-              data: search.data.concat(temp),
-              loading: false,
-              currentPage: newPage,
-              lastPage: res.data.last_page,
-            });
-          } else {
-            let temp = res.data.data;
-            temp.pop();
-            setSearch({
-              data: search.data.concat(temp),
-              loading: false,
-              currentPage: newPage,
-              lastPage: res.data.last_page,
-            });
-          }
+        if (isRequestSuccess(res.data)) {
+          let temp = res.data.data.data;
+          setSearch({
+            data: search.data.concat(temp),
+            loading: false,
+            currentPage: newPage,
+            lastPage: res.data.data.last_page,
+          });
         }
       })
       .catch((err) => {
@@ -53,44 +49,29 @@ const Search = () => {
   }
 
   useEffect(() => {
-    if (query) {
-      getSearchResult(query, 1)
-        .then((res) => {
-          if (isRequestSuccess(res)) {
-            if ((res.data.data.constructor = Object)) {
-              // Quick hack to check if the response is a dictionary instead of array
-              let temp = Object.values(res.data.data);
-              temp.pop();
-              setSearch({
-                data: temp ?? [],
-                loading: false,
-                currentPage: 1,
-                lastPage: res.data.last_page,
-              });
-            } else {
-              let temp = res.data.data;
-              temp.pop();
-              setSearch({
-                data: temp ?? [],
-                loading: false,
-                currentPage: 1,
-                lastPage: res.data.last_page,
-              });
-            }
-          } else {
-            throw "Gagal mendapatkan hasil pencarian";
-          }
-        })
-        .catch((err) => {
-          console.error(err);
+    query && !authIsLoading && getAllProductsByFilters(1, userId, '', query)
+      .then((res) => {
+        if (isRequestSuccess(res.data)) {
+          let temp = res.data.data.data;
           setSearch({
-            data: [],
+            data: temp ?? [],
             loading: false,
-            ...search,
+            currentPage: 1,
+            lastPage: res.data.data.last_page,
           });
+        } else {
+          throw "Gagal mendapatkan hasil pencarian";
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        setSearch({
+          data: [],
+          loading: false,
+          ...search,
         });
-    }
-  }, [query]);
+      });
+  }, [query, authIsLoading]);
 
   return (
     <Layout hasNavbar hasPadding>

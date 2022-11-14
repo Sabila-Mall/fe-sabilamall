@@ -354,12 +354,13 @@ const Sidebar = ({
                       Semua {item.name}
                     </AccordionPanel>
                     {subCategories &&
-                      subCategories.map((item) => {
+                      subCategories.map((item, index) => {
                         return (
                           <AccordionPanel
                             fontSize="0.75em"
                             lineHeight="150%"
                             cursor="pointer"
+                            key={index}
                             onClick={() => {
                               closeSidebar();
                               router.push(

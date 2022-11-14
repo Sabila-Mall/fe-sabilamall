@@ -17,6 +17,8 @@ import {
   SkeletonText,
   useDisclosure,
   VStack,
+  Flex,
+  Link,
 } from "@chakra-ui/react";
 import { IoArrowDown, IoChevronDown, IoFilterOutline } from "react-icons/io5";
 
@@ -30,12 +32,24 @@ const LayoutProductList = ({
   handleFilter,
   sorting = true,
   title = true,
+  filterData,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   function handleFilterWrapper(filter) {
     onClose();
     handleFilter(filter);
   }
+
+  const list_filter = [
+    { title: 'Paling Sesuai', value: '' },
+    { title: 'Urutkan (A-Z)', value: 'atoz' },
+    { title: 'Urutkan (Z-A)', value: 'ztoa' },
+    { title: 'Harga (Tertinggi-Terendah)', value: 'hightolow' },
+    { title: 'Harga (Terendah-Tertinggi)', value: 'lowtohigh' },
+    { title: 'Top Seller', value: 'topseller' },
+    { title: 'Paling Disukai', value: 'mostliked' },
+    { title: 'Produk Spesial', value: 'specials' },
+  ];
 
   return (
     <Box bg="white" pb="100px">
@@ -77,30 +91,13 @@ const LayoutProductList = ({
               <ModalContent>
                 <ModalBody>
                   <VStack align="start" spacing="1rem" justify="center">
-                    <Box onClick={() => handleFilterWrapper("")}>
-                      Paling Sesuai
-                    </Box>
-                    <Box onClick={() => handleFilterWrapper("atoz")}>
-                      Urutkan (A-Z)
-                    </Box>
-                    <Box onClick={() => handleFilterWrapper("ztoa")}>
-                      Urutkan (Z-A)
-                    </Box>
-                    <Box onClick={() => handleFilterWrapper("hightolow")}>
-                      Harga (Tertinggi-Terendah)
-                    </Box>
-                    <Box onClick={() => handleFilterWrapper("lowtohigh")}>
-                      Harga (Terendah-Tertinggi)
-                    </Box>
-                    <Box onClick={() => handleFilterWrapper("topseller")}>
-                      Top Seller
-                    </Box>
-                    <Box onClick={() => handleFilterWrapper("mostliked")}>
-                      Paling Disukai
-                    </Box>
-                    <Box onClick={() => handleFilterWrapper("specials")}>
-                      Produk Spesial
-                    </Box>
+                    {
+                      list_filter.map((item, index) =>
+                        <Box onClick={() => handleFilterWrapper("")} key={index}>
+                          {item.title}
+                        </Box>
+                      )
+                    }
                   </VStack>
                 </ModalBody>
               </ModalContent>
@@ -119,33 +116,16 @@ const LayoutProductList = ({
                 _focus={{ boxShadow: "none" }}
                 display={{ base: "none", md: "block" }}
               >
-                Urutkan Berdasarkan <Icon ml="30px" as={IoChevronDown} />
+                Urutkan Berdasarkan - {list_filter.find((item) => item.value == filterData).title} <Icon ml="30px" as={IoChevronDown} />
               </MenuButton>
               <MenuList>
-                <MenuItem onClick={() => handleFilter("")}>
-                  Paling Sesuai
-                </MenuItem>
-                <MenuItem onClick={() => handleFilter("atoz")}>
-                  Urutkan (A-Z)
-                </MenuItem>
-                <MenuItem onClick={() => handleFilter("ztoa")}>
-                  Urutkan (Z-A)
-                </MenuItem>
-                <MenuItem onClick={() => handleFilter("hightolow")}>
-                  Harga (Tertinggi-Terendah)
-                </MenuItem>
-                <MenuItem onClick={() => handleFilter("lowtohigh")}>
-                  Harga (Terendah-Tertinggi)
-                </MenuItem>
-                <MenuItem onClick={() => handleFilter("topseller")}>
-                  Top Seller
-                </MenuItem>
-                <MenuItem onClick={() => handleFilter("mostliked")}>
-                  Paling Disukai
-                </MenuItem>
-                <MenuItem onClick={() => handleFilter("specials")}>
-                  Produk Spesial
-                </MenuItem>
+                {
+                  list_filter.map((item, index) =>
+                    <MenuItem onClick={() => handleFilter(item.value)} key={index}>
+                      {item.title}
+                    </MenuItem>
+                  )
+                }
               </MenuList>
             </Menu>
           </>
@@ -155,11 +135,44 @@ const LayoutProductList = ({
         w="100%"
         position="relative"
         templateColumns={[
-          "repeat(2,1fr)",
-          "repeat(3,1fr)",
-          "repeat(4,1fr)",
-          "repeat(5,1fr)",
-          "repeat(7,1fr)",
+          "repeat(2, 1fr)",
+          "repeat(3, 1fr)",
+          "repeat(4, 1fr)",
+          "repeat(5, 1fr)",
+          "repeat(6, 1fr)",
+          "repeat(7, 1fr)",
+        ]}
+        columnGap={2}
+        rowGap={4}
+      >
+        {data.data.map((item, index) =>
+          loading ? (
+            <Box
+              key={index}
+              bg="white"
+              borderRadius="8px"
+              border="1px solid #CBD5E0"
+            >
+              <Skeleton h="10rem" />
+              <Box padding="1.5rem">
+                <SkeletonText noOfLines={2} mb="1rem" />
+                <SkeletonText noOfLines={1} />
+              </Box>
+            </Box>
+          ) : (
+            <CardProduct key={index} {...item} responsive={true} />
+          ),
+        )}
+      </Grid>
+      {/* <Grid
+        w="100%"
+        position="relative"
+        templateColumns={[
+          "repeat(2, 1fr)",
+          "repeat(3, 1fr)",
+          "repeat(4, 1fr)",
+          "repeat(5, 1fr)",
+          "repeat(7, 1fr)",
           "repeat(8, 1fr)",
         ]}
         columnGap={2}
@@ -180,12 +193,11 @@ const LayoutProductList = ({
               </Box>
             </Box>
           ) : (
-            <Box key={item.id}>
-              <CardProduct {...item} responsive={true} />
+            <Box bg={'red'} height={index == 0 ? '200px' : ''}>
             </Box>
           ),
         )}
-      </Grid>
+      </Grid> */}
       {data.currentPage !== data.lastPage && (
         <Center mt="1rem">
           <Button

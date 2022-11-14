@@ -34,6 +34,7 @@ import {
   IoNotifications,
   IoCart,
   IoFileTrayStacked,
+  IoFileTrayFull,
   IoChevronDown,
 } from "react-icons/io5";
 import { IoHomeSharp, IoReceiptSharp } from "react-icons/io5";
@@ -312,12 +313,13 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
       </Link>
 
       <Link href={"/stok"} w="fit-content">
-        <Icon
-          display={{ base: "none", md: "block" }}
-          as={IoFileTrayStacked}
-          className={styles.navbarIcon}
-          color="gray.500"
-        />
+        <Box position="relative" w="fit-content">
+          <Icon
+            as={IoFileTrayFull}
+            className={styles.navbarIcon}
+            color="gray.500"
+          />
+        </Box>
       </Link>
       <Box
         w="fit-content"
@@ -457,8 +459,8 @@ const CustomAccordion = () => {
           </Flex>
         ) : (
           <Accordion width="320px" allowToggle>
-            {category?.map((el) => (
-              <AccordionItem id={el.id}>
+            {category?.map((el, index) => (
+              <AccordionItem id={el.id} key={index}>
                 <h2>
                   <AccordionButton>
                     <Box flex="1" textAlign="left">
@@ -476,9 +478,10 @@ const CustomAccordion = () => {
                   >
                     Semua {el.name}
                   </MenuItem>
-                  {el?.sub_categories?.map((sub) => (
+                  {el?.sub_categories?.map((sub, index) => (
                     <MenuItem
                       className={styles.menuItem}
+                      key={index}
                       onClick={() =>
                         router.push(
                           `/daftar-produk?id=${sub.id}&nama=${sub.name}`,
