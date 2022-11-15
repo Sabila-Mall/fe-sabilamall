@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-const Clear = () => {
+const Refresh = () => {
     const router = useRouter();
     useEffect(() => {
         router.push("/");
@@ -9,4 +9,4 @@ const Clear = () => {
     return <></>;
 };
 
-export default Clear;
+export default Refresh;
