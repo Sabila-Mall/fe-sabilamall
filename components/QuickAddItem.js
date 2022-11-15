@@ -7,6 +7,7 @@ import {
   VStack,
   Image,
   Checkbox,
+  Box,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { createRef, useState } from "react";
