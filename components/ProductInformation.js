@@ -204,7 +204,7 @@ const ProductInformation = ({
                 fontSize="14px"
               >
                 {/* {products_description?.replace(/<[^>]+>/g, "")} */}
-                <div
+                <Box
                   dangerouslySetInnerHTML={{ __html: products_description }}
                 />
               </Text> :
@@ -220,7 +220,7 @@ const ProductInformation = ({
               `}
                 >
                   {/* {products_description?.replace(/<[^>]+>/g, "")} */}
-                  {products_description ? <div
+                  {products_description ? <Box
                     dangerouslySetInnerHTML={{ __html: products_description }}
                   /> : <Text id="descriptionText"
                     color="gray.600"

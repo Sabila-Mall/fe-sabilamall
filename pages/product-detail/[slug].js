@@ -22,6 +22,7 @@ import { ShareProduct } from "../../components/ShareProduct";
 import { IMAGE_HOST } from "../../constants/api";
 import { useAuthContext } from "../../contexts/authProvider";
 import { isNumber, getPriceAfterDiscount, getImageLink } from "../../utils/functions";
+import { getAllProductsByFilters } from "../../api/Homepage";
 
 const ProductDetails = ({ initialData }) => {
   const auth = useAuthContext();
@@ -78,8 +79,8 @@ const ProductDetails = ({ initialData }) => {
 
   const getRelatedProducts = async () => {
     try {
-      const res = await getRelatedProduct({ products_slug: slug, customers_id: userId });
-      setRelatedProducts(res);
+      const res = await getAllProductsByFilters(1, userId, 'related', null, null, slug, 0, 999999999, 6);
+      setRelatedProducts(res.data.data.data);
     } catch (e) {
     }
   }
@@ -103,10 +104,13 @@ const ProductDetails = ({ initialData }) => {
   }
 
   let while_count = count_item * count_item;
-  while (path.length != count_item || while_count > 0) {
+  while (while_count != 0) {
     const data = breadCrumbItem.find((i) => i.parent_id == path[path.length - 1].categories_id);
     if (data != null) {
       path.push(data);
+    }
+    if (path.length == count_item) {
+      break;
     }
     while_count--;
   }

@@ -68,7 +68,7 @@ export const Layout = ({
 Layout.propTypes = {
   hasNavbar: PropTypes.bool,
   hasBreadCrumb: PropTypes.bool,
-  breadCrumbItem: PropTypes.object,
+  breadCrumbItem: PropTypes.array,
   hasFooter: PropTypes.bool,
   sticky: PropTypes.bool,
   noFooter: PropTypes.bool,

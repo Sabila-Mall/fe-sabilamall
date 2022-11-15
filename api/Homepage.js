@@ -20,13 +20,14 @@ export const getFlashSaleProducts = (page = 1, userId) => {
   });
 };
 
-export const getAllProductsByFilters = (page = 1, userId, type = '', search = '', categories_id = '', min_price = 0, max_price = 999999999, paginate = 20) => {
+export const getAllProductsByFilters = (page = 1, userId, type = '', search = '', categories_id = '', products_slug = '', min_price = 0, max_price = 999999999, paginate = 20) => {
   return axios.post(HOST + "/api/product/get_all_by_filters", {
     type: type,
     page: page,
     customers_id: userId,
     search: search,
     categories_id: categories_id,
+    products_slug: products_slug,
     min_price: min_price,
     max_price: max_price,
     paginate: paginate,

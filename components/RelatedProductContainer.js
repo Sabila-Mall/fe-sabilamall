@@ -20,33 +20,24 @@ const RelatedProductContainer = ({ relatedProducts }) => {
         </Heading>
       </Stack>
       <Grid
-        templateColumns={{ base: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)', lg: 'repeat(6, 1fr)' }}
-        gap="24px"
-        mt="16px"
-        overflowX="auto"
+        templateColumns={[
+          "repeat(2, 1fr)",
+          "repeat(3, 1fr)",
+          "repeat(4, 1fr)",
+          "repeat(5, 1fr)",
+          "repeat(6, 1fr)",
+          "repeat(6, 1fr)",
+        ]}
+        columnGap={2}
+        rowGap={4}
+        display={'inline-grid'}
       >
         {relatedProducts.map((item, index) => {
-
-          const final_price = item.products_event == 'flash_sale' ? item.flash_sale_price : item.price;
-          const data = {
-            image_path: item.image_medium,
-            name: item.products_name,
-            flash_end: item.flash_sale_expires_date,
-            products_id: item.products_id,
-            products_slug: item.products_slug,
-            normal_price: item.price,
-            final_price: final_price,
-            customerdiscount: item.customers_discount,
-            isfreeshipping: item.is_free_shipping,
-            jenis: item.products_jenis,
-          };
           return (
-            <>
-              <CardProduct
-                {...data}
-                key={index}
-              />
-            </>
+            <CardProduct
+              {...item}
+              key={index}
+            />
           )
         })}
       </Grid>

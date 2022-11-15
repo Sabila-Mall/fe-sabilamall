@@ -57,7 +57,7 @@ export const HomepageProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    !authIsLoading && getAllProductsByFilters(1, userId, 'flash_sale', null, null, 0, 999999999, 10)
+    !authIsLoading && getAllProductsByFilters(1, userId, 'flash_sale', null, null, null, 0, 999999999, 10)
       .then((res) => {
         if (isRequestSuccess(res.data)) {
           setFlashSaleProducts({
@@ -83,7 +83,7 @@ export const HomepageProvider = ({ children }) => {
   }, [authIsLoading, userLevel]);
 
   useEffect(() => {
-    !authIsLoading && getAllProductsByFilters(1, userId, 'special', null, null, 0, 999999999, 10)
+    !authIsLoading && getAllProductsByFilters(1, userId, 'special', null, null, null, 0, 999999999, 10)
       .then((res) => {
         if (isRequestSuccess(res.data)) {
           setDiscountProducts({

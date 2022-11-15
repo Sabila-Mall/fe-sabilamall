@@ -437,7 +437,7 @@ const CustomAccordion = () => {
       setCategory(e.data?.data);
       setLoading(false);
     });
-  }, []);
+  }, [null]);
 
   return (
     <Menu>
@@ -538,7 +538,7 @@ const Navbar = () => {
     return () => {
       window.removeEventListener("resize", setNavbarWidth);
     };
-  }, []);
+  }, [null]);
 
   return (
     <>

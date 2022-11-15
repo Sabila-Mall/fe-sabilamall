@@ -366,17 +366,19 @@ const ProductCheckout = ({
               alignItems={"center"}
             >
               <HStack>
-                <IconButton
-                  aria-label={"Decrease number of items"}
-                  as={IoRemoveCircleOutline}
-                  w={"24px"}
-                  h={"24px"}
-                  bgColor="transparent"
-                  color={"gray.400"}
-                  disabled={numberOfItem == 0}
-                  _hover={{ cursor: "pointer" }}
-                  onClick={() => handleModifyNumberOfItem("decrease")}
-                />
+                <Box>
+                  <IconButton
+                    aria-label={"Decrease number of items"}
+                    as={IoRemoveCircleOutline}
+                    w={"24px"}
+                    h={"24px"}
+                    bgColor="transparent"
+                    color={"gray.400"}
+                    disabled={numberOfItem == 0}
+                    _hover={{ cursor: "pointer" }}
+                    onClick={() => handleModifyNumberOfItem("decrease")}
+                  />
+                </Box>
                 <Input
                   minW="3.5rem"
                   maxW="5rem"
@@ -642,17 +644,19 @@ const ProductCheckout = ({
               alignItems={"center"}
             >
               <HStack>
-                <IconButton
-                  aria-label={"Decrease number of items"}
-                  as={IoRemoveCircleOutline}
-                  w={"24px"}
-                  h={"24px"}
-                  bgColor="transparent"
-                  color={"gray.400"}
-                  disabled={numberOfItem == 0}
-                  _hover={{ cursor: "pointer" }}
-                  onClick={() => handleModifyNumberOfItem("decrease")}
-                />
+                <Box>
+                  <IconButton
+                    aria-label={"Decrease number of items"}
+                    as={IoRemoveCircleOutline}
+                    w={"24px"}
+                    h={"24px"}
+                    bgColor="transparent"
+                    color={"gray.400"}
+                    disabled={numberOfItem == 0}
+                    _hover={{ cursor: "pointer" }}
+                    onClick={() => handleModifyNumberOfItem("decrease")}
+                  />
+                </Box>
                 <Input
                   minW="3.5rem"
                   maxW="5rem"

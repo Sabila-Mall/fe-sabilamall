@@ -201,14 +201,16 @@ const QuickAddItem = ({ product, my }) => {
             spacing={{ base: "2rem", md: "8rem" }}
           >
             <HStack>
-              <IconButton
-                aria-label={"Remove Item"}
-                icon={<IoRemoveCircleOutline size={"1.5rem"} />}
-                variant={"ghost"}
-                color={quantity === 1 ? "gray.200" : "gray.400"}
-                _hover={{ cursor: "pointer" }}
-                onClick={() => handleModifyNumberOfItem("decrease")}
-              />
+              <Box>
+                <IconButton
+                  aria-label={"Remove Item"}
+                  icon={<IoRemoveCircleOutline size={"1.5rem"} />}
+                  variant={"ghost"}
+                  color={quantity === 1 ? "gray.200" : "gray.400"}
+                  _hover={{ cursor: "pointer" }}
+                  onClick={() => handleModifyNumberOfItem("decrease")}
+                />
+              </Box>
               <Input
                 minW="3.5rem"
                 maxW="5rem"

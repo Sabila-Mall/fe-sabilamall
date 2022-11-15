@@ -597,7 +597,7 @@ const PriceValue = ({ as, price, isDiscount, infoDiscount, size, bold = 300, isP
                 py="2px"
                 borderRadius="4px"
               >
-                <span>{infoDiscount}</span>
+                {infoDiscount}
               </Text>
             </Box>
           )
