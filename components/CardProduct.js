@@ -65,7 +65,7 @@ const CardProduct = ({
       text_discount = `${customers_discount}%`;
     }
   } else if (products_event == 'special') {
-    text_promo_price = 'Special Price';
+    text_promo_price = 'S Price';
     final_price = promo_price - (promo_price * (customers_discount / 100))
     final_discount = customers_discount;
     text_discount = `${customers_discount}%`;

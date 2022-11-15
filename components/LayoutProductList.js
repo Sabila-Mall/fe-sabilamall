@@ -93,7 +93,7 @@ const LayoutProductList = ({
                   <VStack align="start" spacing="1rem" justify="center">
                     {
                       list_filter.map((item, index) =>
-                        <Box onClick={() => handleFilterWrapper("")} key={index}>
+                        <Box onClick={() => handleFilterWrapper(item.value)} key={index}>
                           {item.title}
                         </Box>
                       )
