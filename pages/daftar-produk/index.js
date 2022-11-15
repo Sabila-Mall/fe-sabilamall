@@ -41,7 +41,7 @@ const DaftarProduk = () => {
     setProducts({ ...products, loading: true });
 
     const newPage = products.currentPage + 1;
-    getAllProductsByFilters(newPage, customerId, 'category', null, categoryId, null, null, null, null)
+    getAllProductsByFilters(newPage, userId, 'category', null, categoryId, null, null, null, null)
       .then((res) => {
         setProducts({
           data: products.data.concat(res.data.data.data),
@@ -58,7 +58,7 @@ const DaftarProduk = () => {
   }
 
   useEffect(() => {
-    categoryId && !authIsLoading && getAllProductsByFilters(1, customerId, 'category', null, categoryId, null, null, null, null)
+    categoryId && !authIsLoading && getAllProductsByFilters(1, userId, 'category', null, categoryId, null, null, null, null)
       .then((res) => {
         setProducts({
           data: res.data.data.data,
