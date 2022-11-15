@@ -170,7 +170,7 @@ const SearchedElement = ({ isSearched, setIsSearched }) => {
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      if (searchQuery.current.valueOf()) router.push(`/search?q=${searchQuery.current.valueOf()}`);
+      if (searchQuery.current.value) router.push(`/search?q=${searchQuery.current.value}`);
     }
   };
 
@@ -198,7 +198,7 @@ const SearchedElement = ({ isSearched, setIsSearched }) => {
           display={isSearched ? "flex" : "none"}
           alignItems="center"
           onClick={() => {
-            if (searchQuery.current.valueOf()) router.push(`/search?q=${searchQuery.current.valueOf()}`);
+            if (searchQuery.current.value) router.push(`/search?q=${searchQuery.current.value}`);
           }}
         />
         <Input
@@ -516,7 +516,7 @@ const Navbar = () => {
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      if (searchQuery.current.valueOf()) router.push(`/search?q=${searchQuery.current.valueOf()}`);
+      if (searchQuery.current.value) router.push(`/search?q=${searchQuery.current.value}`);
     }
   };
 
@@ -589,7 +589,7 @@ const Navbar = () => {
                     color="orange.400"
                     ml="12px"
                     onClick={() => {
-                      if (searchQuery.current.valueOf()) router.push(`/search?q=${searchQuery.current.valueOf()}`);
+                      if (searchQuery.current.value) router.push(`/search?q=${searchQuery.current.value}`);
                     }}
                   />
                 }
