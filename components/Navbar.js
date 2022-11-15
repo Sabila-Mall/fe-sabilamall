@@ -165,12 +165,12 @@ const Overlay = ({ isSearched, isMainMenu, handleClickOverlay }) => (
 );
 
 const SearchedElement = ({ isSearched, setIsSearched }) => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const searchQuery = useRef("");
   const router = useRouter();
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      if (searchQuery) router.push(`/search?q=${searchQuery}`);
+      if (searchQuery.current.valueOf()) router.push(`/search?q=${searchQuery.current.valueOf()}`);
     }
   };
 
@@ -198,7 +198,7 @@ const SearchedElement = ({ isSearched, setIsSearched }) => {
           display={isSearched ? "flex" : "none"}
           alignItems="center"
           onClick={() => {
-            if (searchQuery) router.push(`/search?q=${searchQuery}`);
+            if (searchQuery.current.valueOf()) router.push(`/search?q=${searchQuery.current.valueOf()}`);
           }}
         />
         <Input
@@ -211,8 +211,7 @@ const SearchedElement = ({ isSearched, setIsSearched }) => {
           borderRadius="12px"
           borderWidth="0"
           transition="width 0.8s, padding-left 0.8s,  background-color 0s, visibility 0s"
-          value={searchQuery}
-          onChange={(event) => setSearchQuery(event.target.value)}
+          ref={searchQuery}
           onKeyDown={(event) => handleKeyDown(event)}
         />
       </InputGroup>
@@ -511,12 +510,12 @@ const Navbar = () => {
   const onDrawerOpen = drawerDisclosure.onOpen;
   const onDrawerClose = drawerDisclosure.onClose;
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const searchQuery = useRef("");
   const router = useRouter();
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      if (searchQuery) router.push(`/search?q=${searchQuery}`);
+      if (searchQuery.current.valueOf()) router.push(`/search?q=${searchQuery.current.valueOf()}`);
     }
   };
 
@@ -589,7 +588,7 @@ const Navbar = () => {
                     color="orange.400"
                     ml="12px"
                     onClick={() => {
-                      if (searchQuery) router.push(`/search?q=${searchQuery}`);
+                      if (searchQuery.current.valueOf()) router.push(`/search?q=${searchQuery.current.valueOf()}`);
                     }}
                   />
                 }
@@ -602,8 +601,7 @@ const Navbar = () => {
                 bg="gray.100"
                 pl="50px"
                 focusBorderColor="gray.100"
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
+                ref={searchQuery}
                 onKeyDown={(event) => handleKeyDown(event)}
               />
             </InputGroup>
