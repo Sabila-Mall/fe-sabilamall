@@ -33,8 +33,6 @@ const HomeDisplay = () => {
   const [scrollVisible, setScrollVisible] = useState(false);
   const { width } = useWindowSize();
 
-  console.log(products);
-
   useEffect(() => {
     const scrollLogger = () => {
       if (window.pageYOffset > window.innerHeight / 3) {

@@ -114,8 +114,6 @@ const ProductHeader = ({
     bgImage = '/images/labels/5.svg'
   }
 
-  console.log('Debug', pricePromo);
-
   const price_product_data = { price, pricePromo, discountPromo, isPromo, event, customers_discount, products_event };
 
   if (products_event != '') {

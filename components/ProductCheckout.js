@@ -224,8 +224,6 @@ const ProductCheckout = ({
           variantPriceAfterDiscount = variantPrice - (variantPrice * (customers_discount / 100))
         }
 
-        console.log('debuaga', variantPriceAfterDiscount);
-
         setVariantPrice(variantPrice);
         setVariantPriceAfterDiscount(variantPriceAfterDiscount);
 

@@ -115,8 +115,6 @@ const ProductDetails = ({ initialData }) => {
     while_count--;
   }
 
-  console.log(path);
-
   path = path.map((item) => {
     return {
       name: item.categories_name,
