@@ -70,36 +70,36 @@ const Banner = ({ data, loading }) => {
           {...settings}
         >
           {width <= 576
-            ? data.map((each) => (
+            ? data.map((each, index) => (
+              <Box
+                key={index}
+                display="flex !important"
+                justifyContent="center"
+                onClick={() => router.push(each.link)}
+              >
                 <Box
-                  key={data?.id}
-                  display="flex !important"
-                  justifyContent="center"
-                  onClick={() => router.push(each.link)}
-                >
-                  <Box
-                    boxSizing="border-box"
-                    width={0.9 * window.innerWidth + "px"}
-                    height={(0.9 / 3) * window.innerWidth + "px"}
-                    className="imageRound"
-                    ml={{ base: "0.25rem", xl: "0.5rem" }}
-                    mr={{ base: "0.25rem", xl: "0.5rem" }}
-                    backgroundImage={`url(${getImageLink(each.image_path)})`}
-                    backgroundPosition="center"
-                    backgroundSize="cover"
-                  />
-                </Box>
-              ))
-            : data.map((each) => (
-                <Img
-                  onClick={() => router.push(each.url)}
+                  boxSizing="border-box"
+                  width={0.9 * window.innerWidth + "px"}
+                  height={(0.9 / 3) * window.innerWidth + "px"}
                   className="imageRound"
-                  src={getImageLink(each.image_path)}
-                  pl={{ base: "0.2rem", xl: "0.5rem" }}
-                  pr={{ base: "0.2rem", xl: "0.5rem" }}
-                  key={each.id}
+                  ml={{ base: "0.25rem", xl: "0.5rem" }}
+                  mr={{ base: "0.25rem", xl: "0.5rem" }}
+                  backgroundImage={`url(${getImageLink(each.image_path)})`}
+                  backgroundPosition="center"
+                  backgroundSize="cover"
                 />
-              ))}
+              </Box>
+            ))
+            : data.map((each, index) => (
+              <Img
+                onClick={() => router.push(each.url)}
+                className="imageRound"
+                src={getImageLink(each.image_path)}
+                pl={{ base: "0.2rem", xl: "0.5rem" }}
+                pr={{ base: "0.2rem", xl: "0.5rem" }}
+                key={index}
+              />
+            ))}
         </Slider>
       </Box>
       <Box

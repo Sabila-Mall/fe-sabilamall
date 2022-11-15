@@ -314,6 +314,7 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
       <Link href={"/stok"} w="fit-content">
         <Box position="relative" w="fit-content">
           <Icon
+            display={{ base: "none", md: "block" }}
             as={IoFileTrayFull}
             className={styles.navbarIcon}
             color="gray.500"
