@@ -208,7 +208,7 @@ const ProductCheckout = ({
     const getStock = () => {
       if (sizeId != '' && colorId != '') {
         const stock = stockData.find((item) => item.options_values_color_id == colorId && item.options_values_size_id == sizeId && item.warehouse_id == warehouseId);
-        setStock(stock?.stock ?? 0);
+        setStock(stock?.stock != null && stock?.stock >= 0 ? stock?.stock : 0);
         setNumberOfItem((stock?.stock ?? 0) == 0 ? 0 : 1);
 
         const variantPrice = Number(pricePrefixColor + priceColor) + Number(pricePrefixSize + priceSize);
@@ -511,7 +511,7 @@ const ProductCheckout = ({
             fontWeight={"bold"}
             className={"primaryFont"}
             _hover={{ bgColor: "red.600" }}
-            isDisabled={(!stock || !numberOfItem)}
+            isDisabled={(numberOfItem <= 0)}
             onClick={() => {
               if (!auth.isLoggedIn)
                 return callToast({ title: "Silakan login terlebih dahulu" });
@@ -555,7 +555,7 @@ const ProductCheckout = ({
 
     const getStock = () => {
       const stock = stockData.find((item) => item.warehouse_id == warehouseId);
-      setStock(stock?.stock ?? 0);
+      setStock(stock?.stock != null && stock?.stock >= 0 ? stock?.stock : 0);
       setNumberOfItem((stock?.stock ?? 0) <= 0 ? 0 : 1);
 
       const itemPrice = isPromo ? Number(pricePromo) : Number(price);
@@ -726,7 +726,7 @@ const ProductCheckout = ({
             fontWeight={"bold"}
             className={"primaryFont"}
             _hover={{ bgColor: "red.600" }}
-            isDisabled={(!stock || !numberOfItem)}
+            isDisabled={(numberOfItem <= 0)}
             onClick={() => {
               if (!auth.isLoggedIn)
                 return callToast({ title: "Silakan login terlebih dahulu" });

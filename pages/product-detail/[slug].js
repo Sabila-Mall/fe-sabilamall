@@ -103,25 +103,34 @@ const ProductDetails = ({ initialData }) => {
     path.push(breadCrumbItem.find((i) => i.parent_id == 0));
   }
 
-  let while_count = count_item * count_item;
-  while (while_count != 0) {
-    const data = breadCrumbItem.find((i) => i.parent_id == path[path.length - 1].categories_id);
-    if (data != null) {
-      path.push(data);
+  if (path.length > 0) {
+    let while_count = count_item * count_item;
+    while (while_count != 0) {
+      const data = breadCrumbItem.find((i) => i.parent_id == path[path.length - 1].categories_id);
+      if (data != null) {
+        path.push(data);
+      }
+      if (path.length == count_item) {
+        break;
+      }
+      while_count--;
     }
-    if (path.length == count_item) {
-      break;
-    }
-    while_count--;
-  }
-
-  path = path.map((item) => {
-    return {
-      name: item.categories_name,
+    path = path.map((item) => {
+      return {
+        name: item.categories_name,
+        link: "/",
+        isOnPage: false,
+      }
+    });
+  } else {
+    path = [{
+      name: 'Home',
       link: "/",
       isOnPage: false,
-    }
-  });
+    }]
+  }
+
+
   // ========================
 
   const tempHeadImage = dataProduct.products_image.split("/");
