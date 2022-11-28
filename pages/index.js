@@ -24,6 +24,7 @@ const HomeDisplay = () => {
     products,
     flashSaleProducts,
     discountProducts,
+    instalmentProducts,
     banner,
     category,
     handleLoadMoreProducts,
@@ -134,6 +135,18 @@ const HomeDisplay = () => {
           data={discountProducts.data}
           headingText="Discount"
           loading={discountProducts.loading}
+        />
+        <Divider
+          orientation="horizontal"
+          w="100%"
+          colorScheme="gray"
+          my="1.5rem"
+        />
+        <LayoutSaleProducts
+          data={instalmentProducts.data}
+          headingText="Cicilan"
+          loading={instalmentProducts.loading}
+          url_detail={'/product-cicilan'}
         />
         <Divider
           orientation="horizontal"

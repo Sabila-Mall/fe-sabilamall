@@ -37,6 +37,13 @@ export const HomepageProvider = ({ children }) => {
     lastPage: Number.MAX_SAFE_INTEGER,
   });
 
+  const [instalmentProducts, setInstalmentProducts] = useState({
+    data: new Array(8).fill(0),
+    loading: true,
+    currentPage: 1,
+    lastPage: Number.MAX_SAFE_INTEGER,
+  });
+
   const [banner, setBanner] = useState({
     data: [],
     loading: true,
@@ -77,6 +84,32 @@ export const HomepageProvider = ({ children }) => {
           data: [],
           loading: false,
           ...flashSaleProducts,
+        });
+      });
+
+  }, [authIsLoading, userLevel]);
+
+  useEffect(() => {
+    !authIsLoading && getAllProductsByFilters(1, userId, 'instalment', null, null, null, 0, 999999999, 10)
+      .then((res) => {
+        if (isRequestSuccess(res.data)) {
+          setInstalmentProducts({
+            data: res.data.data.data ?? [],
+            loading: false,
+            currentPage: 1,
+            lastPage: res.data.data.last_page,
+          });
+        } else {
+          throw "Gagal mendapatkan produk cicilan";
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        errorToast(err);
+        setInstalmentProducts({
+          data: [],
+          loading: false,
+          ...instalmentProducts,
         });
       });
 
@@ -200,6 +233,7 @@ export const HomepageProvider = ({ children }) => {
     products,
     flashSaleProducts,
     discountProducts,
+    instalmentProducts,
     banner,
     category,
     handleFilterProducts,

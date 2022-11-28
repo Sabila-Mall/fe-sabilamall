@@ -11,8 +11,9 @@ import CardProduct from "./CardProduct";
 
 const px = { base: "1rem", md: "1.5rem", lg: "3rem", xl: "50px" };
 
-const LayoutSaleProducts = ({ data, loading, headingText, hasBackground }) => {
+const LayoutSaleProducts = ({ data, loading, headingText, hasBackground, url_detail }) => {
   const [display, setDisplay] = useState("none");
+  const url_detail_2 = url_detail ?? `/product-sale?type=${headingText.toLowerCase().replace(" ", "-")}`;
   const { width } = useWindowSize();
   const width_2 = width ?? 768;
   let ref = null;
@@ -161,9 +162,7 @@ const LayoutSaleProducts = ({ data, loading, headingText, hasBackground }) => {
           cursor="pointer"
         >
           <Link
-            href={`/product-sale?type=${headingText
-              .toLowerCase()
-              .replace(" ", "-")}`}
+            href={url_detail_2}
           >
             <Text
               color={hasBackground ? "white" : "black"}
