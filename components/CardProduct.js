@@ -28,6 +28,7 @@ const CardProduct = ({
   responsive,
   isfreeshipping,
   jenis,
+  defaultStock
 }) => {
   const { isLoggedIn, userData } = useAuthContext();
   const { wishlistData } = useWishlistContext();
@@ -65,6 +66,12 @@ const CardProduct = ({
     }
     setLiked((prev) => !prev);
   };
+
+  if (defaultStock >= 0) {
+    defaultStock = defaultStock;
+  } else {
+    defaultStock = -1;
+  }
 
   useEffect(() => {
     function handleResize() {
@@ -216,6 +223,17 @@ const CardProduct = ({
                   )}
                 </Flex>
               </Box>
+              {defaultStock >= 0 && (
+                <Box
+                  color={defaultStock > 0 ? "green.400" : "red.400"}
+                  direction="row"
+                  align="right"
+                >
+                  <Text alignSelf="right">
+                    {defaultStock > 0 ? "" : "Stok habis"}
+                  </Text>
+                </Box>
+              )}
               {isfreeshipping !== 0 && (
                 // <Icon
                 //   width="1.3em"
