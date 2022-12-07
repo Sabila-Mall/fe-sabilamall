@@ -20,7 +20,7 @@ import { useCartContext } from "../contexts/cartProvider";
 import { useWindowSize } from "../hooks/useWindowSize";
 import { currencyFormat, formatNumber, getImageLink } from "../utils/functions";
 
-const CheckoutProduct = ({ product }) => {
+const CheckoutProduct = ({ product, ckData }) => {
   const { width } = useWindowSize();
   const isSmartphone = width < 768;
 
@@ -29,7 +29,7 @@ const CheckoutProduct = ({ product }) => {
   const { editCartItemNotes } = useCartContext();
 
   const gambarURL = product.products_image_path_medium;
-  const discount = Number(product.customers_discount);
+  let discount = Number(product.customers_discount);
   const beratAdd = Number(product.varian.reduce((sum, item) => sum + parseInt(item.values_weight), 0));
   const berat = Number(product.products_weight);
   const gudang = product.origincity;
@@ -39,6 +39,13 @@ const CheckoutProduct = ({ product }) => {
   const jumlah = product.customers_basket_quantity;
   const catatan = product.customers_basket_notes;
   const customerBasket = product?.customers_basket_id;
+
+  const is_promo_buyxy = ckData?.is_promo_buyxy;
+  const disc_buyxy_customers = ckData?.disc_buyxy_customers;
+  const disc_buyxy_manufacturers = ckData?.disc_buyxy_manufacturers;
+  if (is_promo_buyxy == true) {
+    discount = disc_buyxy_customers;
+  }
 
   let deskripsiArray = [];
   let deskripsi;

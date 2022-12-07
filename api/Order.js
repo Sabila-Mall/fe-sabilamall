@@ -55,6 +55,18 @@ export const getHandlingFeeAdminDiscount = () => {
   return axios.post(HOST + "/api/order/get_handling_fee_admin_discount");
 }
 
+export const apiCheckPromoBuyXYGetDisc = async (list_product, customers_id, vendors_id) => {
+  let device_id = getDeviceId();
+  const res = await axios.post(HOST + "/api/order/check_promo_buyxy_get_disc", {
+    list_product,
+    customers_id,
+    device_id,
+    vendors_id,
+  });
+  const data = await res.data;
+  return data;
+}
+
 export const getKurir = (
   customerId,
   delivery_id,

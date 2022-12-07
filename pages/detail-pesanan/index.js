@@ -1,5 +1,6 @@
 import { Box, Flex, Text } from "@chakra-ui/layout";
 import {
+  Alert,
   Button,
   Checkbox,
   Grid,
@@ -73,6 +74,7 @@ const RingkasanPesanan = () => {
   const { checkoutData } = useCheckoutContext();
 
   let products = [];
+  let ckData;
 
   if (typeof window !== "undefined") {
     const localCheckoutJson = localStorage.getItem("selectedProduct");
@@ -80,6 +82,7 @@ const RingkasanPesanan = () => {
       isValidJson(localCheckoutJson) && JSON.parse(localCheckoutJson);
     if (localCheckout) {
       products = localCheckout.products;
+      ckData = localCheckout;
     }
   }
   return (
@@ -185,9 +188,28 @@ const RingkasanPesanan = () => {
           </Grid>
         )}
         {products.map((produk) => (
-          <CheckoutProduct key={produk.customers_basket_id} product={produk} />
+          <CheckoutProduct key={produk.customers_basket_id} product={produk} ckData={ckData} />
         ))}
       </VStack>
+      {ckData?.is_promo_buyxy &&
+        <Box
+          mt="1rem"
+          padding="1rem"
+          borderRadius="0.5rem"
+          border="1px"
+          borderColor="red.200"
+          bg="red.50"
+          color="red.500"
+          className="primaryFont"
+        >
+          <Text color="#e53e3e" fontSize="1rem" fontWeight="bold">
+            Selamat Kamu Mendapatkan Promo!
+          </Text>
+          <Text color="#e53e3e" fontSize="0.75rem" fontWeight="bold">
+            {ckData?.promo_buyxy_desc}
+          </Text>
+        </Box>
+      }
     </>
   );
 };

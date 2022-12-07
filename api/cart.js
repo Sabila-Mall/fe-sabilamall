@@ -15,6 +15,18 @@ export const apiGetCartByCustomerID = async (customers_id) => {
   return data;
 };
 
+
+export const apiGetPromoBuyXYGetDisc = async (dataPost) => {
+  let device_id = getDeviceId();
+
+  const res = await axios.post(HOST + "/api/cart/get_cart_by_customer_2", {
+    customers_id,
+    device_id,
+  });
+  const data = await res.data?.data;
+  return data;
+}
+
 export const addCart = async (dataPost) => {
   let device_id = getDeviceId();
   try {
