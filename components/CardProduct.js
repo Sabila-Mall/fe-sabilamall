@@ -102,12 +102,6 @@ const CardProduct = ({
     setIsLikedProduct((val) => !val);
   };
 
-  if (defaultStock >= 0) {
-    defaultStock = defaultStock;
-  } else {
-    defaultStock = -1;
-  }
-
   useEffect(() => {
     function handleResize() {
       let width = responsive
