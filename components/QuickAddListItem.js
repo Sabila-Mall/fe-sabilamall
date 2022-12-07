@@ -25,7 +25,6 @@ const QuickAddListItem = () => {
                 {el.keranjang.map((elemenKeranjang, index) => {
                   return (
                     <QuickAddItem key={index} product={elemenKeranjang} my="1rem" />
-
                   )
                 })}
               </>

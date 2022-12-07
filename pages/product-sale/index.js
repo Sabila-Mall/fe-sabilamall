@@ -4,8 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import {
-  getDiscountProducts,
-  getFlashSaleProducts,
+  getAllProductsByFilters,
 } from "../../api/Homepage";
 import { Layout } from "../../components/Layout";
 import LayoutProductList from "../../components/LayoutProductList";
@@ -15,7 +14,7 @@ import {
 } from "../../contexts/homepageProvider";
 import { isRequestSuccess } from "../../utils/api";
 import { titleCase } from "../../utils/functions";
-import {useAuthContext} from "../../contexts/authProvider";
+import { useAuthContext } from "../../contexts/authProvider";
 
 const SaleProductsDisplay = () => {
   const router = useRouter();
@@ -28,8 +27,13 @@ const SaleProductsDisplay = () => {
   });
   const type = router.query.type;
 
-  const {userData} = useAuthContext();
-  const userId = userData?.id;
+  const auth = useAuthContext();
+
+  const userId = auth.userData?.id;
+  const userLevel = auth.userData?.user_level;
+  const adminId = auth.userData?.admin_id;
+  const isLoggedIn = auth.isLoggedIn;
+  const authIsLoading = auth.loading;
 
   const toast = useToast();
   const errorToast = (errMessage) => {
@@ -47,9 +51,9 @@ const SaleProductsDisplay = () => {
     const newPage = products.currentPage + 1;
     let response = null;
     if (type === "flash-sale") {
-      response = getFlashSaleProducts(newPage, userId);
+      response = getAllProductsByFilters(newPage, userId, 'flash_sale');
     } else if (type === "discount") {
-      response = getDiscountProducts(newPage, userId);
+      response = getAllProductsByFilters(newPage, userId, 'special');
     }
 
     if (response) {
@@ -72,14 +76,14 @@ const SaleProductsDisplay = () => {
   }
 
   useEffect(() => {
-    if (type) {
+    if (type && !authIsLoading) {
       if (type === "discount" && discountProducts) {
         setProducts(discountProducts);
       } else if (type === "flash-sale" && flashSaleProducts) {
         setProducts(flashSaleProducts);
       }
     }
-  }, [type, flashSaleProducts, discountProducts]);
+  }, [type, flashSaleProducts, discountProducts, authIsLoading, userLevel]);
 
   return (
     <Layout

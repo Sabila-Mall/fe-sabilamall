@@ -34,6 +34,7 @@ import {
   IoNotifications,
   IoCart,
   IoFileTrayStacked,
+  IoFileTrayFull,
   IoChevronDown,
 } from "react-icons/io5";
 import { IoHomeSharp, IoReceiptSharp } from "react-icons/io5";
@@ -164,12 +165,12 @@ const Overlay = ({ isSearched, isMainMenu, handleClickOverlay }) => (
 );
 
 const SearchedElement = ({ isSearched, setIsSearched }) => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const searchQuery = useRef("");
   const router = useRouter();
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      if (searchQuery) router.push(`/search?q=${searchQuery}`);
+      if (searchQuery.current.value) router.push(`/search?q=${searchQuery.current.value}`);
     }
   };
 
@@ -197,7 +198,7 @@ const SearchedElement = ({ isSearched, setIsSearched }) => {
           display={isSearched ? "flex" : "none"}
           alignItems="center"
           onClick={() => {
-            if (searchQuery) router.push(`/search?q=${searchQuery}`);
+            if (searchQuery.current.value) router.push(`/search?q=${searchQuery.current.value}`);
           }}
         />
         <Input
@@ -210,8 +211,7 @@ const SearchedElement = ({ isSearched, setIsSearched }) => {
           borderRadius="12px"
           borderWidth="0"
           transition="width 0.8s, padding-left 0.8s,  background-color 0s, visibility 0s"
-          value={searchQuery}
-          onChange={(event) => setSearchQuery(event.target.value)}
+          ref={searchQuery}
           onKeyDown={(event) => handleKeyDown(event)}
         />
       </InputGroup>
@@ -312,12 +312,14 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
       </Link>
 
       <Link href={"/stok"} w="fit-content">
-        <Icon
-          display={{ base: "none", md: "block" }}
-          as={IoFileTrayStacked}
-          className={styles.navbarIcon}
-          color="gray.500"
-        />
+        <Box position="relative" w="fit-content">
+          <Icon
+            display={{ base: "none", md: "block" }}
+            as={IoFileTrayFull}
+            className={styles.navbarIcon}
+            color="gray.500"
+          />
+        </Box>
       </Link>
       <Box
         w="fit-content"
@@ -347,18 +349,36 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
                   >
                     {userData?.first_name} {userData?.last_name}
                   </Text>
-                  <Flex w="full" justify="space-between">
-                    <Text mr=".7rem">{userData?.memberid}</Text>
-                    <Box
-                      bg={setBadgeColor(userData?.user_level)}
-                      color="white"
-                      px=".4rem"
-                      py=".1rem"
-                      borderRadius="30px"
-                    >
-                      {userData?.user_level}
-                    </Box>
-                  </Flex>
+                  {
+                    userData?.admin_id != null
+                      ?
+                      <Box>
+                        <Text>{userData?.memberid}</Text>
+                        <Box
+                          bg={setBadgeColor(userData?.user_level)}
+                          color="white"
+                          px=".4rem"
+                          py=".1rem"
+                          borderRadius="30px"
+                          whiteSpace="nowrap"
+                        >
+                          {userData?.user_level} {userData?.admin_id ? 'by admin' : ''}
+                        </Box>
+                      </Box>
+                      :
+                      <Flex w="full" justify="space-between">
+                        <Text mr=".7rem">{userData?.memberid}</Text>
+                        <Box
+                          bg={setBadgeColor(userData?.user_level)}
+                          color="white"
+                          px=".4rem"
+                          py=".1rem"
+                          borderRadius="30px"
+                        >
+                          {userData?.user_level}
+                        </Box>
+                      </Flex>
+                  }
                 </Box>
               </Flex>
             </MenuButton>
@@ -417,7 +437,7 @@ const CustomAccordion = () => {
       setCategory(e.data?.data);
       setLoading(false);
     });
-  }, []);
+  }, [null]);
 
   return (
     <Menu>
@@ -439,8 +459,8 @@ const CustomAccordion = () => {
           </Flex>
         ) : (
           <Accordion width="320px" allowToggle>
-            {category?.map((el) => (
-              <AccordionItem id={el.id}>
+            {category?.map((el, index) => (
+              <AccordionItem id={el.id} key={index}>
                 <h2>
                   <AccordionButton>
                     <Box flex="1" textAlign="left">
@@ -458,9 +478,10 @@ const CustomAccordion = () => {
                   >
                     Semua {el.name}
                   </MenuItem>
-                  {el?.sub_categories?.map((sub) => (
+                  {el?.sub_categories?.map((sub, index) => (
                     <MenuItem
                       className={styles.menuItem}
+                      key={index}
                       onClick={() =>
                         router.push(
                           `/daftar-produk?id=${sub.id}&nama=${sub.name}`,
@@ -490,12 +511,12 @@ const Navbar = () => {
   const onDrawerOpen = drawerDisclosure.onOpen;
   const onDrawerClose = drawerDisclosure.onClose;
 
-  const [searchQuery, setSearchQuery] = useState("");
+  const searchQuery = useRef("");
   const router = useRouter();
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      if (searchQuery) router.push(`/search?q=${searchQuery}`);
+      if (searchQuery.current.value) router.push(`/search?q=${searchQuery.current.value}`);
     }
   };
 
@@ -517,7 +538,7 @@ const Navbar = () => {
     return () => {
       window.removeEventListener("resize", setNavbarWidth);
     };
-  }, []);
+  }, [null]);
 
   return (
     <>
@@ -568,7 +589,7 @@ const Navbar = () => {
                     color="orange.400"
                     ml="12px"
                     onClick={() => {
-                      if (searchQuery) router.push(`/search?q=${searchQuery}`);
+                      if (searchQuery.current.value) router.push(`/search?q=${searchQuery.current.value}`);
                     }}
                   />
                 }
@@ -581,8 +602,7 @@ const Navbar = () => {
                 bg="gray.100"
                 pl="50px"
                 focusBorderColor="gray.100"
-                value={searchQuery}
-                onChange={(event) => setSearchQuery(event.target.value)}
+                ref={searchQuery}
                 onKeyDown={(event) => handleKeyDown(event)}
               />
             </InputGroup>

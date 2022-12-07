@@ -59,6 +59,7 @@ const Konfirmasi = () => {
               number: res.data[0].orders_number,
               date: res.data[0].date_purchased.split(" ")[0],
               price: res.data[0].order_price,
+              handling_fee_admin: res.data[0].handling_fee_admin ?? 0,
               loading: false,
             });
           } else {
@@ -78,7 +79,7 @@ const Konfirmasi = () => {
     { info: "Nomor Order", value: orderInformation.number },
     { info: "Tanggal Pemesanan", value: orderInformation.date },
     { info: "Metode Pembayaran", value: "Transfer Bank" },
-    { info: "Harga", value: `Rp ${formatNumber(orderInformation.price)}` },
+    { info: "Harga", value: `Rp ${formatNumber(parseInt(orderInformation.price) + parseInt(orderInformation.handling_fee_admin))}` },
   ];
 
   return (

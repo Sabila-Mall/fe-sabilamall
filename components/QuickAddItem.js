@@ -7,6 +7,7 @@ import {
   VStack,
   Image,
   Checkbox,
+  Box,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { createRef, useState } from "react";
@@ -158,6 +159,9 @@ const QuickAddItem = ({ product, my }) => {
               ) : (
                 <></>
               )}
+              <Text color="gray.500" fontSize="14px">
+                Gudang : {product.origincity}
+              </Text>
               {varian &&
                 varian.map((el, index) => {
                   return (
@@ -198,15 +202,16 @@ const QuickAddItem = ({ product, my }) => {
             spacing={{ base: "2rem", md: "8rem" }}
           >
             <HStack>
-              <IconButton
-                aria-label={"Remove Item"}
-                icon={<IoRemoveCircleOutline size={"1.5rem"} />}
-                variant={"ghost"}
-                color={"gray.400"}
-                color={quantity === 1 ? "gray.200" : "gray.400"}
-                _hover={{ cursor: "pointer" }}
-                onClick={() => handleModifyNumberOfItem("decrease")}
-              />
+              <Box>
+                <IconButton
+                  aria-label={"Remove Item"}
+                  icon={<IoRemoveCircleOutline size={"1.5rem"} />}
+                  variant={"ghost"}
+                  color={quantity === 1 ? "gray.200" : "gray.400"}
+                  _hover={{ cursor: "pointer" }}
+                  onClick={() => handleModifyNumberOfItem("decrease")}
+                />
+              </Box>
               <Input
                 minW="3.5rem"
                 maxW="5rem"

@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import { getProductsByCategory } from "../../api/DaftarProduk";
+import { getAllProductsByFilters } from "../../api/Homepage";
 import { Layout } from "../../components/Layout";
 import LayoutProductList from "../../components/LayoutProductList";
 import { useAuthContext } from "../../contexts/authProvider";
@@ -19,8 +20,12 @@ const DaftarProduk = () => {
   const categoryId = router.query.id;
   const categoryName = router.query.nama;
 
-  const { userData } = useAuthContext();
-  const customerId = userData?.id;
+  const auth = useAuthContext();
+  const userId = auth.userData?.id;
+  const userLevel = auth.userData?.user_level;
+  const adminId = auth.userData?.admin_id;
+  const isLoggedIn = auth.isLoggedIn;
+  const authIsLoading = auth.loading;
 
   const toast = useToast();
   const errorToast = (errMessage) => {
@@ -36,13 +41,13 @@ const DaftarProduk = () => {
     setProducts({ ...products, loading: true });
 
     const newPage = products.currentPage + 1;
-    getProductsByCategory(categoryId, newPage, customerId)
+    getAllProductsByFilters(newPage, userId, 'category', null, categoryId, null, null, null, null)
       .then((res) => {
         setProducts({
-          data: products.data.concat(res.data.data),
+          data: products.data.concat(res.data.data.data),
           loading: false,
           currentPage: newPage,
-          lastPage: res.data.last_page,
+          lastPage: res.data.data.last_page,
         });
       })
       .catch((err) => {
@@ -53,22 +58,20 @@ const DaftarProduk = () => {
   }
 
   useEffect(() => {
-    if (categoryId) {
-      getProductsByCategory(categoryId, 1, customerId)
-        .then((res) => {
-          setProducts({
-            data: res.data.data,
-            loading: false,
-            currentPage: 1,
-            lastPage: res.data.last_page,
-          });
-        })
-        .catch((err) => {
-          console.error(err);
-          setProducts({ ...products, loading: false });
+    categoryId && !authIsLoading && getAllProductsByFilters(1, userId, 'category', null, categoryId, null, null, null, null)
+      .then((res) => {
+        setProducts({
+          data: res.data.data.data,
+          loading: false,
+          currentPage: 1,
+          lastPage: res.data.data.last_page,
         });
-    }
-  }, [categoryId, customerId]);
+      })
+      .catch((err) => {
+        console.error(err);
+        setProducts({ ...products, loading: false });
+      });
+  }, [categoryId, authIsLoading]);
 
   return (
     <Layout hasNavbar hasPadding>

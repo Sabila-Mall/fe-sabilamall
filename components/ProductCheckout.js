@@ -10,17 +10,18 @@ import {
   Select,
   Spacer,
   Text,
-  toast,
   useControllableState,
   VStack,
   Link,
+  color,
+
 } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { FaWhatsapp } from "react-icons/fa";
-import { IoIosAddCircleOutline } from "react-icons/io";
+import { IoIosAddCircleOutline, IoIosHelpCircle } from "react-icons/io";
 import { IoRemoveCircleOutline } from "react-icons/io5";
 import { IoHeartOutline, IoHeart } from "react-icons/io5";
 
@@ -41,114 +42,74 @@ const formatPrice = (price) => {
 };
 
 const ProductCheckout = ({
-  attributes,
-  customerdiscount,
-  current_price,
-  user_level,
-  customers_id,
+  products_attributes,
+  products_type,
+  warehouse,
+  products_stock,
+  stockData,
+  price_after_discount,
+  price,
+  products_event,
+  customers_discount,
   products_id,
-  stocks: stockss,
-  discount_price,
-  isLiked: is_liked,
-  po_close_status,
-  preOrder,
+  special_products_price,
+  flash_sale_discount,
+  flash_sale_price_after_discount,
+  flash_sale_price,
+  is_liked_product,
   products_slug,
-  products_quantity,
-  setDiscountPricePerUnit,
-  setPricePerUnit,
 }) => {
+
+  const product_wa = products_slug?.replace("-", "+")
+
   const toast = useToast();
+
+  const callToast = ({ isSuccess = false, title, description, ...others }) => {
+    const configToast = {
+      duration: 5000,
+      isClosable: true,
+      variant: "subtle",
+      position: "top",
+    };
+
+    return isSuccess
+      ? toast({
+        title,
+        description,
+        status: "success",
+        ...configToast,
+        ...others,
+      })
+      : toast({
+        title,
+        description,
+        status: "error",
+        ...configToast,
+        ...others,
+      });
+  };
+
   const router = useRouter();
-  const isHidden = preOrder && po_close_status == 1;
-  const productwa = products_slug && products_slug?.replace("-", "+");
-  const { isLoggedIn } = useAuthContext();
-  const { register, getValues } = useForm();
+  const auth = useAuthContext();
+  const userId = auth.userData?.id ?? null;
+  const userLevel = auth.userData?.user_level ?? 'null';
+  const adminId = auth.userData?.admin_id;
+
   const { addCartItem } = useCartContext();
 
-  const [stocks, setStocks] = useState(stockss);
-  const [stock, setStock] = useState(null);
-  const [filterStock, setFilterStock] = useState({ warna: null, ukuran: null });
+  const warehouseData = JSON.parse(warehouse ?? "[]");
 
-  const [isLiked, setIsLiked] = useState(is_liked == "1");
+  const [warehouseId, setWarehouseId] = useState(warehouseData.length == 1 ? String(warehouseData[0].id) : null);
 
-  const [pricePrefixColor, setPricePrefixColor] = useState("+");
-  const [pricePrefixSize, setPricePrefixSize] = useState("+");
-  const [priceColor, setPriceColor] = useState(0);
-  const [priceSize, setPriceSize] = useState(0);
-
-  const colorsData = attributes.filter(
-    (attr) => attr?.option?.name?.toLowerCase() === "warna",
-  )[0];
-  const sizesData = attributes.filter(
-    (attr) => attr?.option?.name?.toLowerCase() === "ukuran",
-  )[0];
-
-  const colors = colorsData?.values;
-  const sizes = sizesData?.values;
-
-  const colorId = colorsData?.option?.id;
-  const sizeId = sizesData?.option?.id;
-
-  let option_id = [];
-  if (colorId && sizeId) {
-    option_id = [colorId, sizeId];
-  } else if (colorId && !sizeId) {
-    option_id = colorId;
-  } else if (!colorId && sizeId) {
-    option_id = sizeId;
-  }
-
-  const colorVariance = colors?.length;
-  const sizeVariance = sizes?.length;
-
-  const [numberOfItem, setNumberOfItem] = useControllableState({
-    defaultValue: 0,
-  });
-
-  // const realPrice = current_price * numberOfItem;
-
-  const checkStockCl = (dataFilter) => {
-    if (!sizes || !colors) return setStock(products_quantity);
-    if (!dataFilter) return;
-
-    const { warna, ukuran } = dataFilter;
-
-    if (!warna || !ukuran) return;
-
-    const c = colors?.find((c) => c.id == warna);
-    const s = sizes?.find((s) => s.id == ukuran);
-
-    const data = stocks?.[c.value]?.find(
-      (stock) => stock?.attr_ukuran == s.products_attributes_id,
-    );
-
-    setStock(data?.stock ?? 0);
-    setNumberOfItem(data?.stock ? 1 : 0);
-  };
-
-  const handleModifyNumberOfItem = (event) => {
-    if (event === "increase") {
-      if ((stock ?? 0) - numberOfItem === 0) {
-        setNumberOfItem(stock ?? 0);
-      } else {
-        setNumberOfItem(numberOfItem + 1);
-      }
-    } else if (event === "decrease") {
-      if (numberOfItem > 0) {
-        setNumberOfItem(numberOfItem - 1);
-      } else {
-        setNumberOfItem(0);
-      }
-    }
-  };
+  const [isLiked, setIsLiked] = useState(is_liked_product);
 
   const handleClickWishlist = () => {
-    if (!isLoggedIn)
+    if (!auth.isLoggedIn)
       return callToast({ title: "Silakan login terlebih dahulu" });
 
     const dataPost = {
       liked_products_id: Number(products_id),
-      liked_customers_id: Number(customers_id),
+      liked_customers_id: Number(userId),
     };
 
     if (!isLiked) {
@@ -186,372 +147,672 @@ const ProductCheckout = ({
     }
   };
 
-  const callToast = ({ isSuccess = false, title, description, ...others }) => {
-    const configToast = {
-      duration: 5000,
-      isClosable: true,
-      variant: "subtle",
-      position: "top",
-    };
+  // promo ==========================================
+  let isPromo = false;
+  let pricePromo = 0;
+  let discountPromo = 0;
+  if (products_event == 'flash_sale') {
+    isPromo = true;
+    pricePromo = flash_sale_price;
+    discountPromo = flash_sale_discount;
+  } else if (products_event == 'special') {
+    isPromo = true;
+    pricePromo = special_products_price;
+    discountPromo = (price - special_products_price) / price * 100;
+  }
+  // ==========================================
 
-    return isSuccess
-      ? toast({
-          title,
-          description,
-          status: "success",
-          ...configToast,
-          ...others,
-        })
-      : toast({
-          title,
-          description,
-          status: "error",
-          ...configToast,
-          ...others,
-        });
-  };
+  if (products_type == 1) {
+    const [itemQty, setItemQty] = useState(0);
+    const [itemPrice, setItemPrice] = useState(0);
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [totalNormalPrice, setTotalNormalPrice] = useState(0);
 
-  const calculateTotalPrice = (isDiscount = false) => {
-    let addedPrice = 0;
+    const [variantPrice, setVariantPrice] = useState(0);
+    const [variantPriceAfterDiscount, setVariantPriceAfterDiscount] = useState(0);
 
-    if (pricePrefixColor === "+" && pricePrefixSize === "+") {
-      addedPrice = Number(priceColor) + Number(priceSize);
+    const [numberOfItem, setNumberOfItem] = useState(0);
+    const [normalPrice, setNormalPrice] = useState(0);
+
+    const [stock, setStock] = useState(products_stock);
+
+    const productsAttributes = JSON.parse(products_attributes);
+    const colorsData = productsAttributes.filter((item) => item.options_name.toLowerCase() === 'warna');
+    const sizesData = productsAttributes.filter((item) => item.options_name.toLowerCase() === 'ukuran');
+
+    const colorVariance = colorsData?.length;
+    const sizeVariance = sizesData?.length;
+
+    const [colorId, setColorId] = useState('');
+    const [sizeId, setSizeId] = useState('');
+
+    const [priceColor, setPriceColor] = useState(0);
+    const [pricePrefixColor, setPricePrefixColor] = useState('+');
+    const [priceSize, setPriceSize] = useState(0);
+    const [pricePrefixSize, setPricePrefixSize] = useState('+');
+
+    const changeAttributes = (id, type) => {
+      if (type == 'color') {
+        const color = colorsData.find((item) => item.options_values_id == id);
+        setPricePrefixColor(color?.price_prefix ?? '+');
+        setPriceColor(color?.options_values_price ?? 0);
+        setColorId(id);
+      } else if (type == 'size') {
+        const size = sizesData.find((item) => item.options_values_id == id);
+        setPricePrefixSize(size?.price_prefix ?? '+');
+        setPriceSize(size?.options_values_price ?? 0);
+        setSizeId(id);
+      }
     }
 
-    if (pricePrefixColor === "+" && pricePrefixSize === "-") {
-      addedPrice = +Number(priceColor) - Number(priceSize);
+    const getStock = () => {
+      if (sizeId != '' && colorId != '') {
+        const stock = stockData.find((item) => item.options_values_color_id == colorId && item.options_values_size_id == sizeId && item.warehouse_id == warehouseId);
+        setStock(stock?.stock != null && stock?.stock >= 0 ? stock?.stock : 0);
+        setNumberOfItem((stock?.stock ?? 0) == 0 ? 0 : 1);
+
+        const variantPrice = Number(pricePrefixColor + priceColor) + Number(pricePrefixSize + priceSize);
+        const variantPriceAfterDiscount = 0;
+
+        const itemPrice = isPromo ? (Number(pricePromo) + variantPrice) : (Number(price) + variantPrice);
+
+        if (products_event == 'flash_sale') {
+          itemPrice = itemPrice - (itemPrice * ((discountPromo + customers_discount) / 100))
+          variantPriceAfterDiscount = variantPrice - (variantPrice * ((discountPromo + customers_discount) / 100))
+        } else {
+          itemPrice = itemPrice - (itemPrice * (customers_discount / 100))
+          variantPriceAfterDiscount = variantPrice - (variantPrice * (customers_discount / 100))
+        }
+
+        setVariantPrice(variantPrice);
+        setVariantPriceAfterDiscount(variantPriceAfterDiscount);
+
+        const normalPrice = Number(price) + Number(variantPrice);
+
+        setNormalPrice(normalPrice);
+        setItemPrice(itemPrice);
+      } else {
+        setStock(0);
+        setNumberOfItem(0);
+        setVariantPrice(0);
+        setVariantPriceAfterDiscount(0);
+        setNormalPrice(0);
+        setItemPrice(0);
+      }
     }
 
-    if (pricePrefixColor === "-" && pricePrefixSize === "+") {
-      addedPrice = -Number(priceColor) + Number(priceSize);
+    const handleModifyNumberOfItem = (action) => {
+      if (action === "increase") {
+        if (stock <= numberOfItem) {
+          setNumberOfItem(stock);
+        } else {
+          setNumberOfItem(numberOfItem + 1);
+        }
+      } else if (action === "decrease") {
+        if (numberOfItem > 0) {
+          setNumberOfItem(numberOfItem - 1);
+        } else {
+          setNumberOfItem(0);
+        }
+      }
     }
 
-    if (pricePrefixColor === "-" && pricePrefixSize === "-") {
-      addedPrice = -Number(priceColor) - Number(priceSize);
+    const calculatePrice = () => {
+      setTotalPrice(itemPrice * numberOfItem);
+      setTotalNormalPrice(normalPrice * numberOfItem)
     }
 
-    if (!discount_price) {
-      setDiscountPricePerUnit(null);
-      setPricePerUnit(Number(current_price) + addedPrice);
-    } else {
-      setDiscountPricePerUnit(Number(discount_price) + addedPrice);
-      setPricePerUnit(Number(current_price) + addedPrice);
+    useEffect(() => {
+      getStock();
+    }, [sizeId, colorId, warehouseId]);
+
+    useEffect(() => {
+      calculatePrice();
+    }, [numberOfItem, itemPrice, variantPrice]);
+
+    return (
+      <>
+        <VStack minW={{ base: '100%', md: '300px' }} borderColor={"gray.300"} borderWidth={"1px"} spacing={'12px'} className={"secondaryFont"} p={'1rem'} borderRadius={"12px"}>
+          {warehouseData && warehouseData.length > 1 && (
+            <Box width={"full"}>
+              <Text textColor={"gray.500"} fontSize={"16px"}>
+                Gudang: {warehouseData.length} item
+              </Text>
+              <Spacer height={"10px"} />
+              <Select
+                placeholder={"Pilih Gudang"}
+                borderColor={"gray.200"}
+                textColor={"gray.400"}
+                color={"gray.400"}
+                onChange={(e) => {
+                  setWarehouseId(e.target.value);
+                }}
+              >
+                {warehouseData?.map(({ id, value }) => (
+                  <option
+                    key={id}
+                    value={`${id}`}
+                  >
+                    {value}
+                  </option>
+                ))}
+              </Select>
+            </Box>
+          )}
+
+          {colorsData && (
+            <Box width={"full"}>
+              <Text textColor={"gray.500"} fontSize={"16px"}>
+                Warna: {colorVariance} varian
+              </Text>
+              <Spacer height={"10px"} />
+              <Select
+                placeholder={"Pilih Warna"}
+                borderColor={"gray.200"}
+                textColor={"gray.400"}
+                color={"gray.400"}
+                onChange={(e) => changeAttributes(e.target.value, 'color')}
+              >
+                {colorsData?.map(({ options_values_name, options_values_id }) => (
+                  <option
+                    key={options_values_id}
+                    value={options_values_id}
+                  >
+                    {options_values_name}
+                  </option>
+                ))}
+              </Select>
+            </Box>
+          )
+          }
+
+          {sizesData && (
+            <Box width={"full"}>
+              <Text textColor={"gray.500"} fontSize={"16px"}>
+                Ukuran: {sizeVariance} varian
+              </Text>
+              <Spacer height={"10px"} />
+              <Select
+                placeholder={"Pilih Ukuran"}
+                borderColor={"gray.200"}
+                textColor={"gray.400"}
+                color={"gray.400"}
+                onChange={(e) => changeAttributes(e.target.value, 'size')}
+              >
+                {sizesData?.map(({ options_values_name, options_values_id }) => (
+                  <option
+                    key={options_values_id}
+                    value={options_values_id}
+                  >
+                    {options_values_name}
+                  </option>
+                ))}
+              </Select>
+            </Box>
+          )
+          }
+
+          <Box width={"100%"}>
+            <Text textColor={"gray.500"} fontSize={"16px"}>
+              Jumlah
+            </Text>
+            <Spacer height={"10px"} />
+            <HStack
+              spacing={"1.5rem"}
+              flexDirection={"row"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
+            >
+              <HStack>
+                <Box>
+                  <IconButton
+                    aria-label={"Decrease number of items"}
+                    as={IoRemoveCircleOutline}
+                    w={"24px"}
+                    h={"24px"}
+                    bgColor="transparent"
+                    color={"gray.400"}
+                    disabled={numberOfItem == 0}
+                    _hover={{ cursor: "pointer" }}
+                    onClick={() => handleModifyNumberOfItem("decrease")}
+                  />
+                </Box>
+                <Input
+                  minW="3.5rem"
+                  maxW="5rem"
+                  placeholder={numberOfItem}
+                  textAlign={"center"}
+                  borderColor={"gray.200"}
+                  textColor={"gray.300"}
+                  readOnly={true}
+                />
+                <IconButton
+                  aria-label={"Increase the number of item"}
+                  as={IoIosAddCircleOutline}
+                  color={"gray.400"}
+                  disabled={numberOfItem == stock}
+                  w={"24px"}
+                  bgColor="transparent"
+                  h={"24px"}
+                  _hover={{ cursor: "pointer" }}
+                  onClick={() => handleModifyNumberOfItem("increase")}
+                />
+              </HStack>
+              <HStack marginInlineStart="1rem !important" fontSize={"14px"}>
+                <Text textColor={"gray.500"}>Stok:</Text>
+                <Text textColor={"orange.300"}>{stock ?? "0"}</Text>
+              </HStack>
+            </HStack>
+          </Box>
+          <Divider orientation="horizontal" height={"1px"} />
+          <Box w={'full'}>
+            {
+              variantPrice > 0 && (
+                <>
+                  <Flex
+                    flexDirection={"row"}
+                    alignItems={"center"}
+                    justifyContent={"space-between"}
+                  >
+                    <Text textColor={"gray.500"} fontSize={"14px"} mr="0.5rem">
+                      Tambahan Variasi
+                    </Text>
+                    <VStack alignItems={"flex-end"}>
+                      {
+                        variantPrice != variantPriceAfterDiscount
+                          ?
+                          <Text
+                            as={'del'}
+                            color={"gray.400"}
+                            fontSize="14px"
+                          >
+                            Rp {formatPrice(variantPrice)}/item
+                          </Text>
+                          :
+                          <Text
+                            className={styles.subtotal}
+                            color={"orange.400"}
+                            fontSize="14px"
+                            fontWeight={"bold"}
+                          >
+                            Rp {formatPrice(variantPrice)}/item
+                          </Text>
+                      }
+
+                    </VStack>
+                  </Flex>
+                  {
+                    variantPrice != variantPriceAfterDiscount && (
+                      <Flex
+                        flexDirection={"row"}
+                        alignItems={"center"}
+                        justifyContent={"end"}
+                      >
+                        <VStack alignItems={"flex-end"}>
+                          <Text
+                            className={styles.subtotal}
+                            color={"orange.400"}
+                            fontSize="14px"
+                            fontWeight={"bold"}
+                          >
+                            Rp {formatPrice(variantPriceAfterDiscount)}/item
+                          </Text>
+                        </VStack>
+                      </Flex>
+                    )
+                  }
+                </>
+              )
+            }
+            <Box height={'10px'} />
+
+            <Flex
+              flexDirection={"row"}
+              alignItems={"flex-end"}
+              justifyContent={"end"}
+            >
+              <VStack alignItems={"flex-end"}>
+                <Text
+                  as={'del'}
+                  className={styles.subtotal}
+                  color={"gray.400"}
+                  fontSize="14px"
+                >
+                  Rp {formatPrice(totalNormalPrice)}
+                </Text>
+              </VStack>
+            </Flex>
+            <Flex
+              flexDirection={"row"}
+              alignItems={"flex-end"}
+              justifyContent={"space-between"}
+            >
+              <Text textColor={"gray.500"} fontSize={"16px"} mr="0.5rem">
+                Subtotal
+              </Text>
+              <VStack alignItems={"flex-end"}>
+                <Text
+                  className={styles.subtotal}
+                  color={"orange.400"}
+                  fontSize="20px"
+                  fontWeight={"bold"}
+                >
+                  Rp {formatPrice(totalPrice)}
+                </Text>
+              </VStack>
+            </Flex>
+          </Box>
+
+          <Button
+            backgroundColor={"red.500"}
+            textColor={"white"}
+            width={"full"}
+            fontSize={"16px"}
+            fontWeight={"bold"}
+            className={"primaryFont"}
+            _hover={{ bgColor: "red.600" }}
+            isDisabled={(numberOfItem <= 0)}
+            onClick={() => {
+              if (!auth.isLoggedIn)
+                return callToast({ title: "Silakan login terlebih dahulu" });
+
+              if (numberOfItem < 1) {
+                return callToast({
+                  title: "Gagal",
+                  description: "Jumlah produk minimal satu.",
+                });
+              }
+
+              let option_values_id = JSON.stringify([colorId, sizeId]);
+              let option_id = JSON.stringify([2, 1]);
+
+              addCartItem(
+                userId,
+                userLevel,
+                products_id,
+                numberOfItem,
+                option_id,
+                option_values_id,
+                warehouseId,
+                adminId,
+              );
+            }}
+          >
+            Masukkan ke Keranjang
+          </Button>
+        </VStack >
+        <Footer handleClickWishlist={handleClickWishlist} isLiked={isLiked} product_wa={product_wa} />
+      </>
+    )
+  } else if (products_type == 0) {
+
+    const [numberOfItem, setNumberOfItem] = useState(0);
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [itemPrice, setItemPrice] = useState(0);
+    const [normalPrice, setNormalPrice] = useState(0);
+    const [stock, setStock] = useState(products_stock);
+    const [totalNormalPrice, setTotalNormalPrice] = useState(0);
+
+    const getStock = () => {
+      const stock = stockData.find((item) => item.warehouse_id == warehouseId);
+      setStock(stock?.stock != null && stock?.stock >= 0 ? stock?.stock : 0);
+      setNumberOfItem((stock?.stock ?? 0) <= 0 ? 0 : 1);
+
+      const itemPrice = isPromo ? Number(pricePromo) : Number(price);
+
+      if (auth.isLoggedIn && products_event != 'flash_sale') {
+        itemPrice = itemPrice - (itemPrice * (customers_discount / 100))
+      } else if (auth.isLoggedIn && products_event == 'flash_sale') {
+        itemPrice = itemPrice - (itemPrice * ((discountPromo + customers_discount) / 100))
+      }
+
+      const normalPrice = Number(price);
+
+      setNormalPrice(normalPrice);
+      setItemPrice(itemPrice);
     }
 
-    if (isDiscount || !discount_price) {
-      return formatPrice((Number(current_price) + addedPrice) * numberOfItem);
+    const handleModifyNumberOfItem = (action) => {
+      if (action === "increase") {
+        if (stock <= numberOfItem) {
+          setNumberOfItem(stock);
+        } else {
+          setNumberOfItem(numberOfItem + 1);
+        }
+      } else if (action === "decrease") {
+        if (numberOfItem > 0) {
+          setNumberOfItem(numberOfItem - 1);
+        } else {
+          setNumberOfItem(0);
+        }
+      }
     }
 
-    if (discount_price) {
-      return formatPrice((Number(discount_price) + addedPrice) * numberOfItem);
+    const calculatePrice = () => {
+      setTotalPrice(itemPrice * numberOfItem);
+      setTotalNormalPrice(normalPrice * numberOfItem);
     }
 
-    return 0;
-  };
+    useEffect(() => {
+      getStock();
+    }, [warehouseId]);
 
-  useEffect(() => {
-    checkStockCl();
-  }, []);
+    useEffect(() => {
+      calculatePrice();
+    }, [numberOfItem, itemPrice, normalPrice]);
+
+    return (
+      <>
+        <VStack minW={{ base: '100%', md: '300px' }} borderColor={"gray.300"} borderWidth={"1px"} spacing={'12px'} className={"secondaryFont"} p={'1rem'} borderRadius={"12px"}>
+          {warehouseData && warehouseData.length > 1 && (
+            <Box width={"full"}>
+              <Text textColor={"gray.500"} fontSize={"16px"}>
+                Gudang: {warehouseData.length} item
+              </Text>
+              <Spacer height={"10px"} />
+              <Select
+                placeholder={"Pilih Gudang"}
+                borderColor={"gray.200"}
+                textColor={"gray.400"}
+                color={"gray.400"}
+                onChange={(e) => {
+                  setWarehouseId(e.target.value);
+                }}
+              >
+                {warehouseData?.map(({ id, value }) => (
+                  <option
+                    key={id}
+                    value={`${id}`}
+                  >
+                    {value}
+                  </option>
+                ))}
+              </Select>
+            </Box>
+          )}
+          <Box width={"100%"}>
+            <Text textColor={"gray.500"} fontSize={"16px"}>
+              Jumlah
+            </Text>
+            <Spacer height={"10px"} />
+            <HStack
+              spacing={"1.5rem"}
+              flexDirection={"row"}
+              justifyContent={"space-between"}
+              alignItems={"center"}
+            >
+              <HStack>
+                <Box>
+                  <IconButton
+                    aria-label={"Decrease number of items"}
+                    as={IoRemoveCircleOutline}
+                    w={"24px"}
+                    h={"24px"}
+                    bgColor="transparent"
+                    color={"gray.400"}
+                    disabled={numberOfItem == 0}
+                    _hover={{ cursor: "pointer" }}
+                    onClick={() => handleModifyNumberOfItem("decrease")}
+                  />
+                </Box>
+                <Input
+                  minW="3.5rem"
+                  maxW="5rem"
+                  placeholder={numberOfItem}
+                  textAlign={"center"}
+                  borderColor={"gray.200"}
+                  textColor={"gray.300"}
+                  readOnly={true}
+                />
+                <IconButton
+                  aria-label={"Increase the number of item"}
+                  as={IoIosAddCircleOutline}
+                  color={"gray.400"}
+                  disabled={numberOfItem == stock}
+                  w={"24px"}
+                  bgColor="transparent"
+                  h={"24px"}
+                  _hover={{ cursor: "pointer" }}
+                  onClick={() => handleModifyNumberOfItem("increase")}
+                />
+              </HStack>
+              <HStack marginInlineStart="1rem !important" fontSize={"14px"}>
+                <Text textColor={"gray.500"}>Stok:</Text>
+                <Text textColor={"orange.300"}>{stock ?? "0"}</Text>
+              </HStack>
+            </HStack>
+          </Box>
+          <Divider orientation="horizontal" height={"1px"} />
+          <Box w={'full'}>
+            <Flex flexDirection={"row"} alignItems={'end'} justifyContent={'end'}>
+              <VStack alignItems={"flex-end"}>
+                <Text
+                  className={styles.subtotal}
+                  color={"gray.400"}
+                  fontSize="14px"
+                  as={'del'}
+                >
+                  Rp {formatPrice(totalNormalPrice)}
+                </Text>
+              </VStack>
+            </Flex>
+            {/* <Box height={'10px'} /> */}
+            <Flex
+              flexDirection={"row"}
+              alignItems={"flex-end"}
+              justifyContent={"space-between"}
+            >
+              <Text textColor={"gray.500"} fontSize={"16px"} mr="0.5rem">
+                Subtotal
+              </Text>
+              <VStack alignItems={"flex-end"}>
+                <Text
+                  className={styles.subtotal}
+                  color={"orange.400"}
+                  fontSize="20px"
+                  fontWeight={"bold"}
+                >
+                  Rp {formatPrice(totalPrice)}
+                </Text>
+              </VStack>
+            </Flex>
+          </Box>
+
+          <Button
+            backgroundColor={"red.500"}
+            textColor={"white"}
+            width={"full"}
+            fontSize={"16px"}
+            fontWeight={"bold"}
+            className={"primaryFont"}
+            _hover={{ bgColor: "red.600" }}
+            isDisabled={(numberOfItem <= 0)}
+            onClick={() => {
+              if (!auth.isLoggedIn)
+                return callToast({ title: "Silakan login terlebih dahulu" });
+
+              if (numberOfItem < 1) {
+                return callToast({
+                  title: "Gagal",
+                  description: "Jumlah produk minimal satu.",
+                });
+              }
+
+              let option_values_id = JSON.stringify([colorId, sizeId]);
+              let option_id = JSON.stringify([2, 1]);
+
+              addCartItem(
+                userId,
+                userLevel,
+                products_id,
+                numberOfItem,
+                option_id,
+                option_values_id,
+                warehouseId,
+                adminId,
+              );
+            }}
+          >
+            Masukkan ke Keranjang
+          </Button>
+        </VStack >
+        <Footer handleClickWishlist={handleClickWishlist} isLiked={isLiked} product_wa={product_wa} />
+
+      </>
+    )
+  }
+}
+
+const Footer = ({ handleClickWishlist, isLiked, product_wa }) => {
 
   return (
-    <VStack
-      display={isHidden ? "none" : "block"}
-      maxW={{ "2xl": "300px" }}
-      pl={{ "2xl": "2rem" }}
-      pt={{ base: "1rem", sm: "inherit" }}
-      spacing={"12px"}
-      className={"secondaryFont"}
+    <Flex
+      flexDirection={"row"}
+      justifyContent={"space-between"}
+      alignItems={"center"}
+      width={"full"}
+      mt={2}
     >
-      <VStack
-        w={{ base: "full", lg: "inherit" }}
-        spacing={"10px"}
-        borderColor={"gray.300"}
-        borderWidth={"1px"}
-        padding={"12px 14px"}
-        borderRadius={"12px"}
+      <HStack
+        padding={"7px 12px"}
+        onClick={() => handleClickWishlist()}
+        cursor="pointer"
       >
-        {colors && (
-          <Box width={"full"}>
-            <Text textColor={"gray.500"} fontSize={"16px"}>
-              Warna: {colorVariance} varian
-            </Text>
-            <Spacer height={"10px"} />
-            <Select
-              placeholder={"Pilih Warna"}
-              borderColor={"gray.200"}
-              textColor={"gray.400"}
-              color={"gray.400"}
-              {...register("warna")}
-              onChange={(e) => {
-                setFilterStock((prev) => ({
-                  ...prev,
-                  warna: e.target.value?.split(" ")?.[0],
-                }));
-
-                checkStockCl({
-                  ...filterStock,
-                  warna: e.target.value?.split(" ")?.[0],
-                });
-                const prefix_price = e.target.value?.split(" ")?.[2];
-                const price = e.target.value
-                  ?.split(" ")?.[3]
-                  ?.replace(/\D/g, "");
-
-                setPricePrefixColor(prefix_price);
-                setPriceColor(Number(price));
-              }}
-            >
-              {colors?.map(({ value, id, price_prefix = "+", price = 0 }) => (
-                <option
-                  key={id}
-                  value={`${id} p ${price_prefix}  ${(price + "")?.replace(
-                    /\D/g,
-                    "",
-                  )}`}
-                >
-                  {value}
-                </option>
-              ))}
-            </Select>
-          </Box>
-        )}
-
-        {sizes && (
-          <Box width={"full"}>
-            <Text textColor={"gray.500"} fontSize={"16px"}>
-              Ukuran: {sizeVariance} varian
-            </Text>
-            <Spacer height={"10px"} />
-            <Select
-              placeholder={"Pilih Ukuran"}
-              borderColor={"gray.200"}
-              textColor={"gray.400"}
-              color={"gray.400"}
-              {...register("ukuran")}
-              onChange={(e) => {
-                setFilterStock((prev) => ({
-                  ...prev,
-                  ukuran: e.target.value?.split(" ")?.[0],
-                }));
-                checkStockCl({
-                  ...filterStock,
-                  ukuran: e.target.value?.split(" ")?.[0],
-                });
-                const prefix_price = e.target.value?.split(" ")?.[2];
-                const price = e.target.value
-                  ?.split(" ")?.[3]
-                  ?.replace(/\D/g, "");
-
-                setPricePrefixSize(prefix_price);
-                setPriceSize(Number(price));
-              }}
-            >
-              {sizes?.map(({ value, id, prefix_price = "+", price = 0 }) => (
-                <option
-                  key={id}
-                  value={`${id} p ${prefix_price} ${(price + "")?.replace(
-                    /\D/g,
-                    "",
-                  )}`}
-                >
-                  {value}
-                </option>
-              ))}
-            </Select>
-          </Box>
-        )}
-
-        <Box width={"100%"}>
-          <Text textColor={"gray.500"} fontSize={"16px"}>
-            Jumlah
-          </Text>
-          <Spacer height={"10px"} />
-          <HStack
-            spacing={"1.5rem"}
-            flexDirection={"row"}
-            justifyContent={"space-between"}
-            alignItems={"center"}
-          >
-            <HStack>
-              <IconButton
-                aria-label={"Decrease number of items"}
-                as={IoRemoveCircleOutline}
-                w={"24px"}
-                h={"24px"}
-                bgColor="transparent"
-                color={numberOfItem === 0 ? "gray.200" : "gray.400"}
-                _hover={{ cursor: "pointer" }}
-                onClick={() => handleModifyNumberOfItem("decrease")}
-              />
-              <Input
-                minW="3.5rem"
-                maxW="5rem"
-                placeholder={numberOfItem}
-                textAlign={"center"}
-                borderColor={"gray.200"}
-                textColor={"gray.300"}
-              />
-              <IconButton
-                aria-label={"Increase the number of item"}
-                as={IoIosAddCircleOutline}
-                color={"gray.400"}
-                w={"24px"}
-                bgColor="transparent"
-                h={"24px"}
-                _hover={{ cursor: "pointer" }}
-                onClick={() => handleModifyNumberOfItem("increase")}
-              />
-            </HStack>
-            <HStack marginInlineStart="1rem !important" fontSize={"14px"}>
-              {/* {stock !== null ? (
-                <>
-                  <Text textColor={"gray.500"}>Stok:</Text>
-                  <Text textColor={"orange.300"}>{stock}</Text>
-                </>
-              ) : (
-                ""
-              )} */}
-              <Text textColor={"gray.500"}>Stok:</Text>
-              <Text textColor={"orange.300"}>{stock ?? "0"}</Text>
-            </HStack>
-          </HStack>
-        </Box>
-
-        <Divider orientation="horizontal" height={"1px"} />
-
-        <Flex
-          flexDirection={"row"}
-          alignItems={"flex-end"}
-          justifyContent={"space-between"}
-          width={"full"}
-        >
-          <Text textColor={"gray.500"} fontSize={"16px"} mr="0.5rem">
-            Subtotal
-          </Text>
-          <VStack alignItems={"flex-end"}>
-            {discount_price && (
-              <Text as={"s"} color={"gray.400"} fontSize={"12px"}>
-                Rp {calculateTotalPrice(true)}
-              </Text>
-            )}
-            <Text
-              className={styles.subtotal}
-              color={"orange.400"}
-              fontSize="20px"
-              fontWeight={"bold"}
-            >
-              Rp {calculateTotalPrice()}
-            </Text>
-          </VStack>
-        </Flex>
-
-        <Button
-          backgroundColor={"red.500"}
-          textColor={"white"}
-          width={"full"}
-          fontSize={"16px"}
+        <Icon color={"red.500"} as={isLiked ? IoHeart : IoHeartOutline} />
+        <Text
+          textColor={"red.500"}
+          fontSize={"14px"}
           fontWeight={"bold"}
           className={"primaryFont"}
-          _hover={{ bgColor: "red.600" }}
-          isDisabled={(!stock || !numberOfItem) && colors && sizes}
-          onClick={() => {
-            if (!isLoggedIn)
-              return callToast({ title: "Silakan login terlebih dahulu" });
-
-            if (numberOfItem < 1) {
-              return callToast({
-                title: "Gagal",
-                description: "Jumlah produk minimal satu.",
-              });
-            }
-
-            const { warna, ukuran } = getValues();
-
-            let option_values_id = [];
-            if (warna && ukuran) {
-              option_values_id = [
-                Number(warna.split(" ")[0]),
-                Number(ukuran.split(" ")[0]),
-              ];
-            } else if (warna && !ukuran) {
-              option_values_id = Number(warna.split(" ")[0]);
-            } else if (!warna && ukuran) {
-              option_values_id = Number(ukuran.split(" ")[0]);
-            }
-
-            if (Array.isArray(option_values_id)) {
-              option_values_id = JSON.stringify(option_values_id);
-            }
-
-            if (Array.isArray(option_id)) {
-              option_id = JSON.stringify(option_id);
-            }
-
-            addCartItem(
-              customers_id,
-              user_level,
-              products_id,
-              numberOfItem,
-              option_id,
-              option_values_id,
-            );
-          }}
         >
-          Masukkan ke Keranjang
-        </Button>
-      </VStack>
+          Wishlist
+        </Text>
+      </HStack>
 
-      <Flex
-        flexDirection={"row"}
-        justifyContent={"space-between"}
-        alignItems={"center"}
-        width={"full"}
+      <Link
+        href={`https://office.sabilamall.com/warotator.php?pos=cso&produk=${product_wa}`}
+        _hover={{ decoration: "none" }}
+        isExternal
       >
         <HStack
+          backgroundColor={"orange.400"}
+          borderRadius={"4px"}
           padding={"7px 12px"}
-          onClick={() => handleClickWishlist()}
           cursor="pointer"
         >
-          <Icon color={"red.500"} as={isLiked ? IoHeart : IoHeartOutline} />
+          <Icon color={"White"} as={FaWhatsapp} />
           <Text
-            textColor={"red.500"}
+            textColor={"white"}
             fontSize={"14px"}
             fontWeight={"bold"}
             className={"primaryFont"}
           >
-            Wishlist
+            Chat Admin
           </Text>
         </HStack>
-
-        <Link
-          href={`https://office.sabilamall.com/warotator.php?pos=cso&produk=${productwa}`}
-          _hover={{ decoration: "none" }}
-          isExternal
-        >
-          <HStack
-            backgroundColor={"orange.400"}
-            borderRadius={"4px"}
-            padding={"7px 12px"}
-            cursor="pointer"
-          >
-            <Icon color={"White"} as={FaWhatsapp} />
-            <Text
-              textColor={"white"}
-              fontSize={"14px"}
-              fontWeight={"bold"}
-              className={"primaryFont"}
-            >
-              Chat Admin
-            </Text>
-          </HStack>
-        </Link>
-      </Flex>
-    </VStack>
-  );
-};
-
-ProductCheckout.defaultProps = {
-  po_close_status: 1,
-};
+      </Link>
+    </Flex>
+  )
+}
 
 export default ProductCheckout;

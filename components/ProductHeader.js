@@ -1,54 +1,136 @@
-import { Box, Text, Stack, StackDivider, Flex, Icon } from "@chakra-ui/react";
+import {
+  Box,
+  Text,
+  Stack,
+  StackDivider,
+  Flex,
+  Icon,
+  Image,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Button,
+  UnorderedList,
+  ListItem,
+  Badge,
+  Tooltip,
+  Link
+} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { FaShippingFast } from "react-icons/fa";
-import { IoIosCheckmarkCircleOutline } from "react-icons/io";
+import { IoIosCheckmarkCircleOutline, IoIosCloseCircle } from "react-icons/io";
+import {
+  IoMenu,
+  IoSearch,
+  IoHeartSharp,
+  IoNotifications,
+  IoCart,
+  IoFileTrayStacked,
+  IoChevronDown,
+} from "react-icons/io5";
+import { FaPercent } from "react-icons/fa";
 import { IoTimeOutline } from "react-icons/io5";
 import { RiCalendarEventFill } from "react-icons/ri";
+import { useAuthContext } from "../contexts/authProvider";
 
 import { numberWithDot } from "../utils/functions";
+import {
+  calculateTimeLeft,
+  currencyFormat,
+  getPriceAfterDiscount,
+  parseNumber,
+  pad,
+} from "../utils/functions";
+
+import moment from "moment";
 
 const ProductHeader = ({
-  libur,
-  preOrder,
+  holiday,
+  holiday_reason,
+  close_order,
+  products_event,
   products_name,
   vendors_name,
-  products_ordered,
-  rating,
-  customerdiscount: discount,
-  current_price,
-  products_quantity: stock,
-  isholidaydata,
+  sales_products,
+  products_stock,
+  products_jenis,
   po_opendate,
   po_closedate,
-  discount_price: discount_price_be,
   po_shippingdate,
-  po_close_status,
-  isfreeshipping,
-  promos,
+  po_status,
+  promo_flash_sale,
+  special_name,
+  price: normalPrice,
+  special_products_price,
+  flash_sale_price,
+  customers_discount,
+  flash_sale_name,
+  flash_sale_expires_date,
+  special_expires_date,
+  flash_sale_discount,
+  manufacturers_name,
+  reviews,
+  is_free_shipping,
+  free_shipping_data,
+  is_instalment,
 }) => {
-  const isClose = preOrder && po_close_status == 1;
+  const auth = useAuthContext();
 
-  if (promos != "") {
-    //    const isPromo = JSON.parse(promos);
+  let isPromo = false;
+  let promoData = {};
+  let pricePromo = 0;
+  let discountPromo = 0;
+  let event = '';
+  let promoExpiredTime = null;
+  let [timer, setTimer] = useState(null);
+  let color = '';
+  let bgImage = '';
+
+  let price = Number(normalPrice);
+
+  if (products_event == 'flash_sale' && (flash_sale_price != price || flash_sale_discount > 0)) {
+    isPromo = true;
+    promoData = flash_sale_name
+    pricePromo = Number(flash_sale_price);
+    discountPromo = flash_sale_discount;
+    event = flash_sale_discount == 0 ? '' : `Flash Sale ${discountPromo}%`;
+    promoExpiredTime = flash_sale_expires_date;
+    color = 'red.500';
+    bgImage = '/images/labels/2.svg'
+  } else if (products_event == 'special') {
+    isPromo = true;
+    promoData = special_name;
+    pricePromo = Number(special_products_price);
+    discountPromo = (price - pricePromo) / price * 100
+    event = `Special ${parseInt(discountPromo)}%`;
+    promoExpiredTime = special_expires_date;
+    color = '#ED8936';
+    bgImage = '/images/labels/5.svg'
   }
-  const isPromo = promos ? JSON.parse(promos) : null;
 
-  const discount_price = discount_price_be
-    ? new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      maximumFractionDigits: 0,
-      minimumFractionDigits: 0,
-    }).format(Number(discount_price_be))
-    : null;
-  const price = current_price
-    ? new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      maximumFractionDigits: 0,
-      minimumFractionDigits: 0,
-    }).format(Number(current_price))
-    : null;
+  const price_product_data = { price, pricePromo, discountPromo, isPromo, event, customers_discount, products_event };
+
+  if (products_event != '') {
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setTimer(calculateTimeLeft(promoExpiredTime));
+      }, 1000);
+      return () => clearInterval(interval);
+    }, [null]);
+  }
+
+  const rating = JSON.parse(reviews ?? "[]");
+  let avgRating = 0;
+
+  if (rating.length > 0) {
+    avgRating = rating.reduce((old, item) => old + item.reviews_rating, 0) / rating.length;
+  }
 
   return (
     <Box>
@@ -77,194 +159,450 @@ const ProductHeader = ({
         <Flex alignItems="center">
           <FaStar color="gray" as="span" size={"1em"} />
           <Text color="gray.500" pl="0.3rem">
-            {Number(rating).toFixed(1)}
+            {Number(avgRating).toFixed(1)}
           </Text>
         </Flex>
-        <Text color="gray.500">{vendors_name}</Text>
-        <Text color="gray.500">Terjual {products_ordered}</Text>
-        {libur ? (
+        <Text color="gray.500">{manufacturers_name}</Text>
+        <Text color="gray.500">Terjual {sales_products}</Text>
+        {holiday ? (
           <Flex alignItems="center">
             <RiCalendarEventFill size="1.4em" color="#DD6B20" as="span" />
-            <Text color="orange.400" pl="0.5rem">
+            <Text color="orange.400" pl="0.25rem">
               Toko Libur
             </Text>
           </Flex>
         ) : (
-          <Stack
-            color={stock > 0 ? "green.400" : "red.400"}
-            direction="row"
-            align="center"
-          >
-            <IoIosCheckmarkCircleOutline as="span" size="1.2em" />
-            <Text alignSelf="center">
-              {stock > 0 ? `Stok Tersedia (${stock})` : "Stok habis"}
-            </Text>
-          </Stack>
+          <Tooltip label={<Flex alignItems={'center'}><IoFileTrayStacked as="span" size="1.2em" />&ensp;Cek Stok</Flex>} placement={'top'}>
+            <Link
+              _hover={{ textStyle: "none" }}
+              href={`/stok?product_name=${products_name}`}
+              target="_blank"
+            // onClick={(e) => router.push(`/product-detail/${products_slug}`)}
+            >
+              <Stack
+                color={products_stock > 0 ? "green.400" : "red.400"}
+                direction="row"
+                align="center"
+                cursor={'pointer'}
+              >
+                <IoIosCheckmarkCircleOutline as="span" size="1.4em" />
+                <Text alignSelf="center">
+                  {products_stock > 0 ? `Stok Tersedia (${products_stock})` : "Stok habis"}
+                </Text>
+              </Stack>
+            </Link>
+          </Tooltip>
         )}
-        {preOrder && (
+        {products_jenis == 'po' && (
           <Flex alignItems="center">
-            <IoTimeOutline size="1.4em" color="#ECC94B" as="span" />
-            <Text color="yellow.400" pl="0.5rem">
+            <IoTimeOutline size="1.4em" color="#ED477A" as="span" />
+            <Text color="#ED477A" pl="0.25rem">
               Pre Order
             </Text>
           </Flex>
         )}
-        {isfreeshipping == 1 && (
-          <Flex alignItems="center">
-            <Icon
-              color="green.400"
-              as={FaShippingFast}
-              width="1.25em"
-              height="1.25em"
-            />
-            <Text color="green.400" pl="0.5rem">
-              Free Ongkir
-            </Text>
-          </Flex>
+        {is_instalment.length > 0 && (
+          <ShowDetailCicilan cicilan_data={is_instalment} />
+        )}
+        {is_free_shipping == 1 && (
+          <ShowDetailFreeShipping free_shipping_data={free_shipping_data} />
         )}
       </Stack>
-      {isPromo != null && (
-        <Box
-          my="1rem"
-          w={{ lg: "95%", xl: "full" }}
-          bg="#e53e3e"
-          color="#ffffff"
-          fontWeight="500"
-          px="1rem"
-          py={{ base: "0.5rem", xl: "1rem" }}
-          border="1px red solid"
-          borderRadius="8px"
-          textAlign="center"
-          fontSize="1rem"
-        >
-          {isPromo.promoname}
-        </Box>
-      )}
-
       {
-        libur && (
+        products_jenis == 'po' && po_status != 1 && (
           <Box
             my="1rem"
             w={{ lg: "95%", xl: "full" }}
-            bg="red.50"
-            color="red.400"
-            fontWeight="500"
-            px="1rem"
-            py={{ base: "0.5rem", xl: "1rem" }}
-            border="1px red solid"
+            color="white"
+            p="0.5rem"
             borderRadius="8px"
-            textAlign="center"
-            fontSize="1rem"
+            style={{ backgroundImage: `url('/images/labels/3.svg')` }}
+            bgRepeat={'no-repeat'}
+            backgroundSize={{ base: '1000%', md: '200%' }}
+            bgPosition={'center'}
           >
-            Toko ini sedang libur. {isholidaydata ?? ""}
+            <Flex justifyContent="left" alignItems={"center"}>
+              <IoIosCloseCircle size="1.2em" ></IoIosCloseCircle>
+              <Text fontWeight={'600'} ml={1}> Pre Order Telah Berakhir</Text>
+            </Flex>
           </Box>
         )
       }
-
       {
-        po_opendate && po_closedate && po_shippingdate && !isClose && (
+        products_jenis == 'po' && po_status == 1 && (
           <Box
             my="1rem"
             w={{ lg: "95%", xl: "full" }}
-            bg="orange.50"
-            color="orange.400"
-            fontWeight="500"
-            px="1rem"
-            py="0.5rem"
-            border="1px red solid"
+            color="white"
+            p="0.5rem"
             borderRadius="8px"
-            fontSize="1rem"
+            style={{ backgroundImage: `url('/images/labels/3.svg')` }}
+            bgRepeat={'no-repeat'}
+            backgroundSize={{ base: '1000%', md: '200%' }}
+            bgPosition={'center'}
           >
-            <Flex justifyContent="space-between" px="1rem">
+            <Flex justifyContent="space-between" px="1rem" direction={{ base: 'column', md: 'row' }}>
               <Box>
-                <Text>Periode Pemesanan</Text>
-                <Text fontWeight="400" fontSize="1.2rem">
-                  {po_opendate} s.d. {po_closedate}
+                <Text fontWeight={'600'}>Periode Pemesanan</Text>
+                <Text fontSize="1rem">
+                  {moment(po_opendate).format('DD/MMM/YYYY HH:mm')} s.d. {moment(po_closedate).format('DD/MMM/YYYY HH:mm')}
                 </Text>
               </Box>
               <Box>
-                <Text>Estimasi Pengiriman</Text>
-                <Text fontWeight="400" fontSize="1.2rem">
-                  {po_shippingdate}
+                <Text fontWeight={'600'}>Estimasi Pengiriman</Text>
+                <Text fontSize="1rem">
+                  {moment(po_shippingdate).format('DD/MMM/YYYY')}
                 </Text>
               </Box>
             </Flex>
           </Box>
         )
       }
-
       {
-        isClose && (
-          <Flex
-            my="1rem"
-            w={{ lg: "95%", xl: "full" }}
-            bg="orange.50"
-            color="orange.400"
-            fontWeight="500"
-            px="1rem"
-            py="0.5rem"
-            border="1px red solid"
-            borderRadius="8px"
-            fontSize="1rem"
-            justify="center"
-            align="center"
-          >
-            <Text>Pre Order Telah Berakhir</Text>
-          </Flex>
+        isPromo && (
+          <>
+            <Box p={'5px'} borderRadius={'5px'} mb={'10px'} style={{ backgroundImage: `url('${bgImage}')` }} backgroundPosition={'70%'} bgRepeat={'no-repeat'} backgroundSize={{ base: '1000%', md: '175%' }}>
+              <Flex justifyContent={'space-between'} alignItems={{ base: 'left', md: 'center' }} direction={{ base: 'column', md: 'row' }}>
+                <Box>
+                  {
+                    products_event == 'flash_sale'
+                      ?
+                      <Image src="/images/logo/flash_sale.svg" h={'30px'} />
+                      :
+                      <Image src="/images/logo/special_price.svg" h={'38px'} mt="-4px" mb="-4px" />
+                  }
+                </Box>
+                <Flex gridGap={'2px'} ml={'5px'} pb={{ base: '5px', md: '0px' }} >
+                  <Text mr={'5px'} fontWeight={'600'} color={'white'}> <IoTimeOutline size="1.2em" color="white" style={{ 'display': 'inline', 'marginTop': '-2px' }} /> Berakhir Dalam</Text>
+                  <Box px={'4px'} mx={'1px'} bg={'blackAlpha.700'} color={'white'} borderRadius={'2px'} fontWeight={'600'}>{pad(timer?.days ?? 0)}</Box>
+                  <Text color={'white'}>:</Text>
+                  <Box px={'4px'} mx={'1px'} bg={'blackAlpha.700'} color={'white'} borderRadius={'2px'} fontWeight={'600'}>{pad(timer?.hours ?? 0)}</Box>
+                  <Text color={'white'}>:</Text>
+                  <Box px={'4px'} mx={'1px'} bg={'blackAlpha.700'} color={'white'} borderRadius={'2px'} fontWeight={'600'}>{pad(timer?.minutes ?? 0)}</Box>
+                  <Text color={'white'}>:</Text>
+                  <Box px={'4px'} mx={'1px'} bg={'blackAlpha.700'} color={'white'} borderRadius={'2px'} fontWeight={'600'}>{pad(timer?.seconds ?? 0)}</Box>
+                </Flex>
+              </Flex>
+              {
+                products_event == 'flash_sale' && (
+                  <Text fontSize={'16px'} px="8px" pb="4px" fontWeight={'600'} color={'white'}>
+                    {promoData}
+                  </Text>
+                )
+              }
+            </Box>
+          </>
         )
       }
-      {
-        discount_price && discount_price !== price ? (
-          <Box>
-            <Text
-              as="del"
-              color="gray.300"
-              className="secondaryFont"
-              fontSize="16px"
-              h="24px"
-            >
-              {price}
-            </Text>
-          </Box>
-        ) : (
-          ""
-        )
-      }
-
-      <Stack direction="row">
-        <Text
-          className="primaryFont"
-          color="red.500"
-          fontSize="36px"
-          fontWeight="bold"
-        >
-          {discount_price ?? price}
-        </Text>
-        <Box alignSelf="center">
-          {discount ? (
-            <Text
-              className="secondaryFont"
-              color="white"
-              bg="red.500"
-              fontWeight="500"
-              fontSize="14px"
-              px="8px"
-              py="4px"
-              borderRadius="4px"
-            >
-              Diskon {discount}%
-            </Text>
-          ) : (
-            ""
-          )}
-        </Box>
-      </Stack>
+      <PriceProducts price_product_data={price_product_data} />
+      {/* <Box height={'5px'} /> */}
     </Box >
   );
 };
 
-ProductHeader.defaultProps = {
-  po_close_status: 1,
-};
+const ShowDetailFreeShipping = ({ free_shipping_data }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  return (
+    <>
+      <Flex alignItems="center" onClick={onOpen} style={{ cursor: 'pointer' }}>
+        <Icon
+          color="green.400"
+          as={FaShippingFast}
+          width="1.25em"
+          height="1.25em"
+        />
+        <Text color="green.400" pl="0.25rem">
+          Free Ongkir
+        </Text>
+      </Flex>
+
+      <Modal isOpen={isOpen} onClose={onClose} size={'xl'}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Free Ongkir</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {
+              free_shipping_data.map((item) =>
+                <Box shadow={'base'} border={'1px'} borderColor={'gray.200'} borderRadius={'base'} p={3} mb={4} >
+                  <Text fontWeight={'600'}>{item.promos_desc}</Text>
+                  <table style={{ 'fontSize': '14px', 'marginTop': '5px' }} className="info_free_shipping_table">
+                    <tbody>
+                      <tr>
+                        <td style={{ whiteSpace: 'nowrap' }}>Minimum Pembelian&emsp;</td>
+                        <td>:</td>
+                        <td>{item.promos_qty} Qty</td>
+                      </tr>
+                      <tr>
+                        <td style={{ whiteSpace: 'nowrap' }}>Minimum Total Pembelian&emsp;</td>
+                        <td>:</td>
+                        <td>{currencyFormat(item.promos_total)}</td>
+                      </tr>
+                      <tr>
+                        <td>Diskon Ongkir&emsp;</td>
+                        <td>:</td>
+                        <td>{
+                          item.promos_fulldisc == 1
+                            ?
+                            'Free'
+                            :
+                            currencyFormat(item.promos_amount)
+                        }</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                </Box>
+              )
+            }
+
+          </ModalBody>
+
+        </ModalContent>
+      </Modal>
+    </>
+  )
+}
+
+const ShowDetailCicilan = ({ cicilan_data }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  return (
+    <>
+      <Flex alignItems="center" onClick={onOpen} style={{ cursor: 'pointer' }}>
+        <FaPercent size="1em" color="blueviolet" as="span" />
+        <Text color="blueviolet" pl="0.25rem">
+          Cicilan
+        </Text>
+      </Flex>
+
+      <Modal isOpen={isOpen} onClose={onClose} size={'2xl'}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Cicilan</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            {
+              cicilan_data.map((item) =>
+                <Box shadow={'base'} border={'1px'} borderColor={'gray.200'} borderRadius={'base'} p={3} mb={4} >
+                  <Text fontWeight={'600'}>{item.promos_desc}</Text>
+                  <table style={{ 'fontSize': '14px', 'marginTop': '5px' }} >
+                    <tbody>
+                      <tr>
+                        <td style={{ whiteSpace: 'nowrap' }} valign="top">Produk<br></br>Cicilan&emsp;</td>
+                        <td valign="top">:&ensp;</td>
+                        <td valign="top">
+                          <table>
+                            <tbody>
+                              {item.list_products.map((item2, index) =>
+                                <tr>
+                                  <td valign="top">{(index) + 1}. </td>
+                                  <td valign="top"><Link
+                                    _hover={{ textStyle: "none" }}
+                                    href={`/product-detail/${item2.products_slug}`}
+                                    target="_blank"
+                                    fontWeight={"bold"}
+                                    color={"orange.400"}
+                                    mr="1"
+                                    mb="1"
+                                    display={'inline-block'}
+                                  >
+                                    {item2.products_name}
+                                  </Link></td>
+                                </tr>
+                              )}
+
+                            </tbody>
+                          </table>
+
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colSpan={3}><hr style={{ marginTop: 10, marginBottom: 10 }} /></td>
+                      </tr>
+                      <tr>
+                        <td style={{ whiteSpace: 'nowrap' }}>DP&emsp;</td>
+                        <td>:&ensp;</td>
+                        <td><Badge colorScheme='green'>DP 50%</Badge></td>
+                      </tr>
+                      <tr>
+                        <td style={{ whiteSpace: 'nowrap' }}>Termin 1&emsp;</td>
+                        <td>:&ensp;</td>
+                        <td>{item.termin_1} | <Badge colorScheme='green'>Cicilan 25%</Badge></td>
+                      </tr>
+                      <tr>
+                        <td style={{ whiteSpace: 'nowrap' }}>Termin 2&emsp;</td>
+                        <td>:&ensp;</td>
+                        <td>{item.termin_2} | <Badge colorScheme='green'>Cicilan 25%</Badge></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </Box>
+              )
+            }
+
+          </ModalBody>
+
+        </ModalContent>
+      </Modal>
+    </>
+  )
+}
+
+const PriceProducts = ({ price_product_data }) => {
+
+
+  const { price, pricePromo, discountPromo, isPromo, event, customers_discount, products_event } = price_product_data;
+  const auth = useAuthContext();
+
+  if (auth.isLoggedIn && isPromo) {
+    if (products_event == 'flash_sale') {
+      if (discountPromo > 0 && price != pricePromo) {
+        const price_after_discount = pricePromo - (pricePromo * (customers_discount + discountPromo) / 100);
+        return (
+          <>
+            <PriceValue as={'del'} price={price} isDiscount={false} size={18} />
+            <PriceValue as={'del'} price={pricePromo} isDiscount={true} infoDiscount={'Flash Sale Price'} size={24} />
+            <PriceValue as={'text'} price={price_after_discount} infoDiscount={'Diskon ' + customers_discount + '% + ' + event} isDiscount={true} size={32} bold={'bold'} isPrimary={true} />
+          </>
+        )
+      } else if (discountPromo > 0 && price == pricePromo) {
+        const price_after_discount = pricePromo - (pricePromo * (customers_discount + discountPromo) / 100);
+        return (
+          <>
+            <PriceValue as={'del'} price={pricePromo} isDiscount={false} size={24} />
+            <PriceValue as={'text'} price={price_after_discount} infoDiscount={'Diskon ' + customers_discount + '% + ' + event} isDiscount={true} size={32} bold={'bold'} isPrimary={true} />
+          </>
+        )
+      } else if (discountPromo <= 0 && price != pricePromo) {
+        const price_after_discount = pricePromo - (pricePromo * (customers_discount + discountPromo) / 100);
+        return (
+          <>
+            <PriceValue as={'del'} price={price} isDiscount={false} size={18} />
+            <PriceValue as={'del'} price={pricePromo} isDiscount={true} infoDiscount={'Flash Sale Price'} size={24} />
+            <PriceValue as={'text'} price={price_after_discount} infoDiscount={'Diskon ' + customers_discount + '%'} isDiscount={true} size={32} bold={'bold'} isPrimary={true} />
+          </>
+        )
+      } else if (discountPromo <= 0 && price == pricePromo) {
+        const price_after_discount = pricePromo - (pricePromo * (customers_discount + discountPromo) / 100);
+        return (
+          <>
+            <PriceValue as={'del'} price={pricePromo} isDiscount={false} size={24} />
+            <PriceValue as={'text'} price={price_after_discount} infoDiscount={'Diskon ' + customers_discount + '%'} isDiscount={true} size={32} bold={'bold'} isPrimary={true} />
+          </>
+        )
+      }
+    } else if (products_event == 'special') {
+      const price_after_discount = pricePromo - (pricePromo * customers_discount / 100);
+      return (
+        <>
+          <PriceValue as={'del'} price={price} isDiscount={false} size={18} />
+          <PriceValue as={'del'} price={pricePromo} infoDiscount={event} isDiscount={true} size={24} />
+          <PriceValue as={'text'} price={price_after_discount} infoDiscount={'Diskon ' + customers_discount + '%'} isDiscount={true} size={32} bold={'bold'} isPrimary={true} />
+        </>
+      )
+    }
+  } else if (auth.isLoggedIn && !isPromo) {
+    const price_after_discount = price - (price * customers_discount / 100);
+    return (
+      <>
+        <PriceValue as={'del'} price={price} isDiscount={false} size={24} />
+        {/* <PriceValue as={'del'} price={pricePromo} infoDiscount={event} isDiscount={true} size={24} /> */}
+        <PriceValue as={'text'} price={price_after_discount} infoDiscount={'Diskon ' + customers_discount + '%'} isDiscount={true} size={32} bold={'bold'} isPrimary={true} />
+      </>
+    )
+  } else if (!auth.isLoggedIn && isPromo) {
+    if (products_event == 'flash_sale') {
+      if (discountPromo > 0 && price != pricePromo) {
+        const price_after_discount = pricePromo - (pricePromo * (discountPromo) / 100);
+        return (
+          <>
+            <PriceValue as={'del'} price={price} isDiscount={false} size={18} />
+            <PriceValue as={'del'} price={pricePromo} isDiscount={true} infoDiscount={'Flash Sale Price'} size={24} />
+            <PriceValue as={'text'} price={price_after_discount} infoDiscount={event} isDiscount={true} size={32} bold={'bold'} isPrimary={true} />
+          </>
+        )
+      } else if (discountPromo > 0 && price == pricePromo) {
+        const price_after_discount = pricePromo - (pricePromo * (discountPromo) / 100);
+        return (
+          <>
+            <PriceValue as={'del'} price={pricePromo} isDiscount={false} size={24} />
+            <PriceValue as={'text'} price={price_after_discount} infoDiscount={event} isDiscount={true} size={32} bold={'bold'} isPrimary={true} />
+          </>
+        )
+      } else if (discountPromo <= 0 && price != pricePromo) {
+        const price_after_discount = pricePromo - (pricePromo * (discountPromo) / 100);
+        return (
+          <>
+            <PriceValue as={'del'} price={price} size={24} />
+            <PriceValue as={'text'} price={price_after_discount} infoDiscount={'Flash Sale Price'} isDiscount={true} size={32} bold={'bold'} isPrimary={true} />
+          </>
+        )
+      } else if (discountPromo <= 0 && price == pricePromo) {
+        const price_after_discount = pricePromo - (pricePromo * (discountPromo) / 100);
+        return (
+          <>
+            <PriceValue as={'del'} price={pricePromo} isDiscount={false} size={24} />
+            <PriceValue as={'text'} price={price_after_discount} infoDiscount={'Diskon ' + customers_discount + '%'} isDiscount={true} size={32} bold={'bold'} isPrimary={true} />
+          </>
+        )
+      }
+    } else if (products_event == 'special') {
+      const price_after_discount = pricePromo;
+      return (
+        <>
+          <PriceValue as={'del'} price={price} isDiscount={false} size={24} />
+          {/* <PriceValue as={'del'} price={pricePromo} infoDiscount={event} isDiscount={true} size={24} /> */}
+          <PriceValue as={'text'} price={price_after_discount} infoDiscount={event} isDiscount={true} size={32} bold={'bold'} isPrimary={true} />
+        </>
+      )
+    }
+  } else if (!auth.isLoggedIn && !isPromo) {
+    const price_after_discount = price;
+    return (
+      <>
+        {/* <PriceValue as={'del'} price={price} isDiscount={false} size={24} />   */}
+        {/* <PriceValue as={'text'} price={pricePromo} infoDiscount={event} isDiscount={true} size={32} bold={'bold'} /> */}
+        <PriceValue as={'text'} price={price_after_discount} isDiscount={false} size={32} bold={'bold'} isPrimary={true} />
+      </>
+    )
+  }
+}
+
+
+const PriceValue = ({ as, price, isDiscount, infoDiscount, size, bold = 300, isPrimary }) => {
+  return (
+    <>
+      <Stack direction={'row'} mb={'-5px'}>
+        <Text
+          as={as}
+          color={as == 'del' ? 'gray.300' : 'red.500'}
+          className={isPrimary ? 'primaryFont' : 'secondaryFont'}
+          fontSize={size}
+          fontWeight={bold}
+        >
+          {currencyFormat(price)}
+        </Text>
+        {
+          isDiscount && (
+            <Box alignSelf="center" textAlign={'center'}>
+              <Text
+                className="secondaryFont"
+                color="white"
+                bg="red.500"
+                fontWeight="300"
+                fontSize={size / 2.2}
+                px="4px"
+                py="2px"
+                borderRadius="4px"
+              >
+                {infoDiscount}
+              </Text>
+            </Box>
+          )
+        }
+      </Stack>
+    </>
+  )
+}
 
 export default ProductHeader;

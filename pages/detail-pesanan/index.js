@@ -235,19 +235,28 @@ const Pengiriman = ({ kurir, pengiriman, handler, loadingKurir }) => {
           {loadingKurir ? (
             <Spinner m="3" />
           ) : (
-            <Select
-              className="secondaryFont"
-              placeholder="Pilih jasa pengiriman"
-              onChange={(event) => {
-                handler(event.target.value);
-              }}
-            >
-              {kurir.map((jasa, index) => (
-                <option value={jasa.name} key={index}>
-                  {jasa.name} ({currencyFormat(jasa.rate)})
-                </option>
-              ))}
-            </Select>
+            <>
+              {
+                kurir
+                  ?
+                  <Select
+                    className="secondaryFont"
+                    placeholder="Pilih jasa pengiriman"
+                    onChange={(event) => {
+                      handler(event.target.value);
+                    }}
+                  >
+                    {kurir?.map((jasa, index) => (
+                      <option value={jasa.name} key={index}>
+                        {jasa.name} ({currencyFormat(jasa.rate)})
+                      </option>
+                    ))}
+                  </Select>
+                  :
+                  <Text className="primaryFont" >Kurir tidak ditemukan, silakan hubungi admin!</Text>
+              }
+
+            </>
           )}
         </Flex>
         <Flex justify="space-between">
@@ -533,6 +542,7 @@ const DetailPesanan = () => {
   const router = useRouter();
 
   const { userData } = useAuthContext();
+  const adminId = userData?.admin_id;
   const {
     checkoutData,
     setOrderNumber,
@@ -557,7 +567,7 @@ const DetailPesanan = () => {
   const toast = useToast();
 
   let arrayOfCustomerBasket = [];
-  let weight, vendors_id, vendor_origin, totalOrder, products_jenis;
+  let weight, vendors_id, vendor_origin, totalOrder, products_jenis, warehouse_id;
 
   if (typeof window !== "undefined") {
     const productsJson = localStorage.getItem("selectedProduct");
@@ -572,6 +582,7 @@ const DetailPesanan = () => {
       vendors_id = productItems[0].vendors_id;
       vendor_origin = productItems[0].vendors_origin;
       products_jenis = productItems[0].products_jenis;
+      warehouse_id = productItems[0].warehouse_id;
     }
   }
 
@@ -587,6 +598,7 @@ const DetailPesanan = () => {
         vendors_id,
         vendor_origin,
         device_id,
+        warehouse_id
       )
         .then((res) => {
           setKurir(res.data.data.kurirIndonesia.services);
@@ -693,7 +705,9 @@ const DetailPesanan = () => {
   let totalPrice = 0,
     totalQuantity = 0,
     totalDiscount = 0,
-    totalWeight = 0;
+    totalWeight = 0,
+    handlingFeeAdmin = 0,
+    handlingFeeAdminDiscount = 0;
 
   if (typeof window !== "undefined") {
     const checkoutDataJson = localStorage.getItem("selectedProduct");
@@ -704,6 +718,10 @@ const DetailPesanan = () => {
       totalQuantity = checkoutData.quantity;
       totalWeight = checkoutData.weight;
       totalDiscount = checkoutData.discount;
+      if (adminId != null) {
+        handlingFeeAdmin = checkoutData.handling_fee_admin;
+        handlingFeeAdminDiscount = checkoutData.handling_fee_admin_discount;
+      }
     }
   }
   const onSubmit = () => {
@@ -749,6 +767,9 @@ const DetailPesanan = () => {
         "",
         0,
         pengiriman.shipping_promo,
+        adminId,
+        handlingFeeAdmin,
+        handlingFeeAdminDiscount,
       )
         .then((res) => {
           if (isRequestSuccess(res.data)) {
@@ -858,6 +879,7 @@ const DetailPesanan = () => {
             subtotal={totalPrice}
             tambahan={metodePembayaran.biaya}
             pengiriman={pengiriman.harga}
+            handlingFeeAdmin={handlingFeeAdmin}
             diskon={totalDiscount}
             voucher={voucher.harga}
           />

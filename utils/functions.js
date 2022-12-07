@@ -1,6 +1,8 @@
 import nookies from "nookies";
 
 import { IMAGE_HOST } from "../constants/api";
+import { deleteAllCookies } from "../utils/cookies";
+
 
 const fallbackCopyTextToClipboard = (text) => {
   var textArea = document.createElement("textarea");
@@ -32,7 +34,7 @@ export const copyToClipboard = (text, onSuccess, onFail) => {
   }
   navigator.clipboard
     .writeText(text)
-    .then(onSuccess ? onSuccess : () => {})
+    .then(onSuccess ? onSuccess : () => { })
     .catch(() => console.error("Unable to copy", err));
 };
 
@@ -107,6 +109,10 @@ export const calculateTimeLeft = (endTime) => {
   return timeLeft;
 };
 
+export const pad = (value) => {
+  return (value < 10) ? '0' + value.toString() : value.toString();
+}
+
 export const calculateDiscountedPrice = (realPrice, discount) => {
   if (!discount) {
     return realPrice;
@@ -176,15 +182,13 @@ export const currencyFormat = (amount) => {
  * date: MM/DD/YYYY
  */
 export const dateFormat = (date) => {
-  return `${new Date(date).getFullYear()}-${
-    new Date(date).getMonth() + 1 < 10
-      ? "0" + (new Date(date).getMonth() + 1).toString()
-      : new Date(date).getMonth() + 1
-  }-${
-    new Date(date).getDate() < 10
+  return `${new Date(date).getFullYear()}-${new Date(date).getMonth() + 1 < 10
+    ? "0" + (new Date(date).getMonth() + 1).toString()
+    : new Date(date).getMonth() + 1
+    }-${new Date(date).getDate() < 10
       ? "0" + new Date(date).getDate().toString()
       : new Date(date).getDate()
-  }`;
+    }`;
 };
 
 export const titleCase = (str) => {
@@ -219,7 +223,11 @@ export const isNumber = (n) => {
 };
 
 export const parseNumber = (str) => {
-  return typeof str == "number" ? str : Number(str.slice(0, -3));
+  try {
+    return typeof str == "number" ? str : Number(str);
+  } catch (_) {
+    console.log(str);
+  }
 };
 
 export const getDeviceId = () => {
@@ -229,7 +237,7 @@ export const getDeviceId = () => {
 export const getUserId = () => {
   if (document.cookie.indexOf("user_id") !== -1)
     return nookies.get(null, "user_id");
-  return null;
+  return '';
 };
 
 export const getPriceAfterDiscount = (finalPrice, customerDiscount) => {
@@ -238,16 +246,17 @@ export const getPriceAfterDiscount = (finalPrice, customerDiscount) => {
 
 export const logout = () => {
   localStorage.clear();
-  // clear cookie
-  document.cookie =
-    "user_id" + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;";
-  document.cookie = "token" + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;path=/;";
+  deleteAllCookies();
 
   window.location.href = "/";
 };
 
 export const getImageLink = (link) => {
-  return IMAGE_HOST + link?.replace("images/media/", "");
+  if (link == '') {
+    return 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg'
+  } else {
+    return IMAGE_HOST + link?.replace("images/media/", "");
+  }
 };
 
 export const isValidJson = (str) => {

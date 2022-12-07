@@ -59,7 +59,6 @@ export const CheckoutProvider = ({ children }) => {
     const savedCheckoutResponse = window.sessionStorage.getItem(
       "checkoutResponse",
     );
-    console.log(savedCheckoutResponse);
     if (savedCheckoutResponse) {
       try {
         setCheckoutResponse(JSON.parse(savedCheckoutResponse));

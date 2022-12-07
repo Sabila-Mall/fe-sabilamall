@@ -66,7 +66,7 @@ const OrderInformation = ({ order }) => {
 
   const status = orderData?.payment_status;
   const productDiscount = orderData?.level_discount;
-  const voucherDiscount = orderData?.shipping_promo_amount;
+  const voucherDiscount = orderData?.shipping_cost == 0 ? 0 : orderData?.shipping_promo_amount;
   const couponAmount = orderData?.coupon_amount;
   const notes = orderData?.order_notes;
   const resi = resiData?.waybill_cognote;
@@ -108,13 +108,13 @@ const OrderInformation = ({ order }) => {
           discountPrice: currencyFormat(
             (temporaryProducts[i].final_price *
               (100 - temporaryProducts[i].customers_discount)) /
-              100,
+            100,
           ),
           quantity: temporaryProducts[i].products_quantity,
           subTotal: currencyFormat(
             (temporaryProducts[i].final_price *
               (100 - temporaryProducts[i].customers_discount)) /
-              100,
+            100,
           ),
         },
       ];
@@ -246,7 +246,7 @@ const OrderInformation = ({ order }) => {
                 {(() => {
                   if (
                     status?.toLowerCase() == "pending" &&
-                    orderData?.payment_method === TRANSFER_BANK
+                    orderData?.payment_method === TRANSFER_BANK && !([5, 6].includes(orderData?.orders_status_id))
                   ) {
                     return (
                       <>
@@ -428,21 +428,21 @@ const OrderInformation = ({ order }) => {
                       <Flex alignItems="center">
                         <Text>{`No. Resi:  ${resiData?.found == 0 ? '-' : resi}`}</Text>
                         {resiData?.found != 0 && (
-                        <Tooltip
-                          label={hasCopied ? "Copied!" : "Copy"}
-                          placement="top"
-                          closeOnClick={false}
-                        >
-                          <Box ml="0.25rem">
-                            <Icon
-                              as={IoCopy}
-                              color="orange.500"
-                              boxSize="1rem"
-                              cursor="pointer"
-                              onClick={onCopy}
-                            />
-                          </Box>
-                        </Tooltip>
+                          <Tooltip
+                            label={hasCopied ? "Copied!" : "Copy"}
+                            placement="top"
+                            closeOnClick={false}
+                          >
+                            <Box ml="0.25rem">
+                              <Icon
+                                as={IoCopy}
+                                color="orange.500"
+                                boxSize="1rem"
+                                cursor="pointer"
+                                onClick={onCopy}
+                              />
+                            </Box>
+                          </Tooltip>
                         )}
                       </Flex>
                     )}
@@ -541,6 +541,15 @@ const OrderInformation = ({ order }) => {
                     )}
                   </Text>
                 </Flex>
+                {orderData.handling_fee_admin != 0 && orderData?.handling_fee_admin != null ? (
+                  <Flex mt="8px">
+                    <Text>Admin Fee</Text>
+                    <Spacer />
+                    <Text>+ {currencyFormat(orderData.handling_fee_admin)}</Text>
+                  </Flex>
+                ) : (
+                  <></>
+                )}
                 <Flex mt="8px">
                   <Text>Biaya Pengiriman</Text>
                   <Spacer />
@@ -588,11 +597,12 @@ const OrderInformation = ({ order }) => {
                     className="primaryFont"
                   >
                     {currencyFormat(
+                      parseInt(orderData?.handling_fee_admin ?? 0) +
                       parseInt(subTotalProduk) +
-                        parseInt(orderData?.shipping_cost) +
-                        parseInt(orderData?.addcostvalue) -
-                        parseInt(voucherDiscount) - 
-                        parseInt(couponAmount),
+                      parseInt(orderData?.shipping_cost) +
+                      parseInt(orderData?.addcostvalue) -
+                      parseInt(voucherDiscount) -
+                      parseInt(couponAmount),
                     )}
                   </Text>
                 </Flex>

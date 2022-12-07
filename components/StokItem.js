@@ -34,25 +34,35 @@ const StokItem = ({ img, nama, supplier, tag, link, productId }) => {
     if (fetch && variant.length == 0) {
       apiStock(productId).then((res) => {
         const data = res.data;
-        const listWarna = Object.keys(data);
+        // const listWarna = Object.keys(data);
         let variants = [];
 
-        listWarna.map((warna) => {
-          let ukuran = [];
-          let stok = [];
-
-          data[warna].map((el) => {
-            ukuran.push(el.ukuran);
-            stok.push(el.stock);
+        data.forEach((item) => {
+          variants.push({
+            warehouse: item.warehouse,
+            warna: item.value_color,
+            ukuran: item.value_size,
+            stok: item.stock,
           });
-
-          let ob = {
-            warna: warna,
-            ukuran: ukuran,
-            stok: stok,
-          };
-          variants.push(ob);
         });
+
+        // listWarna.map((warna) => {
+        //   let ukuran = [];
+        //   let stok = [];
+
+
+        //   data[warna].map((el) => {
+        //     ukuran.push(el.ukuran);
+        //     stok.push(el.stock);
+        //   });
+
+        //   let ob = {
+        //     warna: warna,
+        //     ukuran: ukuran,
+        //     stok: stok,
+        //   };
+        //   variants.push(ob);
+        // });
         setVariant((curr) => variants);
         setFetch(false);
       });
@@ -151,6 +161,9 @@ const StokItem = ({ img, nama, supplier, tag, link, productId }) => {
                     paddingBottom="0.2rem"
                   >
                     <Box w="40%">
+                      <Text>Gudang</Text>
+                    </Box>
+                    <Box w="40%">
                       <Text>Warna</Text>
                     </Box>
                     <Box w={{ base: "40%", lg: "50%" }}>
@@ -181,6 +194,14 @@ const StokItem = ({ img, nama, supplier, tag, link, productId }) => {
                               pb="0.6rem"
                             >
                               <Box w="40%">
+                                {vari.warehouse !== "" && <Text>{vari.warehouse}</Text>}
+                                {vari.warehouse === "" && (
+                                  <Text color="gray.300">
+                                    Tanpa Warehouse
+                                  </Text>
+                                )}
+                              </Box>
+                              <Box w="40%">
                                 {vari.warna !== "" && <Text>{vari.warna}</Text>}
                                 {vari.warna === "" && (
                                   <Text color="gray.300">
@@ -189,29 +210,20 @@ const StokItem = ({ img, nama, supplier, tag, link, productId }) => {
                                 )}
                               </Box>
                               <Box w={{ base: "40%", lg: "50%" }}>
-                                {vari.ukuran.length !== 0 &&
-                                  vari.ukuran.map((ukur) => {
-                                    return <Text key={ukur}>{ukur}</Text>;
-                                  })}
-                                {vari.ukuran.length === 0 && (
+                                {vari.ukuran !== "" && <Text>{vari.ukuran}</Text>}
+                                {vari.ukuran === "" && (
                                   <Text color="gray.300">
                                     Tanpa varian ukuran
                                   </Text>
                                 )}
                               </Box>
                               <Box w={{ base: "20%", lg: "10%" }}>
-                                {vari.stok &&
-                                  vari.stok.map((stokk, i) => {
-                                    if (stokk !== 0) {
-                                      return <Text key={i}>{stokk}</Text>;
-                                    } else {
-                                      return (
-                                        <Text key={i} color="red.500">
-                                          Habis
-                                        </Text>
-                                      );
-                                    }
-                                  })}
+                                {vari.stok !== "" && <Text>{vari.stok}</Text>}
+                                {vari.stok === "" && (
+                                  <Text color="gray.300">
+                                    Stok Habis
+                                  </Text>
+                                )}
                               </Box>
                             </Box>
                           </>

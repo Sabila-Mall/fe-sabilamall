@@ -74,7 +74,7 @@ export const ProductCart = ({ isDiscount, product }) => {
       <Flex
         alignItems="start"
         justifyContent={{ base: "center", md: "start" }}
-        justifyContent="flex-start"
+        // justifyContent="flex-start"
         as="label"
         _hover={{ cursor: "pointer" }}
       >
@@ -149,7 +149,7 @@ export const ProductCart = ({ isDiscount, product }) => {
         color={"gray.400"}
         fontSize={"0.75rem"}
         defaultValue={product?.customers_basket_notes || "tambahkan Catatan"}
-        // isPreviewFocusable={false}
+      // isPreviewFocusable={false}
       >
         <HStack spacing={"0.25rem"}>
           <EditableControls />
