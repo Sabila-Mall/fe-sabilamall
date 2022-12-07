@@ -501,8 +501,8 @@ const TermsAndConditions = () => {
                   foto/video barang bersama hang tag (banderol).
                 </ListItem>
                 <ListItem>
-                  Komplain karena kurang barang wajib disertai dengan foto/video
-                  barang bersama packing.
+                  Komplain karena kurang barang wajib disertai dengan video
+                  unboxing (membuka) paket.
                 </ListItem>
                 <ListItem>
                   Komplain permintaan retur/penggantian barang/pengiriman kurang
