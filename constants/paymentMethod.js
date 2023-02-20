@@ -8,4 +8,5 @@ export const PAYMENT_METHOD = {
   GOPAY: "Midtrans - Gopay",
   SHOPEE_PAY: "Midtrans - Shopeepay",
   CSTORE: "Midtrans - Alfamart",
+  VA: "Virtual Account",
 };

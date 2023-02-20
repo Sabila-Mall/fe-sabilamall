@@ -8,6 +8,7 @@ import { InvoiceInfoGopay } from "./InvoiceInfoGopay";
 import { InvoiceInfoQRIS } from "./InvoiceInfoQRIS";
 import { InvoiceInfoSMPay } from "./InvoiceInfoSMPay";
 import { InvoiceInfoVAMandiri } from "./InvoiceInfoVAMandiri";
+import { InvoiceInfoVA } from "./InvoiceInfoVA";
 import { InvoiceInfoVirtualAccount } from "./InvoiceInfoVirtualAccount";
 import { InvoiceInfoShopeePay } from "./PaymentInfoShopeePay";
 
@@ -30,6 +31,8 @@ export const InvoiceInfo = () => {
       return <InvoiceInfoGopay checkoutResponse={checkoutResponse} />;
     case PAYMENT_METHOD.CSTORE:
       return <InvoiceInfoCStore checkoutResponse={checkoutResponse} />;
+    case PAYMENT_METHOD.VA:
+      return <InvoiceInfoVA checkoutResponse={checkoutResponse} />;
     default:
       if (paymentMethod.startsWith(PAYMENT_METHOD.VIRTUAL_ACCOUNT_PREFIX)) {
         return (

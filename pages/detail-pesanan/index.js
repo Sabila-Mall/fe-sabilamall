@@ -64,7 +64,7 @@ import {
  * @param {CheckoutProduct[]} daftarProduk
  */
 
-const ACCEPTED_PAYMENT_METHODS = ["transferbank", "deposit", "midtrans"];
+const ACCEPTED_PAYMENT_METHODS = ["transferbank", "deposit", "midtrans", "mekari_pay"];
 
 const RingkasanPesanan = () => {
   const { width } = useWindowSize();
@@ -656,7 +656,21 @@ const DetailPesanan = () => {
             return item.name?.toLowerCase() !== "shopeepay";
           });
 
+          // const mekariPay = {
+          //   active: 1,
+          //   isavailable: 1,
+          //   method: "mekari_pay",
+          //   name: "Virtual Account",
+          //   payment_method: "mekari_pay"
+          // }
+
+          // filteredData = [...filteredData, mekariPay]
+          // data = [...data, mekariPay]
+
+
           const selectedData = isDesktop ? filteredData : data;
+
+          // console.log(selectedData);
 
           setPaymentMethod(selectedData);
         })
