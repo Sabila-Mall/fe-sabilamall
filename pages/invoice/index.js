@@ -10,6 +10,8 @@ import { currencyFormat } from "../../utils/functions";
 const Invoice = () => {
   const { orderNumber, subtotal, checkoutResponse } = useCheckoutContext();
 
+  console.log(checkoutResponse?.data?.payment_method);
+
   return (
     <>
       <Layout
@@ -44,11 +46,18 @@ const Invoice = () => {
             Halaman ini tidak dapat diakses kembali. Mohon screenshot/cetak
             halaman ini untuk menyimpan tata cara pembayaran.
           </Text>
-          <CetakTataCaraPembayaranButton />
-          <Text mb="1rem" as="h1" fontWeight="500">
-            Konfirmasi pembayaran di menu KONFIRMASI pada web ini. Jika sukses,
-            tunggu beberapa jam akan menjadi PAID.
-          </Text>
+          {
+            checkoutResponse?.data?.payment_method != 'Virtual Account' && (
+              <>
+                <CetakTataCaraPembayaranButton />
+                <Text mb="1rem" as="h1" fontWeight="500">
+                  Konfirmasi pembayaran di menu KONFIRMASI pada web ini. Jika sukses,
+                  tunggu beberapa jam akan menjadi PAID.
+                </Text>
+              </>
+            )
+          }
+
           <Flex justifyContent="space-between" w={{ base: "75%", lg: "60%" }}>
             <Text>Nomor Order/Invoice</Text>
             <Text fontWeight="bold">{checkoutResponse.orders_number}</Text>
