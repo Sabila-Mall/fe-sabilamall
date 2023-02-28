@@ -42,12 +42,14 @@ const CardProduct = ({
   vendors_name,
   manufacturer_name,
   is_instalment,
+  po_closedate,
 }) => {
   const { isLoggedIn, userData } = useAuthContext();
   const userId = isLoggedIn ? userData?.id : "";
   const { wishlistData } = useWishlistContext();
   const [imageHeight, setImageHeight] = useState(144);
   const timeLeft = flash_sale_expires_date && calculateTimeLeft(flash_sale_expires_date);
+  const timeLeftPO = po_closedate && calculateTimeLeft((new Date(po_closedate)).getTime() / 1000);
   const promo_price = products_event == 'flash_sale' ? flash_sale_price : products_event == 'special' ? special_products_price : price;
 
   let final_price = 0;
@@ -171,15 +173,36 @@ const CardProduct = ({
             color={'white'}
             p={'5px'}
           >
-            {timeLeft.days > 0 && <span style={{ whiteSpace: 'nowrap' }}><Icon as={IoTimeSharp} />&nbsp;{`${timeLeft.days} Hari`}&nbsp;</span>}
+            <span style={{ whiteSpace: 'nowrap' }}><Icon as={IoTimeSharp} />&nbsp;</span>
+
+            {timeLeft.days > 0 && <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeft.days} Hari`}&nbsp;</span>}
 
             <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeft.hours} Jam`}&nbsp;</span>
 
-            <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeft.minutes} Menit`} Lagi&nbsp;</span>
+            <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeft.minutes} Menit`}</span>
 
           </Box>
         )}
-        <BoxLabel products_jenis={products_jenis} products_event={products_event} flash_sale_name={flash_sale_name} />
+        {po_closedate && timeLeftPO && (
+          <Box
+            bg={products_event == 'special' ? '#FC5E00' : '#df4580'}
+            fontSize={{ base: "10px", md: "12px" }}
+            textAlign="center"
+            lineHeight={{ base: "15px", md: "18px" }}
+            fontWeight="500"
+            color={'white'}
+            p={'5px'}
+          >
+            <span style={{ whiteSpace: 'nowrap' }}><Icon as={IoTimeSharp} />&nbsp;</span>
+            {timeLeftPO.days > 0 && <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeftPO.days} Hari`}&nbsp;</span>}
+
+            <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeftPO.hours} Jam`}&nbsp;</span>
+
+            <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeftPO.minutes} Menit`}</span>
+
+          </Box>
+        )}
+        <BoxLabel products_jenis={products_jenis} products_event={products_event} flash_sale_name={flash_sale_name} po_closedate={po_closedate} />
 
 
         <Box px={'5px'} py="10px">
@@ -289,32 +312,33 @@ const BoxLabel = ({
   products_jenis,
   products_event,
   flash_sale_name,
+  po_closedate
 }) => {
   if (products_event == 'flash_sale') {
     if (products_jenis == 'po') {
-      return <LabelPOAndFlashSale flash_sale_name={flash_sale_name} />
+      return <LabelPOAndFlashSale flash_sale_name={flash_sale_name} po_closedate={po_closedate} />
     } else {
       return <LabelFlashSale />
     }
   } else if (products_event == 'special') {
     if (products_jenis == 'po') {
-      return <LabelPOAndSpecial />
+      return <LabelPOAndSpecial po_closedate={po_closedate} />
     } else {
       return <LabelSpecial />
     }
   } else if (products_jenis == 'po') {
-    return <LabelPO />
+    return <LabelPO po_closedate={po_closedate} />
   }
 
   return <></>
 
 }
 
-const LabelPO = () => {
+const LabelPO = ({ po_closedate }) => {
   return (
     <Box color="white" style={{ backgroundImage: `url('/images/labels/3.svg')` }} textColor={'white'} bgSize={'cover'} backgroundPosition={'right'} backgroundSize={'340px'} mr={'-9px'}>
-      <Text p={'2px 5px'} fontSize={'xs'} fontWeight={'600'}>
-        Pre Order
+      <Text p={'2px 5px'} fontSize={'xs'} fontWeight={'600'} display={'flex'}>
+        {po_closedate != null ? (<Text>Pre Order - Open</Text>) : <Text>Pre Order - Close</Text>}
       </Text>
     </Box>
   )
@@ -330,21 +354,21 @@ const LabelFlashSale = ({ flash_sale_name }) => {
   )
 }
 
-const LabelPOAndFlashSale = () => {
+const LabelPOAndFlashSale = ({ po_closedate }) => {
   return (
     <Box color="white" style={{ backgroundImage: `url('/images/labels/4.svg')` }} textColor={'black'} bgSize={'cover'} backgroundPosition={'right'} backgroundSize={'340px'} mr={'-11.5px'}>
       <Text p={'2px 5px'} fontSize={'xs'} fontWeight={'600'}>
-        Pre Order & Flash Sale
+        {po_closedate != null ? (<Text>Pre Order & Flash Sale - Open</Text>) : <Text>Pre Order & Flash Sale - Close</Text>}
       </Text>
     </Box>
   )
 }
 
-const LabelPOAndSpecial = () => {
+const LabelPOAndSpecial = ({ po_closedate }) => {
   return (
     <Box color="white" style={{ backgroundImage: `url('/images/labels/1.svg')` }} textColor={'white'} bgSize={'cover'} backgroundPosition={'right'} backgroundSize={'340px'} mr={'-11.5px'}>
       <Text p={'2px 5px'} fontSize={'xs'} fontWeight={'600'}>
-        Pre Order & Special
+        {po_closedate != null ? (<Text>Pre Order & Special - Open</Text>) : <Text>Pre Order & Special - Close</Text>}
       </Text>
     </Box>
   )

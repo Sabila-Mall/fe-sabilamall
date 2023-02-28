@@ -44,6 +44,7 @@ const formatPrice = (price) => {
 const ProductCheckout = ({
   products_attributes,
   products_type,
+  products_jenis,
   warehouse,
   products_stock,
   stockData,
@@ -58,6 +59,8 @@ const ProductCheckout = ({
   flash_sale_price,
   is_liked_product,
   products_slug,
+  po_status,
+
 }) => {
 
   const product_wa = products_slug?.replace("-", "+")
@@ -511,7 +514,7 @@ const ProductCheckout = ({
             fontWeight={"bold"}
             className={"primaryFont"}
             _hover={{ bgColor: "red.600" }}
-            isDisabled={(numberOfItem <= 0)}
+            isDisabled={(numberOfItem <= 0 || (products_jenis == 'po' && po_status != 1))}
             onClick={() => {
               if (!auth.isLoggedIn)
                 return callToast({ title: "Silakan login terlebih dahulu" });
@@ -726,7 +729,7 @@ const ProductCheckout = ({
             fontWeight={"bold"}
             className={"primaryFont"}
             _hover={{ bgColor: "red.600" }}
-            isDisabled={(numberOfItem <= 0)}
+            isDisabled={(numberOfItem <= 0 || (products_jenis == 'po' && po_status != 1))}
             onClick={() => {
               if (!auth.isLoggedIn)
                 return callToast({ title: "Silakan login terlebih dahulu" });

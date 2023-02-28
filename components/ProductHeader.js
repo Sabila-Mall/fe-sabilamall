@@ -229,7 +229,7 @@ const ProductHeader = ({
         )
       }
       {
-        products_jenis == 'po' && po_status == 1 && (
+        products_jenis == 'po' && (
           <Box
             my="1rem"
             w={{ lg: "95%", xl: "full" }}
