@@ -18,7 +18,7 @@ import { useAuthContext } from "../../contexts/authProvider";
 
 const SaleProductsDisplay = () => {
   const router = useRouter();
-  const { flashSaleProducts, discountProducts } = useHomePageContext();
+  const { flashSaleProducts, discountProducts, instalmentProducts } = useHomePageContext();
   const [products, setProducts] = useState({
     data: [],
     loading: true,
@@ -48,12 +48,15 @@ const SaleProductsDisplay = () => {
   function handleLoadMore() {
     setProducts({ ...products, loading: true });
 
+
     const newPage = products.currentPage + 1;
     let response = null;
     if (type === "flash-sale") {
       response = getAllProductsByFilters(newPage, userId, 'flash_sale');
     } else if (type === "discount") {
       response = getAllProductsByFilters(newPage, userId, 'special');
+    } else if (type === "cicilan") {
+      response = getAllProductsByFilters(newPage, userId, 'instalment');
     }
 
     if (response) {
@@ -81,9 +84,11 @@ const SaleProductsDisplay = () => {
         setProducts(discountProducts);
       } else if (type === "flash-sale" && flashSaleProducts) {
         setProducts(flashSaleProducts);
+      } else if (type === "cicilan" && instalmentProducts) {
+        setProducts(instalmentProducts);
       }
     }
-  }, [type, flashSaleProducts, discountProducts, authIsLoading, userLevel]);
+  }, [type, flashSaleProducts, discountProducts, instalmentProducts, authIsLoading, userLevel]);
 
   return (
     <Layout

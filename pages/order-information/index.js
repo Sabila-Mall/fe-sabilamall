@@ -479,14 +479,13 @@ const OrderInformation = ({ order }) => {
 
               {paymentMekariPay?.status && !loadingPaymentMekariPay && (
                 <Box pb="1rem">
-                  <Flex gridGap={2}>
+                  <Flex gridGap={2} direction={{ base: 'column', md: 'row' }}>
                     {
                       getButtonPaymentMekariPay(paymentMekariPay)
                     }
                   </Flex>
                   <Divider pt="1rem" />
                 </Box>)}
-
               {
                 loadingPaymentMekariPay && (
                   <Box pb="1rem" >

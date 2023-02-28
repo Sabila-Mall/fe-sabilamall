@@ -146,7 +146,7 @@ const HomeDisplay = () => {
           data={instalmentProducts.data}
           headingText="Cicilan"
           loading={instalmentProducts.loading}
-          url_detail={'/product-cicilan'}
+        // url_detail={'/product-cicilan'}
         />
         <Divider
           orientation="horizontal"
