@@ -102,7 +102,7 @@ const ProductCheckout = ({
 
   const warehouseData = JSON.parse(warehouse ?? "[]");
 
-  const [warehouseId, setWarehouseId] = useState(warehouseData.length == 1 ? String(warehouseData[0].id) : null);
+  const [warehouseId, setWarehouseId] = useState(null);
 
   const [isLiked, setIsLiked] = useState(is_liked_product);
 
@@ -276,10 +276,10 @@ const ProductCheckout = ({
     return (
       <>
         <VStack minW={{ base: '100%', md: '300px' }} borderColor={"gray.300"} borderWidth={"1px"} spacing={'12px'} className={"secondaryFont"} p={'1rem'} borderRadius={"12px"}>
-          {warehouseData && warehouseData.length > 1 && (
+          {warehouseData && warehouseData.length > 0 && (
             <Box width={"full"}>
               <Text textColor={"gray.500"} fontSize={"16px"}>
-                Gudang: {warehouseData.length} item
+                Gudang: {warehouseData?.filter((item) => item['status'] == 1).length} item
               </Text>
               <Spacer height={"10px"} />
               <Select
@@ -291,7 +291,7 @@ const ProductCheckout = ({
                   setWarehouseId(e.target.value);
                 }}
               >
-                {warehouseData?.map(({ id, value }) => (
+                {warehouseData?.filter((item) => item['status'] == 1).map(({ id, value }) => (
                   <option
                     key={id}
                     value={`${id}`}
@@ -607,10 +607,10 @@ const ProductCheckout = ({
     return (
       <>
         <VStack minW={{ base: '100%', md: '300px' }} borderColor={"gray.300"} borderWidth={"1px"} spacing={'12px'} className={"secondaryFont"} p={'1rem'} borderRadius={"12px"}>
-          {warehouseData && warehouseData.length > 1 && (
+          {warehouseData && warehouseData.length > 0 && (
             <Box width={"full"}>
               <Text textColor={"gray.500"} fontSize={"16px"}>
-                Gudang: {warehouseData.length} item
+                Gudang: {warehouseData?.filter((item) => item['status'] == 1).length} item
               </Text>
               <Spacer height={"10px"} />
               <Select
@@ -621,15 +621,16 @@ const ProductCheckout = ({
                 onChange={(e) => {
                   setWarehouseId(e.target.value);
                 }}
+
               >
-                {warehouseData?.map(({ id, value }) => (
-                  <option
+                {warehouseData?.filter((item) => item['status'] == 1).map(({ id, value }) => {
+                  return <option
                     key={id}
                     value={`${id}`}
                   >
                     {value}
                   </option>
-                ))}
+                })}
               </Select>
             </Box>
           )}
