@@ -207,7 +207,7 @@ const OrderInformation = ({ order }) => {
   }
 
   const getButtonPaymentMekariPay = (item) => {
-    if (item.data.status_paid == 1) {
+    if (item.success) {
       return <>
         <Button
           colorScheme="red"
@@ -219,20 +219,6 @@ const OrderInformation = ({ order }) => {
         </Button>
         <ButtonCekKonfirmasi />
       </>
-    } else if (item.data.status_paid == 2) {
-      return <>
-        <Button
-          colorScheme="red"
-          w={{ base: "full", lg: "unset" }}
-          mt="0.5rem"
-          disabled={true}
-        >
-          Klik Disini Pembayaran Virtual Account
-        </Button>
-        <ButtonCekKonfirmasi />
-      </>
-    } else if (item.data.status_paid == 3) {
-      return <Text>{item.message}</Text>;
     } else {
       return <Text>
         {item.message}
@@ -477,7 +463,7 @@ const OrderInformation = ({ order }) => {
 
               <Divider />
 
-              {paymentMekariPay?.status && !loadingPaymentMekariPay && (
+              {paymentMekariPay?.is_va && !loadingPaymentMekariPay && (
                 <Box pb="1rem">
                   <Flex gridGap={2} direction={{ base: 'column', md: 'row' }}>
                     {
