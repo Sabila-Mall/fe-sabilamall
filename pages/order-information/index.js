@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 import { IoCopy } from "react-icons/io5";
 
 import { apiGetSingleOrder, apiGetResi } from "../../api/GetOrder";
-import { apiGetPaymentMekariPay, apiConfirmPaymentMekariPay } from "../../api/Payment";
+import { apiGetPaymentMekariPay, apiConfirmPaymentMekariPay, apiCreateVirtualAccount, apiUpdateVirtualAccount } from "../../api/Payment";
 import { CardProfile } from "../../components/CardProfile";
 import { Layout } from "../../components/Layout";
 import NavbarProfile from "../../components/NavbarProfile";
@@ -38,6 +38,7 @@ const TRANSFER_BANK = "Transfer Bank";
 const OrderInformation = ({ order }) => {
   const { width } = useWindowSize();
   const { userData, loading } = useAuthContext();
+  const toast = useToast()
 
   const authIsLoading = loading;
 
@@ -167,7 +168,6 @@ const OrderInformation = ({ order }) => {
 
 
   const ButtonCekKonfirmasi = () => {
-    const toast = useToast()
     const [isLoading, setIsLoading] = useState(false);
 
     const cekKonfirmasi = async () => {
@@ -206,6 +206,68 @@ const OrderInformation = ({ order }) => {
     </Button>
   }
 
+  const ButtonBuatVirtualAccount = () => {
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleButton = async () => {
+      setIsLoading(true);
+      const res = await apiCreateVirtualAccount(userData?.id, order);
+      if (res.success) {
+        toast({
+          position: "top",
+          title: res.message,
+          status: 'success',
+          isClosable: true,
+        })
+        getPaymentMekariPay();
+        getSingleOrder();
+      } else {
+        toast({
+          position: "top",
+          title: res.message,
+          status: 'error',
+          isClosable: true,
+        })
+      }
+      setIsLoading(false);
+    }
+
+    return (
+      <Button colorScheme="red" mt={2} onClick={handleButton}>{isLoading ? <Spinner /> : 'Buat Virtual Account'}</Button>
+    )
+  }
+
+  const ButtonUpdateVirtualAccount = () => {
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleButton = async () => {
+      setIsLoading(true);
+      const res = await apiUpdateVirtualAccount(userData?.id, order);
+      if (res.success) {
+        toast({
+          position: "top",
+          title: res.message,
+          status: 'success',
+          isClosable: true,
+        })
+        getPaymentMekariPay();
+        getSingleOrder();
+      } else {
+        toast({
+          position: "top",
+          title: res.message,
+          status: 'error',
+          isClosable: true,
+        })
+      }
+      setIsLoading(false);
+    }
+
+    return (
+      <Button colorScheme="red" mt={2} onClick={handleButton}>{isLoading ? <Spinner /> : 'Update Virtual Account'}</Button>
+    )
+  }
+
   const getButtonPaymentMekariPay = (item) => {
     if (item.success) {
       return <>
@@ -220,9 +282,15 @@ const OrderInformation = ({ order }) => {
         <ButtonCekKonfirmasi />
       </>
     } else {
-      return <Text>
-        {item.message}
-      </Text>
+      return <>
+        <Box>
+          <Text>
+            {item.message}
+          </Text>
+          {item.action == 'create' && (<ButtonBuatVirtualAccount />)}
+          {item.action == 'update' && (<ButtonUpdateVirtualAccount />)}
+        </Box>
+      </>
     }
   }
 
