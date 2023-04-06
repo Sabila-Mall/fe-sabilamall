@@ -1,12 +1,15 @@
 import { Box, Text } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { getAllProductsByFilters } from "../../api/Homepage";
+import { getAllProductsByFilters, getProducts } from "../../api/Homepage";
 
 import { Layout } from "../../components/Layout";
 import LayoutProductList from "../../components/LayoutProductList";
 import { useAuthContext } from "../../contexts/authProvider";
 import { isRequestSuccess } from "../../utils/api";
+
+import { useInfiniteQuery, useQuery } from "react-query";
+
 
 const Search = () => {
   const auth = useAuthContext();
@@ -16,62 +19,26 @@ const Search = () => {
   const adminId = auth.userData?.admin_id;
   const isLoggedIn = auth.isLoggedIn;
   const authIsLoading = auth.loading;
-
   const router = useRouter();
-  const [search, setSearch] = useState({
-    data: [],
-    loading: true,
-    currentPage: 1,
-    lastPage: Number.MAX_SAFE_INTEGER,
+  const query = router.query.q;
+
+  const querySearchProducts = useInfiniteQuery(['products', query], async ({ pageParam = 0 }) => {
+    try {
+      const res = await getProducts(pageParam, userId, '', query)
+      if (isRequestSuccess(res.data)) {
+        return res.data.data;
+      } else {
+        throw "Gagal mendapatkan produk";
+      }
+    } catch (err) {
+      console.error(err);
+      errorToast(err);
+    }
+  }, {
+    refetchOnWindowFocus: false,
+    enabled: !authIsLoading && !!query,
+    getNextPageParam: (lastPage) => lastPage.current_page >= lastPage.last_page ? undefined : lastPage.current_page + 1,
   });
-
-  const query = router.query.q ?? "";
-
-  function handleLoadMoreProducts() {
-    setSearch({ ...search, loading: true });
-
-    const newPage = search.currentPage + 1;
-    getAllProductsByFilters(newPage, userId, '', query)
-      .then((res) => {
-        if (isRequestSuccess(res.data)) {
-          let temp = res.data.data.data;
-          setSearch({
-            data: search.data.concat(temp),
-            loading: false,
-            currentPage: newPage,
-            lastPage: res.data.data.last_page,
-          });
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }
-
-  useEffect(() => {
-    query && !authIsLoading && getAllProductsByFilters(1, userId, '', query)
-      .then((res) => {
-        if (isRequestSuccess(res.data)) {
-          let temp = res.data.data.data;
-          setSearch({
-            data: temp ?? [],
-            loading: false,
-            currentPage: 1,
-            lastPage: res.data.data.last_page,
-          });
-        } else {
-          throw "Gagal mendapatkan hasil pencarian";
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        setSearch({
-          data: [],
-          loading: false,
-          ...search,
-        });
-      });
-  }, [query, authIsLoading]);
 
   return (
     <Layout hasNavbar hasPadding>
@@ -87,11 +54,9 @@ const Search = () => {
             Hasil pencarian untuk {`"${query}"`}
           </Text>
           <LayoutProductList
-            data={search}
-            loading={search.loading}
+            queryProducts={querySearchProducts}
             sorting={false}
             title={false}
-            handleLoadMore={handleLoadMoreProducts}
           />
           {/* <Grid
             templateColumns={{

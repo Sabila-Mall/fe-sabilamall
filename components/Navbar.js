@@ -20,6 +20,7 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
+  useToast,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -39,7 +40,7 @@ import {
 } from "react-icons/io5";
 import { IoHomeSharp, IoReceiptSharp } from "react-icons/io5";
 
-import { getCategory } from "../api/Homepage";
+import { getCategories, getCategory } from "../api/Homepage";
 import { productList } from "../constants/dummyData";
 import { useAuthContext } from "../contexts/authProvider";
 import { useCartContext } from "../contexts/cartProvider";
@@ -48,6 +49,8 @@ import styles from "../styles/Navbar.module.scss";
 import { logout, setBadgeColor } from "../utils/functions";
 import QuickAdd from "./QuickAdd";
 import Sidebar from "./Sidebar";
+import { useQuery } from "react-query";
+import { isRequestSuccess } from "../utils/api";
 
 export const NavbarBottom = ({ onDrawerOpen, isLoggedIn }) => {
   const router = useRouter();
@@ -171,6 +174,7 @@ const SearchedElement = ({ isSearched, setIsSearched }) => {
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       if (searchQuery.current.value) router.push(`/search?q=${searchQuery.current.value}`);
+      setIsSearched(false);
     }
   };
 
@@ -426,18 +430,33 @@ const IconRightElements = ({ isLoggedIn, onDrawerOpen, setIsSearched }) => {
 };
 
 const CustomAccordion = () => {
-  const [category, setCategory] = useState([]);
-  const [loading, setLoading] = useState(false);
-
+  const toast = useToast();
+  const errorToast = (errMessage) => {
+    toast({
+      position: "top",
+      title: errMessage,
+      status: "error",
+      isClosable: true,
+    });
+  };
   const router = useRouter();
 
-  useEffect(() => {
-    setLoading(true);
-    getCategory().then((e) => {
-      setCategory(e.data?.data);
-      setLoading(false);
-    });
-  }, [null]);
+  const queryCategories = useQuery(['category'], async () => {
+    try {
+      const res = await getCategories();
+      if (isRequestSuccess(res.data)) {
+        return res.data.data;
+      } else {
+        throw Error('Gagal mendapatkan kategori');
+      }
+    } catch (err) {
+      console.error(err);
+      errorToast(err);
+    }
+  }, {
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  })
 
   return (
     <Menu>
@@ -453,18 +472,18 @@ const CustomAccordion = () => {
         </Flex>
       </MenuButton>
       <MenuList className={styles.menuList} maxH="80vh" overflowY="auto">
-        {loading ? (
+        {!queryCategories.isFetched ? (
           <Flex justifyContent="center" width="full">
             <Spinner m="1rem" />
           </Flex>
         ) : (
           <Accordion width="320px" allowToggle>
-            {category?.map((el, index) => (
-              <AccordionItem id={el.id} key={index}>
+            {queryCategories.data?.map((el, index) => (
+              <AccordionItem id={el.categories_id} key={el.categories_id}>
                 <h2>
                   <AccordionButton>
                     <Box flex="1" textAlign="left">
-                      {el.name}
+                      {el.categories_name}
                     </Box>
                     <AccordionIcon />
                   </AccordionButton>
@@ -473,10 +492,10 @@ const CustomAccordion = () => {
                   <MenuItem
                     className={styles.menuItem}
                     onClick={() =>
-                      router.push(`/daftar-produk?id=${el.id}&nama=${el.name}`)
+                      router.push(`/daftar-produk?id=${el.categories_id}&nama=${el.categories_name}`)
                     }
                   >
-                    Semua {el.name}
+                    Semua {el.categories_name}
                   </MenuItem>
                   {el?.sub_categories?.map((sub, index) => (
                     <MenuItem
@@ -484,11 +503,11 @@ const CustomAccordion = () => {
                       key={index}
                       onClick={() =>
                         router.push(
-                          `/daftar-produk?id=${sub.id}&nama=${sub.name}`,
+                          `/daftar-produk?id=${sub.categories_id}&nama=${sub.categories_name}`,
                         )
                       }
                     >
-                      {sub.name}
+                      {sub.categories_name}
                     </MenuItem>
                   ))}
                 </AccordionPanel>
@@ -517,6 +536,7 @@ const Navbar = () => {
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       if (searchQuery.current.value) router.push(`/search?q=${searchQuery.current.value}`);
+      setIsSearched(false);
     }
   };
 

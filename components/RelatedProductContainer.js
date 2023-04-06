@@ -11,7 +11,7 @@ import {
 import RelatedProductCard from "../components/RelatedProductCard";
 import CardProduct from "./CardProduct";
 
-const RelatedProductContainer = ({ relatedProducts }) => {
+const RelatedProductContainer = ({ queryRelatedProduct }) => {
   return (
     <Stack divider={<StackDivider borderColor="gray.200" />} mt="24px">
       <Stack direction="row" justify="space-between" w="100%" align="center">
@@ -32,7 +32,7 @@ const RelatedProductContainer = ({ relatedProducts }) => {
         rowGap={4}
         display={'inline-grid'}
       >
-        {relatedProducts.map((item, index) => {
+        {queryRelatedProduct.data?.map((item, index) => {
           return (
             <CardProduct
               {...item}

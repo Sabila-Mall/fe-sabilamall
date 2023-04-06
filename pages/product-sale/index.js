@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 
 import {
   getAllProductsByFilters,
+  getProducts
 } from "../../api/Homepage";
 import { Layout } from "../../components/Layout";
 import LayoutProductList from "../../components/LayoutProductList";
@@ -15,20 +16,14 @@ import {
 import { isRequestSuccess } from "../../utils/api";
 import { titleCase } from "../../utils/functions";
 import { useAuthContext } from "../../contexts/authProvider";
+import { useInfiniteQuery, useQuery } from "react-query";
+
 
 const SaleProductsDisplay = () => {
   const router = useRouter();
-  const { flashSaleProducts, discountProducts, instalmentProducts } = useHomePageContext();
-  const [products, setProducts] = useState({
-    data: [],
-    loading: true,
-    currentPage: 1,
-    lastPage: Number.MAX_SAFE_INTEGER,
-  });
   const type = router.query.type;
 
   const auth = useAuthContext();
-
   const userId = auth.userData?.id;
   const userLevel = auth.userData?.user_level;
   const adminId = auth.userData?.admin_id;
@@ -45,50 +40,28 @@ const SaleProductsDisplay = () => {
     });
   };
 
-  function handleLoadMore() {
-    setProducts({ ...products, loading: true });
-
-
-    const newPage = products.currentPage + 1;
-    let response = null;
-    if (type === "flash-sale") {
-      response = getAllProductsByFilters(newPage, userId, 'flash_sale');
-    } else if (type === "discount") {
-      response = getAllProductsByFilters(newPage, userId, 'special');
-    } else if (type === "cicilan") {
-      response = getAllProductsByFilters(newPage, userId, 'instalment');
-    }
-
-    if (response) {
-      response
-        .then((res) => {
-          if (isRequestSuccess(res.data)) {
-            setProducts({
-              data: products.data.concat(Object.values(res.data.data.data)),
-              currentPage: newPage,
-              lastPage: res.data.data.last_page,
-              loading: false,
-            });
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-          errorToast("Gagal menampilkan produk lebih");
-        });
-    }
-  }
-
-  useEffect(() => {
-    if (type && !authIsLoading) {
-      if (type === "discount" && discountProducts) {
-        setProducts(discountProducts);
-      } else if (type === "flash-sale" && flashSaleProducts) {
-        setProducts(flashSaleProducts);
-      } else if (type === "cicilan" && instalmentProducts) {
-        setProducts(instalmentProducts);
+  const querySearchProducts = useInfiniteQuery(['products', type, userLevel], async ({ pageParam = 0 }) => {
+    const filterType = {
+      'discount': 'special',
+      'flash-sale': 'flash_sale',
+      'cicilan': 'cicilan'
+    };
+    try {
+      const res = await getProducts(pageParam, userId, filterType[type])
+      if (isRequestSuccess(res.data)) {
+        return res.data.data;
+      } else {
+        throw "Gagal mendapatkan produk";
       }
+    } catch (err) {
+      console.error(err);
+      errorToast(err);
     }
-  }, [type, flashSaleProducts, discountProducts, instalmentProducts, authIsLoading, userLevel]);
+  }, {
+    refetchOnWindowFocus: false,
+    enabled: !authIsLoading && !!type,
+    getNextPageParam: (lastPage) => lastPage.current_page >= lastPage.last_page ? undefined : lastPage.current_page + 1,
+  });
 
   return (
     <Layout
@@ -110,11 +83,8 @@ const SaleProductsDisplay = () => {
           >
             Daftar produk {titleCase((type ?? "").replace("-", " "))}
           </Text>
-
           <LayoutProductList
-            data={products}
-            loading={products.loading}
-            handleLoadMore={handleLoadMore}
+            queryProducts={querySearchProducts}
             sorting={false}
             title={false}
           />

@@ -1,5 +1,5 @@
-import { Link } from "@chakra-ui/layout";
-import { Box, Text, Icon, Flex, Image, Badge, Divider, IconButton } from "@chakra-ui/react";
+import Link from "next/link";
+import { Box, Text, Icon, Flex, Image, Badge, Divider, IconButton, AspectRatio } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { FaPercent, FaShippingFast } from "react-icons/fa";
@@ -47,7 +47,6 @@ const CardProduct = ({
   const { isLoggedIn, userData } = useAuthContext();
   const userId = isLoggedIn ? userData?.id : "";
   const { wishlistData } = useWishlistContext();
-  const [imageHeight, setImageHeight] = useState(144);
   const timeLeft = flash_sale_expires_date && calculateTimeLeft(flash_sale_expires_date);
   const timeLeftPO = po_closedate && calculateTimeLeft((new Date(po_closedate)).getTime() / 1000);
   const promo_price = products_event == 'flash_sale' ? flash_sale_price : products_event == 'special' ? special_products_price : price;
@@ -104,207 +103,190 @@ const CardProduct = ({
     setIsLikedProduct((val) => !val);
   };
 
-  useEffect(() => {
-    function handleResize() {
-      let width = responsive
-        ? document.getElementsByClassName("card-product-responsive")[0]
-          .clientWidth
-        : document.getElementsByClassName("card-product")[0].clientWidth;
-      setImageHeight(width);
-    }
-
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => window.removeEventListener("resize", handleResize);
-  });
 
   const [hover, setHover] = useState(false);
 
   return (
 
-    <Link
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      overflow={'hidden'}
-      display={'flex'}
-      border={'1px'}
-      borderColor={'gray.200'}
-      borderRadius="8px"
-      flexDirection={'column'}
-      cursor={"pointer"}
-      shadow={'md'}
-      bg={'white'}
-      justifyContent={'space-between'}
-      _hover={{ textStyle: "none" }}
+    <Flex as={Link} flexDirection={'column'} h={'100%'}
       href={`/product-detail/${products_slug}`}
-      target="_blank"
     >
-      <Box>
-        <Box position={'relative'}
-          h={`${imageHeight}px`}
-          justifyContent="center"
-          w="100%"
-          bgPosition="center"
-          bgRepeat="no-repeat"
-          bgSize="cover"
-          style={{ backgroundImage: 'url(' + getImageLink(image_medium == '' ? image_path : image_medium) + ')' }}
-          className={responsive ? "card-product-responsive" : "card-product"}
-        >
-          <Flex direction={'column'} position={'absolute'} right={0} top={0} p={'5px 0px 0px 0px'} gridGap={'2px'}>
-            {
-              products_features?.split(',').map((item, index) =>
-                <Box key={index}>
-                  <Text color={'white'} p={'2.5px 0px'} lineHeight={'1.2'} bg={products_features_colors.split(',')[index]} fontSize={'10px'} px={'2'} style={{ transform: `translate(${hover ? '0%' : '95%'})`, transitionDuration: '100ms' }}>
-                    {item}
+      <Flex
+        h={'100%'}
+        flexDirection={'column'}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        overflow={'hidden'}
+        display={'flex'}
+        border={'1px'}
+        borderColor={'gray.200'}
+        borderRadius="8px"
+        cursor={"pointer"}
+        shadow={'md'}
+        bg={'white'}
+        justifyContent={'space-between'}
+        _hover={{ textStyle: "none" }}>
+        <Box>
+          <AspectRatio ratio={1 / 1}>
+            <Box position={'relative'}>
+              <Image fallbackSrc="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg" src={getImageLink(image_medium == '' ? image_path : image_medium)} position={'absolute'} width={'100%'} height={'100%'} top={0} right={0} bottom={0} left={0} />
+              <Flex direction={'column'} position={'absolute'} right={0} top={0} p={'5px 0px 0px 0px'} gridGap={'2px'}>
+                {
+                  products_features?.split(',').map((item, index) =>
+                    <Box key={index}>
+                      <Text color={'white'} p={'2.5px 0px'} lineHeight={'1.2'} bg={products_features_colors.split(',')[index]} fontSize={'10px'} px={'2'} style={{ transform: `translate(${hover ? '0%' : '95%'})`, transitionDuration: '100ms' }}>
+                        {item}
+                      </Text>
+                    </Box>
+                  )
+                }
+              </Flex>
+            </Box>
+          </AspectRatio>
+          {flash_sale_expires_date && timeLeft && (
+
+            <Box
+              bg="red.500"
+              fontSize={{ base: "10px", md: "12px" }}
+              textAlign="center"
+              lineHeight={{ base: "15px", md: "18px" }}
+              fontWeight="500"
+              color={'white'}
+              p={'5px'}
+            >
+              <span style={{ whiteSpace: 'nowrap' }}><Icon as={IoTimeSharp} />&nbsp;</span>
+
+              {timeLeft.days > 0 && <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeft.days} Hari`}&nbsp;</span>}
+
+              <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeft.hours} Jam`}&nbsp;</span>
+
+              <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeft.minutes} Menit`}</span>
+
+            </Box>
+          )}
+          {po_closedate && timeLeftPO && (
+            <Box
+              bg={products_event == 'special' ? '#FC5E00' : '#df4580'}
+              fontSize={{ base: "10px", md: "12px" }}
+              textAlign="center"
+              lineHeight={{ base: "15px", md: "18px" }}
+              fontWeight="500"
+              color={'white'}
+              p={'5px'}
+            >
+              <span style={{ whiteSpace: 'nowrap' }}><Icon as={IoTimeSharp} />&nbsp;</span>
+              {timeLeftPO.days > 0 && <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeftPO.days} Hari`}&nbsp;</span>}
+
+              <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeftPO.hours} Jam`}&nbsp;</span>
+
+              <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeftPO.minutes} Menit`}</span>
+
+            </Box>
+          )}
+          <BoxLabel products_jenis={products_jenis} products_event={products_event} flash_sale_name={flash_sale_name} po_closedate={po_closedate} />
+
+
+          <Box px={'5px'} py="10px">
+            {/* <Text fontSize="0.8em" fontWeight="400" lineHeight="16px" style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}> */}
+            <Text fontSize="0.8em" fontWeight="400" lineHeight="16px" >
+              {products_name?.toUpperCase()}
+            </Text>
+            <Box h={'10px'}></Box>
+            <Box
+              className={styles.primaryFont}
+              w="100%"
+              display="flex"
+              alignItems="center"
+              justifyContent="space-between"
+              fontWeight="700"
+              fontSize="16px"
+              lineHeight="20.8px"
+            >
+              <Text>{currencyFormat(final_price)}</Text>
+              <Flex align="center">
+                {isLoggedIn && (
+                  <Icon
+                    width="1.15em"
+                    height="1.15em"
+                    onClick={handleClickWishlist}
+                    as={isLikedProduct ? IoHeart : IoHeartOutline}
+                    color={isLikedProduct ? "red.500" : "black"}
+                  />
+                )}
+              </Flex>
+            </Box>
+            <Box h={'5px'}></Box>
+            <Flex direction={"column"} gridGap={'2px'}>
+              {Number(final_price) !== Number(promo_price) && (
+                <Box
+                  w="100%"
+                  display="flex"
+                  alignItems="center"
+                  fontSize="12px"
+                  fontWeight="500"
+                  lineHeight="18px"
+                >
+                  <Text as="del" color="gray.500">
+                    {currencyFormat(promo_price)}
+                  </Text>
+                  <Text
+                    ml={"5px"}
+                    h="100%"
+                    bg="red.200"
+                    px="4px"
+                    borderRadius="4px"
+                    color="red.700"
+                    display="flex"
+                    alignItems="center"
+                  >
+                    {text_discount}
                   </Text>
                 </Box>
-              )
-            }
-          </Flex>
-        </Box>
-        {flash_sale_expires_date && timeLeft && (
+              )}
+              {Number(price) !== Number(promo_price) && (
+                <Box
+                  w="100%"
+                  display="flex"
+                  alignItems="center"
+                  fontSize="12px"
+                  fontWeight="500"
+                  lineHeight="18px"
+                >
+                  <Text as="del" color="gray.500">
+                    {currencyFormat(price)}
+                  </Text>
+                  <Text
+                    ml={"5px"}
+                    h="100%"
+                    bg="red.200"
+                    px="4px"
+                    borderRadius="4px"
+                    color="red.700"
+                    display="flex"
+                    alignItems="center"
+                  >
+                    {text_promo_price}
+                  </Text>
+                </Box>
 
-          <Box
-            bg="red.500"
-            fontSize={{ base: "10px", md: "12px" }}
-            textAlign="center"
-            lineHeight={{ base: "15px", md: "18px" }}
-            fontWeight="500"
-            color={'white'}
-            p={'5px'}
-          >
-            <span style={{ whiteSpace: 'nowrap' }}><Icon as={IoTimeSharp} />&nbsp;</span>
-
-            {timeLeft.days > 0 && <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeft.days} Hari`}&nbsp;</span>}
-
-            <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeft.hours} Jam`}&nbsp;</span>
-
-            <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeft.minutes} Menit`}</span>
-
-          </Box>
-        )}
-        {po_closedate && timeLeftPO && (
-          <Box
-            bg={products_event == 'special' ? '#FC5E00' : '#df4580'}
-            fontSize={{ base: "10px", md: "12px" }}
-            textAlign="center"
-            lineHeight={{ base: "15px", md: "18px" }}
-            fontWeight="500"
-            color={'white'}
-            p={'5px'}
-          >
-            <span style={{ whiteSpace: 'nowrap' }}><Icon as={IoTimeSharp} />&nbsp;</span>
-            {timeLeftPO.days > 0 && <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeftPO.days} Hari`}&nbsp;</span>}
-
-            <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeftPO.hours} Jam`}&nbsp;</span>
-
-            <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeftPO.minutes} Menit`}</span>
-
-          </Box>
-        )}
-        <BoxLabel products_jenis={products_jenis} products_event={products_event} flash_sale_name={flash_sale_name} po_closedate={po_closedate} />
-
-
-        <Box px={'5px'} py="10px">
-          {/* <Text fontSize="0.8em" fontWeight="400" lineHeight="16px" style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}> */}
-          <Text fontSize="0.8em" fontWeight="400" lineHeight="16px" >
-            {products_name?.toUpperCase()}
-          </Text>
-          <Box h={'10px'}></Box>
-          <Box
-            className={styles.primaryFont}
-            w="100%"
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-            fontWeight="700"
-            fontSize="16px"
-            lineHeight="20.8px"
-          >
-            <Text>{currencyFormat(final_price)}</Text>
-            <Flex align="center">
-              {isLoggedIn && (
-                <Icon
-                  width="1.15em"
-                  height="1.15em"
-                  onClick={handleClickWishlist}
-                  as={isLikedProduct ? IoHeart : IoHeartOutline}
-                  color={isLikedProduct ? "red.500" : "black"}
-                />
               )}
             </Flex>
           </Box>
-          <Box h={'5px'}></Box>
-          <Flex direction={"column"} gridGap={'2px'}>
-            {Number(final_price) !== Number(promo_price) && (
-              <Box
-                w="100%"
-                display="flex"
-                alignItems="center"
-                fontSize="12px"
-                fontWeight="500"
-                lineHeight="18px"
-              >
-                <Text as="del" color="gray.500">
-                  {currencyFormat(promo_price)}
-                </Text>
-                <Text
-                  ml={"5px"}
-                  h="100%"
-                  bg="red.200"
-                  px="4px"
-                  borderRadius="4px"
-                  color="red.700"
-                  display="flex"
-                  alignItems="center"
-                >
-                  {text_discount}
-                </Text>
-              </Box>
+        </Box>
+        <Flex p={'5px'} justifyContent={'space-between'} alignItems={'end'} bg={'gray.100'} borderBottomRadius={'8px'}>
+          <Text fontSize={'xs'} whiteSpace={'nowrap'} overflow={'hidden'} textOverflow={'ellipsis'}>{manufacturer_name} </Text>
+          <Box width={'20px'} />
+          <Flex direction={"row"} alignItems={'center'} gridGap={'5px'}>
+            {is_instalment && (
+              <Icon as={FaPercent} w="12px" src="/images/free-ongkir.svg" color={'blueviolet'} />
             )}
-            {Number(price) !== Number(promo_price) && (
-              <Box
-                w="100%"
-                display="flex"
-                alignItems="center"
-                fontSize="12px"
-                fontWeight="500"
-                lineHeight="18px"
-              >
-                <Text as="del" color="gray.500">
-                  {currencyFormat(price)}
-                </Text>
-                <Text
-                  ml={"5px"}
-                  h="100%"
-                  bg="red.200"
-                  px="4px"
-                  borderRadius="4px"
-                  color="red.700"
-                  display="flex"
-                  alignItems="center"
-                >
-                  {text_promo_price}
-                </Text>
-              </Box>
-
+            {is_free_shipping == 1 && (
+              <Image w="35px" mb={'-0.5'} src="/images/free-ongkir.svg" />
             )}
           </Flex>
-        </Box>
-      </Box>
-      <Flex p={'5px'} justifyContent={'space-between'} alignItems={'end'} bg={'gray.100'} borderBottomRadius={'8px'}>
-        <Text fontSize={'xs'} whiteSpace={'nowrap'} overflow={'hidden'} textOverflow={'ellipsis'}>{manufacturer_name} </Text>
-        <Box width={'20px'} />
-        <Flex direction={"row"} alignItems={'center'} gridGap={'5px'}>
-          {is_instalment && (
-            <Icon as={FaPercent} w="12px" src="/images/free-ongkir.svg" color={'blueviolet'} />
-          )}
-          {is_free_shipping == 1 && (
-            <Image w="35px" mb={'-0.5'} src="/images/free-ongkir.svg" />
-          )}
         </Flex>
       </Flex>
-    </Link >
+    </Flex >
   );
 };
 

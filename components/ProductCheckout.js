@@ -42,26 +42,30 @@ const formatPrice = (price) => {
 };
 
 const ProductCheckout = ({
-  products_attributes,
-  products_type,
-  products_jenis,
-  warehouse,
-  products_stock,
-  stockData,
-  price_after_discount,
-  price,
-  products_event,
-  customers_discount,
-  products_id,
-  special_products_price,
-  flash_sale_discount,
-  flash_sale_price_after_discount,
-  flash_sale_price,
-  is_liked_product,
-  products_slug,
-  po_status,
-
+  productDetail,
+  productStock
 }) => {
+  const { products_attributes,
+    products_type,
+    products_jenis,
+    warehouse,
+    products_stock,
+    price_after_discount,
+    price,
+    products_event,
+    customers_discount,
+    products_id,
+    special_products_price,
+    flash_sale_discount,
+    flash_sale_price_after_discount,
+    flash_sale_price,
+    is_liked_product,
+    products_slug,
+    po_status } = productDetail;
+  const stockData = productStock;
+
+  // console.log(productStok);
+  // return <></>;
 
   const product_wa = products_slug?.replace("-", "+")
 

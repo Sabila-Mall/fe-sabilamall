@@ -5,7 +5,7 @@ import "slick-carousel/slick/slick.css";
 import CardCategory from "./CardCategory";
 import { useRouter } from "next/router";
 
-const LayoutCategoryList = ({ isLoggedIn, data, loading }) => {
+const LayoutCategoryList = ({ isLoggedIn, queryCategories }) => {
   const router = useRouter();
 
   return (
@@ -18,8 +18,8 @@ const LayoutCategoryList = ({ isLoggedIn, data, loading }) => {
       gap={isLoggedIn ? 4 : { md: 3, lg: 4 }}
     >
       {
-        data.map((each, index) =>
-          loading
+        queryCategories.data?.map((each, index) =>
+          !queryCategories.isFetched
             ? <Box
               width={isLoggedIn ? "6rem" : { md: "6rem", lg: "8rem" }}
               height={isLoggedIn ? "6rem" : { md: "6rem", lg: "8rem" }}
@@ -30,10 +30,10 @@ const LayoutCategoryList = ({ isLoggedIn, data, loading }) => {
             </Box>
             : <CardCategory
               isLoggedIn={isLoggedIn}
-              icon={each.icon_path}
-              name={each.name}
-              onClick={() => router.push(`/daftar-produk?id=${each.id}&nama=${each.name}`)}
-              key={each.id}
+              icon={each.image.path}
+              name={each.categories_name}
+              onClick={() => router.push(`/daftar-produk?id=${each.categories_id}&nama=${each.categories_name}`)}
+              key={each.categories_id}
             />,
         )
       }

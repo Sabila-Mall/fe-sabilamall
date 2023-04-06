@@ -4,19 +4,18 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import { getProductsByCategory } from "../../api/DaftarProduk";
-import { getAllProductsByFilters } from "../../api/Homepage";
+import { getAllProductsByFilters, getProducts } from "../../api/Homepage";
 import { Layout } from "../../components/Layout";
 import LayoutProductList from "../../components/LayoutProductList";
 import { useAuthContext } from "../../contexts/authProvider";
+import { isRequestSuccess } from "../../utils/api";
+
+
+import { useInfiniteQuery, useQuery } from "react-query";
+
 
 const DaftarProduk = () => {
   const router = useRouter();
-  const [products, setProducts] = useState({
-    data: new Array(8).fill(0),
-    loading: true,
-    currentPage: 1,
-    lastPage: Number.MAX_SAFE_INTEGER,
-  });
   const categoryId = router.query.id;
   const categoryName = router.query.nama;
 
@@ -37,41 +36,28 @@ const DaftarProduk = () => {
     });
   };
 
-  function handleLoadMore() {
-    setProducts({ ...products, loading: true });
-
-    const newPage = products.currentPage + 1;
-    getAllProductsByFilters(newPage, userId, 'category', null, categoryId, null, null, null, null)
-      .then((res) => {
-        setProducts({
-          data: products.data.concat(res.data.data.data),
-          loading: false,
-          currentPage: newPage,
-          lastPage: res.data.data.last_page,
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-        errorToast("Gagal mengambil produk");
-        setProducts({ ...products, loading: false, data: [] });
-      });
-  }
-
-  useEffect(() => {
-    categoryId && !authIsLoading && getAllProductsByFilters(1, userId, 'category', null, categoryId, null, null, null, null)
-      .then((res) => {
-        setProducts({
-          data: res.data.data.data,
-          loading: false,
-          currentPage: 1,
-          lastPage: res.data.data.last_page,
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-        setProducts({ ...products, loading: false });
-      });
-  }, [categoryId, authIsLoading]);
+  const querySearchProducts = useInfiniteQuery(['products', categoryId, userLevel], async ({ pageParam = 0 }) => {
+    try {
+      const res = await getProducts(pageParam, userId, 'category', null, categoryId)
+      if (isRequestSuccess(res.data)) {
+        return res.data.data;
+      } else {
+        throw "Gagal mendapatkan produk";
+      }
+    } catch (err) {
+      console.error(err);
+      errorToast(err);
+    }
+  }, {
+    initialData: {
+      pages: [
+        { data: new Array(20).fill(0) }
+      ]
+    },
+    refetchOnWindowFocus: false,
+    enabled: !authIsLoading && !!categoryId,
+    getNextPageParam: (lastPage) => lastPage.current_page >= lastPage.last_page ? undefined : lastPage.current_page + 1,
+  });
 
   return (
     <Layout hasNavbar hasPadding>
@@ -88,9 +74,7 @@ const DaftarProduk = () => {
           </Text>
 
           <LayoutProductList
-            data={products}
-            loading={products.loading}
-            handleLoadMore={handleLoadMore}
+            queryProducts={querySearchProducts}
             sorting={false}
             title={false}
           />

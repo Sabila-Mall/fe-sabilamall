@@ -1,11 +1,11 @@
-import { Box, Flex, Button, Text, Icon } from "@chakra-ui/react";
+import { Box, Flex, Button, Text, Icon, useToast, Spinner, VStack } from "@chakra-ui/react";
 import axios from "axios";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { IoMdDownload } from "react-icons/io";
 
-import { getStockData } from "../../api/Stock";
+import { getStockData, getProductStock } from "../../api/Stock";
 import { getProductDetail } from "../../api/product-detail";
 import { getRelatedProduct } from "../../api/related-products";
 import { HOST } from "../../constants/api";
@@ -22,10 +22,15 @@ import { ShareProduct } from "../../components/ShareProduct";
 import { IMAGE_HOST } from "../../constants/api";
 import { useAuthContext } from "../../contexts/authProvider";
 import { isNumber, getPriceAfterDiscount, getImageLink } from "../../utils/functions";
-import { getAllProductsByFilters } from "../../api/Homepage";
+import { getAllProductsByFilters, getProducts } from "../../api/Homepage";
+import { useQuery } from "react-query";
+import { init } from "@sentry/nextjs";
+import { isRequestSuccess } from "../../utils/api";
 
-const ProductDetails = ({ initialData }) => {
+const ProductDetails = () => {
   const auth = useAuthContext();
+  const router = useRouter();
+  const { slug } = router.query;
 
   const userId = auth.userData?.id;
   const userLevel = auth.userData?.user_level;
@@ -34,61 +39,76 @@ const ProductDetails = ({ initialData }) => {
   const authIsLoading = auth.loading;
 
   const [loading, setLoading] = useState(true);
-  const [dataProduct, setDataProduct] = useState(null);
   const [stockData, setStockData] = useState([]);
-  const [relatedProducts, setRelatedProducts] = useState([]);
 
-  const router = useRouter();
-  const slug = router.query.slug;
+  const toast = useToast();
+  const errorToast = (errMessage) => {
+    toast({
+      position: "top",
+      title: errMessage,
+      status: "error",
+      isClosable: true,
+    });
+  };
 
-  useEffect(() => {
-    slug && !authIsLoading && getProductDetails();
-  }, [slug, authIsLoading, userLevel]);
 
-  const getProductDetails = async () => {
-    setLoading(true);
+  const queryProductDetail = useQuery(['product_detail', slug, userLevel], async () => {
     try {
-      const res = await getProductDetail({
-        customers_id: isLoggedIn ? userId : null,
-        products_slug: slug,
-        admin_id: adminId,
-      });
-      setDataProduct(res);
-    } catch (e) {
-      router.replace('/404');
+      const res = await getProductDetail(userId, slug, null)
+      if (isRequestSuccess(res.data)) {
+        return res.data.data;
+      } else {
+        throw "Gagal mendapatkan produk";
+      }
+    } catch (err) {
+      console.error(err);
+      errorToast(err);
     }
-    setLoading(false);
-  }
+  }, {
+    refetchOnWindowFocus: false,
+    enabled: !authIsLoading && !!slug,
+  })
 
-  useEffect(() => {
-    slug && getStockDatas();
-  }, [slug])
-
-  const getStockDatas = async () => {
+  const queryProductStok = useQuery(['product_stock', slug], async () => {
     try {
-      const res = await getStockData({ products_slug: slug });
-      setStockData(res);
-    } catch (e) {
-      router.replace('/404');
+      // await new Promise((resolve, reject) => {
+      //   setTimeout(() => resolve(), 5000)
+      // })
+      const res = await getProductStock({ products_slug: slug });
+      if (isRequestSuccess(res.data)) {
+        return res.data.data;
+      } else {
+        throw "Gagal mendapatkan stok produk";
+      }
+    } catch (err) {
+      console.error(err);
+      errorToast(err);
     }
-  }
+  }, {
+    refetchOnWindowFocus: false,
+    enabled: !authIsLoading && !!slug,
+  });
 
-  useEffect(() => {
-    slug && !authIsLoading && getRelatedProducts();
-  }, [slug, authIsLoading])
-
-  const getRelatedProducts = async () => {
+  const queryRelatedProduct = useQuery(['related_product', slug], async () => {
     try {
-      const res = await getAllProductsByFilters(1, userId, 'related', null, null, slug, 0, 999999999, 6);
-      setRelatedProducts(res.data.data.data);
-    } catch (e) {
+      const res = await getProducts(1, userId, 'related', null, null, slug, 0, 999999999, 6);
+      if (isRequestSuccess(res.data)) {
+        return res.data.data.data;
+      } else {
+        throw "Gagal mendapatkan related produk";
+      }
+    } catch (err) {
+      console.error(err);
+      errorToast(err);
     }
-  }
+  }, {
+    refetchOnWindowFocus: false,
+    enabled: !authIsLoading && !!slug,
+  });
 
-  if (loading) {
+  if (!queryProductDetail.isFetched) {
     return (
       <>
-        <CustomHead initialData={initialData} />
         <Loading />
       </>
     );
@@ -96,7 +116,7 @@ const ProductDetails = ({ initialData }) => {
 
   // ==== path
   let path = [];
-  const breadCrumbItem = JSON.parse(dataProduct.categories ?? "[]");
+  const breadCrumbItem = JSON.parse(queryProductDetail.data?.categories ?? "[]");
   let count_item = breadCrumbItem.length;
 
   if (count_item > 0) {
@@ -130,17 +150,14 @@ const ProductDetails = ({ initialData }) => {
     }]
   }
 
-
-  // ========================
-
-  const tempHeadImage = dataProduct.products_image.split("/");
-  const headImage = tempHeadImage.slice(2, tempHeadImage.length).join("/");
+  const tempHeadImage = queryProductDetail.data?.products_image.split("/");
+  const headImage = tempHeadImage?.slice(2, tempHeadImage.length).join("/");
 
   //price
 
   return (
     <Layout hasNavbar sticky hasBreadCrumb breadCrumbItem={path} hasPadding>
-      <CustomHead initialData={initialData} />
+      {/* <CustomHead initialData={initialData} /> */}
       <Box w="full">
         <Flex
           flexDirection={{ base: "column", lg: "row" }}
@@ -154,7 +171,7 @@ const ProductDetails = ({ initialData }) => {
           >
             <Box h="fit-content" position={{ lg: "sticky" }} top="6rem">
               <ProductImages
-                {...dataProduct}
+                {...queryProductDetail.data}
               />
               <Box display={{ base: "none", lg: "block" }}>
                 <ShareProduct />
@@ -167,32 +184,40 @@ const ProductDetails = ({ initialData }) => {
             px={{ lg: "1rem", xl: "0.5rem", "2xl": "2rem" }}
             mx={{ lg: "1rem" }}
           >
-            <ProductHeader {...dataProduct} />
+            <ProductHeader {...queryProductDetail.data} />
             <Box display={{ base: "none", lg: "block" }}>
-              <ProductInformation {...dataProduct} />
+              <ProductInformation {...queryProductDetail.data} />
             </Box>
           </Box>
           <Box w={{ base: "100%", lg: "25%" }} maxW="100vw" mt={{ base: '3', lg: '0' }}>
-            <ProductCheckout
-              {...dataProduct} stockData={stockData}
-            />
+            {queryProductStok.isFetched ?
+              (<ProductCheckout
+                productDetail={queryProductDetail.data}
+                productStock={queryProductStok.data}
+              />
+              ) : (
+                <VStack minW={{ base: '100%', md: '300px' }} borderColor={"gray.300"} borderWidth={"1px"} spacing={'12px'} className={"secondaryFont"} p={'2rem'} borderRadius={"12px"}>
+                  <Spinner color="gray.500" />
+                </VStack>
+              )
+            }
           </Box>
           <Box
             display={{ base: "block", lg: "none" }}
             mb={{ base: "2rem", lg: "0" }}
             maxW="100vw"
           >
-            <ProductInformation {...dataProduct} />
+            <ProductInformation {...queryProductDetail.data} />
             <Box mb="1rem" />
             <ShareProduct />
           </Box>
         </Flex>
         <Box w={{ lg: "75%" }} maxW="100vw">
-          <ProductReview {...dataProduct} />
+          <ProductReview {...queryProductDetail.data} />
         </Box>
         <Box maxW="100vw">
           <RelatedProductContainer
-            relatedProducts={relatedProducts}
+            queryRelatedProduct={queryRelatedProduct}
           />
         </Box>
       </Box>
@@ -227,22 +252,24 @@ const CustomHead = ({ initialData }) => {
   )
 }
 
-export async function getServerSideProps(context) {
-  const products_slug = context.params.slug;
-  const res = await axios.post(HOST + "/api/product/get_products_info", { products_slug: products_slug });
+// export async function getServerSideProps(context) {
+//   const products_slug = context.params.slug;
+//   const res = await axios.get(`https://smapi.sabilamall.co.id/api/product/info?products_slug=${products_slug}`);
 
-  let initialData = res.data.data;
+//   let initialData = res.data.data;
 
-  initialData.products_image = getImageLink(initialData.products_image);
-  initialData.products_link = `https://www.sabilamall.co.id/product-detail/${initialData.products_slug}`;
+//   initialData.products_image = getImageLink(initialData.products_image);
+//   initialData.products_link = `https://www.sabilamall.co.id/product-detail/${initialData.products_slug}`;
 
-  initialData.products_keywords = `reseller baju muslim, supplier dropship, open reseller gamis, supplier hijab, dropship terpercaya, ${initialData.products_name}, ${initialData.manufacturer_name}, ${JSON.parse(initialData.categories ?? "[]").join(', ')}, ${initialData.origin_city}`;
+//   initialData.products_keywords = `reseller baju muslim, supplier dropship, open reseller gamis, supplier hijab, dropship terpercaya, ${initialData.products_name}, ${initialData.manufacturer_name}, ${JSON.parse(initialData.categories ?? "[]").join(', ')}, ${initialData.origin_city}`;
 
-  initialData.products_description = initialData.products_description == '' ? initialData.products_keywords : initialData.products_description;
+//   initialData.products_description = initialData.products_description == '' ? initialData.products_keywords : initialData.products_description;
 
-  return {
-    props: { initialData },
-  }
-}
+//   initialData.products_slug = products_slug;
+
+//   return {
+//     props: { initialData },
+//   }
+// }
 
 export default ProductDetails;

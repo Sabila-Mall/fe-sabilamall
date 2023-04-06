@@ -1,4 +1,4 @@
-import { Box, Center, Img, Spinner } from "@chakra-ui/react";
+import { AspectRatio, Box, Center, Img, Skeleton, Spinner } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
@@ -18,17 +18,17 @@ const settings = {
   arrows: true,
 };
 
-const Banner = ({ data, loading }) => {
+const Banner = ({ queryBanners }) => {
   const [display, setDisplay] = useState("none");
   const { width } = useWindowSize();
   let ref = null;
 
   const router = useRouter();
 
-  return loading ? (
-    <Center>
-      <Spinner size="xl" />
-    </Center>
+  return !queryBanners.isFetched ? (
+    <AspectRatio ratio={5 / 1} p={3} borderRadius={'xl'}>
+      <Skeleton h="12rem" />
+    </AspectRatio>
   ) : (
     <Box
       position="relative"
@@ -70,7 +70,7 @@ const Banner = ({ data, loading }) => {
           {...settings}
         >
           {width <= 576
-            ? data.map((each, index) => (
+            ? queryBanners.data?.map((each, index) => (
               <Box
                 key={index}
                 display="flex !important"
@@ -90,7 +90,7 @@ const Banner = ({ data, loading }) => {
                 />
               </Box>
             ))
-            : data.map((each, index) => (
+            : queryBanners.data?.map((each, index) => (
               <Img
                 onClick={() => router.push(each.url)}
                 className="imageRound"

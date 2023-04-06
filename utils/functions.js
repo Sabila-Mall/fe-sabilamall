@@ -226,7 +226,7 @@ export const parseNumber = (str) => {
   try {
     return typeof str == "number" ? str : Number(str);
   } catch (_) {
-    console.log(str);
+    // console.log(str);
   }
 };
 

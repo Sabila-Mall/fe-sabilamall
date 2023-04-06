@@ -14,6 +14,7 @@ export const AddressProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const { userData } = useAuthContext();
   const userId = userData?.id;
+  const authLoading = userData?.loading;
 
   const toast = useToast();
 
@@ -169,8 +170,8 @@ export const AddressProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    getAllData();
-  }, [userData]);
+    !authLoading && getAllData();
+  }, [userData, authLoading]);
 
   const value = {
     addressDataPengirim,

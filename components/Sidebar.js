@@ -30,6 +30,7 @@ import { useHomePageContext } from "../contexts/homepageProvider";
 import styles from "../styles/Navbar.module.scss";
 import { isRequestSuccess } from "../utils/api";
 import { getImageLink, logout, setBadgeColor } from "../utils/functions";
+import { useQuery } from "react-query";
 
 const UserInfo = ({ useBorder }) => {
   const { userData } = useAuthContext();
@@ -136,31 +137,22 @@ const Sidebar = ({
     setIsCategoryMenu(false);
   };
 
-  useEffect(() => {
-    getCategory()
-      .then((res) => {
-        if (isRequestSuccess(res.data)) {
-          setCategory({
-            data: res.data.data ?? [],
-            loading: false,
-          });
-          let accordionState = {};
-          if (res.data.data) {
-            res.data.data.forEach((e) => {
-              accordionState[`${e.id}`] = false;
-            });
-          }
-          setCategoryState(accordionState);
-        } else {
-          throw "Gagal mendapatkan kategori";
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        errorToast(err);
-        setCategory({ data: [], loading: false });
-      });
-  }, []);
+  const queryCategories = useQuery(['category'], async () => {
+    try {
+      const res = await getCategories();
+      if (isRequestSuccess(res.data)) {
+        return res.data.data;
+      } else {
+        throw Error('Gagal mendapatkan kategori');
+      }
+    } catch (err) {
+      console.error(err);
+      errorToast(err);
+    }
+  }, {
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  })
 
   return (
     <>
@@ -299,18 +291,18 @@ const Sidebar = ({
         <VStack spacing={1} px="10px" pt="5px">
           {isLoggedIn && <UserInfo useBorder={false} />}
           <Accordion borderWidth="0" allowToggle allowMultiple>
-            {category &&
-              category.data.map((item) => {
+            {queryCategories.isFetched &&
+              queryCategories.data?.map((item) => {
                 const subCategories = item.sub_categories;
                 return (
-                  <AccordionItem key={item.id}>
+                  <AccordionItem key={item.categories_id}>
                     <AccordionButton
                       borderWidth="0"
                       borderColor="transparent"
                       _focus={{ outline: "none" }}
                       onClick={() => {
                         const temp = { ...categoryState };
-                        temp[`${item.id}`] = !temp[`${item.id}`];
+                        temp[`${item.categories_id}`] = !temp[`${item.categories_id}`];
                         setCategoryState(temp);
                       }}
                     >
@@ -324,11 +316,11 @@ const Sidebar = ({
                             className={styles.fontSizeSidebar}
                             lineHeight="30px"
                           >
-                            {item.name}
+                            {item.categories_name}
                           </Heading>
                           <Icon
                             as={
-                              categoryState[`${item.id}`]
+                              categoryState[`${item.categories_id}`]
                                 ? BsChevronUp
                                 : BsChevronDown
                             }
@@ -347,11 +339,11 @@ const Sidebar = ({
                       onClick={() => {
                         closeSidebar();
                         router.push(
-                          `/daftar-produk?id=${item.id}&nama=${item.name}`,
+                          `/daftar-produk?id=${item.categories_id}&nama=${item.categories_name}`,
                         );
                       }}
                     >
-                      Semua {item.name}
+                      Semua {item.categories_name}
                     </AccordionPanel>
                     {subCategories &&
                       subCategories.map((item, index) => {
@@ -364,11 +356,11 @@ const Sidebar = ({
                             onClick={() => {
                               closeSidebar();
                               router.push(
-                                `/daftar-produk?id=${item.id}&nama=${item.name}`,
+                                `/daftar-produk?id=${item.categories_id}&nama=${item.categories_name}`,
                               );
                             }}
                           >
-                            {item.name}
+                            {item.categories_name}
                           </AccordionPanel>
                         );
                       })}

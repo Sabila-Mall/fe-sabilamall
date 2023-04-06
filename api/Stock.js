@@ -40,6 +40,10 @@ export const getStockData = async (dataPost) => {
   }
 };
 
+export const getProductStock = async ({ products_slug }) => {
+  return axios.get(`https://smapi.sabilamall.co.id/api/product/stock?products_slug=${products_slug}`);
+}
+
 export const checkStockByAttribute = async (dataPost) => {
   try {
     const res = await axios.post(HOST + "/api/product/get_quantity_2", {

@@ -106,7 +106,7 @@ const AlamatPenerima = () => {
     const checkoutDataJSON = localStorage.getItem("selectedProduct")
     const checkoutData = isValidJson(checkoutDataJSON) && JSON.parse(checkoutDataJSON);
     if (checkoutData) {
-      console.log(checkoutData);
+      // console.log(checkoutData);
       totalPrice = checkoutData.total_price;
       totalQuantity = checkoutData.quantity;
       totalWeight = checkoutData.weight;

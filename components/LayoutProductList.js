@@ -19,6 +19,8 @@ import {
   VStack,
   Flex,
   Link,
+  Text,
+  Spinner,
 } from "@chakra-ui/react";
 import { IoArrowDown, IoChevronDown, IoFilterOutline } from "react-icons/io5";
 
@@ -26,7 +28,7 @@ import styles from "../styles/Product.module.scss";
 import CardProduct from "./CardProduct";
 
 const LayoutProductList = ({
-  data,
+  queryProducts,
   loading,
   handleLoadMore,
   handleFilter,
@@ -145,25 +147,34 @@ const LayoutProductList = ({
         columnGap={2}
         rowGap={4}
       >
-        {data.data.map((item, index) =>
-          loading ? (
-            <Box
-              key={index}
-              bg="white"
-              borderRadius="8px"
-              border="1px solid #CBD5E0"
-            >
-              <Skeleton h="10rem" />
-              <Box padding="1.5rem">
-                <SkeletonText noOfLines={2} mb="1rem" />
-                <SkeletonText noOfLines={1} />
-              </Box>
+
+        {/* {queryProducts.data?.pages?.reduce((acc, curr) => acc.data.concat(curr.data))} */}
+        {!queryProducts.isFetched ? queryProducts.data?.pages?.map((page) => page.data.map((data, index) => (
+          <Box
+            key={index}
+            bg="white"
+            borderRadius="8px"
+            border="1px solid #CBD5E0"
+          >
+            <Skeleton h="10rem" />
+            <Box padding="1.5rem">
+              <SkeletonText noOfLines={2} mb="1rem" />
+              <SkeletonText noOfLines={1} />
             </Box>
-          ) : (
-            <CardProduct key={index} {...item} responsive={true} />
-          ),
+          </Box>
+        ))
+        ) : (
+          queryProducts.data?.pages?.map((page) => page.data.map((data, index) => <CardProduct key={data.products_id} {...data} responsive={true} />))
         )}
-      </Grid>
+      </Grid >
+
+      {
+        // !queryProducts.isFetched ?
+        //   (<Center><Spinner /></Center>) :
+        //   queryProducts.data?.pages?.reduce((acc, curr) => acc.concat(curr.data), []).length == 0 &&
+        //   (<Center><Text fontSize={'md'} fontWeight={'bold'}>Data Tidak Ditemukan</Text></Center>)
+      }
+
       {/* <Grid
         w="100%"
         position="relative"
@@ -198,23 +209,25 @@ const LayoutProductList = ({
           ),
         )}
       </Grid> */}
-      {data.currentPage !== data.lastPage && (
+
+      {
+        queryProducts.hasNextPage &&
         <Center mt="1rem">
           <Button
             variant="outline"
             borderRadius="29px"
             borderColor="red.500"
             color="red.500"
-            onClick={handleLoadMore}
-            isLoading={loading}
+            onClick={() => queryProducts.fetchNextPage()}
             spinnerPlacement="end"
             loadingText="Mengambil data"
+            isLoading={queryProducts.isFetching}
           >
             Lihat Lebih Banyak <Icon as={IoArrowDown} ml=".5rem" />
           </Button>
         </Center>
-      )}
-    </Box>
+      }
+    </Box >
   );
 };
 

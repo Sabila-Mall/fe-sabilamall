@@ -29,7 +29,10 @@ const HomeDisplay = () => {
     category,
     handleLoadMoreProducts,
     handleFilterProducts,
-    filter
+    filter,
+    queryProducts,
+    queryBanners,
+    queryCategories
   } = useHomePageContext();
   const [scrollVisible, setScrollVisible] = useState(false);
   const { width } = useWindowSize();
@@ -86,7 +89,7 @@ const HomeDisplay = () => {
         >
           <Icon as={IoArrowUp} color="white" width="55%" height="55%" />
         </Circle>
-        <Banner data={banner.data} loading={banner.loading} />
+        <Banner queryBanners={queryBanners} />
         <Flex
           flexDirection={{ base: "column", xl: "row" }}
           justifyContent="space-evenly"
@@ -113,8 +116,7 @@ const HomeDisplay = () => {
               </Text>
               <LayoutCategoryList
                 isLoggedIn={isLoggedIn}
-                data={category.data}
-                loading={category.loading}
+                queryCategories={queryCategories}
               />
             </Flex>
           )}
@@ -123,18 +125,18 @@ const HomeDisplay = () => {
       <Box justify="center" bg="orange.400">
         <Layout hasNavbar={false} noFooter={true} hasPadding={true}>
           <LayoutSaleProducts
-            data={flashSaleProducts.data}
+            data={flashSaleProducts.data.data}
             headingText="Flash Sale"
             hasBackground={true}
-            loading={flashSaleProducts.loading}
+            loading={!flashSaleProducts.isFetched}
           />
         </Layout>
       </Box>
       <Layout hasNavbar={false} hasPadding={true}>
         <LayoutSaleProducts
-          data={discountProducts.data}
+          data={discountProducts.data.data}
           headingText="Discount"
-          loading={discountProducts.loading}
+          loading={!discountProducts.isFetched}
         />
         <Divider
           orientation="horizontal"
@@ -143,9 +145,9 @@ const HomeDisplay = () => {
           my="1.5rem"
         />
         <LayoutSaleProducts
-          data={instalmentProducts.data}
+          data={instalmentProducts.data.data}
           headingText="Cicilan"
-          loading={instalmentProducts.loading}
+          loading={!instalmentProducts.isFetched}
         // url_detail={'/product-cicilan'}
         />
         <Divider
@@ -157,9 +159,7 @@ const HomeDisplay = () => {
         <LayoutProductList
           headingText="Semua Produk"
           bg="white"
-          data={products}
-          loading={products.loading}
-          handleLoadMore={handleLoadMoreProducts}
+          queryProducts={queryProducts}
           handleFilter={handleFilterProducts}
           filterData={filter}
         />

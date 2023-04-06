@@ -13,7 +13,11 @@ import * as fbq from "../lib/fpixel";
 import * as gtag from "../lib/gtag";
 import "../styles/globals.scss";
 
+import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
+
 import nookies from "nookies";
+
+const queryClient = new QueryClient()
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -85,7 +89,9 @@ function MyApp({ Component, pageProps }) {
           `,
           }}
         />
-        <Component {...pageProps} />
+        <QueryClientProvider client={queryClient}>
+          <Component {...pageProps} />
+        </QueryClientProvider>
       </GlobalProvider>
     </>
   );

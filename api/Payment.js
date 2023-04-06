@@ -8,7 +8,7 @@ export const apiGetPaymentMekariPay = async (customerId, orderId) => {
         customers_id: customerId,
         transaction_no: 'SMC' + orderId,
     });
-    console.log(res.data);
+    // console.log(res.data);
     return res.data;
 };
 

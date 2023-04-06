@@ -10,7 +10,7 @@ import { currencyFormat } from "../../utils/functions";
 const Invoice = () => {
   const { orderNumber, subtotal, checkoutResponse } = useCheckoutContext();
 
-  console.log(checkoutResponse?.data?.payment_method);
+  // console.log(checkoutResponse?.data?.payment_method);
 
   return (
     <>
