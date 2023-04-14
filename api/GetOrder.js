@@ -5,20 +5,21 @@ import { getDeviceId } from "../utils/functions";
 
 export const apiGetOrder = async (customerId, page) => {
   let device_id = getDeviceId();
+
+  const params = new URLSearchParams({
+    customers_id: customerId,
+    currency_code: "IDR",
+    device_id: device_id,
+    language_id: 1,
+    page: page,
+  }).toString().replaceAll('null', '');
+
   try {
-    const res = await axios.post(
-      HOST + `/api/order/get_by_customers?page=${page}`,
-      {
-        customers_id: customerId,
-        currency_code: "IDR",
-        language_id: 1,
-        device_id,
-      },
-    );
+    const res = await axios.get(`https://smapi.sabilamall.co.id/api/orders?${params}`);
     const d = {
-      current_page: res.data.current_page,
-      last_page: res.data.last_page,
-      data: res.data.data,
+      current_page: res.data.data.current_page,
+      last_page: res.data.data.last_page,
+      data: res.data.data.data,
     };
 
     return d;
