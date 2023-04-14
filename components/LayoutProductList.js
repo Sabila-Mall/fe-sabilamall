@@ -26,6 +26,8 @@ import { IoArrowDown, IoChevronDown, IoFilterOutline } from "react-icons/io5";
 
 import styles from "../styles/Product.module.scss";
 import CardProduct from "./CardProduct";
+import { Image } from "@chakra-ui/react";
+
 
 const LayoutProductList = ({
   queryProducts,
@@ -169,10 +171,16 @@ const LayoutProductList = ({
       </Grid >
 
       {
-        // !queryProducts.isFetched ?
-        //   (<Center><Spinner /></Center>) :
-        //   queryProducts.data?.pages?.reduce((acc, curr) => acc.concat(curr.data), []).length == 0 &&
-        //   (<Center><Text fontSize={'md'} fontWeight={'bold'}>Data Tidak Ditemukan</Text></Center>)
+        !queryProducts.isFetched ?
+          (<Center><Spinner /></Center>) :
+          queryProducts.data?.pages?.reduce((acc, curr) => acc.concat(curr.data), []).length == 0 &&
+          (<Box display={'flex'} flexDirection={'column'}>
+            <Text fontSize={'xl'} align={'center'}>
+              Produk Tidak Ditemukan
+            </Text>
+            <Image src={'/images/2.svg'} height={'60vh'} />
+
+          </Box>)
       }
 
       {/* <Grid
