@@ -41,6 +41,7 @@ const CheckoutSummary = ({
   handlingFeeAdmin = 0,
   diskon = 0,
   voucher = 0,
+  handlingFee = 0,
 }) => (
   <Box w={{ base: "100%", lg: "25%" }}>
     <Box
@@ -77,6 +78,7 @@ const CheckoutSummary = ({
       </Text>
       <SummaryEntry text="Subtotal" data={subtotal} />
       <SummaryEntry text="Fee Admin" data={handlingFeeAdmin} />
+      <SummaryEntry text="Handling Fee" data={handlingFee} />
       <SummaryEntry text="Pengiriman" data={pengiriman} />
       <SummaryEntry text="Tambahan" data={tambahan} />
       <SummaryEntry text="Diskon" data={diskon} isNegative={true} />
@@ -86,6 +88,7 @@ const CheckoutSummary = ({
       <SummaryEntry
         text="Total"
         data={
+          Number(handlingFee) +
           Number(handlingFeeAdmin) +
           Number(subtotal) +
           Number(pengiriman) +

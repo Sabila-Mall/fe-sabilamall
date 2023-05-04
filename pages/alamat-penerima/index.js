@@ -100,13 +100,14 @@ const AlamatPenerima = () => {
     priceAfterDiscount = 0,
     handlingFeeAdmin = 0,
     handlingFeeAdminDiscount = 0,
+    handlingFee = 0,
     totalWeight = 0;
 
   if (typeof window !== "undefined") {
     const checkoutDataJSON = localStorage.getItem("selectedProduct")
     const checkoutData = isValidJson(checkoutDataJSON) && JSON.parse(checkoutDataJSON);
     if (checkoutData) {
-      // console.log(checkoutData);
+      console.log(checkoutData);
       totalPrice = checkoutData.total_price;
       totalQuantity = checkoutData.quantity;
       totalWeight = checkoutData.weight;
@@ -115,9 +116,12 @@ const AlamatPenerima = () => {
         handlingFeeAdmin = checkoutData.handling_fee_admin;
         handlingFeeAdminDiscount = checkoutData.handling_fee_admin_discount;
       }
+      handlingFee = checkoutData.handling_fee;
       priceAfterDiscount = totalPrice - totalDiscount + handlingFeeAdmin;
     }
   }
+
+  console.log(handlingFee);
 
   const [pengirimCurrentTab, setPengirimCurrentTab] = useState(0);
   const [penerimaCurrentTab, setPenerimaCurrentTab] = useState(0);
@@ -1240,6 +1244,7 @@ const AlamatPenerima = () => {
                 :
                 <Box />
               }
+              
 
               <Box
                 width="100%"
@@ -1264,7 +1269,33 @@ const AlamatPenerima = () => {
                   {currencyFormat(totalDiscount)}
                 </Text>
               </Box>
-
+              {handlingFee > 0 ?
+                <Box
+                  width="100%"
+                  d="flex"
+                  justifyContent="space-between"
+                  marginTop="0.3rem"
+                >
+                  <Text
+                    color="gray.500"
+                    className="primaryFont"
+                    fontWeight="700"
+                    isTruncated
+                  >
+                    Handling Fee
+                  </Text>
+                  <Text
+                    color="gray.500"
+                    className="secondaryFont"
+                    fontWeight="500"
+                    isTruncated
+                  >
+                    {currencyFormat(handlingFee)}
+                  </Text>
+                </Box>
+                :
+                <Box />
+              }
               <Box
                 width="100%"
                 d="flex"
@@ -1310,7 +1341,7 @@ const AlamatPenerima = () => {
                   fontSize="1.25rem"
                   isTruncated
                 >
-                  {currencyFormat(priceAfterDiscount)}
+                  {currencyFormat(priceAfterDiscount + handlingFee)}
                 </Text>
               </Box>
             </Box>

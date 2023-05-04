@@ -161,6 +161,7 @@ export const CartProvider = ({ children }) => {
       let tempDiscBuyXYCustomers = 0;
       let tempDiscBuyXYManufacturers = 0;
       let tempPromoBuyXYDesc = '';
+      let tempHandlingFee = 0;
 
 
       for (let i = 0; i < selectedItem.length; i++) {
@@ -187,6 +188,11 @@ export const CartProvider = ({ children }) => {
           tempHandlingFeeAdminDiscount = 0;
           setHandlingFeeAdminData(tempHandlingFeeAdminDiscount);
         }
+      }
+
+      // tambahan handling fee jika orderan sr12
+      if(selectedItem[0].vendors_id == 10536) {
+        tempHandlingFee = 4300;
       }
 
       router.push("/alamat-penerima");
@@ -257,6 +263,7 @@ export const CartProvider = ({ children }) => {
         disc_buyxy_customers: tempDiscBuyXYCustomers,
         disc_buyxy_manufacturers: tempDiscBuyXYManufacturers,
         promo_buyxy_desc: tempPromoBuyXYDesc,
+        handling_fee: tempHandlingFee,
       };
 
       localStorage.setItem("selectedProduct", JSON.stringify(checkoutData));

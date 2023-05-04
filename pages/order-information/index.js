@@ -736,6 +736,7 @@ const OrderInformation = ({ order }) => {
                   ) : (
                     <></>
                   )}
+
                   <Flex mt="8px">
                     <Text>Biaya Pengiriman</Text>
                     <Spacer />
@@ -773,6 +774,15 @@ const OrderInformation = ({ order }) => {
                   ) : (
                     <></>
                   )}
+                  {orderData.handling_fee != 0 && orderData?.handling_fee != null ? (
+                    <Flex mt="8px">
+                      <Text>Handling Fee</Text>
+                      <Spacer />
+                      <Text>+ {currencyFormat(orderData.handling_fee)}</Text>
+                    </Flex>
+                  ) : (
+                    <></>
+                  )}
                   <Flex mt="8px">
                     <Text>Total Pesanan</Text>
                     <Spacer />
@@ -783,6 +793,7 @@ const OrderInformation = ({ order }) => {
                       className="primaryFont"
                     >
                       {currencyFormat(
+                        parseInt(orderData?.handling_fee ?? 0) +
                         parseInt(orderData?.handling_fee_admin ?? 0) +
                         parseInt(subTotalProduk) +
                         parseInt(orderData?.shipping_cost) +

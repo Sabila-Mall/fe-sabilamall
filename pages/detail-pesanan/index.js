@@ -743,7 +743,7 @@ const DetailPesanan = () => {
     totalDiscount = 0,
     totalWeight = 0,
     handlingFeeAdmin = 0,
-    handlingFeeAdminDiscount = 0;
+    handlingFeeAdminDiscount = 0, handlingFee = 0;
 
   if (typeof window !== "undefined") {
     const checkoutDataJson = localStorage.getItem("selectedProduct");
@@ -758,6 +758,7 @@ const DetailPesanan = () => {
         handlingFeeAdmin = checkoutData.handling_fee_admin;
         handlingFeeAdminDiscount = checkoutData.handling_fee_admin_discount;
       }
+      handlingFee = checkoutData.handling_fee;
     }
   }
   const onSubmit = () => {
@@ -915,6 +916,7 @@ const DetailPesanan = () => {
             subtotal={totalPrice}
             tambahan={metodePembayaran.biaya}
             pengiriman={pengiriman.harga}
+            handlingFee={handlingFee}
             handlingFeeAdmin={handlingFeeAdmin}
             diskon={totalDiscount}
             voucher={voucher.harga}
