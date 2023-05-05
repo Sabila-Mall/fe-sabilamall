@@ -30,7 +30,7 @@ export const apiGetPromoBuyXYGetDisc = async (dataPost) => {
 export const addCart = async (dataPost) => {
   let device_id = getDeviceId();
   try {
-    const res = await axios.post(HOST + "/api/cart/add_to_cart_2", {
+    const res = await axios.post("https://smapi.sabilamall.co.id/api/cart", {
       ...dataPost,
       device_id,
     });
