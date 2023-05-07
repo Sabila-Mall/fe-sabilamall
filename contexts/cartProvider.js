@@ -191,7 +191,7 @@ export const CartProvider = ({ children }) => {
       }
 
       // tambahan handling fee jika orderan sr12
-      if(selectedItem[0].vendors_id == 10536) {
+      if (selectedItem[0].vendors_id == 10536) {
         tempHandlingFee = 4300;
       }
 
@@ -358,29 +358,31 @@ export const CartProvider = ({ children }) => {
     warehouse_id,
     admin_id,
   ) => {
-    addCart({
-      customers_id,
-      user_level,
-      products_id,
-      quantity,
-      option_id,
-      option_values_id,
-      warehouse_id,
-      admin_id,
-    })
-      .then((res) => {
-        if (isRequestSuccess(res)) {
-          successToast("Produk berhasil ditambahkan ke keranjang belanja");
-          getAllData();
-        } else {
-          //          errorToast("Produk gagal ditambahkan ke keranjang belanja");
-          errorToast(res.message);
-          getAllData();
-        }
+    try {
+      const res = await addCart({
+        customers_id,
+        user_level,
+        products_id,
+        quantity,
+        option_id,
+        option_values_id,
+        warehouse_id,
+        admin_id,
       })
-      .catch(() => {
-        errorToast("Produk gagal ditambahkan ke keranjang belanja");
-      });
+
+      if (isRequestSuccess(res)) {
+        successToast("Produk berhasil ditambahkan ke keranjang belanja");
+        getAllData();
+      } else {
+        errorToast(res.message);
+        getAllData();
+      }
+    } catch (_) {
+      errorToast("Produk gagal ditambahkan ke keranjang belanja");
+
+    }
+
+
   };
 
   const deleteCartItem = async (

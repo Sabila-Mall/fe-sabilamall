@@ -277,6 +277,8 @@ const ProductCheckout = ({
       calculatePrice();
     }, [numberOfItem, itemPrice, variantPrice]);
 
+    const [isLoadingAddToCart, setIsLoadingAddToCart] = useState(false);
+
     return (
       <>
         <VStack minW={{ base: '100%', md: '300px' }} borderColor={"gray.300"} borderWidth={"1px"} spacing={'12px'} className={"secondaryFont"} p={'1rem'} borderRadius={"12px"}>
@@ -519,7 +521,8 @@ const ProductCheckout = ({
             className={"primaryFont"}
             _hover={{ bgColor: "red.600" }}
             isDisabled={(numberOfItem <= 0 || (products_jenis == 'po' && po_status != 1))}
-            onClick={() => {
+            isLoading={isLoadingAddToCart}
+            onClick={async () => {
               if (!auth.isLoggedIn)
                 return callToast({ title: "Silakan login terlebih dahulu" });
 
@@ -533,7 +536,9 @@ const ProductCheckout = ({
               let option_values_id = JSON.stringify([colorId, sizeId]);
               let option_id = JSON.stringify([2, 1]);
 
-              addCartItem(
+              setIsLoadingAddToCart(true);
+
+              await addCartItem(
                 userId,
                 userLevel,
                 products_id,
@@ -543,6 +548,9 @@ const ProductCheckout = ({
                 warehouseId,
                 adminId,
               );
+
+              setIsLoadingAddToCart(false);
+
             }}
           >
             Masukkan ke Keranjang
@@ -735,7 +743,8 @@ const ProductCheckout = ({
             className={"primaryFont"}
             _hover={{ bgColor: "red.600" }}
             isDisabled={(numberOfItem <= 0 || (products_jenis == 'po' && po_status != 1))}
-            onClick={() => {
+            isLoading={isLoadingAddToCart}
+            onClick={async () => {
               if (!auth.isLoggedIn)
                 return callToast({ title: "Silakan login terlebih dahulu" });
 
@@ -749,7 +758,9 @@ const ProductCheckout = ({
               let option_values_id = JSON.stringify([colorId, sizeId]);
               let option_id = JSON.stringify([2, 1]);
 
-              addCartItem(
+              setIsLoadingAddToCart(true);
+
+              await addCartItem(
                 userId,
                 userLevel,
                 products_id,
@@ -759,9 +770,12 @@ const ProductCheckout = ({
                 warehouseId,
                 adminId,
               );
+
+              setIsLoadingAddToCart(false);
+
             }}
           >
-            Masukkan ke Keranjang
+            Masukkan ke Keranjangan
           </Button>
         </VStack >
         <Footer handleClickWishlist={handleClickWishlist} isLiked={isLiked} product_wa={product_wa} />
