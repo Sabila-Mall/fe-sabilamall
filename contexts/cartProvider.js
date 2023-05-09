@@ -5,6 +5,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 import {
   addCart,
+  apiDeleteCart,
   apiGetCart,
   deleteCart,
   editCartNotes,
@@ -395,35 +396,26 @@ export const CartProvider = ({ children }) => {
     customers_basket_id,
     toaster = true,
   ) => {
-    await new Promise((res, rej) => {
-      deleteCart({ customers_id, customers_basket_id })
-        .then((res) => {
-          if (isRequestSuccess(res)) {
-            toaster &&
-              successToast("Produk berhasil dihapus dari keranjang belanja");
-            getAllData();
-
-            // hapus dari selected
-            let tempData = selectedItem.filter((item) => item.customers_basket_id != customers_basket_id);
-            setselectedItem(tempData);
-            calculateTotalSelected(tempData);
-            calculateTotalDiscount(tempData);
-            res();
-          } else {
-            toaster &&
-              errorToast("Gagal menghapus produk dari keranjang belanja");
-            getAllData();
-            res();
-
-          }
-        })
-        .catch(() => {
+    try {
+      const res = await apiDeleteCart({ customers_id, customers_basket_id });
+      if (isRequestSuccess(res)) {
+        toaster &&
+          successToast("Produk berhasil dihapus dari keranjang belanja");
+      } else {
+        toaster &&
           errorToast("Gagal menghapus produk dari keranjang belanja");
-          getAllData();
-          res();
-        });
-    })
+      }
+    } catch (_) {
+      successToast("Produk berhasil dihapus dari keranjang belanja");
+    }
 
+    // hapus dari selected
+    let tempData = selectedItem.filter((item) => item.customers_basket_id != customers_basket_id);
+    setselectedItem(tempData);
+    calculateTotalSelected(tempData);
+    calculateTotalDiscount(tempData);
+
+    getAllData();
   };
 
   const updateQuantity = async (

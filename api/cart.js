@@ -55,6 +55,18 @@ export const deleteCart = async (dataPost) => {
   }
 };
 
+export const apiDeleteCart = async ({ customers_id, customers_basket_id }) => {
+  let device_id = getDeviceId();
+  try {
+    const res = await axios.delete(`https://smapi.sabilamall.co.id/api/cart?customers_id=${customers_id}&customers_basket_id=${customers_basket_id}&device_id=${device_id}`);
+    const data = await res.data;
+    return data;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+
 export const editCartNotes = async (dataPost) => {
   let device_id = getDeviceId();
   try {
