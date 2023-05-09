@@ -100,3 +100,11 @@ export const getMyCart = async (user_id) => {
     throw new Error(err);
   }
 };
+
+export const apiGetCart = async (customers_id) => {
+  let device_id = getDeviceId();
+  const res = await axios.get(`https://smapi.sabilamall.co.id/api/cart?customers_id=${customers_id}&device_id=${device_id}`);
+
+  const data = await res.data?.data;
+  return data;
+};

@@ -5,7 +5,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 
 import {
   addCart,
-  apiGetCartByCustomerID,
+  apiGetCart,
   deleteCart,
   editCartNotes,
   updateCartQuantity,
@@ -58,7 +58,7 @@ export const CartProvider = ({ children }) => {
   const getAllData = (checkDouble = false) => {
     checkDouble && setloading(true);
     if (userId) {
-      apiGetCartByCustomerID(userId)
+      apiGetCart(userId)
         .then((res) => {
           let tempCart = [];
           let allData = res;
@@ -379,16 +379,14 @@ export const CartProvider = ({ children }) => {
 
       if (isRequestSuccess(res)) {
         successToast("Produk berhasil ditambahkan ke keranjang belanja");
-        getAllData();
       } else {
         errorToast(res.message);
-        getAllData();
       }
     } catch (_) {
       errorToast("Produk gagal ditambahkan ke keranjang belanja");
-
     }
 
+    getAllData();
 
   };
 
