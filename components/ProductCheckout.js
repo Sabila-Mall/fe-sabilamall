@@ -616,6 +616,8 @@ const ProductCheckout = ({
       calculatePrice();
     }, [numberOfItem, itemPrice, normalPrice]);
 
+    const [isLoadingAddToCart, setIsLoadingAddToCart] = useState(false);
+
     return (
       <>
         <VStack minW={{ base: '100%', md: '300px' }} borderColor={"gray.300"} borderWidth={"1px"} spacing={'12px'} className={"secondaryFont"} p={'1rem'} borderRadius={"12px"}>

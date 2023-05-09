@@ -280,7 +280,14 @@ export const CartProvider = ({ children }) => {
   };
 
   const addToCheckout = (data) => {
+    console.log(data);
     let tempData = selectedItem;
+
+    let countData = selectedItem.filter((item) => item.customers_basket_id == data.customers_basket_id);
+    if (countData.length > 0) {
+      return;
+    }
+
     tempData.push(data);
     setselectedItem(tempData);
     calculateTotalSelected(tempData);
@@ -390,23 +397,37 @@ export const CartProvider = ({ children }) => {
     customers_basket_id,
     toaster = true,
   ) => {
-    deleteCart({ customers_id, customers_basket_id })
-      .then((res) => {
-        if (isRequestSuccess(res)) {
-          toaster &&
-            successToast("Produk berhasil dihapus dari keranjang belanja");
+    await new Promise((res, rej) => {
+      deleteCart({ customers_id, customers_basket_id })
+        .then((res) => {
+          if (isRequestSuccess(res)) {
+            toaster &&
+              successToast("Produk berhasil dihapus dari keranjang belanja");
+            getAllData();
+
+            // hapus dari selected
+            let tempData = selectedItem.filter((item) => item.customers_basket_id != customers_basket_id);
+            setselectedItem(tempData);
+            calculateTotalSelected(tempData);
+            calculateTotalDiscount(tempData);
+            res();
+          } else {
+            toaster &&
+              errorToast("Gagal menghapus produk dari keranjang belanja");
+            getAllData();
+            res();
+
+          }
+        })
+        .catch(() => {
+          errorToast("Gagal menghapus produk dari keranjang belanja");
           getAllData();
-        } else {
-          toaster &&
-            errorToast("Gagal menghapus produk dari keranjang belanja");
-          getAllData();
-        }
-      })
-      .catch(() => {
-        errorToast("Gagal menghapus produk dari keranjang belanja");
-        getAllData();
-      });
+          res();
+        });
+    })
+
   };
+
   const updateQuantity = async (
     customers_id,
     customers_basket_id,

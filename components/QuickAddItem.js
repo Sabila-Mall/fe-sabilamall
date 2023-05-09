@@ -10,7 +10,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { createRef, useState } from "react";
+import { createRef, useEffect, useState } from "react";
 import {
   IoAddCircleOutline,
   IoRemoveCircleOutline,
@@ -50,6 +50,7 @@ const QuickAddItem = ({ product, my }) => {
   const varian = product?.varian;
   const finalPrice = getPriceAfterDiscount(initialPrice, discount);
   const productID = product?.products_id;
+  const productSlug = product?.products_slug;
   settotalPrice(finalPrice * quantity);
 
   const { asPath } = useRouter();
@@ -59,7 +60,10 @@ const QuickAddItem = ({ product, my }) => {
     let tempDiscount = totalDiscount;
     let tempPrice = totalPrice;
     if (event === "increase") {
+      console.log('debug::jalan', { stock, quantity });
+
       if (stock - quantity > 0) {
+
         const newQuantity = quantity + 1;
         tempDiscount += Number(discount);
         settotalDiscount(tempDiscount);
@@ -81,8 +85,12 @@ const QuickAddItem = ({ product, my }) => {
     }
   };
 
-  const handleDelete = (productId) => {
-    deleteCartItem(userId, productId);
+  const [loadingDelete, setLoadingDelete] = useState(false);
+
+  const handleDelete = async (productId) => {
+    setLoadingDelete(true);
+    await deleteCartItem(userId, productId);
+    setLoadingDelete(false);
   };
 
   let inputRef = createRef();
@@ -98,18 +106,17 @@ const QuickAddItem = ({ product, my }) => {
     <VStack align={"start"} w={"full"} my={my}>
       <HStack
         as="label"
-        onClick={() => handleCheckbox()}
         align={"top"}
         justify={"space-between"}
         spacing={"1rem"}
         w={"full"}
-        _hover={{ cursor: "pointer" }}
       >
         <Flex>
           <Checkbox
             w="min-content"
             ref={inputRef}
             defaultChecked={selectedItem.includes(product)}
+            onChange={(e) => handleCheckbox()}
             size="lg"
           ></Checkbox>
           <HStack spacing={"1rem"} ml="1rem">
@@ -120,9 +127,9 @@ const QuickAddItem = ({ product, my }) => {
               h={"4rem"}
               onClick={() => {
                 if (asPath.includes("/product-detail")) {
-                  return router.push(`${productID}`);
+                  return router.push(`${productSlug}`);
                 } else {
-                  return router.push(`/product-detail/${productID}`);
+                  return router.push(`/product-detail/${productSlug}`);
                 }
               }}
             />
@@ -134,9 +141,9 @@ const QuickAddItem = ({ product, my }) => {
                 className={"secondaryFont"}
                 onClick={() => {
                   if (asPath.includes("/product-detail")) {
-                    return router.push(`${productID}`);
+                    return router.push(`${productSlug}`);
                   } else {
-                    return router.push(`/product-detail/${productID}`);
+                    return router.push(`/product-detail/${productSlug}`);
                   }
                 }}
               >
@@ -175,12 +182,14 @@ const QuickAddItem = ({ product, my }) => {
         </Flex>
 
         <IconButton
+          isLoading={loadingDelete}
           justifySelf={"end"}
           aria-label={"delete"}
           color={"red.400"}
           icon={<IoTrash size={"1.25rem"} />}
           variant={"ghost"}
           h={5}
+          p={5}
           onClick={() => handleDelete(product.customers_basket_id)}
         />
       </HStack>
