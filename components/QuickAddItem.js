@@ -105,13 +105,15 @@ const QuickAddItem = ({ product, my }) => {
   return (
     <VStack align={"start"} w={"full"} my={my}>
       <HStack
-        as="label"
         align={"top"}
         justify={"space-between"}
         spacing={"1rem"}
         w={"full"}
       >
-        <Flex>
+        <Flex
+          w={'full'}
+          as="label"
+        >
           <Checkbox
             w="min-content"
             ref={inputRef}
