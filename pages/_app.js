@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { AuthProvider } from "../contexts/authProvider";
 import { GlobalProvider } from "../contexts/globalProvider";
 import * as fbq from "../lib/fpixel";
-// import * as gtag from "../lib/gtag";
+import * as gtag from "../lib/gtag";
 import "../styles/globals.scss";
 
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
@@ -41,9 +41,9 @@ function MyApp({ Component, pageProps }) {
   }, [router.events]);
 
   useEffect(() => {
-    // const handleRouteChange = (url) => {
-    //   gtag.pageview(url);
-    // };
+    const handleRouteChange = (url) => {
+      gtag.pageview(url);
+    };
     router.events.on("routeChangeComplete", handleRouteChange);
     return () => {
       router.events.off("routeChangeComplete", handleRouteChange);
@@ -56,7 +56,7 @@ function MyApp({ Component, pageProps }) {
         <link rel="icon" href="favicon.ico" />
       </Head>
       <GlobalProvider>
-        {/* <Script
+        <Script
           strategy="afterInteractive"
           src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
         />
@@ -72,7 +72,7 @@ function MyApp({ Component, pageProps }) {
             });
           `,
           }}
-        /> */}
+        />
         <Script
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
