@@ -44,7 +44,8 @@ const SaleProductsDisplay = () => {
     const filterType = {
       'discount': 'special',
       'flash-sale': 'flash_sale',
-      'cicilan': 'cicilan'
+      'cicilan': 'cicilan',
+      'pre-order': 'pre_order'
     };
     try {
       const res = await getProducts(pageParam, userId, filterType[type])

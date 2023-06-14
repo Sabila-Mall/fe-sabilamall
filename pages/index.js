@@ -25,6 +25,7 @@ const HomeDisplay = () => {
     flashSaleProducts,
     discountProducts,
     instalmentProducts,
+    preOrderProducts,
     banner,
     category,
     handleLoadMoreProducts,
@@ -144,10 +145,22 @@ const HomeDisplay = () => {
           colorScheme="gray"
           my="1.5rem"
         />
-        <LayoutSaleProducts
+        {/* <LayoutSaleProducts
           data={instalmentProducts.data.data}
           headingText="Cicilan"
           loading={!instalmentProducts.isFetched}
+        // url_detail={'/product-cicilan'}
+        />
+        <Divider
+          orientation="horizontal"
+          w="100%"
+          colorScheme="gray"
+          my="1.5rem"
+        /> */}
+        <LayoutSaleProducts
+          data={preOrderProducts.data.data}
+          headingText="Pre Order"
+          loading={!preOrderProducts.isFetched}
         // url_detail={'/product-cicilan'}
         />
         <Divider

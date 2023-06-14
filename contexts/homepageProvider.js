@@ -112,6 +112,26 @@ export const HomepageProvider = ({ children }) => {
     getNextPageParam: (lastPage) => lastPage.current_page >= lastPage.last_page ? undefined : lastPage.current_page + 1,
   });
 
+  const preOrderProducts = useQuery('pre_order', async () => {
+    try {
+      const res = await getProducts(1, userId, 'pre_order', null, null, null, 0, 999999999, 10)
+      if (isRequestSuccess(res.data)) {
+        return res.data.data;
+      } else {
+        throw "Gagal mendapatkan produk pre order";
+      }
+    } catch (err) {
+      console.error(err);
+      errorToast(err);
+    }
+  }, {
+    initialData: {
+      data: new Array(8).fill(0),
+    },
+    refetchOnWindowFocus: false,
+    enabled: !authIsLoading,
+  })
+
   // console.log('Debug::', queryProducts.isFetched);
 
   const queryBanners = useQuery(['banner'], async () => {
@@ -310,6 +330,7 @@ export const HomepageProvider = ({ children }) => {
     flashSaleProducts,
     discountProducts,
     instalmentProducts,
+    preOrderProducts,
     queryBanners,
     banner,
     queryCategories,
