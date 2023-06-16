@@ -89,7 +89,7 @@ export const HomepageProvider = ({ children }) => {
     enabled: !authIsLoading,
   });
 
-  const queryProducts = useInfiniteQuery(['products'], async ({ pageParam = 0 }) => {
+  const queryProducts = useInfiniteQuery(['products', filter], async ({ pageParam = 0 }) => {
     try {
       const res = await getProducts(pageParam, userId, filter)
       if (isRequestSuccess(res.data)) {
@@ -321,7 +321,6 @@ export const HomepageProvider = ({ children }) => {
   }
 
   function handleFilterProducts(filter) {
-    setProducts({ ...products, loading: true });
     setFilter(filter);
   }
 
