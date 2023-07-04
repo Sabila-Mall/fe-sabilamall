@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { HOST } from "../constants/api";
+import { HOST, HOST_2 } from "../constants/api";
 import { isRequestSuccess } from "../utils/api";
 
 export const apiStock = (productId) => {
@@ -41,7 +41,7 @@ export const getStockData = async (dataPost) => {
 };
 
 export const getProductStock = async ({ products_slug }) => {
-  return axios.get(`https://smapi.sabilamall.co.id/api/product/stock?products_slug=${products_slug}`);
+  return axios.get(`${HOST_2}/api/product/stock?products_slug=${products_slug}`);
 }
 
 export const checkStockByAttribute = async (dataPost) => {
