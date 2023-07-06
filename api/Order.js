@@ -24,6 +24,7 @@ export const apiPlaceOrder = (
   handlingFeeAdminDiscount,
 ) => {
   let device_id = getDeviceId();
+  console.log(customerBasketId)
   return axios.post(HOST + "/api/order/place_order_2", {
     dataorder: [
       {

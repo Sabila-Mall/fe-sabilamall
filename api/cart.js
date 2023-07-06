@@ -118,5 +118,6 @@ export const apiGetCart = async (customers_id) => {
   const res = await axios.get(`${HOST_2}/api/cart?customers_id=${customers_id}&device_id=${device_id}`);
 
   const data = await res.data?.data;
+  console.log(`${HOST_2}/api/cart?customers_id=${customers_id}&device_id=${device_id}`, data)
   return data;
 };

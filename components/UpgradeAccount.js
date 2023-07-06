@@ -54,15 +54,16 @@ export const UpgradeAccount = ({ isMobile, currentAccount }) => {
       customers_id: userId,
       level: Number(tempValue),
     })
-      .then(() =>
+      .then((res) => {
+        console.log(res);
         toast({
           title: "Berhasil mengupgrade akun",
           status: "success",
           duration: 5000,
           isClosable: true,
           position: "top",
-        }),
-      )
+        });
+      })
       .catch(() =>
         toast({
           title: "Gagal mengupgrade akun",
