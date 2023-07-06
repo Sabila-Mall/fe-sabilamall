@@ -58,7 +58,7 @@ const HomeDisplay = () => {
       <Layout hasNavbar={true} hasPadding={false} noFooter={true}>
         <Head>
           <title>
-            Distributor Grosir Supplier Nibras, Endomoda, Ethica - Open Reseller
+            Distributor Grosir Supplier Nibras, Yasmeera, Ethica - Open Reseller
           </title>
           <meta
             name="keywords"
@@ -68,7 +68,7 @@ const HomeDisplay = () => {
           <meta name="DC.title" content="true" />
           <meta
             name="description"
-            content="Distributor Grosir Supplier Baju Muslim, Gamis, Hijab Nibras, Endomoda, Ethica, Seply, Labella, Yasmeera. Dropship  Terpercaya & Murah Open Reseller."
+            content="Distributor Grosir Supplier Baju Muslim, Gamis, Hijab Nibras, Endomoda, Ethica, Seply, KeKe, Yasmeera. Dropship  Terpercaya & Murah Open Reseller."
           />
           <meta
             name="csrf-token"
