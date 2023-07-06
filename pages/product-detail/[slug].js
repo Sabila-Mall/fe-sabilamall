@@ -232,7 +232,7 @@ const CustomHead = ({ queryProductDetail }) => {
   if(queryProductDetail.status == 'success') {
     const products_image = getImageLink(queryProductDetail.data?.products_image);
     const products_link = `https://www.sabilamall.co.id/product-detail/${queryProductDetail.data?.products_slug}`;
-    const products_keywords = `reseller baju muslim, supplier dropship, open reseller gamis, supplier hijab, dropship terpercaya, ${queryProductDetail.data?.products_name}, ${queryProductDetail.data?.manufacturers_name}, ${JSON.parse(queryProductDetail.data?.categories ?? "[]").join(', ')}`;
+    const products_keywords = `reseller baju muslim, supplier dropship, open reseller gamis, supplier hijab, dropship terpercaya, ${queryProductDetail.data?.products_name}, ${queryProductDetail.data?.manufacturers_name}, ${JSON.parse(queryProductDetail.data?.categories ?? "[]").map((item) => item.categories_name).join(', ')}`;
     const products_description = queryProductDetail.data?.products_description == '' ? products_keywords : queryProductDetail.data?.products_description;
     const products_slug = queryProductDetail.data?.products_slug;
     const products_name = queryProductDetail.data?.products_name;
