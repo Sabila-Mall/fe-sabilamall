@@ -157,7 +157,7 @@ const ProductDetails = () => {
 
   return (
     <Layout hasNavbar sticky hasBreadCrumb breadCrumbItem={path} hasPadding>
-      {/* <CustomHead initialData={initialData} /> */}
+      <CustomHead queryProductDetail={queryProductDetail} />
       <Box w="full">
         <Flex
           flexDirection={{ base: "column", lg: "row" }}
@@ -225,31 +225,45 @@ const ProductDetails = () => {
   );
 };
 
-const CustomHead = ({ initialData }) => {
-  return (
-    <Head>
-      <title>{`${initialData?.products_name} - SabilaMall`}</title>
-      <meta
-        property="og:url"
-        content={initialData?.products_link}
-      />
-      <meta property="og:type" content="website" />
-      <meta property="og:title" content={initialData?.products_name} />
-      <meta property="og:description" content={initialData?.products_description} />
-      <meta
-        property="og:image"
-        content={initialData?.products_image}
-      />
-      <meta name="keywords" content={initialData?.products_keywords} />
-      <meta name="author" content="SabilaMall" />
-      <meta name="DC.title" content={initialData?.products_name} />
-      <meta
-        name="description"
-        content={initialData?.products_description}
-      />
-    </Head>
+const CustomHead = ({ queryProductDetail }) => {
 
-  )
+  console.log(queryProductDetail.data);
+
+  if(queryProductDetail.status == 'success') {
+    const products_image = getImageLink(queryProductDetail.data?.products_image);
+    const products_link = `https://www.sabilamall.co.id/product-detail/${queryProductDetail.data?.products_slug}`;
+    const products_keywords = `reseller baju muslim, supplier dropship, open reseller gamis, supplier hijab, dropship terpercaya, ${queryProductDetail.data?.products_name}, ${queryProductDetail.data?.manufacturers_name}, ${JSON.parse(queryProductDetail.data?.categories ?? "[]").join(', ')}`;
+    const products_description = queryProductDetail.data?.products_description == '' ? products_keywords : queryProductDetail.data?.products_description;
+    const products_slug = queryProductDetail.data?.products_slug;
+    const products_name = queryProductDetail.data?.products_name;
+
+    return (
+      <Head>
+        <title>{`${products_name} - SabilaMall`}</title>
+        <meta
+          property="og:url"
+          content={products_link}
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={products_name} />
+        <meta property="og:description" content={products_description} />
+        <meta
+          property="og:image"
+          content={products_image}
+        />
+        <meta name="keywords" content={products_keywords} />
+        <meta name="author" content="SabilaMall" />
+        <meta name="DC.title" content={products_name} />
+        <meta
+          name="description"
+          content={products_description}
+        />
+      </Head>
+    )
+  } 
+
+  return <></>;
+  
 }
 
 // export async function getServerSideProps(context) {
