@@ -108,10 +108,7 @@ const CardProduct = ({
 
   return (
 
-    <Link
-      href={`/product-detail/${products_slug}`}
-    >
-      <a>
+      <a href={`/product-detail/${products_slug}`} target="_blank">
 
         <Flex
           h={'100%'}
@@ -289,7 +286,6 @@ const CardProduct = ({
           </Flex>
         </Flex>
       </a>
-    </Link >
   );
 };
 
