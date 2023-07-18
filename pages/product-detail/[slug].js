@@ -58,6 +58,7 @@ const ProductDetails = () => {
       if (isRequestSuccess(res.data)) {
         return res.data.data;
       } else {
+        router.push('/404');
         throw "Gagal mendapatkan produk";
       }
     } catch (err) {
