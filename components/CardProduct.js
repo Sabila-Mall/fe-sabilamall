@@ -43,6 +43,7 @@ const CardProduct = ({
   manufacturer_name,
   is_instalment,
   po_closedate,
+  is_official,
 }) => {
   const { isLoggedIn, userData } = useAuthContext();
   const userId = isLoggedIn ? userData?.id : "";
@@ -107,9 +108,7 @@ const CardProduct = ({
   const [hover, setHover] = useState(false);
 
   return (
-
       <a href={`/product-detail/${products_slug}`} target="_blank">
-
         <Flex
           h={'100%'}
           flexDirection={'column'}
@@ -272,10 +271,16 @@ const CardProduct = ({
               </Flex>
             </Box>
           </Box>
-          <Flex p={'5px'} justifyContent={'space-between'} alignItems={'end'} bg={'gray.100'} borderBottomRadius={'8px'}>
+          <Flex p={'5px'} justifyContent={'space-between'} alignItems={'center'} bg={'gray.100'} borderBottomRadius={'8px'}>
             <Text fontSize={'xs'} whiteSpace={'nowrap'} overflow={'hidden'} textOverflow={'ellipsis'}>{manufacturer_name} </Text>
+            
             <Box width={'20px'} />
             <Flex direction={"row"} alignItems={'center'} gridGap={'5px'}>
+              {
+                is_official === 1 && (
+                  <Badge colorScheme="red" variant="solid" rounded={'full'} textTransform={'unset'} fontSize="0.6rem">Official</Badge>
+                )
+              }
               {is_instalment && (
                 <Icon as={FaPercent} w="12px" src="/images/free-ongkir.svg" color={'blueviolet'} />
               )}

@@ -79,6 +79,7 @@ const ProductHeader = ({
   is_free_shipping,
   free_shipping_data,
   is_instalment,
+  is_official,
 }) => {
   const auth = useAuthContext();
 
@@ -149,7 +150,6 @@ const ProductHeader = ({
         flexWrap="wrap"
         alignItems="center"
         direction="row"
-        lineHeight="1.5rem"
         spacing="8px"
         className="secondaryFont"
         fontSize="0.875rem"
@@ -162,7 +162,18 @@ const ProductHeader = ({
             {Number(avgRating).toFixed(1)}
           </Text>
         </Flex>
-        <Text color="gray.500">{manufacturers_name}</Text>
+        <Text color="gray.500" display={'flex'} gridGap={'5px'} alignItems={'center'} justifyContent={'center'}>
+          {manufacturers_name}
+          {
+            is_official === 1 && (
+              <Box>
+
+                <Badge   colorScheme="red" variant="solid" rounded={'full'} textTransform={'unset'} fontSize="0.6rem" >Official</Badge>
+              </Box>
+            )
+          }
+        </Text>
+        
         <Text color="gray.500">Terjual {sales_products}</Text>
         {holiday ? (
           <Flex alignItems="center">
