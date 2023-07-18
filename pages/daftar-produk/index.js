@@ -12,6 +12,7 @@ import { isRequestSuccess } from "../../utils/api";
 
 
 import { useInfiniteQuery, useQuery } from "react-query";
+import Head from "next/head";
 
 
 const DaftarProduk = () => {
@@ -61,6 +62,11 @@ const DaftarProduk = () => {
 
   return (
     <Layout hasNavbar hasPadding>
+
+    <Head>
+        <title>{`Koleksi ${categoryName ?? ''} - SabilaMall`}</title>
+      </Head>
+
       <Box as="main" pb="12" d="flex" justifyContent="start" w="full">
         <Box paddingTop="1.8rem" minH="100vh" w="full">
           <Text
