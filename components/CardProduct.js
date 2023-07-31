@@ -1,25 +1,34 @@
+import {
+  AspectRatio,
+  Badge,
+  Box,
+  Divider,
+  Flex,
+  Icon,
+  IconButton,
+  Image,
+  Text,
+} from "@chakra-ui/react";
 import Link from "next/link";
-import { Box, Text, Icon, Flex, Image, Badge, Divider, IconButton, AspectRatio } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FaPercent, FaShippingFast } from "react-icons/fa";
-import { IoHeartOutline, IoTimeSharp, IoHeart } from "react-icons/io5";
+import { IoHeart, IoHeartOutline, IoTimeSharp } from "react-icons/io5";
 
 import { useAuthContext } from "../contexts/authProvider";
 import { useWishlistContext } from "../contexts/wishlistProvider";
+import label1 from "../public/images/labels/1.svg";
 import styles from "../styles/Product.module.scss";
-import { getImageLink } from "../utils/functions";
-import label1 from "../public/images/labels/1.svg"
 import {
   calculateTimeLeft,
   currencyFormat,
+  getImageLink,
   getPriceAfterDiscount,
   parseNumber,
 } from "../utils/functions";
 
 const CardProduct = ({
-  image_path,
-  image_medium,
+  image,
   products_event,
   products_name,
   flash_sale_expires_date,
@@ -47,16 +56,25 @@ const CardProduct = ({
   const { isLoggedIn, userData } = useAuthContext();
   const userId = isLoggedIn ? userData?.id : "";
   const { wishlistData } = useWishlistContext();
-  const timeLeft = flash_sale_expires_date && calculateTimeLeft(flash_sale_expires_date);
-  const timeLeftPO = po_closedate && calculateTimeLeft((new Date(po_closedate)).getTime() / 1000);
-  const promo_price = products_event == 'flash_sale' ? flash_sale_price : products_event == 'special' ? special_products_price : price;
+  const timeLeft =
+    flash_sale_expires_date && calculateTimeLeft(flash_sale_expires_date);
+  const timeLeftPO =
+    po_closedate && calculateTimeLeft(new Date(po_closedate).getTime() / 1000);
+  const promo_price =
+    products_event == "flash_sale"
+      ? flash_sale_price
+      : products_event == "special"
+      ? special_products_price
+      : price;
 
   let final_price = 0;
   let text_promo_price, text_discount;
   let final_discount = 0;
-  if (products_event == 'flash_sale') {
-    text_promo_price = 'FS Price';
-    final_price = promo_price - (promo_price * ((customers_discount + flash_sale_discount) / 100));
+  if (products_event == "flash_sale") {
+    text_promo_price = "FS Price";
+    final_price =
+      promo_price -
+      promo_price * ((customers_discount + flash_sale_discount) / 100);
     final_discount = customers_discount + flash_sale_discount;
     if (flash_sale_discount > 0 && customers_discount > 0) {
       text_discount = `${customers_discount}% + ${flash_sale_discount}%`;
@@ -65,13 +83,13 @@ const CardProduct = ({
     } else if (customers_discount > 0) {
       text_discount = `${customers_discount}%`;
     }
-  } else if (products_event == 'special') {
-    text_promo_price = 'S Price';
-    final_price = promo_price - (promo_price * (customers_discount / 100))
+  } else if (products_event == "special") {
+    text_promo_price = "S Price";
+    final_price = promo_price - promo_price * (customers_discount / 100);
     final_discount = customers_discount;
     text_discount = `${customers_discount}%`;
   } else {
-    final_price = price - (price * (customers_discount / 100));
+    final_price = price - price * (customers_discount / 100);
     final_discount = customers_discount;
     text_discount = `${customers_discount}%`;
   }
@@ -103,97 +121,144 @@ const CardProduct = ({
     setIsLikedProduct((val) => !val);
   };
 
-
   const [hover, setHover] = useState(false);
 
   return (
-
-    <Link
-      href={`/product-detail/${products_slug}`}
-    >
+    <Link href={`/product-detail/${products_slug}`}>
       <a>
-
         <Flex
-          h={'100%'}
-          flexDirection={'column'}
+          h={"100%"}
+          flexDirection={"column"}
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
-          overflow={'hidden'}
-          display={'flex'}
-          border={'1px'}
-          borderColor={'gray.200'}
+          overflow={"hidden"}
+          display={"flex"}
+          border={"1px"}
+          borderColor={"gray.200"}
           borderRadius="8px"
           cursor={"pointer"}
-          shadow={'md'}
-          bg={'white'}
-          justifyContent={'space-between'}
-          _hover={{ textStyle: "none" }}>
+          shadow={"md"}
+          bg={"white"}
+          justifyContent={"space-between"}
+          _hover={{ textStyle: "none" }}
+        >
           <Box>
             <AspectRatio ratio={1 / 1}>
-              <Box position={'relative'}>
-                <Image fallbackSrc="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg" src={getImageLink(image_medium == '' ? image_path : image_medium)} position={'absolute'} width={'100%'} height={'100%'} top={0} right={0} bottom={0} left={0} />
-                <Flex direction={'column'} position={'absolute'} right={0} top={0} p={'5px 0px 0px 0px'} gridGap={'2px'}>
-                  {
-                    products_features?.split(',').map((item, index) =>
-                      <Box key={index}>
-                        <Text color={'white'} p={'2.5px 0px'} lineHeight={'1.2'} bg={products_features_colors.split(',')[index]} fontSize={'10px'} px={'2'} style={{ transform: `translate(${hover ? '0%' : '95%'})`, transitionDuration: '100ms' }}>
-                          {item}
-                        </Text>
-                      </Box>
-                    )
-                  }
+              <Box position={"relative"}>
+                <Image
+                  fallbackSrc="https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg"
+                  src={getImageLink(
+                    !!image?.medium ? image.medium : image?.actual,
+                  )}
+                  position={"absolute"}
+                  width={"100%"}
+                  height={"100%"}
+                  top={0}
+                  right={0}
+                  bottom={0}
+                  left={0}
+                />
+                <Flex
+                  direction={"column"}
+                  position={"absolute"}
+                  right={0}
+                  top={0}
+                  p={"5px 0px 0px 0px"}
+                  gridGap={"2px"}
+                >
+                  {products_features?.split(",").map((item, index) => (
+                    <Box key={index}>
+                      <Text
+                        color={"white"}
+                        p={"2.5px 0px"}
+                        lineHeight={"1.2"}
+                        bg={products_features_colors.split(",")[index]}
+                        fontSize={"10px"}
+                        px={"2"}
+                        style={{
+                          transform: `translate(${hover ? "0%" : "95%"})`,
+                          transitionDuration: "100ms",
+                        }}
+                      >
+                        {item}
+                      </Text>
+                    </Box>
+                  ))}
                 </Flex>
               </Box>
             </AspectRatio>
             {flash_sale_expires_date && timeLeft && (
-
               <Box
                 bg="red.500"
                 fontSize={{ base: "10px", md: "12px" }}
                 textAlign="center"
                 lineHeight={{ base: "15px", md: "18px" }}
                 fontWeight="500"
-                color={'white'}
-                p={'5px'}
+                color={"white"}
+                p={"5px"}
               >
-                <span style={{ whiteSpace: 'nowrap' }}><Icon as={IoTimeSharp} />&nbsp;</span>
+                <span style={{ whiteSpace: "nowrap" }}>
+                  <Icon as={IoTimeSharp} />
+                  &nbsp;
+                </span>
 
-                {timeLeft.days > 0 && <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeft.days} Hari`}&nbsp;</span>}
+                {timeLeft.days > 0 && (
+                  <span style={{ whiteSpace: "nowrap" }}>
+                    {`${timeLeft.days} Hari`}&nbsp;
+                  </span>
+                )}
 
-                <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeft.hours} Jam`}&nbsp;</span>
+                <span style={{ whiteSpace: "nowrap" }}>
+                  {`${timeLeft.hours} Jam`}&nbsp;
+                </span>
 
-                <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeft.minutes} Menit`}</span>
-
+                <span
+                  style={{ whiteSpace: "nowrap" }}
+                >{`${timeLeft.minutes} Menit`}</span>
               </Box>
             )}
             {po_closedate && timeLeftPO && (
               <Box
-                bg={products_event == 'special' ? '#FC5E00' : '#df4580'}
+                bg={products_event == "special" ? "#FC5E00" : "#df4580"}
                 fontSize={{ base: "10px", md: "12px" }}
                 textAlign="center"
                 lineHeight={{ base: "15px", md: "18px" }}
                 fontWeight="500"
-                color={'white'}
-                p={'5px'}
+                color={"white"}
+                p={"5px"}
               >
-                <span style={{ whiteSpace: 'nowrap' }}><Icon as={IoTimeSharp} />&nbsp;</span>
-                {timeLeftPO.days > 0 && <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeftPO.days} Hari`}&nbsp;</span>}
+                <span style={{ whiteSpace: "nowrap" }}>
+                  <Icon as={IoTimeSharp} />
+                  &nbsp;
+                </span>
+                {timeLeftPO.days > 0 && (
+                  <span style={{ whiteSpace: "nowrap" }}>
+                    {`${timeLeftPO.days} Hari`}&nbsp;
+                  </span>
+                )}
 
-                <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeftPO.hours} Jam`}&nbsp;</span>
+                <span style={{ whiteSpace: "nowrap" }}>
+                  {`${timeLeftPO.hours} Jam`}&nbsp;
+                </span>
 
-                <span style={{ whiteSpace: 'nowrap' }}>{`${timeLeftPO.minutes} Menit`}</span>
-
+                <span
+                  style={{ whiteSpace: "nowrap" }}
+                >{`${timeLeftPO.minutes} Menit`}</span>
               </Box>
             )}
-            <BoxLabel products_jenis={products_jenis} products_event={products_event} flash_sale_name={flash_sale_name} po_closedate={po_closedate} />
+            <BoxLabel
+              products_jenis={products_jenis}
+              products_event={products_event}
+              flash_sale_name={flash_sale_name}
+              po_closedate={po_closedate}
+            />
 
-
-            <Box px={'5px'} py="10px">
+            <Box px={"5px"} py="10px">
               {/* <Text fontSize="0.8em" fontWeight="400" lineHeight="16px" style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}> */}
-              <Text fontSize="0.8em" fontWeight="400" lineHeight="16px" >
+              <Text fontSize="0.8em" fontWeight="400" lineHeight="16px">
                 {products_name?.toUpperCase()}
               </Text>
-              <Box h={'10px'}></Box>
+              <Box h={"10px"}></Box>
               <Box
                 className={styles.primaryFont}
                 w="100%"
@@ -217,8 +282,8 @@ const CardProduct = ({
                   )}
                 </Flex>
               </Box>
-              <Box h={'5px'}></Box>
-              <Flex direction={"column"} gridGap={'2px'}>
+              <Box h={"5px"}></Box>
+              <Flex direction={"column"} gridGap={"2px"}>
                 {Number(final_price) !== Number(promo_price) && (
                   <Box
                     w="100%"
@@ -270,26 +335,43 @@ const CardProduct = ({
                       {text_promo_price}
                     </Text>
                   </Box>
-
                 )}
               </Flex>
             </Box>
           </Box>
-          <Flex p={'5px'} justifyContent={'space-between'} alignItems={'end'} bg={'gray.100'} borderBottomRadius={'8px'}>
-            <Text fontSize={'xs'} whiteSpace={'nowrap'} overflow={'hidden'} textOverflow={'ellipsis'}>{manufacturer_name} </Text>
-            <Box width={'20px'} />
-            <Flex direction={"row"} alignItems={'center'} gridGap={'5px'}>
+          <Flex
+            p={"5px"}
+            justifyContent={"space-between"}
+            alignItems={"end"}
+            bg={"gray.100"}
+            borderBottomRadius={"8px"}
+          >
+            <Text
+              fontSize={"xs"}
+              whiteSpace={"nowrap"}
+              overflow={"hidden"}
+              textOverflow={"ellipsis"}
+            >
+              {manufacturer_name}{" "}
+            </Text>
+            <Box width={"20px"} />
+            <Flex direction={"row"} alignItems={"center"} gridGap={"5px"}>
               {is_instalment && (
-                <Icon as={FaPercent} w="12px" src="/images/free-ongkir.svg" color={'blueviolet'} />
+                <Icon
+                  as={FaPercent}
+                  w="12px"
+                  src="/images/free-ongkir.svg"
+                  color={"blueviolet"}
+                />
               )}
               {is_free_shipping == 1 && (
-                <Image w="35px" mb={'-0.5'} src="/images/free-ongkir.svg" />
+                <Image w="35px" mb={"-0.5"} src="/images/free-ongkir.svg" />
               )}
             </Flex>
           </Flex>
         </Flex>
       </a>
-    </Link >
+    </Link>
   );
 };
 
@@ -297,76 +379,138 @@ const BoxLabel = ({
   products_jenis,
   products_event,
   flash_sale_name,
-  po_closedate
+  po_closedate,
 }) => {
-  if (products_event == 'flash_sale') {
-    if (products_jenis == 'po') {
-      return <LabelPOAndFlashSale flash_sale_name={flash_sale_name} po_closedate={po_closedate} />
+  if (products_event == "flash_sale") {
+    if (products_jenis == "po") {
+      return (
+        <LabelPOAndFlashSale
+          flash_sale_name={flash_sale_name}
+          po_closedate={po_closedate}
+        />
+      );
     } else {
-      return <LabelFlashSale />
+      return <LabelFlashSale />;
     }
-  } else if (products_event == 'special') {
-    if (products_jenis == 'po') {
-      return <LabelPOAndSpecial po_closedate={po_closedate} />
+  } else if (products_event == "special") {
+    if (products_jenis == "po") {
+      return <LabelPOAndSpecial po_closedate={po_closedate} />;
     } else {
-      return <LabelSpecial />
+      return <LabelSpecial />;
     }
-  } else if (products_jenis == 'po') {
-    return <LabelPO po_closedate={po_closedate} />
+  } else if (products_jenis == "po") {
+    return <LabelPO po_closedate={po_closedate} />;
   }
 
-  return <></>
-
-}
+  return <></>;
+};
 
 const LabelPO = ({ po_closedate }) => {
   return (
-    <Box color="white" style={{ backgroundImage: `url('/images/labels/3.svg')` }} textColor={'white'} bgSize={'cover'} backgroundPosition={'right'} backgroundSize={'340px'} mr={'-9px'}>
-      <Text p={'2px 5px'} fontSize={'xs'} fontWeight={'600'} display={'flex'}>
-        {po_closedate != null ? (<Text>Pre Order - Open</Text>) : <Text>Pre Order - Close</Text>}
+    <Box
+      color="white"
+      style={{ backgroundImage: `url('/images/labels/3.svg')` }}
+      textColor={"white"}
+      bgSize={"cover"}
+      backgroundPosition={"right"}
+      backgroundSize={"340px"}
+      mr={"-9px"}
+    >
+      <Text p={"2px 5px"} fontSize={"xs"} fontWeight={"600"} display={"flex"}>
+        {po_closedate != null ? (
+          <Text>Pre Order - Open</Text>
+        ) : (
+          <Text>Pre Order - Close</Text>
+        )}
       </Text>
     </Box>
-  )
-}
+  );
+};
 
 const LabelFlashSale = ({ flash_sale_name }) => {
   return (
-    <Box color="white" style={{ backgroundImage: `url('/images/labels/2.svg')` }} textColor={'white'} bgSize={'cover'} backgroundPosition={'right'} backgroundSize={'340px'} mr={'-11.5px'}>
-      <Text p={'2px 5px'} fontSize={'xs'} fontWeight={'600'} whiteSpace={'nowrap'} textOverflow={'ellipsis'}>
-        Flash Sale {flash_sale_name != null ? " - " + flash_sale_name : ''}
+    <Box
+      color="white"
+      style={{ backgroundImage: `url('/images/labels/2.svg')` }}
+      textColor={"white"}
+      bgSize={"cover"}
+      backgroundPosition={"right"}
+      backgroundSize={"340px"}
+      mr={"-11.5px"}
+    >
+      <Text
+        p={"2px 5px"}
+        fontSize={"xs"}
+        fontWeight={"600"}
+        whiteSpace={"nowrap"}
+        textOverflow={"ellipsis"}
+      >
+        Flash Sale {flash_sale_name != null ? " - " + flash_sale_name : ""}
       </Text>
     </Box>
-  )
-}
+  );
+};
 
 const LabelPOAndFlashSale = ({ po_closedate }) => {
   return (
-    <Box color="white" style={{ backgroundImage: `url('/images/labels/4.svg')` }} textColor={'black'} bgSize={'cover'} backgroundPosition={'right'} backgroundSize={'340px'} mr={'-11.5px'}>
-      <Text p={'2px 5px'} fontSize={'xs'} fontWeight={'600'}>
-        {po_closedate != null ? (<Text>Pre Order & Flash Sale - Open</Text>) : <Text>Pre Order & Flash Sale - Close</Text>}
+    <Box
+      color="white"
+      style={{ backgroundImage: `url('/images/labels/4.svg')` }}
+      textColor={"black"}
+      bgSize={"cover"}
+      backgroundPosition={"right"}
+      backgroundSize={"340px"}
+      mr={"-11.5px"}
+    >
+      <Text p={"2px 5px"} fontSize={"xs"} fontWeight={"600"}>
+        {po_closedate != null ? (
+          <Text>Pre Order & Flash Sale - Open</Text>
+        ) : (
+          <Text>Pre Order & Flash Sale - Close</Text>
+        )}
       </Text>
     </Box>
-  )
-}
+  );
+};
 
 const LabelPOAndSpecial = ({ po_closedate }) => {
   return (
-    <Box color="white" style={{ backgroundImage: `url('/images/labels/1.svg')` }} textColor={'white'} bgSize={'cover'} backgroundPosition={'right'} backgroundSize={'340px'} mr={'-11.5px'}>
-      <Text p={'2px 5px'} fontSize={'xs'} fontWeight={'600'}>
-        {po_closedate != null ? (<Text>Pre Order & Special - Open</Text>) : <Text>Pre Order & Special - Close</Text>}
+    <Box
+      color="white"
+      style={{ backgroundImage: `url('/images/labels/1.svg')` }}
+      textColor={"white"}
+      bgSize={"cover"}
+      backgroundPosition={"right"}
+      backgroundSize={"340px"}
+      mr={"-11.5px"}
+    >
+      <Text p={"2px 5px"} fontSize={"xs"} fontWeight={"600"}>
+        {po_closedate != null ? (
+          <Text>Pre Order & Special - Open</Text>
+        ) : (
+          <Text>Pre Order & Special - Close</Text>
+        )}
       </Text>
     </Box>
-  )
-}
+  );
+};
 
 const LabelSpecial = () => {
   return (
-    <Box color="white" style={{ backgroundImage: `url('/images/labels/5.svg')` }} textColor={'black'} bgSize={'cover'} backgroundPosition={'right'} backgroundSize={'340px'} mr={'-11.5px'}>
-      <Text p={'2px 5px'} fontSize={'xs'} fontWeight={'600'}>
+    <Box
+      color="white"
+      style={{ backgroundImage: `url('/images/labels/5.svg')` }}
+      textColor={"black"}
+      bgSize={"cover"}
+      backgroundPosition={"right"}
+      backgroundSize={"340px"}
+      mr={"-11.5px"}
+    >
+      <Text p={"2px 5px"} fontSize={"xs"} fontWeight={"600"}>
         Special
       </Text>
     </Box>
-  )
-}
+  );
+};
 
 export default CardProduct;

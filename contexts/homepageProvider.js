@@ -1,10 +1,10 @@
 import { useToast } from "@chakra-ui/toast";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
+import { useInfiniteQuery, useQuery } from "react-query";
 
-import { getBanners, getBanner, getCategories, getDiscountProducts, getFlashSaleProducts, getProducts, getAllProductsByFilters } from "../api/Homepage";
+import { getBanners, getCategories, getProducts } from "../api/Homepage";
 import { isRequestSuccess } from "../utils/api";
 import { useAuthContext } from "./authProvider";
-import { useInfiniteQuery, useQuery } from "react-query";
 
 const HomepageContext = createContext();
 
@@ -27,133 +27,198 @@ export const HomepageProvider = ({ children }) => {
 
   const [filter, setFilter] = useState("");
 
-  const flashSaleProducts = useQuery('flash_sale', async () => {
-    try {
-      const res = await getProducts(1, userId, 'flash_sale', null, null, null, 0, 999999999, 10)
-      if (isRequestSuccess(res.data)) {
-        return res.data.data;
-      } else {
-        throw "Gagal mendapatkan produk flash sale";
+  const flashSaleProducts = useQuery(
+    "flash_sale",
+    async () => {
+      try {
+        const res = await getProducts(
+          1,
+          userId,
+          "flash_sale",
+          null,
+          null,
+          null,
+          0,
+          999999999,
+          10,
+        );
+        if (isRequestSuccess(res.data)) {
+          return res.data.data;
+        } else {
+          throw "Gagal mendapatkan produk flash sale";
+        }
+      } catch (err) {
+        console.error(err);
+
+        errorToast(err);
       }
-    } catch (err) {
-      console.error(err);
-
-      errorToast(err);
-    }
-  }, {
-    initialData: {
-      data: new Array(8).fill(0),
     },
-    refetchOnWindowFocus: false,
-    enabled: !authIsLoading
-  });
+    {
+      initialData: {
+        data: new Array(8).fill(0),
+      },
+      refetchOnWindowFocus: false,
+      enabled: !authIsLoading,
+    },
+  );
 
-  const discountProducts = useQuery('special', async () => {
-    try {
-      const res = await getProducts(1, userId, 'special', null, null, null, 0, 999999999, 10)
-      if (isRequestSuccess(res.data)) {
-        return res.data.data;
-      } else {
-        throw "Gagal mendapatkan produk special";
+  const discountProducts = useQuery(
+    "special",
+    async () => {
+      try {
+        const res = await getProducts(
+          1,
+          userId,
+          "special",
+          null,
+          null,
+          null,
+          0,
+          999999999,
+          10,
+        );
+        if (isRequestSuccess(res.data)) {
+          return res.data.data;
+        } else {
+          throw "Gagal mendapatkan produk special";
+        }
+      } catch (err) {
+        console.error(err);
+
+        errorToast(err);
       }
-    } catch (err) {
-      console.error(err);
-
-      errorToast(err);
-    }
-  }, {
-    initialData: {
-      data: new Array(8).fill(0),
     },
-    refetchOnWindowFocus: false,
-    enabled: !authIsLoading,
-  });
+    {
+      initialData: {
+        data: new Array(8).fill(0),
+      },
+      refetchOnWindowFocus: false,
+      enabled: !authIsLoading,
+    },
+  );
 
-  const instalmentProducts = useQuery('instalment', async () => {
-    try {
-      const res = await getProducts(1, userId, 'instalment', null, null, null, 0, 999999999, 10)
-      if (isRequestSuccess(res.data)) {
-        return res.data.data;
-      } else {
-        throw "Gagal mendapatkan produk cicilan";
+  const instalmentProducts = useQuery(
+    "instalment",
+    async () => {
+      try {
+        const res = await getProducts(
+          1,
+          userId,
+          "instalment",
+          null,
+          null,
+          null,
+          0,
+          999999999,
+          10,
+        );
+        if (isRequestSuccess(res.data)) {
+          return res.data.data;
+        } else {
+          throw "Gagal mendapatkan produk cicilan";
+        }
+      } catch (err) {
+        console.error(err);
+        errorToast(err);
       }
-    } catch (err) {
-      console.error(err);
-      errorToast(err);
-    }
-  }, {
-    initialData: {
-      data: new Array(8).fill(0),
     },
-    refetchOnWindowFocus: false,
-    enabled: !authIsLoading,
-  });
+    {
+      initialData: {
+        data: new Array(8).fill(0),
+      },
+      refetchOnWindowFocus: false,
+      enabled: !authIsLoading,
+    },
+  );
 
-  const queryProducts = useInfiniteQuery(['products', filter], async ({ pageParam = 0 }) => {
-    try {
-      const res = await getProducts(pageParam, userId, filter)
-      if (isRequestSuccess(res.data)) {
-        return res.data.data;
-      } else {
-        throw "Gagal mendapatkan produk";
+  const queryProducts = useInfiniteQuery(
+    ["products", filter],
+    async ({ pageParam = 0 }) => {
+      try {
+        const res = await getProducts(pageParam, userId, filter);
+        if (isRequestSuccess(res.data)) {
+          return res.data.data;
+        } else {
+          throw "Gagal mendapatkan produk";
+        }
+      } catch (err) {
+        console.error(err);
+        errorToast(err);
       }
-    } catch (err) {
-      console.error(err);
-      errorToast(err);
-    }
-  }, {
-    initialData: {
-      pages: [
-        { data: new Array(8).fill(0) }
-      ]
     },
-    refetchOnWindowFocus: false,
-    enabled: !authIsLoading,
-    getNextPageParam: (lastPage) => lastPage.current_page >= lastPage.last_page ? undefined : lastPage.current_page + 1,
-  });
+    {
+      initialData: {
+        pages: [{ data: new Array(8).fill(0) }],
+      },
+      refetchOnWindowFocus: false,
+      enabled: !authIsLoading,
+      getNextPageParam: (lastPage) =>
+        lastPage.current_page >= lastPage.last_page
+          ? undefined
+          : lastPage.current_page + 1,
+    },
+  );
 
-  const preOrderProducts = useQuery('pre_order', async () => {
-    try {
-      const res = await getProducts(1, userId, 'pre_order', null, null, null, 0, 999999999, 10)
-      if (isRequestSuccess(res.data)) {
-        return res.data.data;
-      } else {
-        throw "Gagal mendapatkan produk pre order";
+  const preOrderProducts = useQuery(
+    "pre_order",
+    async () => {
+      try {
+        const res = await getProducts(
+          1,
+          userId,
+          "pre_order",
+          null,
+          null,
+          null,
+          0,
+          999999999,
+          10,
+        );
+        if (isRequestSuccess(res.data)) {
+          return res.data.data;
+        } else {
+          throw "Gagal mendapatkan produk pre order";
+        }
+      } catch (err) {
+        console.error(err);
+        errorToast(err);
       }
-    } catch (err) {
-      console.error(err);
-      errorToast(err);
-    }
-  }, {
-    initialData: {
-      data: new Array(8).fill(0),
     },
-    refetchOnWindowFocus: false,
-    enabled: !authIsLoading,
-  })
+    {
+      initialData: {
+        data: new Array(8).fill(0),
+      },
+      refetchOnWindowFocus: false,
+      enabled: !authIsLoading,
+    },
+  );
 
   // console.log('Debug::', queryProducts.isFetched);
 
-  const queryBanners = useQuery(['banner'], async () => {
-    try {
-      const res = await getBanners()
-      if (isRequestSuccess(res.data)) {
-        return res.data.data;
-      } else {
-        throw "Gagal mendapatkan banner";
-      }
-    } catch (err) {
-      console.error(err);
+  const queryBanners = useQuery(
+    ["banner"],
+    async () => {
+      try {
+        const res = await getBanners();
+        if (isRequestSuccess(res.data)) {
+          return res.data.data;
+        } else {
+          throw "Gagal mendapatkan banner";
+        }
+      } catch (err) {
+        console.error(err);
 
-      errorToast(err);
-    }
-  }, {
-    initialData: {
-      data: new Array(8).fill(0),
+        errorToast(err);
+      }
     },
-    refetchOnWindowFocus: false,
-    enabled: !authIsLoading,
-  });
+    {
+      initialData: {
+        data: new Array(8).fill(0),
+      },
+      refetchOnWindowFocus: false,
+      enabled: !authIsLoading,
+    },
+  );
 
   // const [discountProducts, setDiscountProducts] = useState({
   //   data: new Array(8).fill(0),
@@ -169,17 +234,15 @@ export const HomepageProvider = ({ children }) => {
   //   lastPage: Number.MAX_SAFE_INTEGER,
   // });
 
-  const [banner, setBanner] = useState({
-    data: [],
-    loading: true,
-  });
+  // const [banner, setBanner] = useState({
+  //   data: [],
+  //   loading: true,
+  // });
 
   // const [category, setCategory] = useState({
   //   data: new Array(13).fill(0),
   //   loading: true,
   // });
-
-
 
   // useEffect(() => {
   //   !authIsLoading && getAllProductsByFilters(1, userId, 'flash_sale', null, null, null, 0, 999999999, 10)
@@ -258,41 +321,45 @@ export const HomepageProvider = ({ children }) => {
   //     });
   // }, [authIsLoading, userLevel]);
 
-  useEffect(() => {
-    getBanner()
-      .then((res) => {
+  // useEffect(() => {
+  //   getBanner()
+  //     .then((res) => {
+  //       if (isRequestSuccess(res.data)) {
+  //         setBanner({
+  //           data: res.data.data ?? [],
+  //           loading: false,
+  //         });
+  //       } else {
+  //         throw "Gagal mendapatkan banner";
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //       errorToast(err);
+  //       setBanner({ ...banner, loading: false });
+  //     });
+  // }, []);
+
+  const queryCategories = useQuery(
+    ["category"],
+    async () => {
+      try {
+        const res = await getCategories();
         if (isRequestSuccess(res.data)) {
-          setBanner({
-            data: res.data.data ?? [],
-            loading: false,
-          });
+          return res.data.data;
         } else {
-          throw "Gagal mendapatkan banner";
+          throw Error("Gagal mendapatkan kategori");
         }
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error(err);
         errorToast(err);
-        setBanner({ ...banner, loading: false });
-      });
-  }, []);
-
-  const queryCategories = useQuery(['category'], async () => {
-    try {
-      const res = await getCategories();
-      if (isRequestSuccess(res.data)) {
-        return res.data.data;
-      } else {
-        throw Error('Gagal mendapatkan kategori');
       }
-    } catch (err) {
-      console.error(err);
-      errorToast(err);
-    }
-  }, {
-    initialData: new Array(13).fill(0),
-    refetchOnWindowFocus: false,
-  })
+    },
+    {
+      initialData: new Array(13).fill(0),
+      refetchOnWindowFocus: false,
+    },
+  );
 
   // useEffect(() => {
   //   !authIsLoading && getAllProductsByFilters(1, userId, filter)
@@ -331,7 +398,7 @@ export const HomepageProvider = ({ children }) => {
     instalmentProducts,
     preOrderProducts,
     queryBanners,
-    banner,
+    // banner,
     queryCategories,
     handleFilterProducts,
     handleLoadMoreProducts,

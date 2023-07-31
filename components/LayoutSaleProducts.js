@@ -1,4 +1,12 @@
-import { Box, Flex, Heading, Icon, Skeleton, SkeletonText, Text, } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Icon,
+  Skeleton,
+  SkeletonText,
+  Text,
+} from "@chakra-ui/react";
 import Link from "next/link";
 import { useState } from "react";
 import { IoArrowForwardOutline } from "react-icons/io5";
@@ -11,14 +19,24 @@ import CardProduct from "./CardProduct";
 
 const px = { base: "1rem", md: "1.5rem", lg: "3rem", xl: "50px" };
 
-const LayoutSaleProducts = ({ data, loading, headingText, hasBackground, url_detail }) => {
+const LayoutSaleProducts = ({
+  data,
+  loading,
+  headingText,
+  hasBackground,
+  url_detail,
+}) => {
   const [display, setDisplay] = useState("none");
-  const url_detail_2 = url_detail ?? `/product-sale?type=${headingText.toLowerCase().replace(" ", "-")}`;
+  const url_detail_2 =
+    url_detail ??
+    `/product-sale?type=${headingText.toLowerCase().replace(" ", "-")}`;
   const { width } = useWindowSize();
   const width_2 = width ?? 768;
   let ref = null;
 
-  const totalData = data.length
+  // console.log(data)
+
+  const totalData = data.length;
 
   const enoughItem = () => {
     // This function will return True if the carousel cannot hold item number and need a show more button,
@@ -33,7 +51,7 @@ const LayoutSaleProducts = ({ data, loading, headingText, hasBackground, url_det
     } else {
       return totalData > width_2 / 200;
     }
-  }
+  };
 
   const settings = {
     arrows: true,
@@ -43,10 +61,10 @@ const LayoutSaleProducts = ({ data, loading, headingText, hasBackground, url_det
       width_2 >= 1440
         ? 6
         : width_2 >= 768
-          ? width_2 / 232
-          : width_2 >= 560
-            ? width_2 / 190
-            : width_2 / 200,
+        ? width_2 / 232
+        : width_2 >= 560
+        ? width_2 / 190
+        : width_2 / 200,
     slidesToScroll: 3,
     initialSlid: 0,
   };
@@ -70,8 +88,7 @@ const LayoutSaleProducts = ({ data, loading, headingText, hasBackground, url_det
       >
         {headingText}
       </Heading>
-      {
-        enoughItem() &&
+      {enoughItem() && (
         <Box
           onClick={() => {
             if (ref !== null) {
@@ -93,14 +110,13 @@ const LayoutSaleProducts = ({ data, loading, headingText, hasBackground, url_det
             <MdChevronLeft size="2em" />
           </Box>
         </Box>
-      }
+      )}
       <Box overflow="hidden">
         <Slider
           ref={(node) => {
             ref = node;
           }}
           {...settings}
-
         >
           {data.map((item, index) =>
             loading ? (
@@ -120,16 +136,14 @@ const LayoutSaleProducts = ({ data, loading, headingText, hasBackground, url_det
                 </Box>
               </Flex>
             ) : (
-              <Box pr={'20px'} key={index}>
-                <CardProduct  {...item} />
+              <Box pr={"20px"} key={index}>
+                <CardProduct {...item} />
               </Box>
             ),
           )}
-
         </Slider>
       </Box>
-      {
-        enoughItem() &&
+      {enoughItem() && (
         <Box
           onClick={() => {
             if (ref !== null) {
@@ -151,9 +165,8 @@ const LayoutSaleProducts = ({ data, loading, headingText, hasBackground, url_det
             <MdChevronRight size="2em" />
           </Box>
         </Box>
-      }
-      {
-        enoughItem() &&
+      )}
+      {enoughItem() && (
         <Flex
           justify="flex-end"
           mt="1rem"
@@ -161,9 +174,7 @@ const LayoutSaleProducts = ({ data, loading, headingText, hasBackground, url_det
           color="black"
           cursor="pointer"
         >
-          <Link
-            href={url_detail_2}
-          >
+          <Link href={url_detail_2}>
             <Text
               color={hasBackground ? "white" : "black"}
               fontSize="16px"
@@ -175,7 +186,7 @@ const LayoutSaleProducts = ({ data, loading, headingText, hasBackground, url_det
             </Text>
           </Link>
         </Flex>
-      }
+      )}
     </Box>
   );
 };

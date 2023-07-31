@@ -22,12 +22,11 @@ import {
   Text,
   Spinner,
 } from "@chakra-ui/react";
+import { Image } from "@chakra-ui/react";
 import { IoArrowDown, IoChevronDown, IoFilterOutline } from "react-icons/io5";
 
 import styles from "../styles/Product.module.scss";
 import CardProduct from "./CardProduct";
-import { Image } from "@chakra-ui/react";
-
 
 const LayoutProductList = ({
   queryProducts,
@@ -45,14 +44,14 @@ const LayoutProductList = ({
   }
 
   const list_filter = [
-    { title: 'Paling Sesuai', value: '' },
-    { title: 'Urutkan (A-Z)', value: 'atoz' },
-    { title: 'Urutkan (Z-A)', value: 'ztoa' },
-    { title: 'Harga (Tertinggi-Terendah)', value: 'hightolow' },
-    { title: 'Harga (Terendah-Tertinggi)', value: 'lowtohigh' },
-    { title: 'Top Seller', value: 'topseller' },
-    { title: 'Paling Disukai', value: 'mostliked' },
-    { title: 'Produk Spesial', value: 'specials' },
+    { title: "Paling Sesuai", value: "" },
+    { title: "Urutkan (A-Z)", value: "atoz" },
+    { title: "Urutkan (Z-A)", value: "ztoa" },
+    { title: "Harga (Tertinggi-Terendah)", value: "hightolow" },
+    { title: "Harga (Terendah-Tertinggi)", value: "lowtohigh" },
+    { title: "Top Seller", value: "topseller" },
+    { title: "Paling Disukai", value: "mostliked" },
+    { title: "Produk Spesial", value: "special" },
   ];
 
   return (
@@ -95,13 +94,14 @@ const LayoutProductList = ({
               <ModalContent>
                 <ModalBody>
                   <VStack align="start" spacing="1rem" justify="center">
-                    {
-                      list_filter.map((item, index) =>
-                        <Box onClick={() => handleFilterWrapper(item.value)} key={index}>
-                          {item.title}
-                        </Box>
-                      )
-                    }
+                    {list_filter.map((item, index) => (
+                      <Box
+                        onClick={() => handleFilterWrapper(item.value)}
+                        key={index}
+                      >
+                        {item.title}
+                      </Box>
+                    ))}
                   </VStack>
                 </ModalBody>
               </ModalContent>
@@ -120,16 +120,19 @@ const LayoutProductList = ({
                 _focus={{ boxShadow: "none" }}
                 display={{ base: "none", md: "block" }}
               >
-                Urutkan Berdasarkan - {list_filter.find((item) => item.value == filterData).title} <Icon ml="30px" as={IoChevronDown} />
+                Urutkan Berdasarkan -{" "}
+                {list_filter.find((item) => item.value == filterData).title}{" "}
+                <Icon ml="30px" as={IoChevronDown} />
               </MenuButton>
               <MenuList>
-                {
-                  list_filter.map((item, index) =>
-                    <MenuItem onClick={() => handleFilter(item.value)} key={index}>
-                      {item.title}
-                    </MenuItem>
-                  )
-                }
+                {list_filter.map((item, index) => (
+                  <MenuItem
+                    onClick={() => handleFilter(item.value)}
+                    key={index}
+                  >
+                    {item.title}
+                  </MenuItem>
+                ))}
               </MenuList>
             </Menu>
           </>
@@ -149,39 +152,52 @@ const LayoutProductList = ({
         columnGap={2}
         rowGap={4}
       >
-
         {/* {queryProducts.data?.pages?.reduce((acc, curr) => acc.data.concat(curr.data))} */}
-        {!queryProducts.isFetched ? queryProducts.data?.pages?.map((page) => page.data.map((data, index) => (
-          <Box
-            key={index}
-            bg="white"
-            borderRadius="8px"
-            border="1px solid #CBD5E0"
-          >
-            <Skeleton h="10rem" />
-            <Box padding="1.5rem">
-              <SkeletonText noOfLines={2} mb="1rem" />
-              <SkeletonText noOfLines={1} />
-            </Box>
-          </Box>
-        ))
-        ) : (
-          queryProducts.data?.pages?.map((page) => page.data.map((data, index) => <CardProduct key={data.products_id} {...data} responsive={true} />))
-        )}
-      </Grid >
+        {!queryProducts.isFetched
+          ? queryProducts.data?.pages?.map((page) =>
+              page.data.map((data, index) => (
+                <Box
+                  key={index}
+                  bg="white"
+                  borderRadius="8px"
+                  border="1px solid #CBD5E0"
+                >
+                  <Skeleton h="10rem" />
+                  <Box padding="1.5rem">
+                    <SkeletonText noOfLines={2} mb="1rem" />
+                    <SkeletonText noOfLines={1} />
+                  </Box>
+                </Box>
+              )),
+            )
+          : queryProducts.data?.pages?.map((page) =>
+              page.data.map((data, index) => (
+                <CardProduct
+                  key={data.products_id}
+                  {...data}
+                  responsive={true}
+                />
+              )),
+            )}
+      </Grid>
 
-      {
-        !queryProducts.isFetched ?
-          (<Center><Spinner /></Center>) :
-          queryProducts.data?.pages?.reduce((acc, curr) => acc.concat(curr.data), []).length == 0 &&
-          (<Box display={'flex'} flexDirection={'column'}>
-            <Text fontSize={'xl'} align={'center'}>
+      {!queryProducts.isFetched ? (
+        <Center>
+          <Spinner />
+        </Center>
+      ) : (
+        queryProducts.data?.pages?.reduce(
+          (acc, curr) => acc.concat(curr.data),
+          [],
+        ).length == 0 && (
+          <Box display={"flex"} flexDirection={"column"}>
+            <Text fontSize={"xl"} align={"center"}>
               Produk Tidak Ditemukan
             </Text>
-            <Image src={'/images/2.svg'} height={'60vh'} />
-
-          </Box>)
-      }
+            <Image src={"/images/2.svg"} height={"60vh"} />
+          </Box>
+        )
+      )}
 
       {/* <Grid
         w="100%"
@@ -218,8 +234,7 @@ const LayoutProductList = ({
         )}
       </Grid> */}
 
-      {
-        queryProducts.hasNextPage &&
+      {queryProducts.hasNextPage && (
         <Center mt="1rem">
           <Button
             variant="outline"
@@ -234,8 +249,8 @@ const LayoutProductList = ({
             Lihat Lebih Banyak <Icon as={IoArrowDown} ml=".5rem" />
           </Button>
         </Center>
-      }
-    </Box >
+      )}
+    </Box>
   );
 };
 

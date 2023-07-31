@@ -21,19 +21,16 @@ import { useWindowSize } from "../hooks/useWindowSize";
 const HomeDisplay = () => {
   const { isLoggedIn } = useAuthContext();
   const {
-    products,
     flashSaleProducts,
     discountProducts,
     instalmentProducts,
     preOrderProducts,
-    banner,
-    category,
     handleLoadMoreProducts,
     handleFilterProducts,
     filter,
     queryProducts,
     queryBanners,
-    queryCategories
+    queryCategories,
   } = useHomePageContext();
   const [scrollVisible, setScrollVisible] = useState(false);
   const { width } = useWindowSize();
@@ -161,7 +158,7 @@ const HomeDisplay = () => {
           data={preOrderProducts.data.data}
           headingText="Pre Order"
           loading={!preOrderProducts.isFetched}
-        // url_detail={'/product-cicilan'}
+          // url_detail={'/product-cicilan'}
         />
         <Divider
           orientation="horizontal"
