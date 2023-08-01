@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { HOST } from "../constants/api";
+import { HOST, HOST_2 } from "../constants/api";
 import { isRequestSuccess } from "../utils/api";
 import { getDeviceId } from "../utils/functions";
 
@@ -30,7 +30,7 @@ export const apiGetPromoBuyXYGetDisc = async (dataPost) => {
 export const addCart = async (dataPost) => {
   let device_id = getDeviceId();
   try {
-    const res = await axios.post("https://smapi.sabilamall.co.id/api/cart", {
+    const res = await axios.post(`${HOST_2}/api/cart`, {
       ...dataPost,
       device_id,
     });
@@ -58,7 +58,7 @@ export const deleteCart = async (dataPost) => {
 export const apiDeleteCart = async ({ customers_id, customers_basket_id }) => {
   let device_id = getDeviceId();
   try {
-    const res = await axios.delete(`https://smapi.sabilamall.co.id/api/cart?customers_id=${customers_id}&customers_basket_id=${customers_basket_id}&device_id=${device_id}`);
+    const res = await axios.delete(`${HOST_2}/api/cart?customers_id=${customers_id}&customers_basket_id=${customers_basket_id}&device_id=${device_id}`);
     const data = await res.data;
     return data;
   } catch (error) {
@@ -115,8 +115,9 @@ export const getMyCart = async (user_id) => {
 
 export const apiGetCart = async (customers_id) => {
   let device_id = getDeviceId();
-  const res = await axios.get(`https://smapi.sabilamall.co.id/api/cart?customers_id=${customers_id}&device_id=${device_id}`);
+  const res = await axios.get(`${HOST_2}/api/cart?customers_id=${customers_id}&device_id=${device_id}`);
 
   const data = await res.data?.data;
+  console.log(`${HOST_2}/api/cart?customers_id=${customers_id}&device_id=${device_id}`, data)
   return data;
 };

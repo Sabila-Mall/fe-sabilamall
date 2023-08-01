@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { HOST } from "../constants/api";
+import { HOST, HOST_2 } from "../constants/api";
 import { getDeviceId } from "../utils/functions";
 
 export const apiGetOrder = async (customerId, page) => {
@@ -15,7 +15,7 @@ export const apiGetOrder = async (customerId, page) => {
   }).toString().replaceAll('null', '');
 
   try {
-    const res = await axios.get(`https://smapi.sabilamall.co.id/api/orders?${params}`);
+    const res = await axios.get(`${HOST_2}/api/orders?${params}`);
     const d = {
       current_page: res.data.data.current_page,
       last_page: res.data.data.last_page,

@@ -810,6 +810,26 @@ const DetailPesanan = () => {
       });
     } else {
       setLoading(true);
+      console.log(
+        vendors_id,
+        arrayOfCustomerBasket,
+        pengiriman.destination,
+        checkoutData.userId,
+        checkoutData.delivery_id,
+        checkoutData.dropshipper_id,
+        metodePembayaran.payment_method,
+        isCouponApplied,
+        couponsAppliedId,
+        0,
+        catatanPesanan,
+        "1.0.2",
+        "",
+        0,
+        pengiriman.shipping_promo,
+        adminId,
+        handlingFeeAdmin,
+        handlingFeeAdminDiscount,
+      );
       apiPlaceOrder(
         vendors_id,
         arrayOfCustomerBasket,
@@ -832,6 +852,7 @@ const DetailPesanan = () => {
       )
         .then((res) => {
           if (isRequestSuccess(res.data)) {
+            console.log(res.data);
             saveCheckoutResponse(res.data);
             router.push("/invoice");
           } else {

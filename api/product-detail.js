@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { HOST } from "../constants/api";
+import { HOST, HOST_2 } from "../constants/api";
 import { isRequestSuccess } from "../utils/api";
 
 export const getProductDetail = async (customers_id, products_slug, products_id, admin_id) => {
@@ -12,6 +12,6 @@ export const getProductDetail = async (customers_id, products_slug, products_id,
     admin_id
   }).toString().replaceAll('null', '').replaceAll('undefined', '');
 
-  return axios.get(`https://smapi.sabilamall.co.id/api/product?${params}`);
+  return axios.get(`${HOST_2}/api/product?${params}`);
 };
 

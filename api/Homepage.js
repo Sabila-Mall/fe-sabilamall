@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { HOST } from "../constants/api";
+import { HOST, HOST_2 } from "../constants/api";
 
 export const getProducts = (page = 1, userId, type = '', search = '', categories_id = '', products_slug = '', min_price = 0, max_price = 999999999, paginate = 20) => {
   const payload = new URLSearchParams({
@@ -15,7 +15,7 @@ export const getProducts = (page = 1, userId, type = '', search = '', categories
     paginate: paginate,
   }).toString().replaceAll('null', '');
 
-  return axios.get(`https://smapi.sabilamall.co.id/api/products?${payload}`)
+  return axios.get(`${HOST_2}/api/products?${payload}`)
 };
 
 export const getFlashSaleProducts = (page = 1, userId) => {
@@ -53,7 +53,7 @@ export const getBanner = () => {
 };
 
 export const getBanners = () => {
-  return axios.get("https://smapi.sabilamall.co.id/api/banners");
+  return axios.get(`${HOST_2}/api/banners`);
 }
 
 export const getCategory = () => {
@@ -61,5 +61,5 @@ export const getCategory = () => {
 };
 
 export const getCategories = () => {
-  return axios.get("https://smapi.sabilamall.co.id/api/categories");
+  return axios.get(`${HOST_2}/api/categories`);
 }
