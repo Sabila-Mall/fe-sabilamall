@@ -51,7 +51,7 @@ export const AddressProvider = ({ children }) => {
   };
 
   const deleteItem = (customers_id, address_book_id, type) => {
-    deleteAddress({ customers_id, address_book_id })
+    deleteAddress(customers_id, address_book_id)
       .then((res) => {
         if (isRequestSuccess(res)) {
           if (type === "delete") {

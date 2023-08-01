@@ -64,7 +64,12 @@ import {
  * @param {CheckoutProduct[]} daftarProduk
  */
 
-const ACCEPTED_PAYMENT_METHODS = ["transferbank", "deposit", "midtrans", "mekari_pay"];
+const ACCEPTED_PAYMENT_METHODS = [
+  "transferbank",
+  "deposit",
+  "midtrans",
+  "mekari_pay",
+];
 
 const RingkasanPesanan = () => {
   const { width } = useWindowSize();
@@ -188,10 +193,14 @@ const RingkasanPesanan = () => {
           </Grid>
         )}
         {products.map((produk) => (
-          <CheckoutProduct key={produk.customers_basket_id} product={produk} ckData={ckData} />
+          <CheckoutProduct
+            key={produk.customers_basket_id}
+            product={produk}
+            ckData={ckData}
+          />
         ))}
       </VStack>
-      {ckData?.is_promo_buyxy &&
+      {ckData?.is_promo_buyxy && (
         <Box
           mt="1rem"
           padding="1rem"
@@ -209,7 +218,7 @@ const RingkasanPesanan = () => {
             {ckData?.promo_buyxy_desc}
           </Text>
         </Box>
-      }
+      )}
     </>
   );
 };
@@ -258,26 +267,25 @@ const Pengiriman = ({ kurir, pengiriman, handler, loadingKurir }) => {
             <Spinner m="3" />
           ) : (
             <>
-              {
-                kurir
-                  ?
-                  <Select
-                    className="secondaryFont"
-                    placeholder="Pilih jasa pengiriman"
-                    onChange={(event) => {
-                      handler(event.target.value);
-                    }}
-                  >
-                    {kurir?.map((jasa, index) => (
-                      <option value={jasa.name} key={index}>
-                        {jasa.name} ({currencyFormat(jasa.rate)})
-                      </option>
-                    ))}
-                  </Select>
-                  :
-                  <Text className="primaryFont" >Kurir tidak ditemukan, silakan hubungi admin!</Text>
-              }
-
+              {kurir ? (
+                <Select
+                  className="secondaryFont"
+                  placeholder="Pilih jasa pengiriman"
+                  onChange={(event) => {
+                    handler(event.target.value);
+                  }}
+                >
+                  {kurir?.map((jasa, index) => (
+                    <option value={jasa.name} key={index}>
+                      {jasa.name} ({currencyFormat(jasa.rate)})
+                    </option>
+                  ))}
+                </Select>
+              ) : (
+                <Text className="primaryFont">
+                  Kurir tidak ditemukan, silakan hubungi admin!
+                </Text>
+              )}
             </>
           )}
         </Flex>
@@ -403,7 +411,7 @@ const MetodePembayaran = ({
                 allowMouseWheel
                 textAlign="right"
                 onChange={(e) => handleDiskonPengiriman(e)}
-              // isDisabled={true}
+                // isDisabled={true}
               >
                 <NumberInputField textAlign="right" />
               </NumberInput>
@@ -589,7 +597,12 @@ const DetailPesanan = () => {
   const toast = useToast();
 
   let arrayOfCustomerBasket = [];
-  let weight, vendors_id, vendor_origin, totalOrder, products_jenis, warehouse_id;
+  let weight,
+    vendors_id,
+    vendor_origin,
+    totalOrder,
+    products_jenis,
+    warehouse_id;
 
   if (typeof window !== "undefined") {
     const productsJson = localStorage.getItem("selectedProduct");
@@ -620,16 +633,16 @@ const DetailPesanan = () => {
         vendors_id,
         vendor_origin,
         device_id,
-        warehouse_id
+        warehouse_id ?? 0,
       )
         .then((res) => {
-          setKurir(res.data.data.kurirIndonesia.services);
+          setKurir(res.data.data);
         })
         .catch((err) => {
           toast({
             position: "top",
             //            title: "Gagal Mendapatkan Kurir",
-            title: res.data.message,
+            title: err.res.data.message,
             status: "error",
             isClosable: true,
           });
@@ -667,7 +680,6 @@ const DetailPesanan = () => {
           // filteredData = [...filteredData, mekariPay]
           // data = [...data, mekariPay]
 
-
           const selectedData = isDesktop ? filteredData : data;
 
           // console.log(selectedData);
@@ -687,16 +699,25 @@ const DetailPesanan = () => {
       setPengiriman({});
     } else {
       const tempPengiriman = kurir.filter((data) => data.name === selected)[0];
-      const estimasi = tempPengiriman.destination.split("|")[2];
+      // const estimasi = tempPengiriman.destination.split("|")[2];
+      const { shipping_promo, rate, etd, destination } = tempPengiriman;
+      const estimasi = etd;
+      let discount_amount;
+
+      if (!!shipping_promo) {
+        if (shipping_promo.promos_fulldisc == 1) {
+          discount_amount = rate;
+        } else {
+          discount_amount = shipping_promo.promos_amount ?? 0;
+        }
+      }
       setPengiriman({
         nama: tempPengiriman.name,
         estimasi: estimasiFormat(estimasi),
-        harga_original: tempPengiriman.rate,
-        harga:
-          tempPengiriman.rate -
-          (tempPengiriman.shipping_promo?.shipping_promo_amount ?? 0),
-        destination: tempPengiriman.destination,
-        shipping_promo: tempPengiriman.shipping_promo,
+        harga_original: rate,
+        harga: rate - discount_amount,
+        destination: destination,
+        shipping_promo: shipping_promo,
       });
     }
   };
@@ -743,7 +764,8 @@ const DetailPesanan = () => {
     totalDiscount = 0,
     totalWeight = 0,
     handlingFeeAdmin = 0,
-    handlingFeeAdminDiscount = 0, handlingFee = 0;
+    handlingFeeAdminDiscount = 0,
+    handlingFee = 0;
 
   if (typeof window !== "undefined") {
     const checkoutDataJson = localStorage.getItem("selectedProduct");
@@ -767,7 +789,7 @@ const DetailPesanan = () => {
     if (
       metodePembayaran.payment_method === "deposit" &&
       totalPrice + pengiriman.harga - totalDiscount >
-      paymentMethod.filter((e) => e.method === "deposit")[0].memberdeposit
+        paymentMethod.filter((e) => e.method === "deposit")[0].memberdeposit
     ) {
       toast({
         title: "Saldo SM Pay tidak mencukupi",

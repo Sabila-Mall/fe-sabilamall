@@ -82,10 +82,12 @@ const AlamatPenerima = () => {
   ];
 
   let selectedProductJson;
-  if (typeof window !== "undefined") selectedProductJson = localStorage.getItem("selectedProduct")
+  if (typeof window !== "undefined")
+    selectedProductJson = localStorage.getItem("selectedProduct");
 
   if (
-    typeof window !== "undefined" && isValidJson(selectedProductJson) &&
+    typeof window !== "undefined" &&
+    isValidJson(selectedProductJson) &&
     !JSON.parse(selectedProductJson)
   )
     router.push("/");
@@ -104,8 +106,9 @@ const AlamatPenerima = () => {
     totalWeight = 0;
 
   if (typeof window !== "undefined") {
-    const checkoutDataJSON = localStorage.getItem("selectedProduct")
-    const checkoutData = isValidJson(checkoutDataJSON) && JSON.parse(checkoutDataJSON);
+    const checkoutDataJSON = localStorage.getItem("selectedProduct");
+    const checkoutData =
+      isValidJson(checkoutDataJSON) && JSON.parse(checkoutDataJSON);
     if (checkoutData) {
       console.log(checkoutData);
       totalPrice = checkoutData.total_price;
@@ -171,7 +174,7 @@ const AlamatPenerima = () => {
         entry_firstname: extractName(namaPengirimInput)?.firstname,
         entry_lastname: extractName(namaPengirimInput)?.lastname,
         entry_phone: ponselPengirim,
-        address_book_type: 2,
+        address_book_type: "Pengirim",
         customers_id: userId,
         is_default: 0,
       });
@@ -195,9 +198,9 @@ const AlamatPenerima = () => {
         entry_zone_id: Number(provinsiPenerima?.split(" ")?.[0]),
         entry_city: Number(kotaPenerima?.split(" ")?.[0]),
         entry_district: Number(kecamatanPenerima?.split(" ")?.[0]),
-        entry_postcode: Number(kodePosPenerima),
+        entry_postcode: kodePosPenerima,
         entry_subdistrict: subdistrictId,
-        address_book_type: 1,
+        address_book_type: "Penerima",
         customers_id: userId,
         is_default: 0,
         entry_street_address: alamatPenerima,
@@ -217,32 +220,33 @@ const AlamatPenerima = () => {
         setDataPengirim(
           addressDataPengirim
             ? [
-              ...addressDataPengirim?.map((d) => ({
-                nama: d.firstname + " " + (d.lastname ?? ""),
-                nomor: d.phone,
-                ...d,
-              })),
-            ]
+                ...addressDataPengirim?.map((d) => ({
+                  nama: d.firstname + " " + (d.lastname ?? ""),
+                  nomor: d.phone,
+                  ...d,
+                })),
+              ]
             : [],
         );
 
         setDataPenerima(
           addressDataPenerima && Array.isArray(addressDataPenerima)
             ? [
-              ...addressDataPenerima?.map((d) => ({
-                delivery_id: d.address_id,
-                nama: d.firstname + " " + (d.lastname ?? ""),
-                nomor: d.phone,
-                alamat: `${d.street}, ${d.subdistrict_type + " " + d.subdistrict_name
+                ...addressDataPenerima?.map((d) => ({
+                  delivery_id: d.address_id,
+                  nama: d.firstname + " " + (d.lastname ?? ""),
+                  nomor: d.phone,
+                  alamat: `${d.street}, ${
+                    d.subdistrict_type + " " + d.subdistrict_name
                   }, ${d.city_type + " " + d.city_name}, ${d.zone_name}`,
-                address_id: d.address_id,
-                city_id: d.city_id,
-                zone_id: d.zone_apicityid,
-                subdistrict_id: d.subdistrict_id,
-                postcode: d.postcode,
-                district_id: d.district,
-              })),
-            ]
+                  address_id: d.address_id,
+                  city_id: d.city_id,
+                  zone_id: d.zone_apicityid,
+                  subdistrict_id: d.subdistrict_id,
+                  postcode: d.postcode,
+                  district_id: d.district,
+                })),
+              ]
             : [],
         );
 
@@ -336,7 +340,7 @@ const AlamatPenerima = () => {
     try {
       addCheckoutData(data);
     } catch {
-      () => { };
+      () => {};
     }
   };
 
@@ -385,7 +389,7 @@ const AlamatPenerima = () => {
           city_id: Number(kotaPenerima?.split(" ")?.[0]),
           district_id: Number(kecamatanPenerima?.split(" ")?.[0]),
           subdistrict_id: Number(kecamatanPenerima?.split(" ")?.[0]),
-          postcode: Number(kodePosPenerima),
+          postcode: kodePosPenerima,
           namaPenerima: namaAwalPenerima + " " + namaAkhirPenerima,
           provinsiPenerima: provinsiPenerima?.split(" ")?.[1],
           kotaPenerima: kotaPenerima?.split(" ")?.[1],
@@ -437,7 +441,7 @@ const AlamatPenerima = () => {
           city_id: Number(kotaPenerima?.split(" ")?.[0]),
           district_id: Number(kecamatanPenerima?.split(" ")?.[0]),
           subdistrict_id: Number(kecamatanPenerima?.split(" ")?.[0]),
-          postcode: Number(kodePosPenerima),
+          postcode: kodePosPenerima,
           namaPengirim: namaPengirimInput,
           nomorPengirim: ponselPengirim,
           namaPenerima: namaAwalPenerima + " " + namaAkhirPenerima,
@@ -1217,7 +1221,7 @@ const AlamatPenerima = () => {
                   {currencyFormat(totalPrice)}
                 </Text>
               </Box>
-              {adminId != null ?
+              {adminId != null ? (
                 <Box
                   width="100%"
                   d="flex"
@@ -1241,10 +1245,9 @@ const AlamatPenerima = () => {
                     {currencyFormat(handlingFeeAdmin)}
                   </Text>
                 </Box>
-                :
+              ) : (
                 <Box />
-              }
-              
+              )}
 
               <Box
                 width="100%"
@@ -1269,7 +1272,7 @@ const AlamatPenerima = () => {
                   {currencyFormat(totalDiscount)}
                 </Text>
               </Box>
-              {handlingFee > 0 ?
+              {handlingFee > 0 ? (
                 <Box
                   width="100%"
                   d="flex"
@@ -1293,9 +1296,9 @@ const AlamatPenerima = () => {
                     {currencyFormat(handlingFee)}
                   </Text>
                 </Box>
-                :
+              ) : (
                 <Box />
-              }
+              )}
               <Box
                 width="100%"
                 d="flex"

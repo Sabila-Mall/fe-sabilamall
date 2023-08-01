@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { HOST } from "../constants/api";
+import { HOST, LOCALHOST } from "../constants/api";
 import { getDeviceId, isValidJson } from "../utils/functions";
 
 export const apiPlaceOrder = (
@@ -53,9 +53,13 @@ export const apiPlaceOrder = (
 
 export const getHandlingFeeAdminDiscount = () => {
   return axios.post(HOST + "/api/order/get_handling_fee_admin_discount");
-}
+};
 
-export const apiCheckPromoBuyXYGetDisc = async (list_product, customers_id, vendors_id) => {
+export const apiCheckPromoBuyXYGetDisc = async (
+  list_product,
+  customers_id,
+  vendors_id,
+) => {
   let device_id = getDeviceId();
   const res = await axios.post(HOST + "/api/order/check_promo_buyxy_get_disc", {
     list_product,
@@ -65,7 +69,7 @@ export const apiCheckPromoBuyXYGetDisc = async (list_product, customers_id, vend
   });
   const data = await res.data;
   return data;
-}
+};
 
 export const getKurir = (
   customerId,
@@ -88,26 +92,20 @@ export const getKurir = (
         customers_basket_id.push(el.customers_basket_id);
       },
     );
-  } catch (error) { }
+  } catch (error) {}
 
-  return axios.post(HOST + "/api/shipping/get_all_shipping", {
+  return axios.post(LOCALHOST + "/api/shipping/get_all_shipping", {
     customers_id: customerId,
-    // countries_id: 100,
-    // postcode: postCode,
-    // city_id: cityId,
-    // zone_id: zoneId,
-    // subdistrict_id: subDistrictId,
-    // subsubdistrict_id: subSubDistrictId,
     delivery_id: delivery_id,
-    language_id: 1,
-    currency_code: "IDR",
+    // language_id: 1,
+    // currency_code: "IDR",
     weight: weight,
     vendors_id: vendorId,
     vendors_origin: vendorOrigin,
     device_id: deviceId,
     customers_basket_id: customers_basket_id,
-    warehouse_id: warehouse_id,
-    debug: true,
+    warehouse_id: warehouse_id ?? 0,
+    // debug: true,
   });
 };
 
@@ -125,7 +123,7 @@ export const getPaymentMethod = (
         customers_basket_id.push(el.customers_basket_id);
       },
     );
-  } catch (error) { }
+  } catch (error) {}
   return axios.post(HOST + "/api/payment/get_payment_method", {
     language_id: "1",
     vendors_id: [`${vendors_id}`],
@@ -157,8 +155,8 @@ export const apiApplyVoucherToCart = (customerId, code) => {
   let arrayOfCustomerBasket = [];
 
   if (typeof window !== "undefined") {
-    const json = localStorage.getItem("selectedProduct")
-    const products = isValidJson(json) ? JSON.parse(json) : {}
+    const json = localStorage.getItem("selectedProduct");
+    const products = isValidJson(json) ? JSON.parse(json) : {};
     const productItems = products?.products;
     if (productItems) {
       productItems.forEach((element) => {

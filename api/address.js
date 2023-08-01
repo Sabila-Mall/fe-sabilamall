@@ -1,13 +1,14 @@
 import axios from "axios";
 
-import { HOST } from "../constants/api";
+import { HOST, LOCALHOST } from "../constants/api";
 
 export const getAddressByUserId = async (user_id, type) => {
   try {
-    const res = await axios.post(HOST + "/api/alamat/get_all_address", {
-      customers_id: user_id,
-      address_book_type: type,
-    });
+    const res = await axios.get(
+      `${LOCALHOST}/api/alamat/get_all_address?customers_id=${user_id}&address_book_type=${
+        type == 2 ? "pengirim" : "penerima"
+      }`,
+    );
     const data = await res.data?.data;
     return data;
   } catch (err) {
@@ -15,11 +16,10 @@ export const getAddressByUserId = async (user_id, type) => {
   }
 };
 
-export const deleteAddress = async (dataPost) => {
+export const deleteAddress = async (customers_id, address_book_id) => {
   try {
-    const res = await axios.post(
-      HOST + "/api/alamat/delete_shipping_address",
-      dataPost,
+    const res = await axios.delete(
+      `${LOCALHOST}/api/alamat/delete_shipping_address?customers_id=${customers_id}&address_book_id=${address_book_id}`,
     );
     const data = await res.data;
     return data;
@@ -31,7 +31,7 @@ export const deleteAddress = async (dataPost) => {
 export const addAddress = async (dataPost) => {
   try {
     const res = await axios.post(
-      HOST + "/api/alamat/add_shipping_address",
+      `${LOCALHOST}/api/alamat/add_shipping_address`,
       dataPost,
     );
     const data = await res?.data;
