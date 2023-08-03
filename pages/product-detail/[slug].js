@@ -54,7 +54,7 @@ const ProductDetails = () => {
 
   const queryProductDetail = useQuery(['product_detail', slug, userLevel], async () => {
     try {
-      const res = await getProductDetail(userId, slug, null)
+      const res = await getProductDetail(userId, slug)
       if (isRequestSuccess(res.data)) {
         return res.data.data;
       } else {
@@ -116,11 +116,11 @@ const ProductDetails = () => {
 
   // ==== path
   let path = [];
-  const breadCrumbItem = JSON.parse(queryProductDetail.data?.categories ?? "[]");
+  const breadCrumbItem = queryProductDetail.data?.categories;
   let count_item = breadCrumbItem.length;
 
   if (count_item > 0) {
-    path.push(breadCrumbItem.find((i) => i.parent_id == 0));
+    path.push(breadCrumbItem.find((i) => i.parent_id == null));
   }
 
   if (path.length > 0) {
@@ -150,7 +150,7 @@ const ProductDetails = () => {
     }]
   }
 
-  const tempHeadImage = queryProductDetail.data?.products_image.split("/");
+  const tempHeadImage = queryProductDetail.data?.products_image.actual.split("/");
   const headImage = tempHeadImage?.slice(2, tempHeadImage.length).join("/");
 
   //price

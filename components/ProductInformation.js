@@ -1,22 +1,22 @@
 import {
   Box,
-  Text,
-  Tabs,
-  TabList,
-  TabPanels,
-  Tab,
-  TabPanel,
-  Stack,
   Button,
-  Heading,
+  Center,
   HStack,
+  Heading,
   Progress,
-  Center
+  Stack,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  Text
 } from "@chakra-ui/react";
+import { css } from "@emotion/react";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { GoStar } from "react-icons/go";
-import { css } from "@emotion/react";
 
 import styles from "../styles/ProductDetails.module.scss";
 
@@ -50,7 +50,7 @@ const ProductInformation = ({
     return false
   })
 
-  const rating = JSON.parse(reviews ?? "[]");
+  const rating = reviews;
   let avgRating = 0;
   let oneRating = 0;
   let twoRating = 0;

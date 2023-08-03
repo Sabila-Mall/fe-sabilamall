@@ -1,4 +1,4 @@
-import { Box, Image, Flex, HStack, Icon } from "@chakra-ui/react";
+import { Box, Flex, HStack, Icon, Image } from "@chakra-ui/react";
 import { View } from "@react-pdf/renderer";
 import axios from "axios";
 import Head from "next/head";
@@ -15,18 +15,16 @@ export const ProductImages = ({
   products_images,
   products_videos,
 }) => {
-  const videos = products_videos != null ? JSON.parse(products_videos) : [];
+  const videos = products_videos;
   const [viewType, setViewType] = useState(videos != null && videos?.length > 0 ? 'video' : 'image');
   const [indexView, setIndexView] = useState(0);
   const [imageNum, setImageNum] = useState(0);
   const [video, setVideo] = useState(videos != null && videos?.length > 0 ? videos[0].source : '');
-  const [image, setImage] = useState(products_image);
-
-  const images_list = JSON.parse(products_images ?? "[]");
+  const [image, setImage] = useState(products_image.actual);
 
   const images = [
-    { id: "podafae", image: products_image, sort_order: images_list?.length },
-    ...images_list,
+    { id: "podafae", image: products_image.actual, sort_order: products_images?.length },
+    ...products_images,
   ];
   let ref = null;
 

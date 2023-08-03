@@ -104,7 +104,7 @@ const ProductCheckout = ({
 
   const { addCartItem } = useCartContext();
 
-  const warehouseData = JSON.parse(warehouse ?? "[]");
+  const warehouseData = warehouse;
 
   const [warehouseId, setWarehouseId] = useState(null);
 
@@ -183,7 +183,8 @@ const ProductCheckout = ({
 
     const [stock, setStock] = useState(products_stock);
 
-    const productsAttributes = JSON.parse(products_attributes);
+    // const productsAttributes = JSON.parse(products_attributes);
+    const productsAttributes = products_attributes;
     const colorsData = productsAttributes.filter((item) => item.options_name.toLowerCase() === 'warna');
     const sizesData = productsAttributes.filter((item) => item.options_name.toLowerCase() === 'ukuran');
 

@@ -12,7 +12,7 @@ import { IoStar } from "react-icons/io5";
 import { getImageLink } from "../utils/functions";
 
 const ProductReview = ({ reviews }) => {
-  const reviewData = JSON.parse(reviews ?? "[]");
+  const reviewData = reviews;
   const totalReview = reviewData ? reviewData.length : 0;
 
   const renderStar = (numberOfStars) => {

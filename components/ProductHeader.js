@@ -125,7 +125,7 @@ const ProductHeader = ({
     }, [null]);
   }
 
-  const rating = JSON.parse(reviews ?? "[]");
+  const rating = reviews;
   let avgRating = 0;
 
   if (rating.length > 0) {
