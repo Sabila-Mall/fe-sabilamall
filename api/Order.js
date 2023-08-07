@@ -24,7 +24,6 @@ export const apiPlaceOrder = (
   handlingFeeAdminDiscount,
 ) => {
   let device_id = getDeviceId();
-  console.log(customerBasketId)
   return axios.post(HOST + "/api/order/place_order_2", {
     dataorder: [
       {
@@ -125,14 +124,12 @@ export const getPaymentMethod = (
       },
     );
   } catch (error) {}
-  return axios.post(HOST + "/api/payment/get_payment_method", {
-    language_id: "1",
-    vendors_id: [`${vendors_id}`],
-    users_id: `${users_id}`,
-    productsjenis: [`${products_jenis}`],
-    totalorder: `${totalorder}`,
+  return axios.post(LOCALHOST + "/api/payment/methods", {
+    vendor_ids: [vendors_id],
+    user_id: users_id,
+    product_jenis: [`${products_jenis}`],
+    totalorder: totalorder,
     kurir: kurir,
-    customers_basket_id: customers_basket_id,
   });
 };
 

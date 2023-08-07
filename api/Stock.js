@@ -1,13 +1,10 @@
 import axios from "axios";
 
-import { HOST, HOST_2 } from "../constants/api";
+import { HOST, HOST_2, LOCALHOST } from "../constants/api";
 import { isRequestSuccess } from "../utils/api";
 
 export const apiStock = (productId) => {
-  return axios.post(HOST + "/api/product/get_stock_2", {
-    products_id: productId,
-    type: "json",
-  });
+  return axios.get(`${LOCALHOST}/api/products/stock?id=${productId}`);
 };
 
 export const checkStock = async (dataPost) => {
@@ -41,8 +38,8 @@ export const getStockData = async (dataPost) => {
 };
 
 export const getProductStock = async ({ products_slug }) => {
-  return axios.get(`${HOST_2}/api/product/stock?products_slug=${products_slug}`);
-}
+  return axios.get(`${LOCALHOST}/api/products/stock?slug=${products_slug}`);
+};
 
 export const checkStockByAttribute = async (dataPost) => {
   try {
@@ -57,4 +54,4 @@ export const checkStockByAttribute = async (dataPost) => {
   } catch (err) {
     throw new Error(err);
   }
-}
+};
