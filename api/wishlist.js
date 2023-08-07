@@ -1,16 +1,19 @@
 import axios from "axios";
 
-import { HOST } from "../constants/api";
+import { HOST, LOCALHOST } from "../constants/api";
 import { isRequestSuccess } from "../utils/api";
 import { getDeviceId } from "../utils/functions";
 
 export const getWishlistByUserId = async (user_id) => {
   try {
-    const device_id = getDeviceId();
-    const res = await axios.post(HOST + "/api/wishlist/get_wishlist_by_user", {
+    const params = new URLSearchParams({
       user_id,
-      device_id,
-    });
+    })
+      .toString()
+      .replaceAll("null", "")
+      .replaceAll("undefined", "");
+
+    const res = await axios.get(`${LOCALHOST}/api/wishlist?${params}`);
 
     if (!isRequestSuccess(res.data)) throw new Error();
 
@@ -23,10 +26,10 @@ export const getWishlistByUserId = async (user_id) => {
 
 export const deleteWishlist = async (dataPost) => {
   try {
-    const device_id = getDeviceId();
-    const res = await axios.post(HOST + "/api/wishlist/delete_wishlist", {
-      ...dataPost,
-      device_id,
+    const res = await axios.delete(LOCALHOST + "/api/wishlist", {
+      data: {
+        ...dataPost,
+      },
     });
 
     if (!isRequestSuccess(res.data)) throw new Error();
@@ -40,10 +43,8 @@ export const deleteWishlist = async (dataPost) => {
 
 export const addWishlist = async (dataPost) => {
   try {
-    const device_id = getDeviceId();
-    const res = await axios.post(HOST + "/api/wishlist/add_wishlist", {
+    const res = await axios.post(LOCALHOST + "/api/wishlist", {
       ...dataPost,
-      device_id,
     });
 
     if (!isRequestSuccess(res.data)) throw new Error();

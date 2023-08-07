@@ -1,15 +1,14 @@
 import {
   Box,
   Button,
-  Grid,
-  Text,
-  Image,
   Flex,
+  Grid,
+  Image,
   Spinner,
+  Text,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { getWishlistByUserId } from "../../api/wishlist";
 import CardProduct from "../../components/CardProduct";
@@ -67,7 +66,6 @@ const Wishlist = () => {
                           {...item}
                           liked_customers_id={userId}
                           key={item.id}
-                          isWishlist={true}
                         />
                       );
                     })}

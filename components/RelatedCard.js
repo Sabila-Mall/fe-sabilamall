@@ -43,14 +43,14 @@ const RelatedCard = ({
 
   const [liked, setLiked] = useState(
     wishlistData?.length > 0
-      ? wishlistData?.map((e) => e.id).includes(liked_products_id)
+      ? wishlistData?.map((e) => e.products_id).includes(liked_products_id)
       : false,
   );
 
   useEffect(() => {
     setLiked(
       wishlistData?.length > 0
-        ? wishlistData?.map((e) => e.id).includes(liked_products_id)
+        ? wishlistData?.map((e) => e.products_id).includes(liked_products_id)
         : false,
     );
   }, [wishlistData]);
@@ -83,15 +83,16 @@ const RelatedCard = ({
       _hover={{ textStyle: "none" }}
       href={`/product-detail/${products_slug}`}
       target="_blank"
-    //   w="80%"
+      //   w="80%"
     >
       <Box
-        className={styles.secondaryFont}
+        className={`${styles.secondaryFont} ${
+          responsive ? "card-product-responsive" : "card-product"
+        }`}
         w={responsive ? "100%" : { base: "150px", md: "150px" }}
         border="1px solid #CBD5E0"
         borderRadius="8px"
         bg="white"
-        className={responsive ? "card-product-responsive" : "card-product"}
         cursor="pointer"
       >
         <Box

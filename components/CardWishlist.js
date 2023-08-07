@@ -1,6 +1,6 @@
-import { Box, Button, Text, Image, Icon } from "@chakra-ui/react";
-import React, { useState, useEffect, useRef } from "react";
-import { IoHeartOutline, IoHeart } from "react-icons/io5";
+import { Box, Button, Icon, Image, Text } from "@chakra-ui/react";
+import React, { useEffect, useRef, useState } from "react";
+import { IoHeart, IoHeartOutline } from "react-icons/io5";
 
 import { addWishlist, deleteWishlist } from "../api/wishlist";
 import { useWishlistContext } from "../contexts/wishlistProvider";
@@ -11,8 +11,8 @@ const numberWithDot = (x) => {
 };
 
 const CardWishlist = ({
-  image_path,
-  name,
+  products_image,
+  products_name,
   discount,
   price,
   products_id: liked_products_id,
@@ -59,7 +59,11 @@ const CardWishlist = ({
       >
         <Image
           borderRadius="0.25rem"
-          src={getImageLink(image_path)}
+          src={getImageLink(
+            !!products_image?.medium
+              ? products_image.medium
+              : products_image?.actual,
+          )}
           objectFit="cover"
         />
       </Box>
@@ -78,7 +82,7 @@ const CardWishlist = ({
             fontSize="0.95rem"
             mt="0.8rem"
           >
-            {name.toUpperCase()}
+            {products_name.toUpperCase()}
           </Text>
 
           {priceAfterDiscount && (
