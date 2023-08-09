@@ -6,10 +6,10 @@ import {
   Flex,
   HStack,
   Icon,
-  Stack,
   Skeleton,
   Spinner,
   Square,
+  Stack,
   Text,
   VStack,
 } from "@chakra-ui/react";
@@ -82,8 +82,9 @@ const SMCard = ({ width }) => {
       getRanking(memberId)
         .then((res) => {
           if (isRequestSuccess(res.data)) {
+            console.log(res.data);
             setRanking({
-              data: res.data.data[0].ranking ?? [],
+              data: res.data.data.ranking,
               loading: false,
             });
           } else {
