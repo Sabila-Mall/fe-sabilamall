@@ -1,10 +1,14 @@
 import axios from "axios";
 
-import { HOST } from "../constants/api";
+import { HOST, LOCALHOST } from "../constants/api";
 
 export const getAllBanks = async (dataPost) => {
   try {
-    const res = await axios.post(HOST + "/api/bank/get_all_banks", dataPost);
+    const payload = new URLSearchParams(dataPost)
+      .toString()
+      .replaceAll("null", "");
+
+    const res = await axios.get(LOCALHOST + "/api/banks?" + payload);
 
     const data = await res.data?.data;
     return data;

@@ -29,10 +29,10 @@ import {
   WrapItem,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { set, useForm } from "react-hook-form";
 import { FaUser } from "react-icons/fa";
-import { IoHeart, IoWalletOutline, IoCamera } from "react-icons/io5";
+import { IoCamera, IoHeart, IoWalletOutline } from "react-icons/io5";
 import { VscPackage } from "react-icons/vsc";
 
 import { topUpHistory, topUpList } from "../../api/Deposit";
@@ -46,8 +46,7 @@ import Navbar from "../../components/Navbar";
 import { ErrorToast, SuccessToast } from "../../components/Toast";
 import { useAuthContext } from "../../contexts/authProvider";
 import { useWindowSize } from "../../hooks/useWindowSize";
-import { currencyFormat } from "../../utils/functions";
-import { formatNumber } from "../../utils/functions";
+import { currencyFormat, formatNumber } from "../../utils/functions";
 
 const listTopUp = [
   {
@@ -288,7 +287,6 @@ const Konfirmasi = ({ dataPost }) => {
   const onClick = (e) => {
     e?.preventDefault();
     const dateIND = dataPost?.date?.split("-").reverse().join("-");
-
     setLoading(true);
     confrimTopUp({
       action: "confirm",
@@ -488,6 +486,7 @@ const DesktopTopUp = ({ listBank, dataPost, setDataPost, isAgent }) => {
     if (userData?.memberid) {
       topUpHistory(userData?.memberid)
         .then((res) => {
+          console.log(res);
           let tempRiwayat = [];
           for (let i = 0; i < res.data.data.length; i++) {
             tempRiwayat.push({
