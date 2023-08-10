@@ -6,14 +6,10 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useEffect } from "react";
 
-import { apiGetOrderCustomer } from "../../api/GetOrder";
+import { apiGetSingleOrder } from "../../api/GetOrder";
 import MyDocument from "../../components/PDFViewer";
 import { useAuthContext } from "../../contexts/authProvider";
 import { currencyFormat } from "../../utils/functions";
-
-// const PDFViewer = dynamic(() => import("../../components/PDFViewer"), {
-//   ssr: false,
-// });
 
 export default function PDF() {
   const { userData } = useAuthContext();
@@ -23,18 +19,16 @@ export default function PDF() {
   const [detailprice, setDetailprice] = useState([]);
 
   useEffect(() => {
-    if (userData) {
+    if (userData && router.isReady) {
       apiGetSingleOrder(userData.id, router.query.id).then((res) => {
         const d = res.data.data;
         setData(d);
-        let subtotal = 0;
-        d.data.forEach(({ final_price }) => {
-          subtotal += final_price;
-        });
+        let subtotal = d.order_price;
+
         setDetailprice([
           {
             name: "Subtotal Produk",
-            price: currencyFormat(subtotal),
+            price: currencyFormat(subtotal - d.shipping_cost),
           },
 
           {
@@ -43,12 +37,12 @@ export default function PDF() {
           },
           {
             name: "Total Biaya",
-            price: currencyFormat(subtotal + d.shipping_cost),
+            price: currencyFormat(subtotal),
           },
         ]);
       });
     }
-  }, [userData]);
+  }, [userData, router.isReady]);
 
   return (
     <Box h="100%">
