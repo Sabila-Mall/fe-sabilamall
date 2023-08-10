@@ -486,7 +486,6 @@ const DesktopTopUp = ({ listBank, dataPost, setDataPost, isAgent }) => {
     if (userData?.memberid) {
       topUpHistory(userData?.memberid)
         .then((res) => {
-          console.log(res);
           let tempRiwayat = [];
           for (let i = 0; i < res.data.data.length; i++) {
             tempRiwayat.push({
