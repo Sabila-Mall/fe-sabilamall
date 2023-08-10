@@ -24,8 +24,8 @@ export default function PDF() {
 
   useEffect(() => {
     if (userData) {
-      apiGetOrderCustomer(userData.id, router.query.id).then((res) => {
-        const d = res.data[0];
+      apiGetSingleOrder(userData.id, router.query.id).then((res) => {
+        const d = res.data.data;
         setData(d);
         let subtotal = 0;
         d.data.forEach(({ final_price }) => {

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { HOST, HOST_2 } from "../constants/api";
+import { HOST, HOST_2, LOCALHOST } from "../constants/api";
 import { getDeviceId } from "../utils/functions";
 
 export const apiGetOrder = async (customerId, page) => {
@@ -8,14 +8,14 @@ export const apiGetOrder = async (customerId, page) => {
 
   const params = new URLSearchParams({
     customers_id: customerId,
-    currency_code: "IDR",
     device_id: device_id,
-    language_id: 1,
     page: page,
-  }).toString().replaceAll('null', '');
+  })
+    .toString()
+    .replaceAll("null", "");
 
   try {
-    const res = await axios.get(`${HOST_2}/api/orders?${params}`);
+    const res = await axios.get(`${LOCALHOST}/api/order?${params}`);
     const d = {
       current_page: res.data.data.current_page,
       last_page: res.data.data.last_page,
@@ -30,25 +30,31 @@ export const apiGetOrder = async (customerId, page) => {
 
 export const apiGetSingleOrder = async (customers_id, orders_id) => {
   let device_id = getDeviceId();
-  return axios.post(HOST + "/api/order/get_by_customers", {
-    customers_id: customers_id,
-    currency_code: "IDR",
-    language_id: 1,
-    orders_id: orders_id,
-    device_id,
-  });
+  // return axios.post(HOST + "/api/order/get_by_customers", {
+  //   customers_id: customers_id,
+  //   currency_code: "IDR",
+  //   language_id: 1,
+  //   orders_id: orders_id,
+  //   device_id,
+  // });
+  return axios.get(
+    `${LOCALHOST}/api/order/detail/${orders_id}?customers_id=${customers_id}`,
+  );
 };
 
 export const apiSearchOrder = async (customerId, orderId) => {
   let device_id = getDeviceId();
   try {
-    const res = await axios.post(HOST + `/api/order/search_by_customers`, {
-      customers_id: customerId,
-      currency_code: "IDR",
-      language_id: 1,
-      orders_id: orderId,
-      device_id,
-    });
+    // const res = await axios.post(HOST + `/api/order/search_by_customers`, {
+    //   customers_id: customerId,
+    //   currency_code: "IDR",
+    //   language_id: 1,
+    //   orders_id: orderId,
+    //   device_id,
+    // });
+    const res = await axios.get(
+      `${LOCALHOST}/api/order/detail/${orderId}?customers_id=${customerId}&no_detail=true`,
+    );
     const d = {
       data: res.data,
     };
@@ -65,11 +71,14 @@ export const apiSearchOrder = async (customerId, orderId) => {
 
 export const apiGetResi = async (customers_id, orders_id) => {
   let device_id = getDeviceId();
-  return axios.post(HOST + "/api/resi/cek_resi", {
-    customers_id: customers_id,
-    orders_id: orders_id,
-    device_id,
-  });
+  // return axios.post(HOST + "/api/resi/cek_resi", {
+  //   customers_id: customers_id,
+  //   orders_id: orders_id,
+  //   device_id,
+  // });
+  return axios.get(
+    `${LOCALHOST}/api/resi?orders_id=${orders_id}&customers_id=${customers_id}`,
+  );
 };
 
 export const apiGetOrderCustomer = async (customerId, orderId) => {

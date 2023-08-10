@@ -33,7 +33,7 @@ const StokItem = ({ img, nama, supplier, tag, link, productId }) => {
   useEffect(() => {
     if (fetch && variant.length == 0) {
       apiStock(productId).then((res) => {
-        const data = res.data;
+        const data = res.data.data;
         // const listWarna = Object.keys(data);
         let variants = [];
 
@@ -49,7 +49,6 @@ const StokItem = ({ img, nama, supplier, tag, link, productId }) => {
         // listWarna.map((warna) => {
         //   let ukuran = [];
         //   let stok = [];
-
 
         //   data[warna].map((el) => {
         //     ukuran.push(el.ukuran);
@@ -194,11 +193,11 @@ const StokItem = ({ img, nama, supplier, tag, link, productId }) => {
                               pb="0.6rem"
                             >
                               <Box w="40%">
-                                {vari.warehouse !== "" && <Text>{vari.warehouse}</Text>}
+                                {vari.warehouse !== "" && (
+                                  <Text>{vari.warehouse}</Text>
+                                )}
                                 {vari.warehouse === "" && (
-                                  <Text color="gray.300">
-                                    Tanpa Warehouse
-                                  </Text>
+                                  <Text color="gray.300">Tanpa Warehouse</Text>
                                 )}
                               </Box>
                               <Box w="40%">
@@ -210,7 +209,9 @@ const StokItem = ({ img, nama, supplier, tag, link, productId }) => {
                                 )}
                               </Box>
                               <Box w={{ base: "40%", lg: "50%" }}>
-                                {vari.ukuran !== "" && <Text>{vari.ukuran}</Text>}
+                                {vari.ukuran !== "" && (
+                                  <Text>{vari.ukuran}</Text>
+                                )}
                                 {vari.ukuran === "" && (
                                   <Text color="gray.300">
                                     Tanpa varian ukuran
@@ -220,9 +221,7 @@ const StokItem = ({ img, nama, supplier, tag, link, productId }) => {
                               <Box w={{ base: "20%", lg: "10%" }}>
                                 {vari.stok !== "" && <Text>{vari.stok}</Text>}
                                 {vari.stok === "" && (
-                                  <Text color="gray.300">
-                                    Stok Habis
-                                  </Text>
+                                  <Text color="gray.300">Stok Habis</Text>
                                 )}
                               </Box>
                             </Box>

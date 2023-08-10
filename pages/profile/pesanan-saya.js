@@ -165,9 +165,10 @@ const CardPesanan = ({
 
   const textColor = getOrderStatusColor(orderStatus);
 
-  const date = datePurchased.split(" ")[0].split("-");
-  const formatedDate = `${Number(date[2])} ${MONTH[Number(date[1]) - 1]
-    } ${Number(date[0])}`;
+  const date = datePurchased.slice(0, 10).split("-");
+  const formatedDate = `${Number(date[2])} ${
+    MONTH[Number(date[1]) - 1]
+  } ${Number(date[0])}`;
 
   return (
     <VStack
@@ -310,7 +311,9 @@ const CardPesanan = ({
           </Text>
           <Text fontSize="1.2rem" fontWeight="bold">
             {totalPriceAgent === 0
-              ? currencyFormat(String(Number(totalPrice) + Number(handlingFeeAdmin)))
+              ? currencyFormat(
+                  String(Number(totalPrice) + Number(handlingFeeAdmin)),
+                )
               : currencyFormat(totalPriceAgent)}
           </Text>
         </Flex>
@@ -333,8 +336,9 @@ const CardPesanan = ({
           <Link
             _hover={{ textDecoration: "none" }}
             target="_blank"
-            href={`${window.location.origin
-              }/order-information/?order=${orderNum.slice(3)}`}
+            href={`${
+              window.location.origin
+            }/order-information/?order=${orderNum.slice(3)}`}
           >
             <Button
               color="orange.500"
@@ -469,7 +473,7 @@ const PesananSayaDesktop = () => {
                   </Text>
                 </Box>
               ) : (
-                data.map((dataPesanan, i) => {
+                data?.map((dataPesanan, i) => {
                   if (Array.isArray(dataPesanan)) {
                     dataPesanan = dataPesanan[i];
                   }
@@ -486,7 +490,7 @@ const PesananSayaDesktop = () => {
                       orderStatus={dataPesanan.orders_status}
                       shippingResi={dataPesanan.shipping_resi}
                       shippingMethod={dataPesanan.shipping_method}
-                      paymentStatus={dataPesanan.payments_status}
+                      paymentStatus={dataPesanan.payment_status}
                       dropShip={dataPesanan.dropship_name}
                       deliverer={dataPesanan.delivery_name}
                       totalPrice={dataPesanan.total_price}
