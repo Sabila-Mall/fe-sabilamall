@@ -1,31 +1,31 @@
 import {
-  Box,
-  Text,
-  Stack,
   AspectRatio,
-  Flex,
+  Box,
+  Button,
   Divider,
+  Flex,
   Grid,
   GridItem,
+  Image,
+  Input,
   InputGroup,
   InputLeftElement,
-  Input,
-  Textarea,
-  Button,
-  Image,
   Link,
+  Stack,
+  Text,
+  Textarea,
   useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { FaPhoneAlt } from "react-icons/fa";
 import { IoLogoFacebook } from "react-icons/io";
 import {
-  IoMail,
-  IoPeopleSharp,
   IoLocation,
-  IoLogoTwitter,
   IoLogoInstagram,
   IoLogoLinkedin,
+  IoLogoTwitter,
+  IoMail,
+  IoPeopleSharp,
 } from "react-icons/io5";
 
 import { apiSendMail } from "../../api/SendEmail";
@@ -43,19 +43,29 @@ const contactUs = () => {
 
   const handleSubmit = async () => {
     setLoading(true);
-    const res = await apiSendMail(name, phone, email, message);
-    if (res.success === true) {
-      toast({
-        title: "Email sent",
-        description: "Pesan sukses terkirim!",
-        status: "success",
-        duration: 4000,
-        position: "top",
-      });
-    } else {
+    try {
+      const res = await apiSendMail(name, phone, email, message);
+      if (res.success === true) {
+        toast({
+          title: "Email sent",
+          description: "Pesan sukses terkirim!",
+          status: "success",
+          duration: 4000,
+          position: "top",
+        });
+      } else {
+        toast({
+          title: "Email failed to sent",
+          description: "Gagal mengirimkan email",
+          status: "error",
+          duration: 4000,
+          position: "top",
+        });
+      }
+    } catch (err) {
       toast({
         title: "Email failed to sent",
-        description: "Gagal mengirimkan email",
+        description: err.message,
         status: "error",
         duration: 4000,
         position: "top",
