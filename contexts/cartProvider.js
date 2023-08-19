@@ -383,8 +383,8 @@ export const CartProvider = ({ children }) => {
       } else {
         errorToast(res.message);
       }
-    } catch (_) {
-      errorToast("Produk gagal ditambahkan ke keranjang belanja");
+    } catch (err) {
+      errorToast(err.message);
     }
 
     getAllData();
