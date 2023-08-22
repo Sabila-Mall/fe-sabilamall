@@ -48,13 +48,15 @@ const Subreseller = () => {
             });
           }
           setSubResellerData(tempSubreseller);
+          setLoading(false);
         })
         .catch((err) => {
           console.error(err);
           setLoading(false);
           setError("Gagal mendapatkan data");
+        }).finally(() => {
+          setLoading(false)
         });
-      setLoading(false);
     }
   }, [userData]);
 

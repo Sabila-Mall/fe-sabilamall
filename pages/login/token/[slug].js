@@ -38,10 +38,10 @@ const LoginToken = () => {
             const response = res.data;
 
             if (isRequestSuccess(response)) {
-                setUserData(filterObject(response.data[0], USER_FIELDS));
-                saveUserIdToCookies(response.data[0].id);
-                saveTokenToCookies(response.data[0].token);
-                saveAdminIdToCookies(response.data[0].admin_id);
+                setUserData(filterObject(response.data, USER_FIELDS));
+                saveUserIdToCookies(response.data.id);
+                saveTokenToCookies(response.data.token);
+                saveAdminIdToCookies(response.data.admin_id);
                 setIsLoggedIn(true);
             }
 

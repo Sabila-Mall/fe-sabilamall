@@ -1,20 +1,22 @@
 import axios from "axios";
 import nookies from "nookies";
 
-import { HOST } from "../constants/api";
+import { HOST, LOCAL } from "../constants/api";
+import { getDeviceId } from "../utils/functions";
 
 export const apiLogin = (email, password) => {
-  return axios.post(HOST + "/api/user/proses_login", {
+  return axios.post(LOCAL + "/api/user/login", {
     email: email,
     password: password,
+    device_id: getDeviceId(),
   });
 };
 
 export const apiLoginByAdmin = (token) => {
-  return axios.post(HOST + "/api/user/proses_login_by_admin", {
+  return axios.post(LOCAL + "/api/user/login/admin", {
     token: token,
   });
-}
+};
 
 export const apiRegister = (
   first_name,
@@ -26,10 +28,10 @@ export const apiRegister = (
   zone_id,
   city_id,
 ) => {
-  return axios.post(HOST + "/api/user/proses_register", {
+  return axios.post(LOCAL + "/api/user/register", {
+    email: email,
     customers_firstname: first_name,
     customers_lastname: last_name,
-    email: email,
     password: password,
     customers_telephone: telephone,
     customers_address: address,
@@ -45,13 +47,14 @@ export const apiResetPassword = (email, phoneNumber) => {
   } else if (phoneNumber !== "") {
     body = { phone: phoneNumber };
   }
-  return axios.post(HOST + "/api/user/process_forgot_password", body);
+  return axios.post(LOCAL + "/api/user/process_forgot_password", body);
 };
 
 export const apiGetUserProfile = (id) => {
-  return axios.post(HOST + "/api/user/get_profile", {
-    user_id: id,
-  });
+  if (typeof id !== "string") {
+    id = id.user_id;
+  }
+  return axios.get(LOCAL + `/api/user/${id}`);
 };
 
 export const apiUbahProfileSaya = (
@@ -63,12 +66,12 @@ export const apiUbahProfileSaya = (
   birthDate,
   users_ktp,
 ) => {
-  return axios.post(HOST + "/api/user/ubah_profile", {
+  return axios.patch(LOCAL + "/api/user/update_profile", {
     user_id: id,
     first_name: firstName,
     last_name: lastName,
-    phone: phone,
     gender: gender,
+    phone: phone,
     dob: birthDate,
     users_ktp: users_ktp,
   });
@@ -82,7 +85,7 @@ export const apiEditProfile = (
   gender,
   birthDate,
 ) => {
-  return axios.post(HOST + "/api/user/ubah_profile", {
+  return axios.patch(LOCAL + "/api/user/update_profile", {
     user_id: id,
     first_name: firstName,
     last_name: lastName,

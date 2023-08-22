@@ -1,12 +1,10 @@
 import axios from "axios";
 
-import { HOST } from "../constants/api";
+import { HOST, LOCAL } from "../constants/api";
 
 export const getRewards = async (memberID) => {
     try {
-        const res = await axios.post(HOST + "/api/user/get_reward", {
-            memberid: memberID
-        });
+        const res = await axios.get(LOCAL + `/api/user/reward?member_id=${memberID}`);
         const data = await res?.data;
         return data;
     } catch (err) {

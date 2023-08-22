@@ -83,7 +83,7 @@ const SMCard = ({ width }) => {
         .then((res) => {
           if (isRequestSuccess(res.data)) {
             setRanking({
-              data: res.data.data[0].ranking ?? [],
+              data: res.data.data.ranking ?? [],
               loading: false,
             });
           } else {

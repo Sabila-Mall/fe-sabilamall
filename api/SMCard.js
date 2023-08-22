@@ -1,20 +1,14 @@
-import { HOST } from "../constants/api";
+import { HOST, LOCAL } from "../constants/api";
 import axios from "axios";
 
 export const getLeaderboard = (limit = 5) => {
-  return axios.post(HOST + "/api/user/get_rangking", {
-    limit: limit,
-  });
+  return axios.get(LOCAL + `/api/user/leaderboard?limit=${limit}`);
 }
 
 export const getRanking = (memberId) => {
-  return axios.post(HOST + "/api/user/get_rangking", {
-    memberid: memberId,
-  });
+  return axios.get(LOCAL + `/api/user/rank?memberid=${memberId}`);
 }
 
 export const getProfile = (userId) => {
-  return axios.post(HOST + "/api/user/get_profile", {
-    user_id: userId,
-  });
+  return axios.get(LOCAL + `/api/user/${userId}`);
 }

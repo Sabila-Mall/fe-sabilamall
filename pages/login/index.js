@@ -45,9 +45,9 @@ const Login = () => {
       .then((res) => {
         const response = res.data;
         if (isRequestSuccess(response)) {
-          setUserData(filterObject(response.data[0], USER_FIELDS));
-          saveUserIdToCookies(response.data[0].id);
-          saveTokenToCookies(response.data[0].token);
+          setUserData(filterObject(response.data, USER_FIELDS));
+          saveUserIdToCookies(response.data.id);
+          saveTokenToCookies(response.data.token);
           setIsLoggedIn(true);
           window.location.href = "/";
         } else {

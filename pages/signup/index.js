@@ -129,8 +129,8 @@ const SignUp = () => {
       .then((res) => {
         const response = res.data;
         if (isRequestSuccess(response)) {
-          setUserData(filterObject(response.data[0], USER_FIELDS));
-          saveUserIdToCookies(response.data[0].id);
+          setUserData(filterObject(response.data, USER_FIELDS));
+          saveUserIdToCookies(response.data.id);
           // saveTokenToCookies(respose.data[0].token);
           setIsLoggedIn(true);
           router.push("/");
