@@ -28,7 +28,7 @@ const CheckoutProduct = ({ product, ckData }) => {
   const userId = userData?.id;
   const { editCartItemNotes } = useCartContext();
 
-  const gambarURL = product.products_image_path_medium;
+  const gambarURL = product.products_image_path;
   let discount = Number(product.customers_discount);
   const beratAdd = Number(product.varian.reduce((sum, item) => sum + parseInt(item.values_weight), 0));
   const berat = Number(product.products_weight);
