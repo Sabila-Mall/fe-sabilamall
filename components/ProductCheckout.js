@@ -14,7 +14,6 @@ import {
   VStack,
   Link,
   color,
-
 } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
@@ -41,11 +40,9 @@ const formatPrice = (price) => {
   }).format(price);
 };
 
-const ProductCheckout = ({
-  productDetail,
-  productStock
-}) => {
-  const { products_attributes,
+const ProductCheckout = ({ productDetail, productStock }) => {
+  const {
+    products_attributes,
     products_type,
     products_jenis,
     warehouse,
@@ -61,13 +58,14 @@ const ProductCheckout = ({
     flash_sale_price,
     is_liked_product,
     products_slug,
-    po_status } = productDetail;
+    po_status,
+  } = productDetail;
   const stockData = productStock;
 
   // console.log(productStok);
   // return <></>;
 
-  const product_wa = products_slug?.replace("-", "+")
+  const product_wa = products_slug?.replace("-", "+");
 
   const toast = useToast();
 
@@ -81,25 +79,25 @@ const ProductCheckout = ({
 
     return isSuccess
       ? toast({
-        title,
-        description,
-        status: "success",
-        ...configToast,
-        ...others,
-      })
+          title,
+          description,
+          status: "success",
+          ...configToast,
+          ...others,
+        })
       : toast({
-        title,
-        description,
-        status: "error",
-        ...configToast,
-        ...others,
-      });
+          title,
+          description,
+          status: "error",
+          ...configToast,
+          ...others,
+        });
   };
 
   const router = useRouter();
   const auth = useAuthContext();
   const userId = auth.userData?.id ?? null;
-  const userLevel = auth.userData?.user_level ?? 'null';
+  const userLevel = auth.userData?.user_level ?? "null";
   const adminId = auth.userData?.admin_id;
 
   const { addCartItem } = useCartContext();
@@ -158,14 +156,14 @@ const ProductCheckout = ({
   let isPromo = false;
   let pricePromo = 0;
   let discountPromo = 0;
-  if (products_event == 'flash_sale') {
+  if (products_event == "flash_sale") {
     isPromo = true;
     pricePromo = flash_sale_price;
     discountPromo = flash_sale_discount;
-  } else if (products_event == 'special') {
+  } else if (products_event == "special") {
     isPromo = true;
     pricePromo = special_products_price;
-    discountPromo = (price - special_products_price) / price * 100;
+    discountPromo = ((price - special_products_price) / price) * 100;
   }
   // ==========================================
 
@@ -176,60 +174,79 @@ const ProductCheckout = ({
     const [totalNormalPrice, setTotalNormalPrice] = useState(0);
 
     const [variantPrice, setVariantPrice] = useState(0);
-    const [variantPriceAfterDiscount, setVariantPriceAfterDiscount] = useState(0);
+    const [variantPriceAfterDiscount, setVariantPriceAfterDiscount] = useState(
+      0,
+    );
 
     const [numberOfItem, setNumberOfItem] = useState(0);
     const [normalPrice, setNormalPrice] = useState(0);
 
     const [stock, setStock] = useState(products_stock);
 
-    // const productsAttributes = JSON.parse(products_attributes);
-    const productsAttributes = products_attributes;
-    const colorsData = productsAttributes.filter((item) => item.options_name.toLowerCase() === 'warna');
-    const sizesData = productsAttributes.filter((item) => item.options_name.toLowerCase() === 'ukuran');
+    const productsAttributes = JSON.parse(products_attributes);
+    const colorsData = productsAttributes.filter(
+      (item) => item.options_name.toLowerCase() === "warna",
+    );
+    const sizesData = productsAttributes.filter(
+      (item) => item.options_name.toLowerCase() === "ukuran",
+    );
 
     const colorVariance = colorsData?.length;
     const sizeVariance = sizesData?.length;
 
-    const [colorId, setColorId] = useState('');
-    const [sizeId, setSizeId] = useState('');
+    const [colorId, setColorId] = useState("");
+    const [sizeId, setSizeId] = useState("");
 
     const [priceColor, setPriceColor] = useState(0);
-    const [pricePrefixColor, setPricePrefixColor] = useState('+');
+    const [pricePrefixColor, setPricePrefixColor] = useState("+");
     const [priceSize, setPriceSize] = useState(0);
-    const [pricePrefixSize, setPricePrefixSize] = useState('+');
+    const [pricePrefixSize, setPricePrefixSize] = useState("+");
 
     const changeAttributes = (id, type) => {
-      if (type == 'color') {
+      if (type == "color") {
         const color = colorsData.find((item) => item.options_values_id == id);
-        setPricePrefixColor(color?.price_prefix ?? '+');
+        setPricePrefixColor(color?.price_prefix ?? "+");
         setPriceColor(color?.options_values_price ?? 0);
         setColorId(id);
-      } else if (type == 'size') {
+      } else if (type == "size") {
         const size = sizesData.find((item) => item.options_values_id == id);
-        setPricePrefixSize(size?.price_prefix ?? '+');
+        setPricePrefixSize(size?.price_prefix ?? "+");
         setPriceSize(size?.options_values_price ?? 0);
         setSizeId(id);
       }
-    }
+    };
 
     const getStock = () => {
-      if (sizeId != '' && colorId != '') {
-        const stock = stockData.find((item) => item.options_values_color_id == colorId && item.options_values_size_id == sizeId && item.warehouse_id == warehouseId);
+      if (sizeId != "" && colorId != "") {
+        const stock = stockData.find(
+          (item) =>
+            item.options_values_color_id == colorId &&
+            item.options_values_size_id == sizeId &&
+            item.warehouse_id == warehouseId,
+        );
         setStock(stock?.stock != null && stock?.stock >= 0 ? stock?.stock : 0);
         setNumberOfItem((stock?.stock ?? 0) == 0 ? 0 : 1);
 
-        const variantPrice = Number(pricePrefixColor + priceColor) + Number(pricePrefixSize + priceSize);
+        const variantPrice =
+          Number(pricePrefixColor + priceColor) +
+          Number(pricePrefixSize + priceSize);
         const variantPriceAfterDiscount = 0;
 
-        const itemPrice = isPromo ? (Number(pricePromo) + variantPrice) : (Number(price) + variantPrice);
+        const itemPrice = isPromo
+          ? Number(pricePromo) + variantPrice
+          : Number(price) + variantPrice;
 
-        if (products_event == 'flash_sale') {
-          itemPrice = itemPrice - (itemPrice * ((discountPromo + customers_discount) / 100))
-          variantPriceAfterDiscount = variantPrice - (variantPrice * ((discountPromo + customers_discount) / 100))
+        if (products_event == "flash_sale") {
+          itemPrice =
+            itemPrice -
+            itemPrice * ((discountPromo + customers_discount) / 100);
+          variantPriceAfterDiscount =
+            variantPrice -
+            variantPrice * ((discountPromo + customers_discount) / 100);
         } else {
-          itemPrice = itemPrice - (itemPrice * (customers_discount / 100))
-          variantPriceAfterDiscount = variantPrice - (variantPrice * (customers_discount / 100))
+          itemPrice = itemPrice - itemPrice * (customers_discount / 100);
+          variantPriceAfterDiscount =
+            variantPrice - variantPrice * (customers_discount / 100);
         }
 
         setVariantPrice(variantPrice);
@@ -247,7 +264,7 @@ const ProductCheckout = ({
         setNormalPrice(0);
         setItemPrice(0);
       }
-    }
+    };
 
     const handleModifyNumberOfItem = (action) => {
       if (action === "increase") {
@@ -263,12 +280,12 @@ const ProductCheckout = ({
           setNumberOfItem(0);
         }
       }
-    }
+    };
 
     const calculatePrice = () => {
       setTotalPrice(itemPrice * numberOfItem);
-      setTotalNormalPrice(normalPrice * numberOfItem)
-    }
+      setTotalNormalPrice(normalPrice * numberOfItem);
+    };
 
     useEffect(() => {
       getStock();
@@ -282,11 +299,21 @@ const ProductCheckout = ({
 
     return (
       <>
-        <VStack minW={{ base: '100%', md: '300px' }} borderColor={"gray.300"} borderWidth={"1px"} spacing={'12px'} className={"secondaryFont"} p={'1rem'} borderRadius={"12px"}>
+        <VStack
+          minW={{ base: "100%", md: "300px" }}
+          borderColor={"gray.300"}
+          borderWidth={"1px"}
+          spacing={"12px"}
+          className={"secondaryFont"}
+          p={"1rem"}
+          borderRadius={"12px"}
+        >
           {warehouseData && warehouseData.length > 0 && (
             <Box width={"full"}>
               <Text textColor={"gray.500"} fontSize={"16px"}>
-                Gudang: {warehouseData?.filter((item) => item['status'] == 1).length} item
+                Gudang:{" "}
+                {warehouseData?.filter((item) => item["status"] == 1).length}{" "}
+                item
               </Text>
               <Spacer height={"10px"} />
               <Select
@@ -298,14 +325,13 @@ const ProductCheckout = ({
                   setWarehouseId(e.target.value);
                 }}
               >
-                {warehouseData?.filter((item) => item['status'] == 1).map(({ id, value }) => (
-                  <option
-                    key={id}
-                    value={`${id}`}
-                  >
-                    {value}
-                  </option>
-                ))}
+                {warehouseData
+                  ?.filter((item) => item["status"] == 1)
+                  .map(({ id, value }) => (
+                    <option key={id} value={`${id}`}>
+                      {value}
+                    </option>
+                  ))}
               </Select>
             </Box>
           )}
@@ -321,20 +347,18 @@ const ProductCheckout = ({
                 borderColor={"gray.200"}
                 textColor={"gray.400"}
                 color={"gray.400"}
-                onChange={(e) => changeAttributes(e.target.value, 'color')}
+                onChange={(e) => changeAttributes(e.target.value, "color")}
               >
-                {colorsData?.map(({ options_values_name, options_values_id }) => (
-                  <option
-                    key={options_values_id}
-                    value={options_values_id}
-                  >
-                    {options_values_name}
-                  </option>
-                ))}
+                {colorsData?.map(
+                  ({ options_values_name, options_values_id }) => (
+                    <option key={options_values_id} value={options_values_id}>
+                      {options_values_name}
+                    </option>
+                  ),
+                )}
               </Select>
             </Box>
-          )
-          }
+          )}
 
           {sizesData && (
             <Box width={"full"}>
@@ -347,20 +371,18 @@ const ProductCheckout = ({
                 borderColor={"gray.200"}
                 textColor={"gray.400"}
                 color={"gray.400"}
-                onChange={(e) => changeAttributes(e.target.value, 'size')}
+                onChange={(e) => changeAttributes(e.target.value, "size")}
               >
-                {sizesData?.map(({ options_values_name, options_values_id }) => (
-                  <option
-                    key={options_values_id}
-                    value={options_values_id}
-                  >
-                    {options_values_name}
-                  </option>
-                ))}
+                {sizesData?.map(
+                  ({ options_values_name, options_values_id }) => (
+                    <option key={options_values_id} value={options_values_id}>
+                      {options_values_name}
+                    </option>
+                  ),
+                )}
               </Select>
             </Box>
-          )
-          }
+          )}
 
           <Box width={"100%"}>
             <Text textColor={"gray.500"} fontSize={"16px"}>
@@ -415,66 +437,55 @@ const ProductCheckout = ({
             </HStack>
           </Box>
           <Divider orientation="horizontal" height={"1px"} />
-          <Box w={'full'}>
-            {
-              variantPrice > 0 && (
-                <>
+          <Box w={"full"}>
+            {variantPrice > 0 && (
+              <>
+                <Flex
+                  flexDirection={"row"}
+                  alignItems={"center"}
+                  justifyContent={"space-between"}
+                >
+                  <Text textColor={"gray.500"} fontSize={"14px"} mr="0.5rem">
+                    Tambahan Variasi
+                  </Text>
+                  <VStack alignItems={"flex-end"}>
+                    {variantPrice != variantPriceAfterDiscount ? (
+                      <Text as={"del"} color={"gray.400"} fontSize="14px">
+                        Rp {formatPrice(variantPrice)}/item
+                      </Text>
+                    ) : (
+                      <Text
+                        className={styles.subtotal}
+                        color={"orange.400"}
+                        fontSize="14px"
+                        fontWeight={"bold"}
+                      >
+                        Rp {formatPrice(variantPrice)}/item
+                      </Text>
+                    )}
+                  </VStack>
+                </Flex>
+                {variantPrice != variantPriceAfterDiscount && (
                   <Flex
                     flexDirection={"row"}
                     alignItems={"center"}
-                    justifyContent={"space-between"}
+                    justifyContent={"end"}
                   >
-                    <Text textColor={"gray.500"} fontSize={"14px"} mr="0.5rem">
-                      Tambahan Variasi
-                    </Text>
                     <VStack alignItems={"flex-end"}>
-                      {
-                        variantPrice != variantPriceAfterDiscount
-                          ?
-                          <Text
-                            as={'del'}
-                            color={"gray.400"}
-                            fontSize="14px"
-                          >
-                            Rp {formatPrice(variantPrice)}/item
-                          </Text>
-                          :
-                          <Text
-                            className={styles.subtotal}
-                            color={"orange.400"}
-                            fontSize="14px"
-                            fontWeight={"bold"}
-                          >
-                            Rp {formatPrice(variantPrice)}/item
-                          </Text>
-                      }
-
+                      <Text
+                        className={styles.subtotal}
+                        color={"orange.400"}
+                        fontSize="14px"
+                        fontWeight={"bold"}
+                      >
+                        Rp {formatPrice(variantPriceAfterDiscount)}/item
+                      </Text>
                     </VStack>
                   </Flex>
-                  {
-                    variantPrice != variantPriceAfterDiscount && (
-                      <Flex
-                        flexDirection={"row"}
-                        alignItems={"center"}
-                        justifyContent={"end"}
-                      >
-                        <VStack alignItems={"flex-end"}>
-                          <Text
-                            className={styles.subtotal}
-                            color={"orange.400"}
-                            fontSize="14px"
-                            fontWeight={"bold"}
-                          >
-                            Rp {formatPrice(variantPriceAfterDiscount)}/item
-                          </Text>
-                        </VStack>
-                      </Flex>
-                    )
-                  }
-                </>
-              )
-            }
-            <Box height={'10px'} />
+                )}
+              </>
+            )}
+            <Box height={"10px"} />
 
             <Flex
               flexDirection={"row"}
@@ -483,7 +494,7 @@ const ProductCheckout = ({
             >
               <VStack alignItems={"flex-end"}>
                 <Text
-                  as={'del'}
+                  as={"del"}
                   className={styles.subtotal}
                   color={"gray.400"}
                   fontSize="14px"
@@ -521,7 +532,9 @@ const ProductCheckout = ({
             fontWeight={"bold"}
             className={"primaryFont"}
             _hover={{ bgColor: "red.600" }}
-            isDisabled={(numberOfItem <= 0 || (products_jenis == 'po' && po_status != 1))}
+            isDisabled={
+              numberOfItem <= 0 || (products_jenis == "po" && po_status != 1)
+            }
             isLoading={isLoadingAddToCart}
             onClick={async () => {
               if (!auth.isLoggedIn)
@@ -534,8 +547,8 @@ const ProductCheckout = ({
                 });
               }
 
-              let option_values_id = JSON.stringify([colorId, sizeId]);
-              let option_id = JSON.stringify([2, 1]);
+              let option_values_id = [Number(colorId ?? 0), Number(sizeId ?? 0)];
+              let option_id = [2, 1];
 
               setIsLoadingAddToCart(true);
 
@@ -551,17 +564,19 @@ const ProductCheckout = ({
               );
 
               setIsLoadingAddToCart(false);
-
             }}
           >
             Masukkan ke Keranjang
           </Button>
-        </VStack >
-        <Footer handleClickWishlist={handleClickWishlist} isLiked={isLiked} product_wa={product_wa} />
+        </VStack>
+        <Footer
+          handleClickWishlist={handleClickWishlist}
+          isLiked={isLiked}
+          product_wa={product_wa}
+        />
       </>
-    )
+    );
   } else if (products_type == 0) {
-
     const [numberOfItem, setNumberOfItem] = useState(0);
     const [totalPrice, setTotalPrice] = useState(0);
     const [itemPrice, setItemPrice] = useState(0);
@@ -576,17 +591,18 @@ const ProductCheckout = ({
 
       const itemPrice = isPromo ? Number(pricePromo) : Number(price);
 
-      if (auth.isLoggedIn && products_event != 'flash_sale') {
-        itemPrice = itemPrice - (itemPrice * (customers_discount / 100))
-      } else if (auth.isLoggedIn && products_event == 'flash_sale') {
-        itemPrice = itemPrice - (itemPrice * ((discountPromo + customers_discount) / 100))
+      if (auth.isLoggedIn && products_event != "flash_sale") {
+        itemPrice = itemPrice - itemPrice * (customers_discount / 100);
+      } else if (auth.isLoggedIn && products_event == "flash_sale") {
+        itemPrice =
+          itemPrice - itemPrice * ((discountPromo + customers_discount) / 100);
       }
 
       const normalPrice = Number(price);
 
       setNormalPrice(normalPrice);
       setItemPrice(itemPrice);
-    }
+    };
 
     const handleModifyNumberOfItem = (action) => {
       if (action === "increase") {
@@ -602,12 +618,12 @@ const ProductCheckout = ({
           setNumberOfItem(0);
         }
       }
-    }
+    };
 
     const calculatePrice = () => {
       setTotalPrice(itemPrice * numberOfItem);
       setTotalNormalPrice(normalPrice * numberOfItem);
-    }
+    };
 
     useEffect(() => {
       getStock();
@@ -621,11 +637,21 @@ const ProductCheckout = ({
 
     return (
       <>
-        <VStack minW={{ base: '100%', md: '300px' }} borderColor={"gray.300"} borderWidth={"1px"} spacing={'12px'} className={"secondaryFont"} p={'1rem'} borderRadius={"12px"}>
+        <VStack
+          minW={{ base: "100%", md: "300px" }}
+          borderColor={"gray.300"}
+          borderWidth={"1px"}
+          spacing={"12px"}
+          className={"secondaryFont"}
+          p={"1rem"}
+          borderRadius={"12px"}
+        >
           {warehouseData && warehouseData.length > 0 && (
             <Box width={"full"}>
               <Text textColor={"gray.500"} fontSize={"16px"}>
-                Gudang: {warehouseData?.filter((item) => item['status'] == 1).length} item
+                Gudang:{" "}
+                {warehouseData?.filter((item) => item["status"] == 1).length}{" "}
+                item
               </Text>
               <Spacer height={"10px"} />
               <Select
@@ -636,16 +662,16 @@ const ProductCheckout = ({
                 onChange={(e) => {
                   setWarehouseId(e.target.value);
                 }}
-
               >
-                {warehouseData?.filter((item) => item['status'] == 1).map(({ id, value }) => {
-                  return <option
-                    key={id}
-                    value={`${id}`}
-                  >
-                    {value}
-                  </option>
-                })}
+                {warehouseData
+                  ?.filter((item) => item["status"] == 1)
+                  .map(({ id, value }) => {
+                    return (
+                      <option key={id} value={`${id}`}>
+                        {value}
+                      </option>
+                    );
+                  })}
               </Select>
             </Box>
           )}
@@ -702,14 +728,18 @@ const ProductCheckout = ({
             </HStack>
           </Box>
           <Divider orientation="horizontal" height={"1px"} />
-          <Box w={'full'}>
-            <Flex flexDirection={"row"} alignItems={'end'} justifyContent={'end'}>
+          <Box w={"full"}>
+            <Flex
+              flexDirection={"row"}
+              alignItems={"end"}
+              justifyContent={"end"}
+            >
               <VStack alignItems={"flex-end"}>
                 <Text
                   className={styles.subtotal}
                   color={"gray.400"}
                   fontSize="14px"
-                  as={'del'}
+                  as={"del"}
                 >
                   Rp {formatPrice(totalNormalPrice)}
                 </Text>
@@ -745,7 +775,9 @@ const ProductCheckout = ({
             fontWeight={"bold"}
             className={"primaryFont"}
             _hover={{ bgColor: "red.600" }}
-            isDisabled={(numberOfItem <= 0 || (products_jenis == 'po' && po_status != 1))}
+            isDisabled={
+              numberOfItem <= 0 || (products_jenis == "po" && po_status != 1)
+            }
             isLoading={isLoadingAddToCart}
             onClick={async () => {
               if (!auth.isLoggedIn)
@@ -758,8 +790,8 @@ const ProductCheckout = ({
                 });
               }
 
-              let option_values_id = JSON.stringify([colorId, sizeId]);
-              let option_id = JSON.stringify([2, 1]);
+              let option_values_id = [Number(colorId ?? 0), Number(sizeId ?? 0)];
+              let option_id = [2, 1];
 
               setIsLoadingAddToCart(true);
 
@@ -775,21 +807,22 @@ const ProductCheckout = ({
               );
 
               setIsLoadingAddToCart(false);
-
             }}
           >
             Masukkan ke Keranjangan
           </Button>
-        </VStack >
-        <Footer handleClickWishlist={handleClickWishlist} isLiked={isLiked} product_wa={product_wa} />
-
+        </VStack>
+        <Footer
+          handleClickWishlist={handleClickWishlist}
+          isLiked={isLiked}
+          product_wa={product_wa}
+        />
       </>
-    )
+    );
   }
-}
+};
 
 const Footer = ({ handleClickWishlist, isLiked, product_wa }) => {
-
   return (
     <Flex
       flexDirection={"row"}
@@ -837,7 +870,7 @@ const Footer = ({ handleClickWishlist, isLiked, product_wa }) => {
         </HStack>
       </Link>
     </Flex>
-  )
-}
+  );
+};
 
 export default ProductCheckout;

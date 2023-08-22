@@ -1,9 +1,10 @@
 import axios from "axios";
 
-import { HOST, HOST_2 } from "../constants/api";
+import { HOST } from "../constants/api";
 import { isRequestSuccess } from "../utils/api";
 import { getDeviceId } from "../utils/functions";
 
+// not used
 export const apiGetCartByCustomerID = async (customers_id) => {
   let device_id = getDeviceId();
 
@@ -15,7 +16,7 @@ export const apiGetCartByCustomerID = async (customers_id) => {
   return data;
 };
 
-
+// not used
 export const apiGetPromoBuyXYGetDisc = async (dataPost) => {
   let device_id = getDeviceId();
 
@@ -25,22 +26,24 @@ export const apiGetPromoBuyXYGetDisc = async (dataPost) => {
   });
   const data = await res.data?.data;
   return data;
-}
+};
 
 export const addCart = async (dataPost) => {
   let device_id = getDeviceId();
   try {
-    const res = await axios.post(`${HOST_2}/api/cart`, {
+    const res = await axios.post(`http://localhost:8000/api/cart`, {
       ...dataPost,
       device_id,
     });
     const data = await res.data;
     return data;
   } catch (error) {
+    console.log(error.response);
     throw new Error(error);
   }
 };
 
+// not used
 export const deleteCart = async (dataPost) => {
   let device_id = getDeviceId();
   try {
@@ -58,7 +61,9 @@ export const deleteCart = async (dataPost) => {
 export const apiDeleteCart = async ({ customers_id, customers_basket_id }) => {
   let device_id = getDeviceId();
   try {
-    const res = await axios.delete(`${HOST_2}/api/cart?customers_id=${customers_id}&customers_basket_id=${customers_basket_id}&device_id=${device_id}`);
+    const res = await axios.delete(
+      `http://localhost:8000/api/cart?customers_id=${customers_id}&customers_basket_id=${customers_basket_id}&device_id=${device_id}`,
+    );
     const data = await res.data;
     return data;
   } catch (error) {
@@ -66,12 +71,17 @@ export const apiDeleteCart = async ({ customers_id, customers_basket_id }) => {
   }
 };
 
-
-export const editCartNotes = async (dataPost) => {
+export const editCartNotes = async ({
+  customers_id,
+  customers_basket_id,
+  customers_basket_notes,
+}) => {
   let device_id = getDeviceId();
   try {
-    const res = await axios.post(HOST + "/api/cart/update_notes_item", {
-      ...dataPost,
+    const res = await axios.patch(`http://localhost:8000` + "/api/cart", {
+      customers_id,
+      customers_basket_id,
+      customers_basket_notes,
       device_id,
     });
     const data = await res.data;
@@ -81,11 +91,17 @@ export const editCartNotes = async (dataPost) => {
   }
 };
 
-export const updateCartQuantity = async (dataPost) => {
+export const updateCartQuantity = async ({
+  customers_id,
+  customers_basket_id,
+  customers_basket_quantity,
+}) => {
   let device_id = getDeviceId();
   try {
-    const res = await axios.post(HOST + "/api/cart/update_qty_item_2", {
-      ...dataPost,
+    const res = await axios.patch(`http://localhost:8000` + "/api/cart", {
+      customers_id,
+      customers_basket_id,
+      customers_basket_quantity,
       device_id,
     });
     const data = await res.data;
@@ -115,9 +131,10 @@ export const getMyCart = async (user_id) => {
 
 export const apiGetCart = async (customers_id) => {
   let device_id = getDeviceId();
-  const res = await axios.get(`${HOST_2}/api/cart?customers_id=${customers_id}&device_id=${device_id}`);
+  const res = await axios.get(
+    `http://localhost:8000/api/cart?customers_id=${customers_id}&device_id=${device_id}`,
+  );
 
   const data = await res.data?.data;
-  console.log(`${HOST_2}/api/cart?customers_id=${customers_id}&device_id=${device_id}`, data)
   return data;
 };

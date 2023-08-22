@@ -374,7 +374,7 @@ export const CartProvider = ({ children }) => {
         quantity,
         option_id,
         option_values_id,
-        warehouse_id,
+        warehouse_id: warehouse_id ??undefined,
         admin_id,
       })
 
@@ -383,8 +383,8 @@ export const CartProvider = ({ children }) => {
       } else {
         errorToast(res.message);
       }
-    } catch (_) {
-      errorToast("Produk gagal ditambahkan ke keranjang belanja");
+    } catch (err) {
+      errorToast(err.message);
     }
 
     getAllData();
