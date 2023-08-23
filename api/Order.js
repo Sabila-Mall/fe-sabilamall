@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { HOST } from "../constants/api";
+import { HOST, LOCALHOST } from "../constants/api";
 import { getDeviceId, isValidJson } from "../utils/functions";
 
 export const apiPlaceOrder = (
@@ -24,7 +24,6 @@ export const apiPlaceOrder = (
   handlingFeeAdminDiscount,
 ) => {
   let device_id = getDeviceId();
-  console.log(customerBasketId)
   return axios.post(HOST + "/api/order/place_order_2", {
     dataorder: [
       {
@@ -54,9 +53,13 @@ export const apiPlaceOrder = (
 
 export const getHandlingFeeAdminDiscount = () => {
   return axios.post(HOST + "/api/order/get_handling_fee_admin_discount");
-}
+};
 
-export const apiCheckPromoBuyXYGetDisc = async (list_product, customers_id, vendors_id) => {
+export const apiCheckPromoBuyXYGetDisc = async (
+  list_product,
+  customers_id,
+  vendors_id,
+) => {
   let device_id = getDeviceId();
   const res = await axios.post(HOST + "/api/order/check_promo_buyxy_get_disc", {
     list_product,
@@ -66,7 +69,7 @@ export const apiCheckPromoBuyXYGetDisc = async (list_product, customers_id, vend
   });
   const data = await res.data;
   return data;
-}
+};
 
 export const getKurir = (
   customerId,
@@ -89,7 +92,7 @@ export const getKurir = (
         customers_basket_id.push(el.customers_basket_id);
       },
     );
-  } catch (error) { }
+  } catch (error) {}
 
   return axios.post(HOST + "/api/shipping/get_all_shipping", {
     customers_id: customerId,
@@ -126,7 +129,7 @@ export const getPaymentMethod = (
         customers_basket_id.push(el.customers_basket_id);
       },
     );
-  } catch (error) { }
+  } catch (error) {}
   return axios.post(HOST + "/api/payment/get_payment_method", {
     language_id: "1",
     vendors_id: [`${vendors_id}`],
@@ -139,27 +142,21 @@ export const getPaymentMethod = (
 };
 
 export const apiGetVoucher = (customerId) => {
-  return axios.post(
-    HOST + "/api/coupon/get_all_active",
-    {
-      customers_id: customerId,
-      currency_code: "IDR",
-    },
-    {
-      headers: {
-        apikey: "32c9284bfd35879a8dce97f8db9e0c2c",
-      },
-    },
-  );
+  const payload = new URLSearchParams({
+    customers_id: customerId,
+  })
+    .toString()
+    .replaceAll("null", "");
+  return axios.get(LOCALHOST + "/api/coupon/active?" + payload);
 };
 
 export const apiApplyVoucherToCart = (customerId, code) => {
   let deviceId = getDeviceId();
-  let arrayOfCustomerBasket = [];
+  let arrayOfCustomerBasket = [123];
 
   if (typeof window !== "undefined") {
-    const json = localStorage.getItem("selectedProduct")
-    const products = isValidJson(json) ? JSON.parse(json) : {}
+    const json = localStorage.getItem("selectedProduct");
+    const products = isValidJson(json) ? JSON.parse(json) : {};
     const productItems = products?.products;
     if (productItems) {
       productItems.forEach((element) => {
@@ -167,11 +164,11 @@ export const apiApplyVoucherToCart = (customerId, code) => {
       });
     }
 
-    return axios.post(HOST + "/api/coupon/apply_to_cart", {
+    return axios.post(LOCALHOST + "/api/coupon/apply", {
       customers_id: customerId,
       device_id: deviceId,
       coupon_code: code,
-      customers_basket_id: arrayOfCustomerBasket,
+      customers_basket_ids: arrayOfCustomerBasket,
     });
   }
 };
