@@ -11,12 +11,7 @@ export const apiGetPaymentMekariPay = async (customerId, orderId) => {
 
     return res.data;
   } catch (error) {
-    toast({
-      position: "top",
-      title: error?.response?.data?.message,
-      status: "error",
-      isClosable: true,
-    });
+    return error?.response?.data;
   }
 };
 
@@ -30,12 +25,7 @@ export const apiConfirmPaymentMekariPay = async (customerId, orderId) => {
     );
     return res.data;
   } catch (error) {
-    toast({
-      position: "top",
-      title: error?.response?.data?.message,
-      status: "error",
-      isClosable: true,
-    });
+    return error?.response?.data;
   }
 };
 
@@ -46,12 +36,7 @@ export const apiCreateVirtualAccount = async (customerId, orderId) => {
     });
     return res.data;
   } catch (error) {
-    toast({
-      position: "top",
-      title: error?.response?.data?.message,
-      status: "error",
-      isClosable: true,
-    });
+    return error?.response?.data;
   }
 };
 
@@ -62,11 +47,6 @@ export const apiUpdateVirtualAccount = async (customerId, orderId) => {
     );
     return res.data;
   } catch (error) {
-    toast({
-      position: "top",
-      title: error?.response?.data?.message,
-      status: "error",
-      isClosable: true,
-    });
+    return error?.response?.data;
   }
 };
