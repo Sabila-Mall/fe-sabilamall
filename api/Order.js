@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { HOST, LOCALHOST } from "../constants/api";
+import { HOST, STAGING } from "../constants/api";
 import { getDeviceId, isValidJson } from "../utils/functions";
 
 export const apiPlaceOrder = (
@@ -94,7 +94,7 @@ export const getKurir = (
     );
   } catch (error) {}
 
-  return axios.post(LOCALHOST + "/api/shipping/get_all_shipping", {
+  return axios.post(STAGING + "/api/shipping/get_all_shipping", {
     customers_id: customerId,
     delivery_id: delivery_id,
     // language_id: 1,
@@ -124,7 +124,7 @@ export const getPaymentMethod = (
       },
     );
   } catch (error) {}
-  return axios.post(LOCALHOST + "/api/payment/methods", {
+  return axios.post(STAGING + "/api/payment/methods", {
     vendor_ids: [vendors_id],
     user_id: users_id,
     product_jenis: [`${products_jenis}`],
